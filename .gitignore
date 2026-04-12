@@ -1,0 +1,16 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+.env
+.env.local
+.env.production
+!.env.example
+*.log
+npm-debug.log*
+Thumbs.db
+
+# Server database files
+server/data/
+server/node_modules/

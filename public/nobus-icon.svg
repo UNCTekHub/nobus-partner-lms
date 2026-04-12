@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="12" fill="#0052CC"/>
+  <path d="M16 44V20l16 12L16 44z" fill="#00C9A7"/>
+  <path d="M48 44V20L32 32l16 12z" fill="#ffffff" opacity="0.8"/>
+  <text x="32" y="54" text-anchor="middle" fill="white" font-size="10" font-weight="bold" font-family="Arial">NCS</text>
+</svg>

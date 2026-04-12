@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans antialiased;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-nobus-500 hover:bg-nobus-600 text-white font-semibold py-2.5 px-6 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md;
+  }
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-nobus-600 font-semibold py-2.5 px-6 rounded-lg border-2 border-nobus-200 hover:border-nobus-400 transition-all duration-200;
+  }
+  .btn-accent {
+    @apply bg-accent-500 hover:bg-accent-600 text-white font-semibold py-2.5 px-6 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md;
+  }
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-blue {
+    @apply badge bg-nobus-50 text-nobus-700;
+  }
+  .badge-green {
+    @apply badge bg-green-50 text-green-700;
+  }
+  .badge-amber {
+    @apply badge bg-amber-50 text-amber-700;
+  }
+}
+
+/* Markdown content styling */
+.lesson-content h2 {
+  @apply text-2xl font-bold text-gray-900 mt-8 mb-4 pb-2 border-b border-gray-200;
+}
+.lesson-content h3 {
+  @apply text-xl font-semibold text-gray-800 mt-6 mb-3;
+}
+.lesson-content p {
+  @apply text-gray-700 leading-relaxed mb-4;
+}
+.lesson-content ul {
+  @apply list-disc list-inside space-y-1.5 mb-4 ml-2 text-gray-700;
+}
+.lesson-content ol {
+  @apply list-decimal list-inside space-y-1.5 mb-4 ml-2 text-gray-700;
+}
+.lesson-content li {
+  @apply leading-relaxed;
+}
+.lesson-content strong {
+  @apply font-semibold text-gray-900;
+}
+.lesson-content blockquote {
+  @apply border-l-4 border-nobus-400 bg-nobus-50 p-4 my-4 rounded-r-lg text-gray-700 italic;
+}
+.lesson-content code {
+  @apply bg-gray-100 text-nobus-700 px-1.5 py-0.5 rounded text-sm font-mono;
+}
+.lesson-content pre {
+  @apply bg-gray-900 text-gray-100 p-4 rounded-lg my-4 overflow-x-auto;
+}
+.lesson-content pre code {
+  @apply bg-transparent text-gray-100 px-0 py-0;
+}
+.lesson-content table {
+  @apply w-full border-collapse my-4 text-sm;
+}
+.lesson-content thead {
+  @apply bg-gray-50;
+}
+.lesson-content th {
+  @apply text-left p-3 font-semibold text-gray-700 border-b-2 border-gray-200;
+}
+.lesson-content td {
+  @apply p-3 border-b border-gray-100 text-gray-600;
+}
+.lesson-content tr:hover td {
+  @apply bg-gray-50;
+}
+.lesson-content hr {
+  @apply my-8 border-gray-200;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}
