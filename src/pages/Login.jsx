@@ -26,7 +26,7 @@ export default function Login() {
   };
 
   const demoAccounts = [
-    { email: 'admin@nobus.io', password: 'admin123', label: 'Nobus Super Admin' },
+    { email: 'admin@nobus.cloud', password: 'Nobus@2026!', label: 'Nobus Platform Admin' },
     { email: 'chinedu@acmetech.ng', password: 'demo', label: 'Org Admin (Acme Technologies)' },
     { email: 'amaka@acmetech.ng', password: 'demo', label: 'Sales User (Acme Technologies)' },
     { email: 'fatima@datastream.ng', password: 'demo', label: 'Org Admin (DataStream)' },
