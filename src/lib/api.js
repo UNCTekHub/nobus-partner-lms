@@ -24,8 +24,10 @@ async function request(endpoint, options = {}) {
 
   const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
 
-  if (res.status === 401) {
-    // Token expired or invalid — clear and redirect
+  const data = await res.json();
+
+  if (res.status === 401 && !endpoint.includes('/auth/login')) {
+    // Token expired or invalid — clear and redirect (but not during login)
     setToken(null);
     if (window.location.pathname !== '/login') {
       window.location.href = '/login';
@@ -33,7 +35,6 @@ async function request(endpoint, options = {}) {
     throw new Error('Session expired. Please sign in again.');
   }
 
-  const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Request failed');
   return data;
 }
