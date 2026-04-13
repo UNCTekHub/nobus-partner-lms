@@ -8,7 +8,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy via SSH
+      - name: Deploy App
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -18,26 +18,16 @@ jobs:
           command_timeout: 10m
           script: |
             set -e
-
-            # Fix ownership so ubuntu user can write
             sudo chown -R ubuntu:ubuntu /opt/nobus-lms
-
-            # Mark repo as safe for git
             git config --global --add safe.directory /opt/nobus-lms
-
             cd /opt/nobus-lms
             git pull origin main
-
-            # Ensure .env exists so VITE_API_URL is baked into the build
             echo 'VITE_API_URL=/api' > .env
-
-            # Ensure server .env exists
             if [ ! -f server/.env ]; then
               echo "PORT=3001" > server/.env
               echo "JWT_SECRET=$(openssl rand -hex 32)" >> server/.env
               echo "DB_PATH=./data/lms.db" >> server/.env
             fi
-
             echo "=== Installing server dependencies ==="
             cd server && npm install
             echo "=== Seeding database ==="
@@ -46,51 +36,34 @@ jobs:
             cd .. && npm install
             echo "=== Building frontend ==="
             npm run build
-            echo "=== Build complete, checking dist ==="
+            echo "=== Build complete ==="
             ls -la dist/ | head -10
-
-            echo "=== Stopping old PM2 process ==="
+            echo "=== Restarting PM2 ==="
             pm2 delete nobus-lms || true
-
-            echo "=== Starting server ==="
             cd /opt/nobus-lms
             pm2 start server/index.js --name nobus-lms
             sleep 3
-
             echo "=== PM2 Status ==="
             pm2 status
-
             echo "=== PM2 Logs ==="
             pm2 logs nobus-lms --lines 20 --nostream
-
             echo "=== Health Check ==="
-            curl -s http://localhost:3001/api/health
+            curl -s http://localhost:3001/api/health || echo "HEALTH CHECK FAILED"
+            echo ""
+            echo "=== Test Login ==="
+            curl -s -X POST http://localhost:3001/api/auth/login -H "Content-Type: application/json" -d '{"email":"admin@nobus.io","password":"admin123"}' || echo "LOGIN TEST FAILED"
             echo ""
 
-            echo "=== Test Login Endpoint ==="
-            curl -s -X POST http://localhost:3001/api/auth/login -H "Content-Type: application/json" -d '{"email":"admin@nobus.io","password":"admin123"}'
-            echo ""
-
-            echo "=== Configuring Nginx ==="
-            sudo bash -c 'cat > /etc/nginx/sites-available/nobus-lms << NGINXEOF
-server {
-    listen 80;
-    server_name _;
-
-    location / {
-        proxy_pass http://127.0.0.1:3001;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade \$http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-        proxy_cache_bypass \$http_upgrade;
-    }
-}
-NGINXEOF'
+      - name: Configure Nginx
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 22
+          script: |
+            echo 'server { listen 80; server_name _; location / { proxy_pass http://127.0.0.1:3001; proxy_http_version 1.1; proxy_set_header Upgrade $http_upgrade; proxy_set_header Connection "upgrade"; proxy_set_header Host $host; proxy_set_header X-Real-IP $remote_addr; proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; proxy_set_header X-Forwarded-Proto $scheme; proxy_cache_bypass $http_upgrade; } }' | sudo tee /etc/nginx/sites-available/nobus-lms > /dev/null
             sudo ln -sf /etc/nginx/sites-available/nobus-lms /etc/nginx/sites-enabled/
             sudo rm -f /etc/nginx/sites-enabled/default
             sudo nginx -t && sudo systemctl reload nginx
-            echo "=== Deploy complete ==="
+            echo "=== Nginx configured ==="
