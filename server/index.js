@@ -33,6 +33,12 @@ app.all('/api/*', (req, res) => {
   res.status(404).json({ error: 'API endpoint not found' });
 });
 
+// Global error handler for API routes — return JSON, never HTML
+app.use('/api', (err, req, res, next) => {
+  console.error('API Error:', err.message);
+  res.status(500).json({ error: err.message || 'Internal server error' });
+});
+
 // Serve frontend in production
 const distPath = path.join(__dirname, '..', 'dist');
 app.use(express.static(distPath));
