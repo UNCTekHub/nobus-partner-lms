@@ -30,8 +30,6 @@ jobs:
             fi
             echo "=== Installing server dependencies ==="
             cd server && npm install
-            echo "=== Resetting database for new admin setup ==="
-            rm -f data/lms.db
             echo "=== Seeding database ==="
             node seed.js
             echo "=== Installing frontend dependencies ==="

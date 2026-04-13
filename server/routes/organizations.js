@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import db from '../db.js';
 import { authenticate, requireRole } from '../middleware/auth.js';
+import { sendPartnerApprovalEmail, sendPartnerRejectionEmail } from '../services/email.js';
 
 const router = Router();
 
@@ -77,6 +78,15 @@ router.post('/approve/:id', authenticate, requireRole('super_admin'), (req, res)
     UPDATE pending_organizations SET status = 'approved', reviewed_by = ?, reviewed_at = datetime('now') WHERE id = ?
   `).run(req.user.id, pending.id);
 
+  // Send onboarding email (non-blocking — don't fail approval if email fails)
+  sendPartnerApprovalEmail({
+    contactName: pending.contact_name,
+    contactEmail: pending.contact_email,
+    companyName: pending.name,
+    partnerId,
+    tempPassword,
+  }).catch(err => console.error('[Approve] Email error:', err.message));
+
   res.json({
     message: 'Organization approved',
     organization: { id: orgId, partnerId, name: pending.name },
@@ -93,6 +103,13 @@ router.post('/reject/:id', authenticate, requireRole('super_admin'), (req, res) 
   db.prepare(`
     UPDATE pending_organizations SET status = 'rejected', reviewed_by = ?, reviewed_at = datetime('now') WHERE id = ?
   `).run(req.user.id, pending.id);
+
+  // Send rejection email (non-blocking)
+  sendPartnerRejectionEmail({
+    contactName: pending.contact_name,
+    contactEmail: pending.contact_email,
+    companyName: pending.name,
+  }).catch(err => console.error('[Reject] Email error:', err.message));
 
   res.json({ message: 'Application rejected' });
 });
