@@ -24,6 +24,17 @@ jobs:
 
             cd /opt/nobus-lms
             git pull origin main
+
+            # Ensure .env exists so VITE_API_URL is baked into the build
+            echo 'VITE_API_URL=/api' > .env
+
+            # Ensure server .env exists
+            if [ ! -f server/.env ]; then
+              echo "PORT=3001" > server/.env
+              echo "JWT_SECRET=$(openssl rand -hex 32)" >> server/.env
+              echo "DB_PATH=./data/lms.db" >> server/.env
+            fi
+
             cd server && npm install --omit=dev
             cd .. && npm install && npm run build
             pm2 restart nobus-lms || pm2 start server/index.js --name nobus-lms
