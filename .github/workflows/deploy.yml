@@ -35,9 +35,13 @@ jobs:
               echo "DB_PATH=./data/lms.db" >> server/.env
             fi
 
-            cd server && npm install --omit=dev
+            cd server && npm install
+            npm run seed
             cd .. && npm install && npm run build
             pm2 restart nobus-lms || pm2 start server/index.js --name nobus-lms
+            sleep 3
+            pm2 logs nobus-lms --lines 10 --nostream
+            curl -s http://localhost:3001/api/health || echo "HEALTH CHECK FAILED"
 
             # Configure Nginx reverse proxy
             sudo tee /etc/nginx/sites-available/nobus-lms > /dev/null << 'NGINXCONF'
