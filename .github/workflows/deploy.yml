@@ -16,13 +16,19 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
+            # Fix ownership so ubuntu user can write
+            sudo chown -R ubuntu:ubuntu /opt/nobus-lms
+
+            # Mark repo as safe for git
+            git config --global --add safe.directory /opt/nobus-lms
+
             cd /opt/nobus-lms
             git pull origin main
-            cd server && npm install --production
+            cd server && npm install --omit=dev
             cd .. && npm install && npm run build
             pm2 restart nobus-lms || pm2 start server/index.js --name nobus-lms
 
-            # Fix Nginx config if still showing default page
+            # Configure Nginx reverse proxy
             sudo tee /etc/nginx/sites-available/nobus-lms > /dev/null << 'NGINXCONF'
             server {
                 listen 80;
