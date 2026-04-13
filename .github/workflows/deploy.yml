@@ -15,7 +15,10 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
+          command_timeout: 10m
           script: |
+            set -e
+
             # Fix ownership so ubuntu user can write
             sudo chown -R ubuntu:ubuntu /opt/nobus-lms
 
@@ -35,33 +38,59 @@ jobs:
               echo "DB_PATH=./data/lms.db" >> server/.env
             fi
 
+            echo "=== Installing server dependencies ==="
             cd server && npm install
-            npm run seed
-            cd .. && npm install && npm run build
-            pm2 restart nobus-lms || pm2 start server/index.js --name nobus-lms
+            echo "=== Seeding database ==="
+            node seed.js
+            echo "=== Installing frontend dependencies ==="
+            cd .. && npm install
+            echo "=== Building frontend ==="
+            npm run build
+            echo "=== Build complete, checking dist ==="
+            ls -la dist/ | head -10
+
+            echo "=== Stopping old PM2 process ==="
+            pm2 delete nobus-lms || true
+
+            echo "=== Starting server ==="
+            cd /opt/nobus-lms
+            pm2 start server/index.js --name nobus-lms
             sleep 3
-            pm2 logs nobus-lms --lines 10 --nostream
-            curl -s http://localhost:3001/api/health || echo "HEALTH CHECK FAILED"
 
-            # Configure Nginx reverse proxy
-            sudo tee /etc/nginx/sites-available/nobus-lms > /dev/null << 'NGINXCONF'
-            server {
-                listen 80;
-                server_name _;
+            echo "=== PM2 Status ==="
+            pm2 status
 
-                location / {
-                    proxy_pass http://127.0.0.1:3001;
-                    proxy_http_version 1.1;
-                    proxy_set_header Upgrade $http_upgrade;
-                    proxy_set_header Connection 'upgrade';
-                    proxy_set_header Host $host;
-                    proxy_set_header X-Real-IP $remote_addr;
-                    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                    proxy_set_header X-Forwarded-Proto $scheme;
-                    proxy_cache_bypass $http_upgrade;
-                }
-            }
-            NGINXCONF
+            echo "=== PM2 Logs ==="
+            pm2 logs nobus-lms --lines 20 --nostream
+
+            echo "=== Health Check ==="
+            curl -s http://localhost:3001/api/health
+            echo ""
+
+            echo "=== Test Login Endpoint ==="
+            curl -s -X POST http://localhost:3001/api/auth/login -H "Content-Type: application/json" -d '{"email":"admin@nobus.io","password":"admin123"}'
+            echo ""
+
+            echo "=== Configuring Nginx ==="
+            sudo bash -c 'cat > /etc/nginx/sites-available/nobus-lms << NGINXEOF
+server {
+    listen 80;
+    server_name _;
+
+    location / {
+        proxy_pass http://127.0.0.1:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_cache_bypass \$http_upgrade;
+    }
+}
+NGINXEOF'
             sudo ln -sf /etc/nginx/sites-available/nobus-lms /etc/nginx/sites-enabled/
             sudo rm -f /etc/nginx/sites-enabled/default
             sudo nginx -t && sudo systemctl reload nginx
+            echo "=== Deploy complete ==="
