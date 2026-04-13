@@ -14,10 +14,33 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          port: ${{ secrets.SERVER_PORT || 22 }}
+          port: 22
           script: |
             cd /opt/nobus-lms
             git pull origin main
             cd server && npm install --production
             cd .. && npm install && npm run build
             pm2 restart nobus-lms || pm2 start server/index.js --name nobus-lms
+
+            # Fix Nginx config if still showing default page
+            cat > /etc/nginx/sites-available/nobus-lms << 'NGINXCONF'
+            server {
+                listen 80;
+                server_name _;
+
+                location / {
+                    proxy_pass http://127.0.0.1:3001;
+                    proxy_http_version 1.1;
+                    proxy_set_header Upgrade $http_upgrade;
+                    proxy_set_header Connection 'upgrade';
+                    proxy_set_header Host $host;
+                    proxy_set_header X-Real-IP $remote_addr;
+                    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                    proxy_set_header X-Forwarded-Proto $scheme;
+                    proxy_cache_bypass $http_upgrade;
+                }
+            }
+            NGINXCONF
+            ln -sf /etc/nginx/sites-available/nobus-lms /etc/nginx/sites-enabled/
+            rm -f /etc/nginx/sites-enabled/default
+            nginx -t && systemctl reload nginx
