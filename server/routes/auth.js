@@ -79,7 +79,7 @@ router.post('/register-org', (req, res) => {
   }
 
   // Check for duplicate RC number
-  const existing = db.prepare('SELECT id FROM pending_organizations WHERE rc_number = ? AND status = "pending"').get(rcNumber);
+  const existing = db.prepare("SELECT id FROM pending_organizations WHERE rc_number = ? AND status = 'pending'").get(rcNumber);
   if (existing) {
     return res.status(409).json({ error: 'An application with this RC number is already pending' });
   }
