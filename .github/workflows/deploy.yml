@@ -40,6 +40,8 @@ jobs:
             ls -la dist/ | head -10
             echo "=== Restarting PM2 ==="
             pm2 delete nobus-lms || true
+            sudo fuser -k 3001/tcp || true
+            sleep 1
             cd /opt/nobus-lms
             pm2 start server/index.js --name nobus-lms
             sleep 3

@@ -21,7 +21,7 @@ router.post('/login', (req, res) => {
   if (!valid) return res.status(401).json({ error: 'Invalid email or password' });
 
   // Update last_active
-  db.prepare('UPDATE users SET last_active = datetime("now") WHERE id = ?').run(user.id);
+  db.prepare("UPDATE users SET last_active = datetime('now') WHERE id = ?").run(user.id);
 
   const token = generateToken(user.id);
 

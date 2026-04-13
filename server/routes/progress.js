@@ -95,7 +95,7 @@ function updateActivity(userId) {
     newStreak = 1;
   }
 
-  db.prepare('UPDATE users SET last_active = datetime("now"), learning_streak = ? WHERE id = ?').run(newStreak, userId);
+  db.prepare("UPDATE users SET last_active = datetime('now'), learning_streak = ? WHERE id = ?").run(newStreak, userId);
 }
 
 // Helper: check if user completed all quizzes in a course path
