@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth, ROLES } from './context/AuthContext';
 import { ProgressProvider } from './context/ProgressContext';
+import { I18nProvider } from './lib/i18n';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
@@ -11,10 +12,14 @@ import LessonPage from './pages/LessonPage';
 import QuizPage from './pages/QuizPage';
 import Certification from './pages/Certification';
 import Login from './pages/Login';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import OrgRegistration from './pages/OrgRegistration';
 import OrgAdminDashboard from './pages/OrgAdminDashboard';
 import SuperAdminDashboard from './pages/SuperAdminDashboard';
 import UserProfile from './pages/UserProfile';
+import Discussions from './pages/Discussions';
+import Leaderboard from './pages/Leaderboard';
 import { Loader2 } from 'lucide-react';
 
 function LoadingScreen() {
@@ -45,6 +50,8 @@ function AppRoutes() {
       {/* Public routes */}
       <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
       <Route path="/register" element={isAuthenticated ? <Navigate to="/" replace /> : <OrgRegistration />} />
+      <Route path="/forgot-password" element={isAuthenticated ? <Navigate to="/" replace /> : <ForgotPassword />} />
+      <Route path="/reset-password" element={isAuthenticated ? <Navigate to="/" replace /> : <ResetPassword />} />
 
       {/* Protected routes inside Layout */}
       <Route
@@ -60,6 +67,8 @@ function AppRoutes() {
                 <Route path="/course/:courseId/module/:moduleId/lesson/:lessonId" element={<LessonPage />} />
                 <Route path="/course/:courseId/module/:moduleId/quiz" element={<QuizPage />} />
                 <Route path="/certification" element={<Certification />} />
+                <Route path="/discussions" element={<Discussions />} />
+                <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/profile" element={<UserProfile />} />
                 <Route
                   path="/org-admin"
@@ -89,12 +98,14 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <ProgressProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </ProgressProvider>
-    </AuthProvider>
+    <I18nProvider>
+      <AuthProvider>
+        <ProgressProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </ProgressProvider>
+      </AuthProvider>
+    </I18nProvider>
   );
 }

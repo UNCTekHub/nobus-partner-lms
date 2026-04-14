@@ -107,9 +107,12 @@ export default function Login() {
             </button>
           </form>
 
-          <div className="mt-4 text-center">
+          <div className="mt-4 flex items-center justify-between">
+            <Link to="/forgot-password" className="text-sm text-gray-400 hover:text-nobus-600 hover:underline">
+              Forgot password?
+            </Link>
             <Link to="/register" className="text-sm text-nobus-600 hover:underline">
-              Register your organization as a Nobus partner
+              Register as partner
             </Link>
           </div>
         </div>

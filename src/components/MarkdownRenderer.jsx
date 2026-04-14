@@ -66,6 +66,27 @@ function markdownToHtml(md) {
   html = html.replace(/☐/g, '<input type="checkbox" disabled /> ');
   html = html.replace(/☑/g, '<input type="checkbox" checked disabled /> ');
 
+  // YouTube embeds: ![video](https://youtube.com/watch?v=xxx) or ![video](https://youtu.be/xxx)
+  html = html.replace(/!\[video\]\((?:https?:\/\/(?:www\.)?youtube\.com\/watch\?v=|https?:\/\/youtu\.be\/)([^)&]+)[^)]*\)/g,
+    '<div class="aspect-video my-4 rounded-lg overflow-hidden"><iframe src="https://www.youtube.com/embed/$1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full"></iframe></div>');
+
+  // Generic video embed: ![video](url.mp4)
+  html = html.replace(/!\[video\]\(([^)]+\.(?:mp4|webm|ogg))\)/g,
+    '<div class="my-4"><video controls class="w-full rounded-lg"><source src="$1" /></video></div>');
+
+  // Audio embed: ![audio](url.mp3)
+  html = html.replace(/!\[audio\]\(([^)]+\.(?:mp3|wav|ogg))\)/g,
+    '<div class="my-4"><audio controls class="w-full"><source src="$1" /></audio></div>');
+
+  // Images with alt text
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,
+    '<figure class="my-4"><img src="$2" alt="$1" class="w-full rounded-lg" loading="lazy" /><figcaption class="text-center text-sm text-gray-500 mt-2">$1</figcaption></figure>');
+
+  // Callout boxes: :::tip, :::warning, :::info
+  html = html.replace(/:::tip\n([\s\S]*?):::/g, '<div class="p-4 bg-green-50 border-l-4 border-green-500 rounded-r-lg my-4"><strong class="text-green-700">Tip:</strong> <span class="text-green-800">$1</span></div>');
+  html = html.replace(/:::warning\n([\s\S]*?):::/g, '<div class="p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg my-4"><strong class="text-amber-700">Warning:</strong> <span class="text-amber-800">$1</span></div>');
+  html = html.replace(/:::info\n([\s\S]*?):::/g, '<div class="p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg my-4"><strong class="text-blue-700">Note:</strong> <span class="text-blue-800">$1</span></div>');
+
   // Paragraphs - wrap remaining loose text
   html = html.replace(/\n\n/g, '</p><p>');
   if (!html.startsWith('<')) html = '<p>' + html;

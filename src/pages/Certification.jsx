@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Award, CheckCircle, Circle, ArrowRight, Shield, Star, Crown } from 'lucide-react';
+import { Award, CheckCircle, Circle, ArrowRight, Shield, Star, Crown, Download, Loader2 } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
+import { api } from '../lib/api';
 import ProgressBar from '../components/ProgressBar';
 
 const levels = [
@@ -69,6 +71,7 @@ const assessmentDomains = [
 
 export default function Certification() {
   const { getCourseProgress } = useProgress();
+  const [downloading, setDownloading] = useState(null);
   const salesProg = getCourseProgress('sales-enablement');
   const presalesProg = getCourseProgress('presales-enablement');
   const techProg = getCourseProgress('technical-enablement');
@@ -77,6 +80,24 @@ export default function Certification() {
   const salesComplete = isComplete(salesProg);
   const presalesComplete = isComplete(presalesProg);
   const techComplete = isComplete(techProg);
+
+  const handleDownloadCert = async (pathId) => {
+    setDownloading(pathId);
+    try {
+      const blob = await api.downloadCertificate(pathId);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `nobus-certificate-${pathId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      alert(err.message || 'Failed to download certificate');
+    }
+    setDownloading(null);
+  };
 
   const progressCards = [
     { label: 'Sales Enablement', prog: salesProg, complete: salesComplete, color: 'nobus', path: 'sales-enablement' },
@@ -111,7 +132,13 @@ export default function Certification() {
               {card.prog.completedLessons}/{card.prog.totalLessons} lessons &middot;
               {card.prog.passedQuizzes}/{card.prog.totalQuizzes} quizzes passed
             </div>
-            {!card.complete && (
+            {card.complete ? (
+              <button onClick={() => handleDownloadCert(card.path)} disabled={downloading === card.path}
+                className="mt-3 inline-flex items-center gap-1 text-sm text-green-700 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg px-3 py-1.5 transition-colors">
+                {downloading === card.path ? <Loader2 className="w-3 h-3 animate-spin" /> : <Download className="w-3 h-3" />}
+                {downloading === card.path ? 'Downloading...' : 'Download Certificate'}
+              </button>
+            ) : (
               <Link to={`/course/${card.path}`} className="text-nobus-600 text-sm hover:underline mt-3 inline-flex items-center gap-1">
                 Continue <ArrowRight className="w-3 h-3" />
               </Link>
