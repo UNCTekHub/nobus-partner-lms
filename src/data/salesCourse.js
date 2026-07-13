@@ -56,7 +56,8 @@ Nobus Cloud Services (NCS) is a public cloud provider purpose-built for Africa's
 - **No egress fees.** Data leaving Nobus is free. On AWS, egress alone can be 15-20% of the monthly bill.
 
 ### Compliance posture
-- **NDPA** aligned: Nigerian data protection regulation, critical for banks, government and healthcare
+- **NDPA** aligned: Nigeria Data Protection Act, critical for banks, government and healthcare
+- **ODPC** compliant: Kenya's Office of the Data Protection Commissioner, covering workloads in the Nairobi zone
 - **ISO 27001** certified information security management
 - **PCI DSS** supported: payment-card workloads can be built compliant on Nobus
 
@@ -99,7 +100,8 @@ Nobus Cloud Services (NCS) is a public cloud provider purpose-built for Africa's
 ### 4. Compliance First
 - **ISO 27001** certified information security
 - **PCI DSS** compliance supported for payment card environments
-- **NDPA** aligned for data protection
+- **NDPA** aligned for data protection in Nigeria
+- **ODPC** compliant for data protection in Kenya
 - Built for regulated industries (banking, insurance, healthcare)
 
 ### 5. Cost Competitive - No Hidden Fees
@@ -209,7 +211,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 ### Persona 4: The Compliance / Risk Officer (the veto holder)
 - **Cares about:** NDPA, data residency, auditability, regulator comfort
 - **Fears:** Signing off on offshore data storage and being personally accountable later
-- **Your message:** "Data stays in Nigeria in Tier III-certified facilities. NDPA-aligned, ISO 27001 certified, PCI DSS supported."
+- **Your message:** "Data stays in-country in Tier III-certified facilities. NDPA-aligned in Nigeria, ODPC compliant in Kenya, ISO 27001 certified, PCI DSS supported."
 - **Proof points:** Compliance one-pager from the Content Hub, encryption story (AES-256 at rest, encrypted transit)
 - **Opening question:** *"How does your current provider evidence NDPA compliance when the regulator asks?"*
 
@@ -721,7 +723,7 @@ Generated from the Quote Builder and attached as the formal quotation (ref NCS-Q
 Phased, with dates and owners: migration windows, testing, cutover, rollback plan. Include your managed-services offer (setup fee plus monthly support) as its own line so the customer sees ongoing partnership, not a drive-by sale.
 
 **6. Why Nobus, why us**
-Three Nobus proofs (Tier III multi-AZ across Africa, 99.982% uptime, NDPA/ISO 27001) and three partner proofs (your certifications from this academy, reference customers, your support SLA).
+Three Nobus proofs (Tier III multi-AZ across Africa, 99.982% uptime, NDPA/ODPC/ISO 27001) and three partner proofs (your certifications from this academy, reference customers, your support SLA).
 
 **7. Next step and validity**
 One specific ask with a date, and quote validity (30 days, matching the Quote Builder terms).

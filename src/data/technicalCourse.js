@@ -845,7 +845,7 @@ Managed DNS service for mapping domain names to IP addresses. **Free for all Nob
 - Physical security of Tier III data centres (24/7 facility control)
 - Infrastructure: hypervisors, storage fabric, core network
 - Platform encryption machinery, IDS/IPS, SIEM monitoring, incident response process
-- Compliance certifications: ISO 27001, GDPR posture, PCI DSS support, NDPA alignment
+- Compliance certifications: ISO 27001, GDPR posture, PCI DSS support, NDPA alignment (Nigeria), ODPC compliance (Kenya)
 
 **The customer (with you) secures what runs IN the cloud:**
 - Data classification and encryption choices
@@ -878,7 +878,7 @@ The one-line version for meetings: **"Nobus secures the building and the platfor
 ### Running the enterprise security conversation
 1. Open with the shared responsibility split (whiteboard it; two columns)
 2. Walk the layers table top to bottom, mapping each to their stated concerns
-3. Name the certifications once, precisely: ISO 27001 certified, PCI DSS supported, NDPA aligned
+3. Name the certifications once, precisely: ISO 27001 certified, PCI DSS supported, NDPA aligned (Nigeria), ODPC compliant (Kenya)
 4. Close with the restore-drill offer: "Security you have not tested is a hope. We schedule quarterly restore drills."
 
 ### Key takeaways
@@ -961,6 +961,7 @@ Protect mission-critical systems from servers to desktops/laptops:
 | Framework | Relevance | How Nobus Helps |
 |-----------|-----------|-----------------|
 | **NDPA** | Data about Nigerian citizens must comply with NDPA | Data residency in Nigeria, encryption, access controls |
+| **ODPC (Kenya)** | Data about Kenyan citizens under Kenya's Data Protection Act | Nobus is ODPC compliant; residency in the Nairobi zone (nobus-ea-az1) |
 | **CBN Cybersecurity** | Banks must comply with CBN IT security standards | Tier III DC, AES-256 encryption, MFA, RBAC, IDS/IPS |
 | **PCI-DSS** | Credit card data processing/storage | Nobus is PCI-DSS compliant; application-layer compliance is customer's responsibility |
 | **ISO 27001** | International information security standard | Nobus is ISO 27001 certified |

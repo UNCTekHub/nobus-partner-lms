@@ -80,7 +80,7 @@ export default function Landing() {
                 </Link>
               </div>
               <div className="flex flex-wrap gap-x-6 gap-y-2 mt-10 text-sm text-nobus-300">
-                {['Naira billing, zero FX risk', 'Tier III zones in Lagos and Nairobi', 'NDPA · ISO 27001 · PCI DSS'].map((t) => (
+                {['Naira billing, zero FX risk', 'Tier III zones in Lagos and Nairobi', 'NDPA · ODPC · ISO 27001 · PCI DSS'].map((t) => (
                   <span key={t} className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-nobus-400" /> {t}</span>
                 ))}
               </div>
