@@ -46,6 +46,50 @@ export default function Landing() {
 
   const c = country || { name: '', complianceChip: 'NDPA · ODPC · ISO 27001 · PCI DSS', computePrice: 'with transparent pricing', partnerProgram: false, flag: '🌍', currencyShort: 'local currency' };
 
+  // Localized mock data for the hero dashboard preview
+  const PREVIEW = {
+    NG: {
+      org: 'Acme Technologies Ltd · NBS-NG-2026-001',
+      stats: [
+        { label: 'Open Pipeline', value: '₦7.6M' },
+        { label: 'Forecast', value: '₦10.2M' },
+        { label: 'Protected Deals', value: '4' },
+      ],
+      deals: [
+        { name: 'Core banking migration', status: 'Protected', cls: 'badge-green', val: '₦4.5M' },
+        { name: 'Health records platform', status: 'Pending', cls: 'badge-amber', val: '₦12M' },
+        { name: 'Retail e-commerce stack', status: 'Won', cls: 'badge-green', val: '₦6.8M' },
+      ],
+    },
+    KE: {
+      org: 'Savanna Cloud Ltd · NBS-KE-2026-001',
+      stats: [
+        { label: 'Open Pipeline', value: 'KSh 9.8M' },
+        { label: 'Forecast', value: 'KSh 13.1M' },
+        { label: 'Protected Deals', value: '4' },
+      ],
+      deals: [
+        { name: 'Core banking migration', status: 'Protected', cls: 'badge-green', val: 'KSh 5.8M' },
+        { name: 'Health records platform', status: 'Pending', cls: 'badge-amber', val: 'KSh 15M' },
+        { name: 'Retail e-commerce stack', status: 'Won', cls: 'badge-green', val: 'KSh 8.7M' },
+      ],
+    },
+    OTHER: {
+      org: 'Global Cloud Partners · NBS-INT-2026-001',
+      stats: [
+        { label: 'Open Pipeline', value: '$75K' },
+        { label: 'Forecast', value: '$102K' },
+        { label: 'Protected Deals', value: '4' },
+      ],
+      deals: [
+        { name: 'Core banking migration', status: 'Protected', cls: 'badge-green', val: '$45K' },
+        { name: 'Health records platform', status: 'Pending', cls: 'badge-amber', val: '$120K' },
+        { name: 'Retail e-commerce stack', status: 'Won', cls: 'badge-green', val: '$68K' },
+      ],
+    },
+  };
+  const preview = PREVIEW[c.code] || PREVIEW.NG;
+
   const SERVICES = [
     { icon: Server, name: 'Compute', desc: `FCS instances, dedicated hosting, autoscaling and CloudOrchestration, ${c.computePrice}.` },
     { icon: HardDrive, name: 'Storage & Backup', desc: 'FBS block volumes, unlimited FOS object storage and Acronis-powered Cloud Backup.' },
@@ -74,13 +118,15 @@ export default function Landing() {
               title="Change country">
               <Globe className="w-4 h-4" /> {c.flag} <span className="hidden md:inline">{c.name}</span>
             </button>
-            <Link to="/login" className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white hover:bg-nobus-800 transition-colors">
-              <LogIn className="w-4 h-4" /> Login
-            </Link>
             {c.partnerProgram && (
-              <Link to="/register" className="btn-primary !py-2 text-sm">
-                Become a Partner
-              </Link>
+              <>
+                <Link to="/login" className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white hover:bg-nobus-800 transition-colors">
+                  <LogIn className="w-4 h-4" /> Login
+                </Link>
+                <Link to="/register" className="btn-primary !py-2 text-sm">
+                  Become a Partner
+                </Link>
+              </>
             )}
           </div>
         </div>
@@ -107,9 +153,11 @@ export default function Landing() {
               </p>
               <div className="flex flex-wrap gap-3">
                 <BecomePartnerButton country={c} className="btn-primary inline-flex items-center gap-2 text-base !px-7 !py-3" />
-                <Link to="/login" className="inline-flex items-center gap-2 px-7 py-3 rounded-lg font-semibold text-white bg-white/10 hover:bg-white/20 transition-colors">
-                  <LogIn className="w-4 h-4" /> Partner Login
-                </Link>
+                {c.partnerProgram && (
+                  <Link to="/login" className="inline-flex items-center gap-2 px-7 py-3 rounded-lg font-semibold text-white bg-white/10 hover:bg-white/20 transition-colors">
+                    <LogIn className="w-4 h-4" /> Partner Login
+                  </Link>
+                )}
               </div>
               <div className="flex flex-wrap gap-x-6 gap-y-2 mt-10 text-sm text-nobus-300">
                 {[
@@ -123,22 +171,38 @@ export default function Landing() {
             </div>
 
             {/* Portal preview composition */}
-            <div className="hidden lg:block relative">
+            <div className="hidden lg:block relative pt-20 pb-20">
+              {/* Floating benefit cards: parked fully above and below the dashboard card */}
+              <div className="absolute top-0 right-0 z-20 bg-nobus-500 text-white rounded-xl shadow-xl px-5 py-4">
+                <div className="flex items-center gap-2">
+                  <BadgePercent className="w-5 h-5" />
+                  <div>
+                    <div className="font-extrabold leading-tight">Exclusive Partner Pricing</div>
+                    <div className="text-[10px] text-nobus-100">on every registered deal</div>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute bottom-0 left-0 z-20 bg-white rounded-xl shadow-xl px-5 py-4 text-gray-900">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-5 h-5 text-green-600" />
+                  <div>
+                    <div className="font-extrabold leading-tight">90-Day Protection</div>
+                    <div className="text-[10px] text-gray-400">channel-conflict shield</div>
+                  </div>
+                </div>
+              </div>
+
               {/* Main dashboard card */}
               <div className="bg-white rounded-2xl shadow-2xl p-6 text-gray-900 relative z-10">
                 <div className="flex items-center justify-between mb-5">
                   <div>
-                    <div className="text-xs text-gray-400">Acme Technologies Ltd · NBS-NG-2026-001</div>
+                    <div className="text-xs text-gray-400">{preview.org}</div>
                     <div className="font-bold text-lg">Partner Dashboard</div>
                   </div>
                   <span className="badge bg-nobus-50 text-nobus-700 font-bold">Gold Tier</span>
                 </div>
                 <div className="grid grid-cols-3 gap-3 mb-5">
-                  {[
-                    { label: 'Open Pipeline', value: '₦7.6M' },
-                    { label: 'Forecast', value: '₦10.2M' },
-                    { label: 'Protected Deals', value: '4' },
-                  ].map((s) => (
+                  {preview.stats.map((s) => (
                     <div key={s.label} className="bg-gray-50 rounded-xl p-3">
                       <div className="text-lg font-bold text-gray-900">{s.value}</div>
                       <div className="text-[10px] text-gray-400 font-medium">{s.label}</div>
@@ -146,11 +210,7 @@ export default function Landing() {
                   ))}
                 </div>
                 <div className="space-y-2.5">
-                  {[
-                    { name: 'Core banking migration', status: 'Protected', cls: 'badge-green', val: '₦4.5M' },
-                    { name: 'Health records platform', status: 'Pending', cls: 'badge-amber', val: '₦12M' },
-                    { name: 'Retail e-commerce stack', status: 'Won', cls: 'badge-green', val: '₦6.8M' },
-                  ].map((d) => (
+                  {preview.deals.map((d) => (
                     <div key={d.name} className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50">
                       <div className="text-sm font-medium text-gray-800">{d.name}</div>
                       <div className="flex items-center gap-2">
@@ -162,25 +222,6 @@ export default function Landing() {
                 </div>
               </div>
 
-              {/* Floating benefit cards */}
-              <div className="absolute -top-6 -right-4 z-20 bg-nobus-500 text-white rounded-xl shadow-xl px-5 py-4">
-                <div className="flex items-center gap-2">
-                  <BadgePercent className="w-5 h-5" />
-                  <div>
-                    <div className="font-extrabold leading-tight">Exclusive Partner Pricing</div>
-                    <div className="text-[10px] text-nobus-100">on every registered deal</div>
-                  </div>
-                </div>
-              </div>
-              <div className="absolute -bottom-6 -left-6 z-20 bg-white rounded-xl shadow-xl px-5 py-4 text-gray-900">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-5 h-5 text-green-600" />
-                  <div>
-                    <div className="font-extrabold leading-tight">90-Day Protection</div>
-                    <div className="text-[10px] text-gray-400">channel-conflict shield</div>
-                  </div>
-                </div>
-              </div>
               <div className="absolute top-1/2 -right-10 z-0 w-40 h-40 bg-nobus-500/30 rounded-full blur-2xl" />
             </div>
           </div>
@@ -283,16 +324,13 @@ export default function Landing() {
               </h2>
               <p className="text-nobus-200 mb-8 max-w-xl mx-auto">
                 Our partner program is currently live in Nigeria while we prepare the {c.name === 'Kenya' ? 'Kenyan' : 'international'} launch.
-                Existing partners can sign in as usual. Operating in Nigeria? Switch your country to apply today.
+                Operating in Nigeria? Switch your country to apply today.
               </p>
               <div className="flex flex-wrap justify-center gap-3">
                 <button onClick={() => setPickerOpen(true)}
                   className="btn-primary inline-flex items-center gap-2 text-base !px-7 !py-3">
                   <Globe className="w-4 h-4" /> Change Country
                 </button>
-                <Link to="/login" className="inline-flex items-center gap-2 px-7 py-3 rounded-lg font-semibold text-white bg-white/10 hover:bg-white/20 transition-colors">
-                  Partner Login
-                </Link>
               </div>
             </>
           )}
