@@ -21,7 +21,8 @@ jobs:
             sudo chown -R ubuntu:ubuntu /opt/nobus-lms
             git config --global --add safe.directory /opt/nobus-lms
             cd /opt/nobus-lms
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
             echo 'VITE_API_URL=/api' > .env
             if [ ! -f server/.env ]; then
               echo "PORT=3001" > server/.env
