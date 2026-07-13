@@ -40,7 +40,7 @@ Nobus Cloud Services (NCS) is Nigeria's first native hyperscale public cloud pla
 
 ### Where it runs
 - **West Africa AZ 1 (nobus-wa-az1):** Rack Centre, Ikeja, Lagos, Nigeria
-- **West Africa AZ 2 (nobus-wa-az2):** Lekki, Lagos, Nigeria
+- **West Africa AZ 2 (nobus-wa-az2):** OADC, Lekki, Lagos, Nigeria
 - **East Africa AZ 1 (nobus-ea-az1):** Nairobi, Kenya
 - **99.982% uptime guarantee** with N+1 redundancy on power, cooling and network
 - Managed entirely from one console: **dashboard.nobus.io**
@@ -74,7 +74,7 @@ Nobus Cloud Services (NCS) is Nigeria's first native hyperscale public cloud pla
 Pre-billing: resources charge from the start of each cycle while in **running or paused** states; build, shutting-down and deleted states do not bill. Auto-billing tops up from a saved card 3 days before the cycle if the wallet is short. All billing in Naira, entry compute from NGN 9,309/month, and **zero egress fees**.
 
 ### Key takeaways
-- OpenStack-based, Tier III multi-AZ across Africa, 99.982% uptime, one console
+- Hyperscale, Tier III multi-AZ across Africa, 99.982% uptime, one console
 - Know the translation table cold; it is how you win credibility with AWS-trained engineers
 - Running and paused instances bill; stopped billing requires shutdown or termination`
         },
@@ -91,7 +91,7 @@ Pre-billing: resources charge from the start of each cycle while in **running or
 - How the OpenStack foundation shapes what is possible
 
 ### The physical layer
-- **Regions and availability zones (AZs):** Nobus runs three Tier III-certified zones: **nobus-wa-az1** (Rack Centre, Ikeja Lagos), **nobus-wa-az2** (Lekki, Lagos) and **nobus-ea-az1** (Nairobi, Kenya). An AZ is a physically isolated facility with independent power, cooling and network; zone names appear in the console when you place resources.
+- **Regions and availability zones (AZs):** Nobus runs three Tier III-certified zones: **nobus-wa-az1** (Rack Centre, Ikeja Lagos), **nobus-wa-az2** (OADC, Lekki Lagos) and **nobus-ea-az1** (Nairobi, Kenya). An AZ is a physically isolated facility with independent power, cooling and network; zone names appear in the console when you place resources.
 - **Tier III means:** concurrent maintainability, N+1 redundancy on every critical system, 99.982% uptime design. You can honestly tell customers this exceeds what any office server room achieves.
 - **Design rule:** production workloads that need high availability should spread across AZs; FBS snapshots can be copied cross-zone for disaster recovery.
 

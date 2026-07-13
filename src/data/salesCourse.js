@@ -42,11 +42,11 @@ Nobus Cloud Services (NCS) is a public cloud provider purpose-built for Africa's
 
 | Fact | Detail | Why the customer cares |
 |---|---|---|
-| Data centers | Three Tier III availability zones: nobus-wa-az1 (Rack Centre, Ikeja Lagos), nobus-wa-az2 (Lekki, Lagos), nobus-ea-az1 (Nairobi, Kenya) | Same certification class trusted by banks and telcos |
+| Data centers | Three Tier III availability zones: nobus-wa-az1 (Rack Centre, Ikeja Lagos), nobus-wa-az2 (OADC, Lekki Lagos), nobus-ea-az1 (Nairobi, Kenya) | Same certification class trusted by banks and telcos |
 | Anchor region | Lagos, Nigeria (including Rack Centre) | In-country data residency for Nigerian customers |
 | East Africa | nobus-ea-az1 in Nairobi, Kenya | In-region service for East African customers |
 | Uptime | 99.982% guarantee with N+1 redundancy | Beats most on-premise setups by a wide margin |
-| Platform | OpenStack-based hyperscale infrastructure | Same open-source platform powering CERN and Walmart; standard tooling works |
+| Platform | Hyperscale cloud infrastructure | Standard tooling (Terraform, CLI, REST APIs) works as engineers expect |
 | Console | dashboard.nobus.io | One console for every service; easy to demo |
 
 ### The billing model (your strongest opener)
@@ -74,7 +74,7 @@ Nobus Cloud Services (NCS) is a public cloud provider purpose-built for Africa's
           content: `## Competitive Advantages (Your Selling Points)
 
 ### 1. Data Sovereignty
-- Nigerian customer data stays in-country, in **two Tier III-certified Nigerian availability zones**: nobus-wa-az1 (Rack Centre, Ikeja) and nobus-wa-az2 (Lekki)
+- Nigerian customer data stays in-country, in **two Tier III-certified Nigerian availability zones**: nobus-wa-az1 (Rack Centre, Ikeja) and nobus-wa-az2 (OADC, Lekki)
 - Full **NDPA (Nigeria Data Protection Act)** compliance
 - No foreign government access to customer data
 - Critical for banks, government agencies, healthcare providers
@@ -131,7 +131,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 
 - Massive untapped opportunity - the majority of Nigerian businesses are still on-premise
 - Fast-growing cloud adoption driven by digital transformation, fintech boom, and regulatory pressure
-- Nobus is uniquely positioned as the **only OpenStack-based African hyperscale cloud** with Tier III availability zones in Lagos (Ikeja and Lekki) and Nairobi, Kenya
+- Nobus is uniquely positioned as the **only African-native hyperscale cloud** with Tier III availability zones in Lagos (Ikeja and Lekki) and Nairobi, Kenya
 
 ### Target Sectors (Priority Order) - With Specific Value Props
 
@@ -195,7 +195,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 ### Persona 2: The CTO / Head of Engineering (the technical buyer)
 - **Cares about:** Reliability, scalability, standard tooling, not being locked into a dead-end platform
 - **Fears:** A "local" cloud that is really one rack in a closet; losing engineering credibility
-- **Your message:** "OpenStack-based hyperscale: Terraform, APIs and CLI work as expected. Tier III multi-AZ, 99.982% uptime, autoscaling and managed Kubernetes included."
+- **Your message:** "Hyperscale infrastructure: Terraform, APIs and CLI work as expected. Tier III multi-AZ, 99.982% uptime, autoscaling and managed Kubernetes included."
 - **Proof points:** Live console demo (dashboard.nobus.io), instance catalog (si.1 to si.16 families), a demo-lab session
 - **Opening question:** *"If you could re-architect today, what would you keep and what would you drop?"*
 
