@@ -24,37 +24,55 @@ const presalesCourse = {
         {
           id: 'pre-m1-l1',
           title: '1.1 Compute Services for Presales',
-          content: `## Positioning Nobus Compute
+          content: `## Positioning Nobus Compute: The Presales View
 
-### Flexible Compute Service (FCS)
-The core compute offering - virtual machines on demand. Key presales talking points:
+> **Why this matters:** Compute is the anchor of nearly every quote you will build; storage, networking and databases attach to it. Sizing it credibly, and explaining the pricing model without hesitation, is the core presales competency.
 
-- **Instance naming convention:** si.{vCPU}.{RAM}.{disk}.{os} - .l=Linux, .w=Windows
-- **Entry-level (si.1.x / si.2.x):** 1-2 vCPU, 2-8 GB RAM - web servers, microservices, dev/test
-- **Mid-range (si.4.x):** 4 vCPU, 4-32 GB RAM - enterprise apps, SAP, SharePoint, databases
-- **High-performance (si.8.x):** 8 vCPU, 16-32 GB RAM - direct hardware access, non-virtualized licensing
-- **Burstable (si.8.64 / si.16.64):** 8-16 vCPU, 64 GB RAM - variable workloads, staging environments
-- **OS support:** Ubuntu, CentOS, Debian, Rocky Linux, Oracle Linux, Windows Server 2019/2022
-- **Pre-billing model:** Instances billed from launch - educate customers on cost management
-- **Custom NMIs:** Create golden images from existing instances for standardised deployments
-- **VM Import/Export:** Migrate existing VMs from on-premise to Nobus NMIs
+### What you will learn
+- The FCS instance families and how to size from real utilization
+- The pricing mechanics you must be able to compute on a whiteboard
+- How to position Auto Scaling, Load Balancing and Dedicated Hosts in designs
 
-### Auto Scaling
-Position for customers with **variable workloads**:
-- **Scaling Groups:** Logical groups of identical instances
-- **Scaling Policies:** Rules based on CPU, memory, or custom metrics
-- **Min/Max Capacity:** Set floor and ceiling on instance count
-- **Launch Configuration:** Pre-defined NMI, flavor, and network settings
-- Best for: e-commerce (seasonal spikes), SaaS (growing user base), batch processing
+### FCS: the compute foundation
+Nobus Flexible Compute Service provides resizable virtual machines from the console (dashboard.nobus.io), CLI or API.
 
-### Flexible Load Balancing
-Required for any **production web application**:
-- **Protocols:** HTTP, HTTPS, TCP, UDP
-- **Health checks** with configurable interval, threshold, and timeout
-- **Session persistence** (sticky sessions) for stateful apps
-- Works natively within Nobus VPC subnet
+**Instance naming decodes as si.[vCPU].[RAM].[disk].[l|w]:** si.4.8.30.l = 4 vCPU, 8 GiB RAM, 30 GB root disk, Linux. Windows images use 50 GB roots (.50.w) and include the managed license.
 
-> **Presales Tip:** Always diagram Auto Scaling + Load Balancing together. Customers understand scalability better when they see the traffic flow visually. Example: "During Black Friday, your web tier auto-scales from 2 to 10 instances. The load balancer distributes traffic across all of them. When traffic drops, you scale back to 2 - paying only for what you used."`
+| Family | Profile | Typical placement |
+|---|---|---|
+| si.1.x / si.2.x | 1-2 vCPU, 2-8 GiB | Web nodes, microservices, dev/test, VPN gateways |
+| si.4.x | 4 vCPU, 4-32 GiB | Application servers, mid-size databases, ERP tiers |
+| si.8.x | 8 vCPU, 16-64 GiB | Heavy databases, analytics, consolidation hosts |
+| Burstable (si.8.64/si.16.64) | High RAM, bursty CPU | Staging, variable batch workloads |
+| Specialized | Compute-optimized, storage-optimized, GPU | Named workloads only; validate with Nobus |
+
+**OS coverage:** Ubuntu, CentOS and other open-source Linux distributions license-free; Windows Server with managed licensing (+NGN 35,000 per instance-month) or BYOL on Dedicated Hosts.
+
+### Pricing mechanics (whiteboard-ready)
+- Published units: vCPU NGN 93.50 and memory NGN 96.80 per unit-day; entry instances from **NGN 9,309/month**; billing is pre-paid per cycle and accrues while instances are running or paused
+- Rule of thumb: a Linux si.2.4 lands in the low-NGN-20k/month range, an si.4.8 roughly double; always confirm final figures in the Quote Builder or the official Pricing Calculator, which apply exact rates, exclusive partner pricing and 7.5% VAT
+- The differentiators to state every time: **billed in Naira** and **zero egress fees**
+
+### Right-sizing: your credibility lever
+Never mirror the old server's spec. Most on-premise machines run at 15-25% utilization; measure (or ask for) actual peak CPU and RAM, size to peak plus 30% headroom, and let vertical resize or autoscaling absorb growth. A right-sized quote routinely comes in 30-40% under a spec-mirrored one, and it is the single fastest way to beat a competitor's lazy proposal.
+
+### Auto Scaling (position it, always)
+Scaling groups add or remove instances by policy: **dynamic** (live metrics), **predictive** (learned patterns) or **scheduled** (calendar). The service also health-checks and replaces failed instances and balances across availability zones, at **no extra charge** beyond the instances themselves.
+> Positioning line: "During your Black Friday, the web tier grows from 2 to 10 instances by itself, then shrinks back. You pay for the surge only while it exists."
+
+### Load Balancing (the front door of every web design)
+HAProxy-pattern load balancing spreads TCP/HTTP traffic across instance backends with health checks and hostname-based routing (one LB can front several applications). Draw it into every multi-instance design: Floating IP into LB, LB into the autoscaling tier.
+
+### Dedicated Hosting (the compliance and licensing card)
+Entire physical servers reserved for one customer: maximum isolation for regulated workloads, and the home of **BYOL** (per-socket/per-core Microsoft and Oracle licenses, governed via the License Manager). When a customer mentions existing enterprise agreements, this is your answer; it regularly rescues deals that stall on licensing cost.
+
+### Field example
+A retailer's RFQ listed 12 servers copied from their 2019 hardware sheet. The losing bidder quoted 12 mirrored instances. The winning partner requested one month of utilization data, proposed 7 right-sized instances plus an autoscaling web tier, and came in 38% cheaper with better peak capacity. Same platform; the sizing discipline won.
+
+### Key takeaways
+- Decode si.[vCPU].[RAM].[disk].[os] instantly; size from measured peaks plus 30%, never from old spec sheets
+- Know the units (93.50 / 96.80 per unit-day, entry NGN 9,309) but finalize numbers in the Quote Builder
+- Auto Scaling costs nothing extra and self-heals; Dedicated Hosts + BYOL is the licensing rescue card`
         },
         {
           id: 'pre-m1-l2',
@@ -314,83 +332,104 @@ For mature DevOps teams, position Nobus Cloud Orchestration:
         {
           id: 'pre-m2-l1',
           title: '2.1 Common Customer Scenarios',
-          content: `## Reference Architectures
+          content: `## Common Customer Scenarios and Reference Architectures
 
-### Scenario 1: Web Application Migration
-**Customer profile:** Company running 3-5 physical servers for a customer-facing web application.
+> **Why this matters:** Presales credibility is built in the moment a customer describes their situation and you respond with a proven design, not a blank whiteboard. These five scenarios cover roughly 80% of the deals Nobus partners see. Learn them until you can sketch each one from memory.
 
-**Nobus Architecture:**
-- 2x FCS instances (web tier) behind Flexible Load Balancer
-- 1x FCS instance (app tier) in private subnet
-- 1x Managed MySQL database
-- FBS GP2 volumes for application data
-- FOS container for static assets and backups
-- Security Groups: web-sg, app-sg, db-sg (layered access)
-- Auto Scaling on web tier for traffic spikes
+### What you will learn
+- The five most common customer scenarios and the reference architecture for each
+- The Nobus services and instance sizes that fit each pattern
+- The discovery questions that tell you which scenario you are in
 
-**Key selling points:** Scalability, HA, no single point of failure, lower TCO
+### Scenario 1: Corporate website / e-commerce platform
+- **Signals:** Public web traffic, seasonal spikes, marketing pressure for uptime
+- **Architecture:** Floating IP into a load balancer, autoscaling web tier (2-10x FCS si.2.4.30.l), managed MySQL or PostgreSQL on FBS, FOS for media and static assets, daily FBS snapshots
+- **Why it wins:** Autoscaling handles Black Friday without paying for peak capacity year-round; zero egress fees matter enormously for media-heavy sites
+- **Sizing starter:** si.2.4 per web node, si.4.8 for the database; validate in the Pricing Calculator
 
----
+### Scenario 2: Enterprise application migration (ERP, core systems)
+- **Signals:** Hardware refresh due, dollar-billed hosting renewal, board pressure on capex
+- **Architecture:** Right-sized FCS instances (si.4.16 or si.8.16 for app tiers, Windows or Linux), FBS volumes per workload, Site-to-Site VPN to head office, Sophos XG or FortiGate at the perimeter, Dedicated Host where BYOL licensing (Microsoft, Oracle) applies
+- **Why it wins:** BYOL preserves their license investment; VPN keeps hybrid operation smooth during phased migration
+- **Key question:** "Which applications hold licenses tied to physical cores or sockets?"
 
-### Scenario 2: Disaster Recovery
-**Customer profile:** Enterprise needing DR for on-premises critical systems.
+### Scenario 3: Disaster recovery / backup-first entry
+- **Signals:** Ransomware fear, audit finding, a recent outage, cautious buyer
+- **Architecture:** Nobus Cloud Backup (Acronis) protecting on-prem and even AWS/Azure workloads, FOS as the backup target, a pilot-light FCS environment for critical-system failover, quarterly restore drills
+- **Why it wins:** Lowest-risk first step; the customer keeps production where it is and still gets protected. DR customers convert to full migration within 12-18 months.
+- **Key numbers:** FOS at NGN 60/GB-month makes retention affordable; snapshots bill only on consumed data
 
-**Nobus Architecture:**
-- NFT or VPN connectivity to on-prem
-- Pilot light: minimal FCS instances pre-provisioned
-- FBS snapshots replicated on schedule
-- Nobus Cloud Backup (Acronis) for full workload protection
-- Automated failover runbook
+### Scenario 4: Cloud-native fintech / SaaS startup
+- **Signals:** Microservices talk, Kubernetes on the CV, transaction spikes, investor pressure on burn rate
+- **Architecture:** Managed Nobus Kubernetes Engine (Linux worker nodes), managed Kafka for event streaming, managed PostgreSQL or MongoDB, load balancing, security groups per service tier
+- **Why it wins:** Naira billing extends runway; local latency beats eu-west-1 by 100ms+; PCI DSS support unlocks payments work
+- **Watch out:** Floating IPs do not attach to Kubernetes worker nodes; expose services through the load balancer
 
-**Key selling points:** RPO in minutes, RTO under 1 hour, fraction of the cost of a second data center
+### Scenario 5: Regulated enterprise (bank, insurer, government)
+- **Signals:** NDPR/CBN language, compliance officers in meetings, formal RFPs
+- **Architecture:** Isolated virtual data center (DaaS), Sophos XG + security groups layered, AES-256 encrypted FBS everywhere, VPN or Nobus Fast Transit for dedicated connectivity, full audit logging, in-country data residency documented
+- **Why it wins:** Data sovereignty is a legal requirement, not a preference; Tier III certification and ISO 27001 satisfy procurement checklists
+- **Key move:** Bring the compliance one-pager from the Content Hub to the SECOND meeting, unprompted
 
----
+### Matching scenario to discovery
+Three questions place almost any customer:
+1. "Is the workload customer-facing, internal, or protection/DR?"
+2. "What is driving the timing: growth, renewal, risk, or compliance?"
+3. "What must stay where it is, and what can move?"
 
-### Scenario 3: Cloud-Native Application
-**Customer profile:** Fintech building a new microservices application.
-
-**Nobus Architecture:**
-- Cloud Kubernetes Engine (CKE) cluster
-- Managed PostgreSQL for transactional data
-- Nobus Kafka Service for event streaming
-- FOS for document storage
-- Sophos XG for compliance-grade security
-
-**Key selling points:** Modern architecture, auto-scaling pods, managed infrastructure`
+### Key takeaways
+- Five patterns cover 80% of deals: web/e-commerce, enterprise migration, DR-first, cloud-native, regulated
+- Every architecture pairs a Nobus service list with a business reason; never present one without the other
+- DR-first is the lowest-friction entry into cautious accounts, and it expands`
         },
         {
           id: 'pre-m2-l2',
           title: '2.2 Architecture Diagram Best Practices',
-          content: `## Building Effective Architecture Diagrams
+          content: `## Architecture Diagrams That Win Deals
 
-### Every Diagram Should Show:
-1. **Network boundaries** - VPC, subnets, availability zones
-2. **Traffic flow** - arrows showing request path from user to backend
-3. **Security layers** - where firewalls, security groups, and encryption apply
-4. **Data flow** - how data moves between services
-5. **Backup/DR** - snapshot schedules, replication targets
+> **Why this matters:** In most deals, your architecture diagram is the single most-shared artifact: it gets pasted into internal decks, emailed to the CFO, and screenshotted into WhatsApp. A clear diagram sells while you sleep; a cluttered one raises doubts you never get to answer.
 
-### Three-Tier Architecture Template
-\`\`\`
-Internet
-   ↓
-[Load Balancer] - Public Subnet
-   ↓
-[Web Servers] - Private Subnet (web-sg: 80,443 from LB)
-   ↓
-[App Servers] - Private Subnet (app-sg: 8080 from web-sg)
-   ↓
-[Database] - Private Subnet (db-sg: 3306 from app-sg only)
-   ↓
-[FOS Backup] - Object Storage
-\`\`\`
+### What you will learn
+- The layering standard for professional cloud diagrams
+- Nobus-specific notation and labeling conventions
+- The three-version rule for different audiences
 
-### Do's and Don'ts
-- ✅ **Do** include cost estimates next to each component
-- ✅ **Do** show the customer's current architecture alongside the Nobus proposal
-- ✅ **Do** highlight security controls at each layer
-- ❌ **Don't** make diagrams too complex - executives lose interest after 6 boxes
-- ❌ **Don't** show internal Nobus infrastructure - keep it at the service level`
+### The layering standard
+Build every diagram in four horizontal layers, top to bottom, matching the path of a user request:
+1. **Users and locations:** customers on the internet, staff at head office and branches
+2. **Edge and security:** Floating IPs, load balancer, Sophos XG or FortiGate, VPN/Fast Transit terminations
+3. **Compute:** FCS instances grouped in boxes per tier (web, app), autoscaling groups drawn as a stack with "2-10 instances" notation, Kubernetes clusters as one box with node count
+4. **Data:** managed databases, FBS volumes, FOS buckets, backup flows (dashed arrows to Nobus Cloud Backup)
+
+Group everything inside one labeled boundary: "Nobus Cloud - Lagos AZ (Tier III)". If DR spans zones, show the second zone as a lighter box.
+
+### Labeling conventions (be precise, it signals competence)
+- Name services correctly: "FCS si.4.8.30.l", not "server"; "FBS 500 GB", not "disk"; "FOS", not "S3"
+- Every arrow gets a protocol and port where it matters: "HTTPS 443", "PostgreSQL 5432", "IPsec"
+- Security groups drawn as colored borders around tiers, with a one-line rule summary: "web SG: 443 from internet only"
+- Costs optional but powerful: a small monthly figure under each block turns the diagram into a business document
+
+### The three-version rule
+Produce every architecture at three altitudes:
+1. **Executive (1 slide):** five boxes maximum, no ports, arrows labeled in business language ("customers", "head office"), the monthly total in one corner. For CFOs and steering committees.
+2. **Solution (1 page):** the four-layer standard above. For IT managers and evaluation teams. This is the version in your proposal.
+3. **Engineering (as needed):** subnets, CIDR ranges, security-group rules in full, failover behavior. For the customer's engineers during PoC and implementation.
+
+Presenting the engineering version to an executive is the most common presales mistake in the field. Match the altitude to the room.
+
+### Tools and hygiene
+- Any tool works (draw.io, Lucidchart, PowerPoint); consistency beats fancy
+- Use the official Nobus logo from Marketing Materials on customer-facing versions
+- Date and version every diagram; architecture evolves during a deal and stale diagrams cause real confusion
+- Keep an editable master; you will iterate after every technical meeting
+
+### Field example
+A partner competing for an insurer's migration sent the solution-level diagram with monthly costs under each tier. The customer's CFO, who never joined a single call, approved the budget from that one page. The competing proposal had better prose and no diagram. The diagram won.
+
+### Key takeaways
+- Four layers, top to bottom: users, edge/security, compute, data
+- Precise Nobus service names and ports signal competence; vague boxes signal risk
+- Three versions per architecture: executive, solution, engineering; never mix altitudes`
         },
       ],
       quiz: {
@@ -417,73 +456,118 @@ Internet
         {
           id: 'pre-m3-l1',
           title: '3.1 Building a TCO Model',
-          content: `## Total Cost of Ownership Framework
+          content: `## Building a TCO Model That Survives the CFO
 
-### Step 1: Capture Current Costs (On-Prem or Competitor)
-- **Hardware CapEx:** Server purchase, storage arrays, networking equipment
-- **Software licensing:** OS, database, virtualization, backup software
-- **Facilities:** Power, cooling, rack space, physical security
-- **Personnel:** System admins, DBAs, network engineers (fraction of FTE)
-- **Downtime cost:** Revenue lost per hour of outage x average outages/year
-- **Opportunity cost:** Projects delayed by infrastructure provisioning
+> **Why this matters:** Technical wins die in finance reviews. The deal is only real when the numbers are, and a Total Cost of Ownership model built honestly, with sources, is the difference between "interesting" and "approved". This lesson gives you the model and a worked example with real Nobus rates.
 
-### Step 2: Map to Nobus Costs
-- FCS instances (hourly or monthly)
-- FBS volumes (per GB/month)
-- FOS storage (per GB/month + requests)
-- Networking (Floating IPs, NFT if applicable)
-- Managed services (databases, Kubernetes)
-- Backup (NCB licensing)
-- Support tier (included vs. premium)
+### What you will learn
+- The five cost categories a complete TCO must include
+- Published Nobus rates you can quote from memory
+- A worked three-year comparison: on-premise vs Nobus
 
-### Step 3: Compare Over 3 Years
+### The five cost categories
+A credible TCO compares ALL of these for the current state versus Nobus, over 3 years:
+1. **Infrastructure:** hardware purchase/refresh, or cloud compute+storage charges
+2. **Facilities:** power, diesel, cooling, rack space, physical security (routinely 30-40% of on-prem cost in Nigeria; never let this be forgotten)
+3. **Connectivity:** bandwidth, leased lines, VPN
+4. **People:** the fraction of engineer salaries spent racking, patching and babysitting hardware
+5. **Risk:** downtime cost x expected hours (use their own outage history), plus FX exposure on dollar contracts
 
-| Year | On-Premise | Nobus Cloud |
-|------|-----------|-------------|
-| Year 1 | ₦50M (servers) + ₦15M (ops) = ₦65M | ₦4.5M (prod) + ₦2M (dev) + ₦2M (setup) = ₦8.5M |
-| Year 2 | ₦15M (ops) | ₦7M (optimized) |
-| Year 3 | ₦15M (ops) | ₦7M |
-| **TOTAL** | **₦95M** | **₦22.5M** |
-| **SAVINGS** | - | **₦72.5M (76% reduction)** |
+### Nobus rates to know cold (from nobus.io published pricing)
+| Item | Rate |
+|---|---|
+| FCS entry instance | from NGN 9,309/month |
+| FCS vCPU / memory units | NGN 93.50 and NGN 96.80 per unit-day |
+| FBS block storage | NGN 120 per GB-month |
+| FOS object storage | NGN 60 per GB-month |
+| Internet bandwidth | NGN 6,000 per GB-month (burstable to 50 Mbps) |
+| Floating IP | NGN 1,500 per month |
+| Windows license | +NGN 35,000 per instance-month |
+| Egress fees | zero |
+| VAT | 7.5%, always shown explicitly |
 
-> **Presales Tip:** Always present the 3-year view. Year 1 alone may not show dramatic savings due to migration costs, but the 3-year TCO tells the real story.`
+Build the actual line items in the Quote Builder; it applies these rates, exclusive partner pricing, and VAT automatically, and exports a CFO-ready PDF or XLSX.
+
+### Worked example: mid-size company, 3-year view
+Current state: 6 aging servers due for refresh, one rack, generator-backed office server room.
+
+**On-premise path (3 years)**
+- Hardware refresh: NGN 28M (year 1)
+- Power, diesel, cooling: NGN 350k/month = NGN 12.6M
+- One engineer's time at 40%: NGN 2.4M/year = NGN 7.2M
+- UPS/generator maintenance: NGN 1.8M
+- Downtime (their history: ~3 incidents/year, 6 hrs avg, NGN 400k/hr): NGN 21.6M
+- **Total: ~NGN 71M, plus another refresh looming in year 4**
+
+**Nobus path (3 years)**
+- 6x FCS equivalents (mix of si.4.8 and si.2.4) + FBS + backups: ~NGN 1.15M/month = NGN 41.4M
+- Migration project (one-time, partner services): NGN 3.5M
+- Downtime at 99.982%: under NGN 1M expected
+- **Total: ~NGN 46M, capex-free, in Naira, with Tier III redundancy**
+
+Headline for the executive summary: **"~35% lower three-year cost, zero capex, and 20x less expected downtime."**
+
+### Rules of honest modeling
+- Source every number: their invoices, their outage log, nobus.io published rates
+- Use conservative assumptions and say so; a CFO who catches one inflated number discards the whole model
+- Show the do-nothing column; inaction has a cost line too
+- State FX assumptions explicitly for any dollar-denominated current costs
+
+### Key takeaways
+- Five categories: infrastructure, facilities, connectivity, people, risk; omit one and the model is fiction
+- Facilities and downtime are where on-premise quietly loses; make them visible
+- Conservative, sourced numbers beat optimistic ones; credibility is the product`
         },
         {
           id: 'pre-m3-l2',
           title: '3.2 RFP Response Framework',
-          content: `## Responding to RFPs Effectively
+          content: `## Responding to RFPs: The Framework
 
-### Standard RFP Sections & How to Win
+> **Why this matters:** Enterprise and government buyers procure through formal RFPs, and most partners answer them badly: generic boilerplate, ignored instructions, missed deadlines. A disciplined RFP practice is a durable competitive advantage precisely because it is rare.
 
-**1. Company Overview**
-- Nobus = Nkponani Limited, Nigerian-owned, Tier III hosted
-- Emphasize local presence, data sovereignty, compliance certs
+### What you will learn
+- The go/no-go filter that saves you from unwinnable RFPs
+- The compliance-matrix method that structures a winning response
+- How to answer the questions Nobus is strong on, and the ones it is not
 
-**2. Technical Requirements**
-- Map each requirement to a specific Nobus service
-- Include architecture diagram for proposed solution
-- Reference documentation URLs for each service
+### First decision: bid or no-bid (one hour, maximum)
+Score these honestly before writing a word:
+- **Did we know this RFP was coming?** Cold RFPs are usually wired for someone else. If you did not help shape it, your win probability is under 15%.
+- **Can we meet every mandatory requirement?** One failed mandatory disqualifies the whole bid.
+- **Is the budget real and stated?** Unbudgeted RFPs are market research on your time.
+- **Do we have the two weeks of effort this takes?** A half-done RFP response damages your brand more than no response.
+If the answer to two or more is no: decline politely, and ask for a meeting before their NEXT procurement cycle. That meeting is worth more than this bid.
 
-**3. Security & Compliance**
-- ISO 27001, PCI-DSS, NDPR alignment
-- Shared responsibility model documentation
-- Detail encryption, MFA, RBAC capabilities
+### The compliance matrix method
+1. Read the entire RFP twice before writing anything
+2. Extract every numbered requirement into a spreadsheet: ID, requirement, mandatory/desirable, our answer, evidence
+3. Mark each: **Fully compliant / Partially compliant / Non-compliant**, with one sentence of evidence
+4. Write the response in THEIR structure and numbering, never your own template
+5. Answer the question asked. If they ask "describe your backup capability", describe backup capability; do not paste the company history
 
-**4. SLA & Support**
-- 99.95% uptime SLA for FCS
-- Local support team, same timezone
-- Partner hotline for certified partners
+### Standard evidence for common RFP sections
+- **Infrastructure and availability:** Tier III-certified data centers across multiple African availability zones, 99.982% uptime guarantee, N+1 redundancy
+- **Security:** ISO 27001, AES-256 at rest, encrypted transit, security groups + cloud firewalls + optional Sophos XG/FortiGate, shared-responsibility model explained
+- **Data protection and residency:** NDPR alignment, in-country storage, PCI DSS supported
+- **Business continuity:** Nobus Cloud Backup (Acronis), cross-zone snapshot copies, documented restore drills
+- **Pricing:** Quote Builder export (PDF or XLSX) with VAT explicit and validity stated; transparent published rates on nobus.io
+- **Support:** local time-zone support plus your own managed-services SLA as the first line
 
-**5. Pricing**
-- Monthly breakdown + annual projection
-- 3-year TCO comparison
-- Include training and migration as line items
+### Handling the questions you cannot fully meet
+Never bluff an RFP; evaluators compare answers across bidders and bluffs are obvious.
+- Partial compliance, honestly framed: "Compliant via [approach], with the following consideration..."
+- Roadmap answers only where true (example: Kenya region, Q2 2026)
+- A credible workaround beats a fake yes: "Requirement met through Nobus Cloud Backup replication rather than native cross-region replication."
 
-**6. References**
-- Similar industry, similar scale
-- Quantified results (cost savings, uptime, migration time)
+### Deadline discipline
+- Build the timeline backward from submission with three days of buffer
+- Clarification questions: submit early; the answers often reveal the buyer's real priorities
+- One owner for the document, one reviewer who did NOT write it, one final compliance check against the matrix
 
-> **Presales Tip:** The best RFP responses are not generic - they repeat the customer's specific language and pain points from the RFP back to them in each section. Show you read it, not just templated a response.`
+### Key takeaways
+- Most RFPs are lost at bid/no-bid; filter ruthlessly and invest in the ones you shaped
+- The compliance matrix is the skeleton; their structure, their numbering, their questions
+- Honest partial compliance with a workaround outscores confident fiction every time`
         },
       ],
       quiz: {
@@ -510,70 +594,99 @@ Internet
         {
           id: 'pre-m4-l1',
           title: '4.1 Delivering Effective Demos',
-          content: `## Demo Best Practices
+          content: `## Delivering Demos That Close
 
-### Before the Demo
-- ☐ Confirm what the customer wants to see (don't assume)
-- ☐ Pre-provision demo environment (never build live - too risky)
-- ☐ Test everything 1 hour before the meeting
-- ☐ Prepare a backup plan if live demo fails (screenshots, recorded video)
-- ☐ Know who will be in the room and their roles
+> **Why this matters:** A demo is not a product tour; it is a proof performance. The customer is not evaluating the console, they are evaluating whether THEIR problem visibly dissolves on screen. The difference between a tour and a proof is preparation and narrative, and that is a presales skill you can drill.
 
-### Demo Flow (30 minutes max)
-1. **Context (2 min):** "Based on our discovery, here's what we'll show you today..."
-2. **Dashboard tour (5 min):** Show dashboard.nobus.io: instances, volumes, networking
-3. **Core use case (15 min):** Launch instance → attach storage → configure security → show monitoring
-4. **Differentiator (5 min):** Data sovereignty, Naira billing, local support
-5. **Q&A (remaining time):** Let them drive
+### What you will learn
+- The Tell-Show-Confirm structure for every demo segment
+- How to build a demo script around the customer's own discovery pain
+- Recovery moves for when things break live (they will)
 
-### What TO Demo
-- ✅ Instance launch speed (provision in <5 minutes)
-- ✅ Security group configuration (show ease of use)
-- ✅ Dashboard clarity (compare to AWS console complexity)
-- ✅ Naira pricing on the billing page
+### The cardinal rule
+**Never demo a feature; demo the death of a problem.** Every segment must map to a pain the customer stated in discovery. If they never mentioned Kubernetes, there is no Kubernetes in the demo, however proud of it you are.
 
-### What NOT to Demo
-- ❌ Features that are still in beta
-- ❌ Complex networking unless they specifically asked
-- ❌ Admin operations that aren't customer-facing`
+### Structure: Tell, Show, Confirm (repeat per segment)
+- **Tell (15 seconds):** "You said provisioning takes three weeks. Watch what it takes here."
+- **Show (2-3 minutes):** Launch an FCS instance live from dashboard.nobus.io: image, flavor, security group, boot. Narrate what matters, silently skip what does not.
+- **Confirm (15 seconds):** "That was 4 minutes, from your browser. How does that compare to today?" Wait for the answer; the confirmations are where the sale happens.
+
+### The standard 25-minute Nobus demo arc
+1. **Console orientation (3 min):** one dashboard for everything; calm, uncluttered, in English they already speak
+2. **Provisioning proof (5 min):** launch a Linux si.2.4 live; show it booted; attach an FBS volume
+3. **The customer's core pain (8 min):** the segment built specifically for THIS customer: a database restore, an autoscaling event, a VPN status page, a firewall rule
+4. **Cost transparency (5 min):** the Pricing Calculator with their approximate workload; watch the CFO-type lean in
+5. **Close (4 min):** recap each confirmation they gave you, then propose the PoC with dates
+
+### Preparation checklist (non-negotiable)
+- Rehearse the full arc twice, aloud, the day before; once alone, once for a colleague
+- Pre-provision everything slow; live-launch only what is fast and reliable
+- Book a Demo Lab session in PartnerCentral to rehearse the exact scenario
+- Prepare the environment fresh: close tabs, silence notifications, 125% zoom so the back row reads the screen
+- Have screenshots of every step as a fallback deck
+
+### When it breaks live (the recovery ladder)
+1. Stay flat: "Give it a second." (Half of failures resolve on the retry.)
+2. Switch to your fallback screenshots without apology or drama: "While that finishes, here is exactly what completes."
+3. If the demo gods are truly against you, convert to whiteboard and turn the failure into a support story: "And this is the point where you would have a Lagos engineer on the line, not a ticket queue in another continent."
+A composed recovery sells more reliability than a flawless demo; buyers know real systems hiccup. They are watching how you handle it.
+
+### After the demo
+Same day: send a two-line recap listing each confirmed moment ("provisioning in 4 minutes, restore in 6"), the recording if made, and the proposed PoC dates. Demo energy decays in 48 hours; invoice it immediately.
+
+### Key takeaways
+- Every segment is Tell-Show-Confirm, mapped to a stated discovery pain
+- Rehearse twice, pre-provision the slow parts, and carry a screenshot fallback
+- The confirmations, not the features, are the demo's output; recap them same-day`
         },
         {
           id: 'pre-m4-l2',
           title: '4.2 Discovery-to-Proposal Workflow',
-          content: `## End-to-End Workflow
+          content: `## The Discovery-to-Proposal Workflow
 
-### Phase 1: Discovery Call (with Sales partner)
-- Understand current environment (servers, apps, data)
-- Identify pain points and business drivers
-- Capture technical requirements
-- **Output:** Discovery notes document
+> **Why this matters:** Presales is a relay: discovery findings become an architecture, the architecture becomes a quote, the quote becomes a proposal, and any dropped baton kills the deal. This lesson is the end-to-end operating procedure that world-class presales engineers run on every opportunity, with PartnerCentral doing the bookkeeping.
 
-### Phase 2: Solution Design (Presales)
-- Map requirements to Nobus services
-- Design architecture diagram
-- Size instances and storage
-- Identify security and compliance requirements
-- **Output:** Draft architecture + sizing
+### What you will learn
+- The six-step workflow from first technical call to delivered proposal
+- The artifacts each step must produce before the next begins
+- Timeboxes that keep deals moving
 
-### Phase 3: TCO Model (Presales + Sales)
-- Calculate current costs
-- Build Nobus cost projection
-- Show 3-year savings
-- **Output:** TCO comparison spreadsheet
+### The workflow at a glance
 
-### Phase 4: Proposal (Sales + Presales review)
-- Combine architecture, TCO, and commercial terms
-- Include implementation timeline
-- Add success stories and references
-- **Output:** Formal proposal document (10-12 pages max)
+| Step | Activity | Artifact produced | Timebox |
+|---|---|---|---|
+| 1 | Technical discovery | Workload inventory sheet | Week 1 |
+| 2 | Current-state assessment | As-is diagram + constraints list | Week 1 |
+| 3 | Solution design | Target architecture (3 altitudes) | Week 2 |
+| 4 | Sizing and pricing | Quote in Quote Builder (NCS-Q ref) | Week 2 |
+| 5 | Internal review | Red-team sign-off | 2 days |
+| 6 | Proposal assembly & delivery | Proposal + presentation meeting | Week 3 |
 
-### Phase 5: Technical Validation
-- Demo or PoC if needed
-- Answer technical deep-dive questions
-- Security review with customer's IT team
-- **Output:** Technical sign-off
+### Step 1: Technical discovery
+Beyond the sales-level SPIN call, you need engineering facts. Capture per workload: CPU/RAM/storage today, OS and versions, dependencies, licensing model (per-core matters for BYOL and Dedicated Hosts), data volumes, growth rate, RTO/RPO expectations, and interconnectivity (what talks to what, on which ports). Use a standard inventory sheet; memory is not a system.
 
-> **Presales Tip:** Your job is to make the customer's technical team your champions. If the CTO's engineers trust the architecture, the CTO will sign. Invest time in building that technical relationship.`
+### Step 2: Current-state assessment
+Draw the as-is diagram and list hard constraints: compliance requirements (NDPR residency, PCI), non-movable systems, bandwidth realities at their sites, maintenance windows. Constraints discovered now are design inputs; discovered later, they are crises.
+
+### Step 3: Solution design
+Map every workload to a Nobus service and size: FCS flavor per server (right-size from measured usage, not the old box's spec: most on-prem servers run at 20% utilization), FBS volumes, FOS for archives and media, database engine and size, network design (security groups per tier, VPN or Fast Transit, floating IPs), security stack, and the backup/DR layer. Produce the three diagram altitudes from the diagramming lesson.
+
+### Step 4: Sizing and pricing
+Build the quote in the **Quote Builder**: line items from the design, quantities from the inventory, exclusive partner pricing applied where eligible, VAT shown. Sanity-check the total against the customer's stated current spend from discovery; if Nobus is not clearly favorable, revisit right-sizing before you present, not after.
+
+### Step 5: Internal review (the step everyone skips, and should not)
+A colleague who did not build the design tries to break it for 30 minutes: single points of failure, missed dependencies, unrealistic migration windows, sizing errors. Every deal gets a red team, even small ones. This habit is why some partners never get surprised in customer meetings.
+
+### Step 6: Proposal assembly and delivery
+Hand the sales lead the package: solution narrative, the solution-level diagram, the quote reference, implementation phases with dates, and your assumptions list. Present it in a meeting, never by email alone; the proposal walkthrough is where you handle objections while they are small. Attach the quote to the registered deal in PartnerCentral so the pipeline reflects reality.
+
+### Cadence discipline
+The entire workflow targets **three weeks** for a standard deal. Each artifact is stored with the lead in Sales Navigator; if you vanish tomorrow, a colleague picks up the deal without a single repeated customer question. That standard, more than any diagram, is what world-class looks like.
+
+### Key takeaways
+- Six steps, each with a named artifact; no artifact, no next step
+- Right-size from measured utilization; the quote's credibility depends on it
+- Red-team every design for 30 minutes; surprises belong in rehearsal, not customer meetings`
         },
       ],
       quiz: {

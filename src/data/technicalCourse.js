@@ -26,68 +26,147 @@ const technicalCourse = {
         {
           id: 'tech-m1-l1',
           title: '1.1 What is Nobus Cloud Services (NCS)?',
-          content: `## Nobus Cloud Services (NCS)
+          content: `## What is Nobus Cloud Services (NCS)?
 
-Nobus Cloud Services (NCS) is **Nigeria's first native hyperscale public cloud platform**, operated by Nkponani Limited and purpose-built for Africa's digital evolution. Infrastructure runs in **Tier III-certified data centres across multiple availability zones in Africa**, anchored in Lagos, Nigeria (including Rack Centre), with a **Kenya region launching Q2 2026**.
+> **Why this matters:** As a technical engineer you are the person the customer's engineers will test. This lesson gives you the platform's identity, scope and vocabulary so you can hold that conversation with authority from day one.
 
-Nobus provides a software-defined, on-demand cloud infrastructure for businesses across Nigeria and the broader African continent, with **payment in Naira (NGN)**.
+### What you will learn
+- What NCS is, who operates it, and where it physically runs
+- The full service catalogue at a glance
+- The vocabulary that maps Nobus concepts to AWS/Azure equivalents
 
-### Partner Positioning Note
-> Position NCS as the **sovereign cloud of choice** for Nigerian enterprises - data stays in-country, costs are in Naira, and latency to Nigerian users is dramatically lower than hyperscaler alternatives hosted in Europe or the US.`
+### The platform
+Nobus Cloud Services (NCS) is Nigeria's first native hyperscale public cloud platform, operated by **Nkponani Limited** and purpose-built for Africa's digital evolution. It is built on **OpenStack**, the open-source cloud platform that also powers CERN, Walmart and major global telcos, which means standard tooling (Terraform, OpenStack CLI, REST APIs) works as engineers expect.
+
+### Where it runs
+- **Tier III-certified data centres across multiple availability zones in Africa**, anchored in Lagos, Nigeria (including Rack Centre)
+- **Kenya region launching Q2 2026**, extending the pan-African footprint
+- **99.982% uptime guarantee** with N+1 redundancy on power, cooling and network
+- Managed entirely from one console: **dashboard.nobus.io**
+
+### The service catalogue at a glance
+
+| Domain | Services |
+|---|---|
+| Compute | FCS instances (si.1 to si.16 families, Linux and Windows), Dedicated Hosting (BYOL), Auto Scaling, Load Balancing |
+| Storage | FBS block volumes (1 GB - 1 TB, AES-256), FOS object storage (unlimited), snapshots |
+| Networking | Virtual data centers (DaaS), Floating IPs, Site-to-Site VPN, Nobus Fast Transit, Cloud Router (BGP), Cloud Trunks, DNS |
+| Security | Security Groups, Cloud Firewalls, Sophos XG, FortiGate NGFW, Acronis Cyber Protect |
+| Containers | Nobus Kubernetes Engine, Cloud Containers, Managed Kafka |
+| Databases | Managed MSSQL, MySQL, PostgreSQL, MongoDB |
+| Operations | CloudOrchestration (Heat + CloudFormation-compatible IaC), Cloud Backup, monitoring |
+
+### Translation table (for engineers coming from AWS/Azure)
+
+| Nobus | AWS | Azure |
+|---|---|---|
+| FCS instance | EC2 instance | Virtual Machine |
+| NMI (Nobus Machine Image) | AMI | VM Image |
+| FBS volume | EBS volume | Managed Disk |
+| FOS container | S3 bucket | Blob container |
+| Floating IP | Elastic IP | Public IP |
+| Security Group | Security Group | NSG |
+| DaaS virtual data center | VPC | VNet |
+| CloudOrchestration stack | CloudFormation stack | ARM template |
+
+### Billing model (engineers get asked this constantly)
+Pre-billing: resources charge from the start of each cycle while in **running or paused** states; build, shutting-down and deleted states do not bill. Auto-billing tops up from a saved card 3 days before the cycle if the wallet is short. All billing in Naira, entry compute from NGN 9,309/month, and **zero egress fees**.
+
+### Key takeaways
+- OpenStack-based, Tier III multi-AZ across Africa, 99.982% uptime, one console
+- Know the translation table cold; it is how you win credibility with AWS-trained engineers
+- Running and paused instances bill; stopped billing requires shutdown or termination`
         },
         {
           id: 'tech-m1-l2',
           title: '1.2 Platform Architecture',
           content: `## Platform Architecture
 
-NCS is built on an **OpenStack-based hyperscale framework**, delivering Infrastructure-as-a-Service (IaaS) across all major compute, storage, and networking domains.
+> **Why this matters:** Every design decision you will make (placement, redundancy, networking, storage) hangs off how the platform is physically and logically organized. Get this mental model right and everything else in this course clicks into place.
 
-### Core Architectural Pillars
+### What you will learn
+- The physical layer: regions, availability zones, Tier III facilities
+- The logical layer: projects, virtual data centers, networks
+- How the OpenStack foundation shapes what is possible
 
-| Pillar | Description |
-|--------|-------------|
-| **Availability Zones (AZs)** | Isolated physical infrastructure segments within the Nobus data centre. Instances and volumes are pinned to specific AZs. |
-| **Software-Defined Networking** | Neutron-based virtual network fabric supporting VPCs, subnets, routers, security groups, and floating IPs. |
-| **SSD-Backed Storage** | All primary block storage (FBS) is SSD-backed, ensuring consistent sub-millisecond latency. |
-| **Unified Management Console** | dashboard.nobus.io provides full lifecycle control of all resources. |
-| **API-First Design** | All operations accessible via REST APIs, enabling full automation and Infrastructure-as-Code. |`
+### The physical layer
+- **Regions and availability zones (AZs):** Nobus runs Tier III-certified data centres in multiple AZs across Africa (Lagos anchored, Kenya Q2 2026). An AZ is a physically isolated facility with independent power, cooling and network; zone names appear in the console (for example nobus-wa-az1).
+- **Tier III means:** concurrent maintainability, N+1 redundancy on every critical system, 99.982% uptime design. You can honestly tell customers this exceeds what any office server room achieves.
+- **Design rule:** production workloads that need high availability should spread across AZs; FBS snapshots can be copied cross-zone for disaster recovery.
+
+### The logical layer
+- **Projects:** the tenancy boundary. Each customer project isolates its resources, quotas and billing. Everything you provision lives inside a project.
+- **Virtual data center (DaaS):** a logically isolated network environment per project: you define IPv4 CIDR ranges, subnets, route tables and gateways. Creating one is free; you pay only for resources inside it. (IPv4 only today; plan addressing accordingly.)
+- **Networks and subnets:** instances attach to subnets; private IPs are assigned by DHCP from your ranges. Public reachability comes from Floating IPs mapped by NAT.
+- **Security layering:** security groups filter at the instance NIC (stateful), cloud firewalls filter at the network edge (policy-based, first-match), and appliance firewalls (Sophos XG, FortiGate) add deep inspection where required.
+
+### The compute fabric
+- Hypervisor-virtualized compute pools serve **FCS instances** in standard families (si.1 through si.16), plus compute-optimized, storage-optimized, GPU and burstable classes
+- **Dedicated Hosts** carve out entire physical servers for compliance isolation and BYOL licensing (per-socket/per-core Microsoft and Oracle licenses), integrated with the Nobus License Manager
+- **Instance naming decodes as** si.[vCPU].[RAM].[disk].[l|w]: si.4.8.30.l is 4 vCPU, 8 GiB RAM, 30 GB disk, Linux
+
+### The storage fabric
+- **FBS** provides network-attached block volumes that live independently of instances (detach, reattach, resize without downtime), AES-256 encrypted at rest and in transit
+- **FOS** provides distributed object storage across data zones; FBS snapshots are stored in FOS, incrementally
+- This separation is why cloud beats a physical server: the disk outlives the machine
+
+### The OpenStack foundation (what it buys you)
+- Standard APIs: anything that speaks OpenStack (Terraform providers, SDKs, the CLI) works
+- **CloudOrchestration:** Heat templates natively, plus an AWS CloudFormation-compatible API, so existing IaC migrates with minimal changes
+- No proprietary lock-in: skills and automation transfer in and out
+
+### Key takeaways
+- Physical: Tier III multi-AZ; logical: project > virtual data center > subnets > instances
+- Storage is decoupled from compute; volumes and snapshots outlive instances
+- OpenStack underneath means standard tooling and honest portability`
         },
         {
           id: 'tech-m1-l3',
           title: '1.3 Service Catalogue & Access',
-          content: `## Service Catalogue Summary
+          content: `## Service Catalogue and Access Methods
 
-| Category | Service | Key Use Case |
-|----------|---------|-------------|
-| **Compute** | Flexible Compute Service (FCS) | Virtual machines on demand |
-| **Compute** | Auto Scaling | Automated capacity management |
-| **Compute** | Flexible Load Balancing | Traffic distribution |
-| **Block Storage** | Flexible Block Storage (FBS) | Database, OS volumes |
-| **Object Storage** | Flexible Object Storage (FOS) | Backups, media, archives |
-| **Networking** | Nobus Fast Transit (NFT) | Dedicated private connectivity |
-| **Networking** | VPN / Cloud Router | Secure hybrid connectivity |
-| **Security** | Cloud Firewall / Security Groups | Network perimeter security |
-| **Security** | Sophos XG / FortiGate FW | Advanced threat protection |
-| **Containers** | Cloud Container / CKE | Docker & Managed K8s |
-| **Database** | MySQL / PostgreSQL / MongoDB | Managed database services |
-| **Messaging** | Nobus Kafka Service | Event streaming |
-| **Backup** | Nobus Cloud Backup (NCB) | Workload-level backup |
+> **Why this matters:** Engineers judge a platform in the first ten minutes of touching it. Knowing every way in (console, keys, CLI, API) and the access-control model lets you onboard a customer team smoothly and securely on day one.
 
-## Access & Authentication
+### What you will learn
+- The four access methods and when each is right
+- Key-pair authentication and first-login procedure for Linux and Windows
+- Access hygiene standards you should set for every customer
 
-- **Web Console:** https://dashboard.nobus.io
-- **REST API:** OpenStack-compatible API endpoints
-- **CLI Tools:** Standard OpenStack CLI (python-openstackclient)
-- **Terraform Provider:** OpenStack provider for Terraform
+### Access method 1: the web console (dashboard.nobus.io)
+The primary interface: full lifecycle control of every service (Project > Compute, Volumes, Network, Object Store, Orchestration, DNS). This is where you will demo, teach and do most day-2 administration. It is deliberately simpler than AWS's console; use that in your positioning.
 
-> **Tech Tip:** Because Nobus is OpenStack-compatible, customers migrating from other OpenStack-based platforms can reuse their Terraform scripts and Ansible playbooks with minimal modification.
+### Access method 2: SSH key pairs (Linux instances)
+- Create or import a key pair before launching (Project > Compute > Key Pairs); Nobus stores the public key, you download the .pem private key **once**
+- First login: ssh -i mykey.pem ubuntu@[floating-ip] (user varies by image: ubuntu, centos, etc.)
+- On Windows workstations, PuTTY users convert .pem to .ppk with PuTTYgen
+- **Standard:** one key pair per administrator, never shared; lost private keys cannot be re-downloaded, only replaced
 
-## Billing Model
-- FCS Instances are **pre-billed at launch** - costs accrue while instance exists
-- Storage (FBS, FOS, snapshots) billed independently of instance state
-- Floating IPs incur charges regardless of attachment
-- Inbound data transfer is **free**
-- All billing in **Nigerian Naira (NGN)**`
+### Access method 3: Windows instances
+Launch with a key pair, then retrieve the auto-generated administrator password from the console (decrypted with your private key), and connect over RDP (open TCP 3389 in the security group **to the admin's IP only**, never 0.0.0.0/0). Windows instances carry the managed license (+NGN 35,000/month) unless BYOL on a Dedicated Host.
+
+### Access method 4: API and CLI (automation)
+- OpenStack-compatible REST APIs and CLI for scripting and CI/CD pipelines
+- CloudOrchestration accepts Heat templates natively and CloudFormation-format templates through a compatible API: infrastructure-as-code from day one
+- Terraform's OpenStack provider works for teams standardizing on it
+
+### The image catalogue (what you can launch)
+- **Open-source Linux:** Ubuntu (e.g. Ubuntu-22.04-64bit), CentOS and other distributions, license-free
+- **Windows Server:** managed licensing included, or BYOL on Dedicated Hosts
+- **Nobus Machine Images (NMIs):** preconfigured templates; build golden images from a configured instance for standardized fleet deployments
+- **Appliance images:** pfsense-64bit (VPN/routing), Security-Sophos-XG-Firewall, Security-Fortigate-FortiOS, acronis-cyberprotect
+- **Import/Export:** the FCS image import/export service brings existing VMs in (your migration path) and takes images out (no lock-in story)
+
+### Access hygiene: the standard you set on every engagement
+1. Named accounts per human; no shared logins, ever
+2. Key pairs per admin; revoke on staff exit the same day
+3. Security groups scope management ports (22, 3389) to known office/VPN IPs
+4. Document who holds which access in the customer runbook you hand over
+5. Console credentials for the customer's team issued at handover training, not before
+
+### Key takeaways
+- Console for operations and demos; keys for shell access; API/CLI/IaC for automation
+- Private keys download once; treat them like passwords, per-person, revocable
+- Set access hygiene standards on day one; retrofitting them after an incident is misery`
         },
       ],
       quiz: {
@@ -239,26 +318,62 @@ The instance state transitions: **Build → Active (Running)**. You can then ass
         {
           id: 'tech-m2-l3',
           title: '2.5-2.6 Auto Scaling & Load Balancing',
-          content: `## Auto Scaling
+          content: `## Auto Scaling and Load Balancing
 
-Automatically adjusts FCS instance count based on demand.
+> **Why this matters:** These two services are the difference between "a server in the cloud" and cloud architecture. They deliver the elasticity customers are actually buying, and they are among the most demo-effective features on the platform. No extra charge for autoscaling itself; you pay only for the instances it runs.
 
-### Key Concepts
-- **Scaling Group:** Logical group of identical FCS instances
-- **Scaling Policies:** Rules for when to scale out/in (e.g., CPU utilization thresholds)
-- **Min/Max Capacity:** Floor and ceiling on instance count
-- **Launch Configuration:** NMI, flavor, and network settings for new instances
+### What you will learn
+- The three scaling strategies and when each applies
+- How health monitoring and AZ rebalancing protect availability
+- Load balancer architecture with HAProxy, including the config concepts
 
-> **Best Practice:** Always combine Auto Scaling with Flexible Load Balancing for production workloads.
+### Auto Scaling: the concepts
+An autoscaling setup has three parts:
+1. **Launch configuration:** the template for new instances: NMI image, flavor (for example si.2.4.30.l), key pair, security groups, network
+2. **Scaling group:** the fleet definition: minimum, maximum and desired instance counts, spread across availability zones
+3. **Scaling policies:** the rules that change the desired count
 
-## Flexible Load Balancing
+### The three scaling strategies
+| Strategy | Trigger | Best for |
+|---|---|---|
+| Dynamic | Live metrics (CPU, memory, custom) cross a threshold | Unpredictable traffic: news, e-commerce, APIs |
+| Predictive | Machine-learned traffic forecasting | Regular daily/weekly patterns: banking hours, payroll runs |
+| Scheduled | A calendar you define | Known events: month-end, campaign launches, exam registration windows |
 
-Distributes incoming traffic across multiple FCS instances:
+Beyond scaling, the service continuously **monitors instance health, replaces impaired instances automatically, and rebalances capacity across AZs**: self-healing you should demonstrate in every technical evaluation.
 
-- Supports **HTTP, HTTPS, TCP, and UDP** protocols
-- **Health checks** with configurable interval, threshold, and timeout
-- **Session persistence** (sticky sessions) for stateful applications
-- Works natively within a Nobus VPC subnet`
+### Design guidance
+- Set minimum 2 across two AZs for anything production-facing; minimum 1 saves pennies and forfeits availability
+- Scale on the constraint metric (usually CPU for web tiers; queue depth for workers)
+- Set the maximum deliberately: it is your cost ceiling and the customer's budget guardrail
+- Instances must be stateless to scale: sessions in the database or cache, files in FOS, never on local disk
+
+### Load Balancing: the front door
+The platform load-balancing pattern uses **HAProxy** (commonly on pfSense) as a high-availability proxy for TCP and HTTP applications:
+- **Frontend:** receives traffic on the Floating IP (80/443)
+- **ACLs:** map hostnames to backends, so one load balancer serves many applications (domain1.com to backend A, domain2.com to backend B)
+- **Backends:** target groups of FCS instances with health checks; unhealthy members are ejected automatically
+- **Default backend:** catches unmatched traffic
+- **Statistics dashboard:** live session and backend health view (commonly on port 2200), your operations demo
+
+Security group for a typical LB: 80/443 open to the internet, 22 and the stats port restricted to admin IPs.
+
+### The reference pattern (memorize this diagram)
+Internet -> Floating IP -> Load balancer (HAProxy) -> Autoscaling web tier (2-10x si.2.4, multi-AZ) -> Managed database (FBS-backed)
+- Floating IP survives LB replacement (remap, no DNS change)
+- Web tier scales with demand; database scales vertically
+- Every tier's security group admits only the tier above it
+
+### Field demo script (8 minutes)
+1. Show the scaling group at 2 instances; show the policy (CPU > 70% adds one)
+2. Generate load; watch a third instance launch and enter the backend automatically
+3. Terminate an instance manually; watch the group replace it without intervention
+4. Close: "Nobody was paged. That is the operational difference we are selling."
+
+### Key takeaways
+- Launch configuration + scaling group + policies; dynamic, predictive, or scheduled
+- Self-healing (health checks, replacement, AZ rebalancing) is included and demo gold
+- HAProxy frontends with ACL-based routing let one load balancer serve many applications`
         },
       ],
       quiz: {
@@ -714,33 +829,61 @@ Managed DNS service for mapping domain names to IP addresses. **Free for all Nob
         {
           id: 'tech-m5-l1',
           title: '5.1-5.2 Shared Responsibility & Security Services',
-          content: `## Shared Responsibility Model
+          content: `## The Shared Responsibility Model and the Security Stack
 
-### Nobus Responsibility (Security OF the Cloud)
-- Physical data centre security (Tier III, biometrics, CCTV)
-- Hypervisor security and tenant isolation
-- Network infrastructure
-- Data encryption in transit between NCS components
-- MFA and RBAC for platform administration
-- IDS/IPS on network perimeter
-- SLA compliance and uptime guarantees
+> **Why this matters:** Security is the first question enterprise evaluators ask and the fastest way to lose credibility if you answer vaguely. The shared responsibility model is the map: it says exactly what Nobus secures, what the customer (and you, as their partner) must secure, and which tools do each job.
 
-### Customer Responsibility (Security IN the Cloud)
-- OS patching and hardening
-- Application-level security
-- IAM: user accounts, roles, permissions
-- Data encryption at rest
-- Security Group and Firewall configuration
-- Backup and recovery management
-- Industry regulatory compliance (PCI-DSS, NDPR, etc.)
+### What you will learn
+- The precise split of security duties between Nobus and the customer
+- The layered security toolset and what each layer is for
+- How to run the security conversation with an enterprise evaluator
 
-## Built-in Security Controls
-- **Security Groups:** Instance-level stateful packet filtering
-- **Cloud Firewall (FaaS):** Tenant-level perimeter control
-- **Network ACLs:** Stateless access control at subnet level
-- **TLS Encryption:** All data in transit secured with TLS
-- **MFA:** Available for dashboard login - mandate for all admin accounts
-- **RBAC:** Granular permission assignment`
+### The model: who secures what
+
+**Nobus secures the cloud itself:**
+- Physical security of Tier III data centres (24/7 facility control)
+- Infrastructure: hypervisors, storage fabric, core network
+- Platform encryption machinery, IDS/IPS, SIEM monitoring, incident response process
+- Compliance certifications: ISO 27001, GDPR posture, PCI DSS support, NDPR alignment
+
+**The customer (with you) secures what runs IN the cloud:**
+- Data classification and encryption choices
+- Identity: strong passwords, MFA enforcement, role-based access, key-pair hygiene
+- Network policy: security groups, firewall rules, exposed ports
+- Operating systems: patching, hardening, anti-malware
+- Application security and activity monitoring
+
+The one-line version for meetings: **"Nobus secures the building and the platform; we secure what you put in it, together."** Never imply the platform makes customer-side negligence safe; evaluators respect the honest split.
+
+### The layered toolset (defense in depth)
+
+| Layer | Tool | What it does |
+|---|---|---|
+| Instance NIC | Security Groups | Stateful allow rules per port/protocol/source; changes propagate to attached instances instantly |
+| Network edge | Cloud Firewalls | Policy-based, ordered rules (first match wins), allow/deny/reject, IPv4 and IPv6 |
+| Deep inspection | Sophos XG Firewall | NGFW appliance: synchronized security, AI threat detection, web/app control, email protection (min 2 vCPU / 4 GB, 30+80 GB disks) |
+| Deep inspection (alt) | FortiGate NGFW | FortiOS: IPS, application control, DPI, UTM, SD-WAN, FortiGuard intelligence |
+| Data at rest | FBS encryption | AES-256 on volumes and snapshots, encrypted in transit between instance and storage |
+| Workload protection | Acronis Cyber Protect | Backup + anti-ransomware + vulnerability scanning + forensic backup (min 8 GB RAM / 100 GB) |
+| Connectivity | Site-to-Site VPN | IPsec, AES128/256, DH groups with PFS, SHA1/SHA2 |
+
+### Design defaults you should apply on every engagement
+1. Security groups per tier, least privilege: web admits 443 from the internet; app admits only the web SG; database admits only the app SG
+2. Management ports (22, 3389) restricted to named admin IPs or reached via VPN; never 0.0.0.0/0
+3. FBS encryption on for all volumes carrying customer data (it is standard; say so)
+4. One NGFW appliance (Sophos or FortiGate) at the perimeter of any regulated-industry design
+5. Acronis on anything the customer cannot afford to lose, with a tested restore, not just a backup
+
+### Running the enterprise security conversation
+1. Open with the shared responsibility split (whiteboard it; two columns)
+2. Walk the layers table top to bottom, mapping each to their stated concerns
+3. Name the certifications once, precisely: ISO 27001 certified, PCI DSS supported, NDPR aligned
+4. Close with the restore-drill offer: "Security you have not tested is a hope. We schedule quarterly restore drills."
+
+### Key takeaways
+- Nobus: physical, infrastructure, platform, certifications. Customer + partner: data, identity, network policy, OS, apps
+- Defense in depth: security groups + cloud firewalls + NGFW appliance + encryption + protected backups
+- Least-privilege security groups per tier is the default posture, not the premium option`
         },
         {
           id: 'tech-m5-l2',
@@ -1082,85 +1225,150 @@ NCB supports backing up workloads from **any source** to Nobus:
         {
           id: 'tech-m8-l1',
           title: 'Lab 1: Provision a Web Server',
-          content: `## Lab 1 - Provision a Web Server with FCS
+          content: `## Lab 1: Provision a Production-Grade Web Server
 
-**Objective:** Launch an FCS instance, configure security, attach floating IP, deploy Apache.
+> **Objective:** Launch a Linux FCS instance, secure it correctly, assign public access, and serve a web page. This is the foundational workflow every Nobus engineer must perform confidently in front of a customer. Target time: 45 minutes.
 
-### Steps
+### Prerequisites
+- Partner lab credentials for dashboard.nobus.io
+- A terminal with SSH (or PuTTY on Windows, with PuTTYgen)
 
-1. Log in to **dashboard.nobus.io**
-2. Create Security Group \`web-sg\`:
-   - Inbound TCP 22 from your IP
-   - Inbound TCP 80 from 0.0.0.0/0
-   - Inbound TCP 443 from 0.0.0.0/0
-3. Launch FCS Instance:
-   - NMI: Ubuntu 20.04
-   - Flavor: si.2.4
-   - Security Group: web-sg
-   - Generate new SSH key pair
-4. Assign a **Floating IP** from Networking section
-5. SSH into instance:
-\`\`\`bash
-ssh -i your-key.pem ubuntu@<floating-ip>
-\`\`\`
-6. Install Apache:
-\`\`\`bash
-sudo apt-get update && sudo apt-get install -y apache2
-\`\`\`
-7. Verify: Open browser → \`http://<floating-ip>\` - Apache default page should display`
+### Part A: Key pair (5 min)
+1. Console: Project > Compute > Key Pairs > Create Key Pair
+2. Name it lab1-[yourname], type SSH, create, and the .pem downloads automatically
+3. Secure it locally: on Linux/macOS run: chmod 400 lab1-yourname.pem
+   (Windows/PuTTY: import the .pem into PuTTYgen, save as .ppk)
+**Checkpoint:** you hold the private key; Nobus holds only the public half. If you lose the .pem, you cannot re-download it.
+
+### Part B: Security group (5 min)
+1. Project > Network > Security Groups > Create: name web-lab1
+2. Add rules:
+   - SSH, TCP 22, source: YOUR current public IP with /32 (find it via any what-is-my-ip service)
+   - HTTP, TCP 80, source: 0.0.0.0/0
+3. Note what you did NOT do: 22 is not open to the world. This is the habit that separates professionals.
+
+### Part C: Launch the instance (10 min)
+1. Project > Compute > Instances > Launch Instance
+2. Name: web-lab1 | Source: image **Ubuntu-22.04-64bit** | Flavor: **si.2.4.30.l** (2 vCPU, 4 GiB, 30 GB)
+3. Network: the lab subnet | Security group: web-lab1 | Key pair: lab1-[yourname]
+4. Launch, and watch the status move Build -> Running (typically 2-4 minutes)
+**Checkpoint:** note that billing starts at Running: pre-billing in action.
+
+### Part D: Floating IP and connection (10 min)
+1. Project > Network > Floating IPs > Allocate IP, then Associate it to web-lab1
+2. Connect: ssh -i lab1-yourname.pem ubuntu@[floating-ip]
+3. First-connection host fingerprint prompt: type yes
+**Troubleshooting drill:** if the connection hangs, the cause is almost always (a) security group source IP wrong, (b) wrong username for the image, or (c) wrong key. Check in that order; this diagnostic order will serve you for years.
+
+### Part E: Serve a page (10 min)
+Run on the instance:
+1. sudo apt update && sudo apt install -y nginx
+2. echo "[Customer name] on Nobus Cloud - deployed by [you]" | sudo tee /var/www/html/index.html
+3. Browse to http://[floating-ip] and see your page live on the internet
+
+### Part F: Evidence and teardown (5 min)
+1. Screenshot the browser page and the instance detail view (your lab evidence)
+2. Teardown in order: disassociate and release the Floating IP, terminate the instance, delete the security group and key pair
+3. Confirm the instance list is empty: in customer engagements, orphaned lab resources become billing complaints
+
+### What you practiced
+Key-pair auth, least-privilege security groups, image + flavor selection, floating IP mechanics, the SSH troubleshooting ladder, and clean teardown: the exact sequence of a customer PoC day one.`
         },
         {
           id: 'tech-m8-l2',
           title: 'Lab 2: Attach & Mount FBS Volume',
-          content: `## Lab 2 - Attach and Mount an FBS Volume
+          content: `## Lab 2: Block Storage Operations with FBS
 
-**Objective:** Create, attach, and mount an FBS data volume as persistent storage.
+> **Objective:** Create, attach, format, use, snapshot, and restore an FBS volume. Storage operations are the heart of migration and DR work; this lab makes them muscle memory. Target time: 45 minutes.
 
-### Steps
+### Prerequisites
+- A running Linux instance from Lab 1 (or launch a fresh si.2.4.30.l)
+- SSH access to it
 
-1. Navigate to **Volumes** → **Create Volume**
-   - Size: 50 GB
-   - Type: GP2
-   - AZ: Match your instance
-2. Select volume → **Actions** → **Attach Volume** → Select instance
-3. SSH in and verify:
-\`\`\`bash
-lsblk                              # Look for /dev/vdb
-sudo mkfs -t ext4 /dev/vdb         # Format
-sudo mkdir /mnt/data                # Create mount point
-sudo mount /dev/vdb /mnt/data       # Mount
-\`\`\`
-4. Make permanent:
-\`\`\`bash
-echo '/dev/vdb /mnt/data ext4 defaults 0 0' | sudo tee -a /etc/fstab
-\`\`\`
-5. Verify: \`df -h\` - confirm /mnt/data shows 50 GB`
+### Part A: Create and attach a volume (10 min)
+1. Console: Project > Volumes > Volumes > Create Volume
+2. Name: data-lab2 | Size: **10 GB** | leave defaults
+3. Actions > Manage Attachments > attach to your instance
+4. On the instance, find the new device: lsblk (you will see a 10G disk, typically vdb, with no partitions)
+**Concept check:** the volume is network-attached storage with AES-256 encryption at rest; it exists independently of the instance and can outlive it.
+
+### Part B: Format and mount (10 min)
+On the instance:
+1. sudo mkfs.ext4 /dev/vdb
+2. sudo mkdir /data && sudo mount /dev/vdb /data
+3. df -h /data (confirm the ~10G filesystem)
+4. Write test data: echo "customer-critical-file v1" | sudo tee /data/critical.txt
+For permanence across reboots, add it to /etc/fstab (in production, always by UUID from blkid, never by device name; device letters can change).
+
+### Part C: Snapshot (10 min)
+1. Best practice: quiesce writes first: sudo sync
+2. Console: Volumes > data-lab2 > Create Snapshot: name snap-lab2-v1
+3. While it completes, understand the economics: snapshots are **incremental** (only changed blocks after the first) and are stored in FOS at NGN 120 per GB-month of actual consumed data, not provisioned size
+4. Now simulate the disaster: sudo rm /data/critical.txt (gone)
+
+### Part D: Restore (10 min)
+1. Console: Volumes > Snapshots > snap-lab2-v1 > Create Volume: name data-lab2-restored
+2. Attach the new volume to the instance (it appears as vdc)
+3. sudo mkdir /restore && sudo mount /dev/vdc /restore
+4. cat /restore/critical.txt: your file is back
+**Say this to customers verbatim:** "A backup you have not restored is a hope, not a backup. We just proved the restore."
+
+### Part E: Resize awareness (5 min)
+Volumes extend without downtime (Volumes > Extend Volume), followed by an online filesystem grow (resize2fs for ext4). Note the platform guidance of allowing several hours between successive modifications to the same volume. You will not exercise this in the lab, but you must be able to explain it.
+
+### Part F: Teardown (5 min)
+Unmount (sudo umount /data /restore), detach both volumes, delete volumes and the snapshot, and verify the Volumes list is clean.
+
+### What you practiced
+The complete volume lifecycle: create, attach, format, mount, snapshot, destroy, restore, and the incremental-snapshot economics that make Nobus DR designs affordable. This is the demo that closes DR-first deals.`
         },
         {
           id: 'tech-m8-l3',
           title: 'Lab 3: Upload to FOS & Lab 4: VPN',
-          content: `## Lab 3 - Upload Objects to Nobus FOS
+          content: `## Lab 3: Object Storage with FOS + Lab 4: Site-to-Site VPN
 
-1. Navigate to **Object Storage** → **Create Container**
-   - Name: \`partner-test-bucket\`
-2. **Upload Object** → select local file
-3. Click object name to view metadata and access URL
-4. Test direct access via browser or curl
-5. Enable **Versioning** on the container
+> **Objective:** Two labs in one session. First, master FOS container and object operations (20 minutes). Then build a working IPsec VPN with pfSense, the connectivity pattern in most enterprise deals (70 minutes).
 
----
+## Lab 3: FOS Object Storage (20 min)
 
-## Lab 4 - Configure Site-to-Site VPN
+### Part A: Containers and objects
+1. Console: Project > Object Store > Containers > Create Container: name lab3-backups, access **Not public**
+2. Upload any small file (a text file will do); note its metadata in the detail panel
+3. Create a second container lab3-public with public access; upload an image; open its URL in a private browser window: it serves directly
+**Concept check:** FOS is flat (containers hold objects; no real directories), distributed across data zones, and effectively unlimited. Objects are file + metadata.
 
-### On Nobus Side:
-1. Navigate to **Networking** → **VPN**
-2. Create **VPN Service:** select the target router
-3. Create **IKE Policy:** AES-256, SHA-256
-4. Create **IPSec Policy:** tunnel mode, ESP
-5. Create **VPN Connection:** enter peer gateway IP, pre-shared key, local/remote subnets
+### Part B: The economics conversation
+Know these cold: storage **NGN 60/GB-month** at every tier, transfer-in free, requests NGN 2 per 1,000, DELETE free, and zero egress fees on the platform. Run the numbers aloud: 500 GB of backup archives = NGN 30,000/month. This is why FOS is the default backup target in your designs.
 
-### On Customer Side:
-Configure matching IKE/IPSec profile on their router (Cisco, Fortinet, Palo Alto, MikroTik) pointing to the Nobus floating IP.`
+### Part C: Teardown
+Delete objects, then containers (containers must be empty to delete).
+
+## Lab 4: Site-to-Site VPN with pfSense (70 min)
+
+### The scenario
+Customer head office must reach cloud workloads privately. You will build the cloud side of an IPsec tunnel and verify traffic flows.
+
+### Part A: Launch the pfSense appliance (15 min)
+1. Launch an instance from image **pfsense-64bit**: minimum 2048 MB RAM, 30 GB disk (si.2.4 fits)
+2. Security group for VPN (create vpn-lab4): UDP 500 (IKE), UDP 4500 (NAT-T), ESP (protocol 50), AH (protocol 51), plus HTTPS 443 and SSH 22 from your admin IP only
+3. Associate a Floating IP; browse to https://[floating-ip] and complete the pfSense setup wizard
+
+### Part B: Configure IPsec (25 min)
+1. VPN > IPsec > Add P1 (Phase 1): remote gateway = the peer's public IP (your instructor pairs teams), IKEv2, encryption **AES-256**, hash **SHA-256**, DH group 14, and a strong pre-shared key exchanged out of band
+2. Add P2 (Phase 2): local subnet = your cloud subnet, remote subnet = the peer's, ESP, AES-256/SHA-256, with PFS
+3. Status > IPsec > Connect, and watch Phase 1 then Phase 2 establish
+**Troubleshooting ladder:** (1) security group ports, (2) PSK mismatch, (3) phase parameter mismatch, (4) subnet overlap. In the field, 80% of tunnel failures are (1) or (2).
+
+### Part C: Verify like a professional (20 min)
+1. From an instance behind your pfSense, ping a private IP behind the peer's
+2. Measure: run a throughput test across the tunnel and note latency
+3. Record the evidence: tunnel status screenshot, ping output, throughput figure: exactly what you will hand a customer as PoC evidence
+
+### Part D: Teardown (10 min)
+Disconnect the tunnel, release the Floating IP, terminate the instance, delete the security group.
+
+### What you practiced
+Object storage lifecycle and its pricing story, appliance deployment from the image catalogue, real IPsec configuration with production-grade parameters, and the verification discipline that turns "it connects" into customer-signable evidence.`
         },
       ],
       quiz: {
@@ -1187,43 +1395,52 @@ Configure matching IKE/IPSec profile on their router (Cisco, Fortinet, Palo Alto
         {
           id: 'tech-m9-l1',
           title: '9.1-9.2 Migration Framework & Checklist',
-          content: `## The 5Rs Migration Framework
+          content: `## Migration: Framework and Checklist
 
-| Strategy | Description | Nobus Fit |
-|----------|-------------|-----------|
-| **Rehost (Lift & Shift)** | Move VMs as-is to FCS. Minimal changes. Fastest path. | VM Import/Export or manual rebuild |
-| **Replatform** | Move with targeted optimizations (e.g., self-managed MySQL → Managed MySQL) | Leverage managed services |
-| **Refactor** | Redesign for cloud-native: containerize on CKE, use FOS, Auto Scaling | Highest effort, highest long-term benefit |
-| **Retire** | Decommission unneeded workloads. Reduces migration scope. | - |
-| **Retain** | Keep specific workloads on-prem. Use NFT or VPN for hybrid. | Hybrid connectivity |
+> **Why this matters:** Migration is where partner revenue lives: assessment, execution and the managed services that follow. It is also where reputations are made or destroyed. This lesson gives you the framework that makes migrations boring, which is exactly what customers pay for.
 
-## Migration Checklist
+### What you will learn
+- The 6R decision framework applied to Nobus targets
+- The four-phase migration method with go/no-go gates
+- The cutover checklist that prevents 2 AM surprises
 
-### Phase 1 - Discovery & Assessment
-- ☐ Inventory all servers: OS, RAM, CPU, disk, network
-- ☐ Identify application dependencies
-- ☐ Define RTO/RPO requirements
-- ☐ Assess compliance requirements (NDPR, CBN, PCI-DSS)
-- ☐ Estimate sizing using NCS Monthly Calculator
+### The 6R framework (decide per workload, not per customer)
+| Strategy | Meaning | Nobus target |
+|---|---|---|
+| Rehost | Lift-and-shift as-is | FCS via image import/export |
+| Replatform | Small upgrades in transit | FCS + swap self-managed DB for managed PostgreSQL/MySQL/MSSQL/MongoDB |
+| Repurchase | Move to SaaS | Out of scope; be honest when it is the right answer |
+| Refactor | Re-architect | Kubernetes Engine, Kafka, autoscaling groups |
+| Retire | Kill it | Every estate has 10-20% of these; finding them funds the project |
+| Retain | Leave (for now) | Keep on-prem, connect via VPN/Fast Transit, protect with NCB |
 
-### Phase 2 - Preparation
-- ☐ Create VPC, subnets, and security groups
-- ☐ Set up VPN or NFT connectivity
-- ☐ Create base NMIs
-- ☐ Set up monitoring and alerting
+Most first engagements are **rehost + replatform**, with refactor as phase two once trust is earned.
 
-### Phase 3 - Migration Execution
-- ☐ Migrate non-production first, validate
-- ☐ Stage data via FBS snapshots and FOS
-- ☐ Pilot cutover with maintenance window
-- ☐ Production cutover, update DNS
-- ☐ Monitor 48-72 hours post-cutover
+### The four phases and their gates
 
-### Phase 4 - Optimization
-- ☐ Right-size instances based on actual utilization
-- ☐ Implement Auto Scaling for variable workloads
-- ☐ Move cold data from FBS to FOS
-- ☐ Enable scheduled FBS snapshots`
+**Phase 1: Assess (1-2 weeks).** Full inventory (the presales workload sheet), dependency mapping (what talks to what: missed dependencies are the number one migration killer), 6R decision per workload, licensing review (per-core licenses point to Dedicated Hosts/BYOL). *Gate: signed-off inventory and wave plan.*
+
+**Phase 2: Prepare (1-2 weeks).** Build the landing zone: virtual data center, subnets, security groups per tier, VPN up, NMIs prepared, backup policies defined. Migrate ONE non-critical workload end-to-end as the pathfinder. *Gate: pathfinder running in production for one week.*
+
+**Phase 3: Migrate (in waves).** Wave size 3-8 workloads, ordered: dev/test first, internal apps second, customer-facing last. Per workload: image import (or fresh build + data restore), parallel run, validation against pre-agreed checks, DNS/traffic cutover in a maintenance window. *Gate per wave: validation checklist green before the next wave starts.*
+
+**Phase 4: Optimize (weeks 2-6 after).** Right-size from observed utilization (most rehosted instances are oversized 30-50%: pass the savings to the customer and bank the goodwill), enable autoscaling where patterns justify it, snapshot schedules verified, handover runbook delivered, managed-services cadence begun.
+
+### The cutover checklist (laminate this)
+1. Rollback plan written and TESTED before the window opens
+2. DNS TTLs dropped to 300s at least 24 hours ahead
+3. Data sync verified: row counts, checksums, timestamps
+4. Old system kept warm (paused, not deleted) for two weeks
+5. Every stakeholder knows the window, the go/no-go time, and who decides
+6. The first Nobus snapshot taken immediately after cutover succeeds
+
+### The honest conversation (say this early)
+"There will be a maintenance window; zero-downtime is available for some workloads at additional cost. Something small will surprise us; the plan absorbs it. Old systems stay recoverable for two weeks. That is what a professional migration looks like."
+
+### Key takeaways
+- 6R per workload; rehost + replatform first, refactor once trusted
+- Four phases, each with a hard gate; the pathfinder workload de-risks everything after it
+- Right-sizing after migration is your credibility dividend: measurable savings you hand the customer`
         },
       ],
       quiz: {
@@ -1250,43 +1467,52 @@ Configure matching IKE/IPSec profile on their router (Cisco, Fortinet, Palo Alto
         {
           id: 'tech-m10-l1',
           title: '10.1-10.3 Monitoring, Troubleshooting & Support',
-          content: `## Recommended Monitoring Stack
+          content: `## Monitoring, Troubleshooting and Support Operations
 
-- **System Metrics:** Prometheus Node Exporter, Telegraf, or Zabbix agent
-- **Application Metrics:** Prometheus-compatible endpoints
-- **Log Aggregation:** ELK Stack or Graylog on dedicated FCS instances
-- **Alerting:** CPU > 85%, disk > 80%, health check failures → email/Slack
-- **Dashboard:** Grafana connected to Prometheus
+> **Why this matters:** Day-2 operations are where partners earn recurring revenue and where customer trust compounds or evaporates. A defined operating rhythm, a diagnostic method, and a clean escalation path turn support from firefighting into a product you sell.
 
-## Common Troubleshooting
+### What you will learn
+- What to monitor on a Nobus estate and the thresholds that matter
+- The four-layer diagnostic ladder for any incident
+- The escalation model between customer, partner and Nobus support
 
-### Instance Cannot Be Reached via SSH
-1. Verify instance is **Running** in console
-2. Check Floating IP is assigned and associated
-3. Verify Security Group allows TCP 22 from your IP
-4. Check NMI boot log in console output
-5. Verify correct SSH key pair
+### The monitoring baseline (per customer estate)
+| What | Signal | Act when |
+|---|---|---|
+| Instance state | Running/paused/error | Any unexpected state change |
+| CPU | Sustained utilization | > 80% for 15 min: scale or investigate |
+| Memory | Utilization | > 85% sustained: resize or fix the leak |
+| Disk | FBS volume fill | > 80%: extend the volume (online) |
+| Endpoint | HTTP checks from outside | Any failed check, immediately |
+| Backups | Snapshot/NCB job success | Any failed job, same day |
+| Billing | Wallet balance and cycle date | Balance below one cycle: top up (auto-billing helps but watch it) |
+| Network | Topology view in console | Use the Network Topology Center to visualize device connectivity |
 
-### FBS Volume Not Visible
-1. Confirm attachment shows "in-use" in console
-2. Run \`lsblk\` to list block devices
-3. Try \`sudo partprobe\` or rescan
-4. Mount if previously formatted
+Set these up in week one of every engagement. A monitoring gap discovered during an outage is a resume-generating event.
 
-### No Internet Access
-1. Verify Floating IP assigned
-2. Check Security Group egress rules
-3. Verify Cloud Router has default route to external gateway
-4. Test: \`ping 8.8.8.8\` or \`curl http://example.com\`
+### The four-layer diagnostic ladder (work it in order, always)
+**Layer 1: Platform.** Is the instance Running? Volume attached? Floating IP associated? AZ healthy? (Console, 2 minutes.)
+**Layer 2: Network.** Security group rules for the failing port? Cloud firewall policy order (first match wins)? VPN tunnel phase 1/2 up? Can you reach the private IP from inside?
+**Layer 3: Operating system.** SSH/RDP in: disk full (df -h)? Service running (systemctl status)? OOM killer in logs? Recent patch?
+**Layer 4: Application.** App logs, database connections, dependency timeouts.
 
-## Support Channels
+The discipline: never jump to layer 4 because the developer is loudest. 70% of incidents live in layers 2 and 3, and the ladder finds them in minutes.
 
-| Channel | Usage |
-|---------|-------|
-| **Support Portal** (dashboard.nobus.io) | Primary channel for technical tickets |
-| **Email Support** | Non-urgent queries and billing |
-| **Partner Hotline** | Priority support for certified partners |
-| **Documentation** | nobus.io/documentation |`
+### Worked example
+"The website is down" at 08:10. L1: instance Running (2 min). L2: security group intact, but the load balancer backend shows one member ejected (3 min). L3: SSH to that member: root disk 100% full from unrotated logs (3 min). Fix: clear logs, add rotation, extend FBS volume online, re-enter the backend. Total: 15 minutes, and the postmortem action (log rotation fleet-wide) prevents the repeat. That postmortem note, sent to the customer unprompted, is what world-class support looks like.
+
+### The escalation model
+- **First line: you, the partner.** OS, application, configuration, and everything in layers 2-4. This is the managed-services fee you charge, per the Partner Agreement.
+- **Second line: Nobus support** via the support portal (dashboard.nobus.io): platform faults, AZ issues, billing disputes, anything in layer 1 you cannot resolve.
+- When escalating, send the evidence package: instance IDs, timestamps, what the ladder eliminated, screenshots. Tickets with evidence resolve dramatically faster, and your professionalism is visible to the customer.
+
+### The operating rhythm you sell
+Daily: dashboard sweep of all customer estates. Weekly: backup verification and capacity review. Monthly: service report to the customer (uptime, incidents, changes, recommendations). Quarterly: restore drill and right-sizing review. Put this rhythm in your managed-services contract; it is the product.
+
+### Key takeaways
+- Monitor the baseline table from week one; thresholds decided before incidents, not during
+- The four-layer ladder, in order, every time; most incidents are network or OS layer
+- First-line support is your revenue; escalate to Nobus with evidence packages, not vibes`
         },
       ],
       quiz: {
@@ -1313,25 +1539,46 @@ Configure matching IKE/IPSec profile on their router (Cisco, Fortinet, Palo Alto
         {
           id: 'tech-m11-l1',
           title: '11.1 Technical Objections & Responses',
-          content: `## Common Technical Objections
+          content: `## Handling Technical Objections
 
-### "Nobus doesn't have as many services as AWS or Azure."
-> "80% of enterprise workloads run on compute, storage, and networking - all of which Nobus provides at production grade. For any gaps, we can architect a hybrid solution using NFT connectivity."
+> **Why this matters:** In technical evaluations, the customer's engineers will probe you: partly to assess the platform, partly to assess YOU. A precise, honest answer to a hard technical question wins more trust than any slide. These are the objections you will face, with answers that hold up.
 
-### "We are concerned about uptime - this is a Nigerian company."
-> "Nobus runs in Tier III certified data centres across multiple African availability zones, with a 99.982% uptime guarantee and N+1 redundancy. Being African-operated is an advantage: no undersea cable dependency for local data, and support engineers are in your time zone."
+### What you will learn
+- Precise responses to the eight technical objections you will actually hear
+- Where to concede honestly, and how to reframe
+- The demonstration that answers each objection better than words
 
-### "Our developers know AWS APIs - steep learning curve?"
-> "Nobus is built on OpenStack. Terraform's OpenStack provider works natively. Core concepts (instances, security groups, object storage, VPC) are identical - just different names: FCS = EC2, FBS = EBS, FOS = S3."
+**1. "OpenStack is dead / niche."**
+Answer: OpenStack runs CERN's compute, Walmart's infrastructure, and most large telco clouds; it is the standard for sovereign and private-public cloud worldwide. For you it means standard APIs, Terraform support, and no proprietary lock-in. Demo: terraform plan against the platform.
 
-### "Can Nobus help with CBN/NDPR compliance?"
-> "Absolutely. Data hosted on Nobus resides entirely within Nigeria, supporting NDPR data residency. We can provide a compliance mapping document showing how Nobus controls align to CBN requirements."
+**2. "Your instance catalogue is smaller than AWS's 400 types."**
+Answer: True, and deliberate. The si.1 to si.16 families plus compute-optimized, storage-optimized, GPU and burstable classes cover the workload spectrum; AWS's catalogue exists partly because of a decade of hardware generations you must decode. Right-sizing from measured utilization matters far more than menu length. Demo: map their current servers to flavors in ten minutes, live.
 
-### "What happens if Nobus goes down?"
-> "FBS data is replicated across multiple servers. FBS snapshots to FOS create additional recovery points. We design backup and DR plans using FOS replication and NCB to meet your RPO."
+**3. "What about the services you don't have?"**
+Answer: Honestly: if the architecture requires a niche managed service Nobus lacks, we will say so; and NCB even protects workloads that stay on AWS or Azure. For the core enterprise estate (compute, storage, Kubernetes, Kafka, four database engines, firewalls, DNS), the catalogue is complete. Never bluff a missing service; name the workaround or concede.
 
-### "We had a bad experience with another local cloud provider."
-> "Let's propose a structured Proof of Concept with clear success criteria. Run your workload on Nobus for 2-4 weeks and measure against your own benchmarks."`
+**4. "Can it really handle our scale?"**
+Answer: Autoscaling groups with dynamic, predictive and scheduled policies; multi-AZ placement; load balancing; and burstable instance classes. Then make it concrete: "Your peak is X concurrent users; that is an autoscaling group of N si.4.8 instances; let us prove it in a 14-day PoC with your load profile." Scale objections die in PoCs, not in meetings.
+
+**5. "How is 99.982% credible for a local provider?"**
+Answer: It is the Tier III design standard: concurrent maintainability, N+1 power and cooling, multi-AZ. Offer the honest comparison: "Measure your current environment's real availability first; most on-prem rooms cannot document 99.5%." Then put the SLA in the contract.
+
+**6. "IPv6? Multi-region replication? [Feature X]?"**
+Answer: The platform is IPv4-only for virtual data centers today; cross-zone DR is achieved with snapshot copies and NCB replication; Kenya (Q2 2026) adds a second country region. State roadmap items only when they are public and dated. Engineers forgive gaps; they never forgive discovered bluffs.
+
+**7. "Migration will break things."**
+Answer: Agree: unmanaged migrations do. Walk the four-phase framework: pathfinder workload, parallel runs, validation gates, tested rollback, two-week warm standby. Offer the migration lab demo as proof the tooling exists.
+
+**8. "We'll be locked in."**
+Answer: The exit path is real: image export service, standard OpenStack APIs, open-source Linux images, and your data in standard formats (ext4 volumes, S3-style objects, standard database engines). "We keep you by being better, not by holding your data hostage." That sentence, delivered calmly, ends the objection.
+
+### The meta-skill
+Concede small points quickly and completely ("correct, we do not have that today"); it buys the credibility that carries your strong answers. Engineers are allergic to salespeople; be an engineer with a quota instead.
+
+### Key takeaways
+- Every objection gets: direct answer, honest concession where due, then a demonstrable proof
+- Scale and performance objections convert to PoC success criteria; never argue them verbally
+- Fast, clean concessions on small gaps are what make your big claims believable`
         },
       ],
       quiz: {
@@ -1358,27 +1605,56 @@ Configure matching IKE/IPSec profile on their router (Cisco, Fortinet, Palo Alto
         {
           id: 'tech-m12-l1',
           title: '12.1-12.2 Competency Levels & Assessment',
-          content: `## Partner Technical Competency Levels
+          content: `## Certification: Competency Levels and Assessment
 
-| Level | Requirements | Benefits |
-|-------|-------------|----------|
-| **Level 1 - Associate** | Complete this curriculum + pass NCS Associate Assessment | Authorized for FCS/FBS deployments. Access to partner resources. |
-| **Level 2 - Professional** | Level 1 + 3 successful deployments + Advanced Architecture Workshop | Authorized for complex architectures, migrations, K8s. Listed in Partner Directory. |
-| **Level 3 - Expert / NPN Certified** | Level 2 + NFT certification + 10 deployments + 2 enterprise accounts | Authorized for all NFT tiers. Priority support. Access to pre-sales team. |
+> **Why this matters:** Certification is not a ceremony; it is the quality bar that lets Nobus and customers trust the partner channel. This lesson explains exactly what each level requires, how assessment works, and how to prepare so your team passes the first time.
 
-## NCS Associate Assessment Domains
+### What you will learn
+- The three competency levels and what each qualifies you to do
+- The assessment format and pass requirements
+- A two-week preparation plan that works
 
-| Domain | Weight |
-|--------|--------|
-| **FCS** - Instance management, NMIs, flavors, Auto Scaling | 25% |
-| **Storage** - FBS volumes, snapshots, FOS containers | 20% |
-| **Networking** - VPC, Security Groups, Floating IPs, VPN | 20% |
-| **Security** - Shared responsibility, firewalls, compliance | 15% |
-| **Architecture** - HA patterns, DR tiers, migration | 15% |
-| **Operations** - Monitoring, troubleshooting, support | 5% |
+### The three levels
 
-> **Passing Score:** 75% or higher
-> **Format:** 50 multiple-choice questions, 90 minutes`
+**Level 1: NCS Associate (this bootcamp's target)**
+- **Scope:** Deploy and operate core services: FCS instances, FBS/FOS storage, security groups, floating IPs, basic backup
+- **Qualifies you to:** run standard deployments and PoCs under supervision, deliver Lab 1-4 workflows to customers
+- **Assessment:** module quizzes across this course (75% pass mark each) plus the final knowledge check
+
+**Level 2: NCS Professional**
+- **Scope:** Architecture and migration: multi-tier designs, autoscaling, VPN/Fast Transit connectivity, the 6R migration framework executed end-to-end, DR design with tested restores
+- **Qualifies you to:** lead customer implementations and own technical delivery on registered deals
+- **Assessment:** scenario-based exam plus a documented real or lab migration
+
+**Level 3: NCS Expert**
+- **Scope:** Complex estates: Kubernetes and Kafka architectures, regulated-industry designs (NDPR/PCI), performance engineering, multi-workload cutovers
+- **Qualifies you to:** act as the customer-facing architect on enterprise accounts, and train/mentor Associates
+- **Assessment:** panel review of a delivered project plus an advanced practical
+
+Certifications map directly to partner-tier progression: certified staff counts are a factor in advancing from Registered toward Platinum, which unlocks deeper program benefits.
+
+### How the quizzes work (Level 1 mechanics)
+- Each module ends in a quiz; **75% is the pass mark**
+- Retakes are permitted under the platform's retake policy (attempt limits and cooldowns apply), so treat the first attempt seriously
+- Your progress and passes are visible to your org admin and count toward the organization's standing
+
+### The two-week preparation plan
+**Week 1: Content.** One module per sitting, in order; keep your own one-page summary per module (writing it is the revision). Flag anything you cannot explain aloud to a colleague.
+**Week 2: Practice.** Re-run Labs 1-4 without the instructions; whiteboard the reference architectures from memory; drill the numbers that recur (instance naming, 99.982%, NGN 120/GB FBS, NGN 60/GB FOS, entry NGN 9,309, pass mark 75%); then take the quizzes.
+
+### Exam technique (yes, it matters)
+- Read every option; distractors are built from common misconceptions you have now been warned about
+- Absolute words ("always", "only") usually mark wrong answers; platform reality has conditions
+- When two options seem right, re-read the question for the qualifier ("MOST cost-effective", "FIRST step")
+- Answer from the course material, not from how AWS does it; translation errors are the top cause of wrong answers
+
+### After you pass
+Your certificate is downloadable from the platform and verifiable; add it to LinkedIn (it markets both you and the program), and book your Level 2 path with your org admin. Certification expires with major platform revisions, so expect periodic re-certification: staying current is the point.
+
+### Key takeaways
+- Associate = operate core services; Professional = architect and migrate; Expert = complex estates and mentorship
+- 75% pass mark, limited retakes: prepare properly and take attempt one seriously
+- Certified headcount advances your organization's partner tier; your exam is a team contribution`
         },
       ],
       quiz: {
