@@ -20,6 +20,11 @@ import SuperAdminDashboard from './pages/SuperAdminDashboard';
 import UserProfile from './pages/UserProfile';
 import Discussions from './pages/Discussions';
 import Leaderboard from './pages/Leaderboard';
+import SalesNavigator from './pages/SalesNavigator';
+import DealRegistration from './pages/DealRegistration';
+import MarketingHub from './pages/MarketingHub';
+import DemoLabs from './pages/DemoLabs';
+import ContentHub from './pages/ContentHub';
 import { Loader2 } from 'lucide-react';
 
 function LoadingScreen() {
@@ -67,6 +72,11 @@ function AppRoutes() {
                 <Route path="/course/:courseId/module/:moduleId/lesson/:lessonId" element={<LessonPage />} />
                 <Route path="/course/:courseId/module/:moduleId/quiz" element={<QuizPage />} />
                 <Route path="/certification" element={<Certification />} />
+                <Route path="/sales-navigator" element={<SalesNavigator />} />
+                <Route path="/deals" element={<DealRegistration />} />
+                <Route path="/marketing" element={<MarketingHub />} />
+                <Route path="/demo-labs" element={<DemoLabs />} />
+                <Route path="/content-hub" element={<ContentHub />} />
                 <Route path="/discussions" element={<Discussions />} />
                 <Route path="/leaderboard" element={<Leaderboard />} />
                 <Route path="/profile" element={<UserProfile />} />

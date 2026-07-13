@@ -139,6 +139,51 @@ export const api = {
   adminGetSsoConfig: (orgId) => request(`/admin/sso/${orgId}`),
   adminSetSsoConfig: (orgId, data) => request(`/admin/sso/${orgId}`, { method: 'PUT', body: JSON.stringify(data) }),
 
+  // Deal registration
+  getDeals: (status) => request(`/deals${status ? '?status=' + status : ''}`),
+  registerDeal: (data) => request('/deals', { method: 'POST', body: JSON.stringify(data) }),
+  approveDeal: (id) => request(`/deals/${id}/approve`, { method: 'PATCH' }),
+  rejectDeal: (id, reason) => request(`/deals/${id}/reject`, { method: 'PATCH', body: JSON.stringify({ reason }) }),
+  closeDeal: (id, outcome) => request(`/deals/${id}/close`, { method: 'PATCH', body: JSON.stringify({ outcome }) }),
+
+  // Sales navigator / pipeline
+  getLeads: () => request('/pipeline'),
+  getForecast: () => request('/pipeline/forecast'),
+  createLead: (data) => request('/pipeline', { method: 'POST', body: JSON.stringify(data) }),
+  updateLead: (id, data) => request(`/pipeline/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  deleteLead: (id) => request(`/pipeline/${id}`, { method: 'DELETE' }),
+  getLeadActivities: (id) => request(`/pipeline/${id}/activities`),
+  addLeadActivity: (id, note) => request(`/pipeline/${id}/activities`, { method: 'POST', body: JSON.stringify({ note }) }),
+
+  // Marketing materials
+  getMarketingAssets: (params) => {
+    const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+    return request(`/resources/marketing${qs}`);
+  },
+  downloadMarketingAsset: (id) => request(`/resources/marketing/${id}/download`, { method: 'POST' }),
+  addMarketingAsset: (data) => request('/resources/marketing', { method: 'POST', body: JSON.stringify(data) }),
+  updateMarketingAsset: (id, data) => request(`/resources/marketing/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+
+  // Content hub
+  getContentItems: (params) => {
+    const qs = params ? '?' + new URLSearchParams(params).toString() : '';
+    return request(`/resources/content${qs}`);
+  },
+  getContentItem: (id) => request(`/resources/content/${id}`),
+  addContentItem: (data) => request('/resources/content', { method: 'POST', body: JSON.stringify(data) }),
+  updateContentItem: (id, data) => request(`/resources/content/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+
+  // Demo labs
+  getLabs: () => request('/labs'),
+  getLab: (id) => request(`/labs/${id}`),
+  getLabAvailability: (id, date) => request(`/labs/${id}/availability?date=${date}`),
+  bookLab: (id, data) => request(`/labs/${id}/book`, { method: 'POST', body: JSON.stringify(data) }),
+  getLabBookings: () => request('/labs/bookings'),
+  cancelLabBooking: (id) => request(`/labs/bookings/${id}/cancel`, { method: 'PATCH' }),
+  completeLabBooking: (id) => request(`/labs/bookings/${id}/complete`, { method: 'PATCH' }),
+  createLab: (data) => request('/labs', { method: 'POST', body: JSON.stringify(data) }),
+  updateLab: (id, data) => request(`/labs/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+
   // Public API key management
   generateApiKey: (data) => request('/public/keys', { method: 'POST', body: JSON.stringify(data) }),
   getApiKeys: (orgId) => request(`/public/keys${orgId ? '?orgId=' + orgId : ''}`),

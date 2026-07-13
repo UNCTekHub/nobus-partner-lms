@@ -1,0 +1,146 @@
+import { Router } from 'express';
+import db from '../db.js';
+import { authenticate, requireRole } from '../middleware/auth.js';
+import { createNotification, notifySuperAdmins, awardPoints } from '../services/notifications.js';
+import { logAudit, getIP } from '../services/audit.js';
+
+const router = Router();
+
+const PROTECTION_DAYS = 90;
+
+function normalizeCustomer(name) {
+  return (name || '').toLowerCase().replace(/\s+/g, ' ').replace(/(ltd|limited|plc|inc|llc)\.?$/i, '').trim();
+}
+
+// Expire protection windows lazily on read
+function expireStaleDeals() {
+  db.prepare(`
+    UPDATE deals SET status = 'expired', updated_at = datetime('now')
+    WHERE status = 'approved' AND protection_expires IS NOT NULL AND protection_expires < datetime('now')
+  `).run();
+}
+
+// GET /api/deals — own org's deals (super admin sees all)
+router.get('/', authenticate, (req, res) => {
+  expireStaleDeals();
+  const base = `
+    SELECT d.*, o.name as org_name, u.name as submitted_by_name
+    FROM deals d JOIN organizations o ON d.org_id = o.id JOIN users u ON d.submitted_by = u.id
+  `;
+  if (req.user.role === 'super_admin') {
+    const { status } = req.query;
+    let sql = base;
+    const params = [];
+    if (status) { sql += ' WHERE d.status = ?'; params.push(status); }
+    sql += ' ORDER BY d.created_at DESC LIMIT 500';
+    return res.json(db.prepare(sql).all(...params));
+  }
+  if (!req.user.org_id) return res.json([]);
+  res.json(db.prepare(base + ' WHERE d.org_id = ? ORDER BY d.created_at DESC').all(req.user.org_id));
+});
+
+// POST /api/deals — register a deal
+router.post('/', authenticate, (req, res) => {
+  if (!req.user.org_id) return res.status(403).json({ error: 'Only partner users can register deals' });
+  const { customerName, customerEmail, customerIndustry, opportunityName, description, services, estValue, expectedCloseDate } = req.body;
+  if (!customerName || !opportunityName) {
+    return res.status(400).json({ error: 'Customer name and opportunity name are required' });
+  }
+
+  // Duplicate detection: same customer already protected by an active registration
+  const normalized = normalizeCustomer(customerName);
+  const candidates = db.prepare(`
+    SELECT d.id, d.org_id, d.customer_name, o.name as org_name FROM deals d
+    JOIN organizations o ON d.org_id = o.id
+    WHERE d.status IN ('pending', 'approved')
+  `).all();
+  const duplicate = candidates.find((c) => normalizeCustomer(c.customer_name) === normalized);
+
+  const result = db.prepare(`
+    INSERT INTO deals (org_id, submitted_by, customer_name, customer_email, customer_industry,
+      opportunity_name, description, services, est_value, expected_close_date, status, duplicate_of)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?)
+  `).run(
+    req.user.org_id, req.user.id, customerName, customerEmail || null, customerIndustry || null,
+    opportunityName, description || null, JSON.stringify(services || []),
+    estValue || 0, expectedCloseDate || null, duplicate ? duplicate.id : null
+  );
+
+  notifySuperAdmins({
+    type: 'deal',
+    title: 'New deal registration',
+    message: `${req.user.name} registered "${opportunityName}" for customer ${customerName}${duplicate ? ' (possible duplicate)' : ''}`,
+    link: '/deals',
+  });
+  awardPoints(req.user.id, 'deal_registered', 10, `Registered deal: ${opportunityName}`);
+  logAudit({ userId: req.user.id, action: 'deal_registered', entityType: 'deal', entityId: String(result.lastInsertRowid), details: opportunityName, ipAddress: getIP(req) });
+
+  res.status(201).json({
+    id: result.lastInsertRowid,
+    duplicateWarning: duplicate ? `Possible conflict: ${duplicate.customer_name} is already registered by ${duplicate.org_id === req.user.org_id ? 'your organization' : 'another partner'}` : null,
+    message: 'Deal submitted for review',
+  });
+});
+
+// PATCH /api/deals/:id/approve — super admin approval
+router.patch('/:id/approve', authenticate, requireRole('super_admin'), (req, res) => {
+  const deal = db.prepare('SELECT * FROM deals WHERE id = ?').get(req.params.id);
+  if (!deal) return res.status(404).json({ error: 'Deal not found' });
+  if (deal.status !== 'pending') return res.status(400).json({ error: 'Only pending deals can be approved' });
+
+  db.prepare(`
+    UPDATE deals SET status = 'approved', reviewed_by = ?, reviewed_at = datetime('now'),
+      protection_expires = datetime('now', '+${PROTECTION_DAYS} days'), updated_at = datetime('now')
+    WHERE id = ?
+  `).run(req.user.id, req.params.id);
+
+  createNotification({
+    userId: deal.submitted_by, type: 'deal',
+    title: 'Deal approved',
+    message: `Your deal "${deal.opportunity_name}" is approved and protected for ${PROTECTION_DAYS} days.`,
+    link: '/deals',
+  });
+  logAudit({ userId: req.user.id, action: 'deal_approved', entityType: 'deal', entityId: String(deal.id), details: deal.opportunity_name, ipAddress: getIP(req) });
+  res.json({ message: 'Deal approved' });
+});
+
+// PATCH /api/deals/:id/reject — super admin rejection
+router.patch('/:id/reject', authenticate, requireRole('super_admin'), (req, res) => {
+  const { reason } = req.body;
+  const deal = db.prepare('SELECT * FROM deals WHERE id = ?').get(req.params.id);
+  if (!deal) return res.status(404).json({ error: 'Deal not found' });
+  if (deal.status !== 'pending') return res.status(400).json({ error: 'Only pending deals can be rejected' });
+
+  db.prepare(`
+    UPDATE deals SET status = 'rejected', rejection_reason = ?, reviewed_by = ?,
+      reviewed_at = datetime('now'), updated_at = datetime('now') WHERE id = ?
+  `).run(reason || null, req.user.id, req.params.id);
+
+  createNotification({
+    userId: deal.submitted_by, type: 'deal',
+    title: 'Deal rejected',
+    message: `Your deal "${deal.opportunity_name}" was rejected${reason ? ': ' + reason : '.'}`,
+    link: '/deals',
+  });
+  logAudit({ userId: req.user.id, action: 'deal_rejected', entityType: 'deal', entityId: String(deal.id), details: reason || '', ipAddress: getIP(req) });
+  res.json({ message: 'Deal rejected' });
+});
+
+// PATCH /api/deals/:id/close — partner marks an approved deal won or lost
+router.patch('/:id/close', authenticate, (req, res) => {
+  const { outcome } = req.body; // 'won' | 'lost'
+  if (!['won', 'lost'].includes(outcome)) return res.status(400).json({ error: 'Outcome must be won or lost' });
+  const deal = db.prepare('SELECT * FROM deals WHERE id = ?').get(req.params.id);
+  if (!deal) return res.status(404).json({ error: 'Deal not found' });
+  if (req.user.role !== 'super_admin' && deal.org_id !== req.user.org_id) {
+    return res.status(403).json({ error: 'Not your deal' });
+  }
+  if (deal.status !== 'approved') return res.status(400).json({ error: 'Only approved deals can be closed' });
+
+  db.prepare(`UPDATE deals SET status = ?, updated_at = datetime('now') WHERE id = ?`).run(outcome, req.params.id);
+  if (outcome === 'won') awardPoints(deal.submitted_by, 'deal_won', 50, `Won deal: ${deal.opportunity_name}`);
+  logAudit({ userId: req.user.id, action: `deal_${outcome}`, entityType: 'deal', entityId: String(deal.id), details: deal.opportunity_name, ipAddress: getIP(req) });
+  res.json({ message: `Deal marked ${outcome}` });
+});
+
+export default router;

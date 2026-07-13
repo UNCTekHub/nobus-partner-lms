@@ -15,6 +15,10 @@ import discussionRoutes from './routes/discussions.js';
 import adminRoutes from './routes/admin.js';
 import gamificationRoutes from './routes/gamification.js';
 import publicApiRoutes from './routes/publicApi.js';
+import dealRoutes from './routes/deals.js';
+import pipelineRoutes from './routes/pipeline.js';
+import resourceRoutes from './routes/resources.js';
+import labRoutes from './routes/labs.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -52,6 +56,10 @@ app.use('/api/discussions', discussionRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/gamification', gamificationRoutes);
 app.use('/api/public', publicApiRoutes);
+app.use('/api/deals', dealRoutes);
+app.use('/api/pipeline', pipelineRoutes);
+app.use('/api/resources', resourceRoutes);
+app.use('/api/labs', labRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
