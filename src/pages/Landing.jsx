@@ -172,8 +172,8 @@ export default function Landing() {
 
             {/* Portal preview composition */}
             <div className="hidden lg:block relative pt-20 pb-20">
-              {/* Floating benefit cards: parked fully above and below the dashboard card */}
-              <div className="absolute top-0 right-0 z-20 bg-nobus-500 text-white rounded-xl shadow-xl px-5 py-4">
+              {/* Floating benefit cards: overlap the dashboard card edges slightly, never its content */}
+              <div className="absolute top-8 right-0 z-20 bg-nobus-500 text-white rounded-xl shadow-xl px-5 py-4">
                 <div className="flex items-center gap-2">
                   <BadgePercent className="w-5 h-5" />
                   <div>
@@ -182,7 +182,7 @@ export default function Landing() {
                   </div>
                 </div>
               </div>
-              <div className="absolute bottom-0 left-0 z-20 bg-white rounded-xl shadow-xl px-5 py-4 text-gray-900">
+              <div className="absolute bottom-8 left-0 z-20 bg-white border border-gray-100 rounded-xl shadow-xl px-5 py-4 text-gray-900">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-green-600" />
                   <div>
