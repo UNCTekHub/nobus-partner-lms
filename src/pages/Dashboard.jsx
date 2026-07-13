@@ -66,8 +66,8 @@ export default function Dashboard() {
   const firstName = currentUser?.name?.split(' ')[0] || 'Partner';
 
   const kpis = [
-    { label: 'Open Pipeline', value: forecast ? naira(forecast.openPipeline) : '—', sub: 'Lead → Proposal', icon: Wallet, to: '/sales-navigator' },
-    { label: 'Weighted Forecast', value: forecast ? naira(Math.round(forecast.weightedForecast)) : '—', sub: 'probability adjusted', icon: Target, to: '/sales-navigator' },
+    { label: 'Open Pipeline', value: forecast ? naira(forecast.openPipeline) : '-', sub: 'Lead → Proposal', icon: Wallet, to: '/sales-navigator' },
+    { label: 'Weighted Forecast', value: forecast ? naira(Math.round(forecast.weightedForecast)) : '-', sub: 'probability adjusted', icon: Target, to: '/sales-navigator' },
     { label: 'Protected Deals', value: protectedDeals.length, sub: pendingDeals.length ? `${pendingDeals.length} pending review` : 'registered & approved', icon: ShieldCheck, to: '/deals' },
     { label: 'Active Quotes', value: quotes.length, sub: quotes.length ? naira(quotes.reduce((s, q) => s + (q.monthly_total || 0), 0)) + '/mo quoted' : 'build your first', icon: Calculator, to: '/quotes' },
     { label: 'Team Enablement', value: `${trainingPct}%`, sub: `${totalCompleted}/${totalLessons} lessons`, icon: BookOpen, to: '/catalog' },
@@ -229,7 +229,7 @@ export default function Dashboard() {
               </div>
               <p className="text-sm text-nobus-200 leading-relaxed mb-3">
                 Enjoy <strong className="text-white">exclusive partner pricing</strong> on compute and storage for every
-                registered deal you close, per the Partner Agreement — plus your own managed-services fees on top.
+                registered deal you close, per the Partner Agreement - plus your own managed-services fees on top.
               </p>
               <Link to="/deals" className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-300 hover:text-accent-200">
                 Register a deal <ArrowRight className="w-3.5 h-3.5" />

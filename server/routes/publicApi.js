@@ -31,7 +31,7 @@ function authenticateApiKey(req, res, next) {
 
 // ==================== API KEY MANAGEMENT (for authenticated web users) ====================
 
-// POST /api/public/keys — generate API key (org admin or super admin)
+// POST /api/public/keys - generate API key (org admin or super admin)
 router.post('/keys', authenticate, requireRole('super_admin', 'org_admin'), (req, res) => {
   const { name, orgId } = req.body;
   const targetOrgId = orgId || req.user.org_id;
@@ -49,13 +49,13 @@ router.post('/keys', authenticate, requireRole('super_admin', 'org_admin'), (req
 
   // Only show the raw key ONCE
   res.status(201).json({
-    message: 'API key created. Save this key — it will not be shown again.',
+    message: 'API key created. Save this key - it will not be shown again.',
     apiKey: rawKey,
     expiresAt,
   });
 });
 
-// GET /api/public/keys — list API keys (without the actual keys)
+// GET /api/public/keys - list API keys (without the actual keys)
 router.get('/keys', authenticate, requireRole('super_admin', 'org_admin'), (req, res) => {
   const orgId = req.query.orgId || req.user.org_id;
   const keys = db.prepare(`
@@ -65,7 +65,7 @@ router.get('/keys', authenticate, requireRole('super_admin', 'org_admin'), (req,
   res.json(keys);
 });
 
-// DELETE /api/public/keys/:id — revoke an API key
+// DELETE /api/public/keys/:id - revoke an API key
 router.delete('/keys/:id', authenticate, requireRole('super_admin', 'org_admin'), (req, res) => {
   db.prepare('UPDATE api_keys SET active = 0 WHERE id = ?').run(req.params.id);
   res.json({ message: 'API key revoked' });
@@ -73,7 +73,7 @@ router.delete('/keys/:id', authenticate, requireRole('super_admin', 'org_admin')
 
 // ==================== PUBLIC API ENDPOINTS (API key auth) ====================
 
-// GET /api/public/v1/organization — get org info
+// GET /api/public/v1/organization - get org info
 router.get('/v1/organization', authenticateApiKey, (req, res) => {
   const org = req.apiOrg;
   const userCount = db.prepare('SELECT COUNT(*) as count FROM users WHERE org_id = ?').get(org.id).count;
@@ -83,7 +83,7 @@ router.get('/v1/organization', authenticateApiKey, (req, res) => {
   });
 });
 
-// GET /api/public/v1/users — list org users
+// GET /api/public/v1/users - list org users
 router.get('/v1/users', authenticateApiKey, (req, res) => {
   const users = db.prepare(`
     SELECT id, name, email, role, role_category, status, joined_date, last_active, learning_streak
@@ -99,7 +99,7 @@ router.get('/v1/users', authenticateApiKey, (req, res) => {
   res.json(enriched);
 });
 
-// GET /api/public/v1/progress — get org-wide learning progress
+// GET /api/public/v1/progress - get org-wide learning progress
 router.get('/v1/progress', authenticateApiKey, (req, res) => {
   const orgId = req.apiOrg.id;
   const stats = {
@@ -114,7 +114,7 @@ router.get('/v1/progress', authenticateApiKey, (req, res) => {
   res.json(stats);
 });
 
-// GET /api/public/v1/certificates — list certificates for org
+// GET /api/public/v1/certificates - list certificates for org
 router.get('/v1/certificates', authenticateApiKey, (req, res) => {
   const certs = db.prepare(`
     SELECT u.name, u.email, cp.path_id, cp.completed_at, b.badge_name
@@ -128,7 +128,7 @@ router.get('/v1/certificates', authenticateApiKey, (req, res) => {
   res.json(certs);
 });
 
-// GET /api/public/docs — API documentation
+// GET /api/public/docs - API documentation
 router.get('/docs', (req, res) => {
   res.json({
     name: 'Nobus Cloud Partner LMS API',

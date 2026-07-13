@@ -105,7 +105,7 @@ export function AdminDealsQuotes() {
                 <tr key={q.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3 text-xs font-mono text-gray-500">NCS-Q-{String(q.id).padStart(5, '0')}</td>
                   <td className="px-4 py-3 text-sm font-medium text-gray-900">{q.title}</td>
-                  <td className="px-4 py-3 text-sm text-gray-600">{q.customer_name || '—'}</td>
+                  <td className="px-4 py-3 text-sm text-gray-600">{q.customer_name || '-'}</td>
                   <td className="px-4 py-3 text-sm text-gray-600">{q.org_name}</td>
                   <td className="px-4 py-3 text-sm font-medium text-nobus-600">{naira(q.monthly_total)}</td>
                   <td className="px-4 py-3"><StatusBadge status={q.status} /></td>
@@ -326,7 +326,7 @@ export function AdminLabs() {
                 <tr key={b.id} className="hover:bg-gray-50">
                   <td className="px-4 py-3 text-sm font-medium text-gray-900">{b.lab_title}</td>
                   <td className="px-4 py-3 text-sm text-gray-600">{b.user_name}</td>
-                  <td className="px-4 py-3 text-sm text-gray-600">{b.org_name || '—'}</td>
+                  <td className="px-4 py-3 text-sm text-gray-600">{b.org_name || '-'}</td>
                   <td className="px-4 py-3 text-sm text-gray-600">{b.scheduled_date} · {b.time_slot}</td>
                   <td className="px-4 py-3"><StatusBadge status={b.status} /></td>
                   <td className="px-4 py-3">

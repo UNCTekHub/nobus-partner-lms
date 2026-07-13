@@ -60,11 +60,11 @@ export function streamQuotePdf(quote, res) {
 
   let y = 108;
   doc.fillColor('#6b7280').fontSize(8).font('Helvetica-Bold').text('PREPARED FOR', left, y);
-  doc.fillColor('#111827').fontSize(11).font('Helvetica-Bold').text(quote.customer_name || '—', left, y + 11);
+  doc.fillColor('#111827').fontSize(11).font('Helvetica-Bold').text(quote.customer_name || '-', left, y + 11);
   doc.fillColor('#6b7280').fontSize(8).font('Helvetica-Bold').text('QUOTE', left + width / 2, y);
   doc.fillColor('#111827').fontSize(11).font('Helvetica-Bold').text(quote.title, left + width / 2, y + 11, { width: width / 2 });
   doc.fillColor('#6b7280').fontSize(8).font('Helvetica')
-    .text(`Prepared by ${quote.org_name || 'Nobus Cloud Partner'} — Nobus Cloud Services Partner`, left, y + 30);
+    .text(`Prepared by ${quote.org_name || 'Nobus Cloud Partner'} - Nobus Cloud Services Partner`, left, y + 30);
   y += 52;
 
   // Table header
@@ -171,10 +171,10 @@ export async function streamQuoteXlsx(quote, res) {
 
   // Title rows
   ws.mergeCells('A1:E1');
-  ws.getCell('A1').value = `Nobus Cloud Services Quotation — ${quote.title}`;
+  ws.getCell('A1').value = `Nobus Cloud Services Quotation - ${quote.title}`;
   ws.getCell('A1').font = { bold: true, size: 14 };
   ws.mergeCells('A2:E2');
-  ws.getCell('A2').value = `Ref ${ref} · Prepared for ${quote.customer_name || '—'} · by ${quote.org_name || 'Nobus Partner'} · ${new Date().toLocaleDateString('en-NG')}`;
+  ws.getCell('A2').value = `Ref ${ref} · Prepared for ${quote.customer_name || '-'} · by ${quote.org_name || 'Nobus Partner'} · ${new Date().toLocaleDateString('en-NG')}`;
   ws.getCell('A2').font = { size: 10, color: { argb: 'FF6B7280' } };
   ws.addRow([]);
 

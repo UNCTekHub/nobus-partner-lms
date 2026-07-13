@@ -1,4 +1,4 @@
-// NCS Partner Terms and Conditions — source: "NCS Partner Terms and Conditions-2026"
+// NCS Partner Terms and Conditions - source: "NCS Partner Terms and Conditions-2026"
 // (Nkponani Limited). Rendered on the signup flow; acceptance is required to register.
 
 const partnerTerms = `## NCS Partner Terms and Conditions
@@ -77,7 +77,7 @@ We may modify these Terms at any time by posting a revised version on our site o
 
 **8.4 Force Majeure.** We will not be liable for any delay or failure to perform any obligation where the delay or failure results from any cause beyond our reasonable control.
 
-**8.5–8.6 Governing Law & Disputes.** The Governing Laws govern these Terms; disputes will be adjudicated in the Governing Venues set forth in the NCS Customer Agreement.
+**8.5-8.6 Governing Law & Disputes.** The Governing Laws govern these Terms; disputes will be adjudicated in the Governing Venues set forth in the NCS Customer Agreement.
 
 **8.7 Trade Compliance.** Each party will comply with all applicable import, sanctions, export, and re-export control laws and regulations applicable to a Nigerian company.
 
@@ -87,16 +87,16 @@ We may modify these Terms at any time by posting a revised version on our site o
 
 **8.10 Confidentiality and Publicity.** You may use NCS Confidential Information only for your participation in the Program. You will not disclose NCS Confidential Information during the Term or for 3 years following the end of the Term. You will not issue any press release regarding your participation without our prior written consent.
 
-**8.11–8.16.** Notices follow the NCS Customer Agreement; no third-party beneficiaries except as provided in Section 2.1(f); partners dealing with Government customers must maintain a Government Code of Conduct, training, and internal controls; no waivers unless in writing; severability applies; NCS may publish ratings of partner products or services.
+**8.11-8.16.** Notices follow the NCS Customer Agreement; no third-party beneficiaries except as provided in Section 2.1(f); partners dealing with Government customers must maintain a Government Code of Conduct, training, and internal controls; no waivers unless in writing; severability applies; NCS may publish ratings of partner products or services.
 
 ## 9. Key Definitions
 
-- **"NCS Site"** — https://nobus.io
-- **"NCS Customer Agreement"** — https://nobus.io/agreement
-- **"NCS Privacy Notice"** — https://nobus.io/policy
-- **"Nobus Code of Conduct"** — https://nobus.io/code-of-business-conduct-and-ethics
-- **"NFT"** — Nobus Fast Transit service
-- **"NCS Contracting Party"** — Nkponani Limited or its affiliate billing your Program fees
+- **"NCS Site"** - https://nobus.io
+- **"NCS Customer Agreement"** - https://nobus.io/agreement
+- **"NCS Privacy Notice"** - https://nobus.io/policy
+- **"Nobus Code of Conduct"** - https://nobus.io/code-of-business-conduct-and-ethics
+- **"NFT"** - Nobus Fast Transit service
+- **"NCS Contracting Party"** - Nkponani Limited or its affiliate billing your Program fees
 
 *Copyright © 2026 Nkponani Limited. All Rights Reserved.*`;
 

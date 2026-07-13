@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-// Create reusable transporter — configure via environment variables
+// Create reusable transporter - configure via environment variables
 function createTransporter() {
   const host = process.env.SMTP_HOST;
   const port = parseInt(process.env.SMTP_PORT || '587');
@@ -8,7 +8,7 @@ function createTransporter() {
   const pass = process.env.SMTP_PASS;
 
   if (!host || !user || !pass) {
-    console.warn('[Email] SMTP not configured — emails will be logged to console only');
+    console.warn('[Email] SMTP not configured - emails will be logged to console only');
     return null;
   }
 
@@ -33,7 +33,7 @@ const PLATFORM_URL = process.env.PLATFORM_URL || 'http://localhost:3001';
 
 // Send the partner onboarding email when an organization is approved
 export async function sendPartnerApprovalEmail({ contactName, contactEmail, companyName, partnerId, tempPassword }) {
-  const subject = `Welcome to Nobus Cloud Partner Program — ${companyName} Approved!`;
+  const subject = `Welcome to Nobus Cloud Partner Program - ${companyName} Approved!`;
 
   const html = `
     <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
@@ -48,7 +48,7 @@ export async function sendPartnerApprovalEmail({ contactName, contactEmail, comp
         <h2 style="color: #1e293b; margin-top: 0;">Welcome aboard, ${contactName}!</h2>
 
         <p style="color: #475569; line-height: 1.6;">
-          Great news — <strong>${companyName}</strong> has been approved as a Nobus Cloud Partner!
+          Great news - <strong>${companyName}</strong> has been approved as a Nobus Cloud Partner!
           Your organization is now part of our partner ecosystem.
         </p>
 
@@ -103,9 +103,9 @@ export async function sendPartnerApprovalEmail({ contactName, contactEmail, comp
           <ol style="color: #475569; line-height: 1.8; padding-left: 20px;">
             <li><strong>Login</strong> with your credentials above</li>
             <li><strong>Change your password</strong> from your profile settings</li>
-            <li><strong>Invite your team</strong> — add sales, presales, and technical staff</li>
-            <li><strong>Start learning</strong> — explore Sales, Presales, and Technical certification paths</li>
-            <li><strong>Track progress</strong> — monitor your team's certifications and tier progression</li>
+            <li><strong>Invite your team</strong> - add sales, presales, and technical staff</li>
+            <li><strong>Start learning</strong> - explore Sales, Presales, and Technical certification paths</li>
+            <li><strong>Track progress</strong> - monitor your team's certifications and tier progression</li>
           </ol>
         </div>
 
@@ -159,7 +159,7 @@ Getting Started:
 Partner Tier Progression:
 Registered → Silver → Gold → Platinum → Elite
 
-— Nobus Cloud Partner Program
+- Nobus Cloud Partner Program
   `;
 
   const mailOptions = {
@@ -189,7 +189,7 @@ Registered → Silver → Gold → Platinum → Elite
 
 // Send rejection email
 export async function sendPartnerRejectionEmail({ contactName, contactEmail, companyName }) {
-  const subject = `Nobus Cloud Partner Application Update — ${companyName}`;
+  const subject = `Nobus Cloud Partner Application Update - ${companyName}`;
 
   const html = `
     <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">

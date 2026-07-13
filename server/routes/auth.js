@@ -94,7 +94,7 @@ router.post('/login', (req, res) => {
   });
 });
 
-// GET /api/auth/me — get current user from token
+// GET /api/auth/me - get current user from token
 router.get('/me', authenticate, (req, res) => {
   const user = req.user;
 
@@ -118,7 +118,7 @@ router.get('/me', authenticate, (req, res) => {
   });
 });
 
-// POST /api/auth/register-org — submit a partner application
+// POST /api/auth/register-org - submit a partner application
 router.post('/register-org', (req, res) => {
   const { companyName, rcNumber, contactName, contactEmail, phone, country, state, estimatedStaff } = req.body;
 
@@ -177,7 +177,7 @@ router.post('/change-password', authenticate, (req, res) => {
   res.json({ message: 'Password changed successfully' });
 });
 
-// POST /api/auth/forgot-password — request password reset
+// POST /api/auth/forgot-password - request password reset
 router.post('/forgot-password', (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: 'Email is required' });
@@ -208,7 +208,7 @@ router.post('/forgot-password', (req, res) => {
   res.json({ message: 'If an account with that email exists, a reset link has been sent.' });
 });
 
-// POST /api/auth/reset-password — reset password with token
+// POST /api/auth/reset-password - reset password with token
 router.post('/reset-password', (req, res) => {
   const { token, newPassword } = req.body;
   if (!token || !newPassword) return res.status(400).json({ error: 'Token and new password are required' });

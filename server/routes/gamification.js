@@ -17,7 +17,7 @@ const POINTS = {
   first_login: 5,
 };
 
-// GET /api/gamification/my-stats — get current user's points and rank
+// GET /api/gamification/my-stats - get current user's points and rank
 router.get('/my-stats', authenticate, (req, res) => {
   const totalPoints = db.prepare('SELECT COALESCE(SUM(points), 0) as total FROM user_points WHERE user_id = ?')
     .get(req.user.id).total;
@@ -47,7 +47,7 @@ router.get('/my-stats', authenticate, (req, res) => {
   res.json({ totalPoints, level, nextLevelPoints, levelProgress: Math.round(levelProgress), rank, recentPoints });
 });
 
-// GET /api/gamification/leaderboard — org-scoped for partners; global only for Nobus admins
+// GET /api/gamification/leaderboard - org-scoped for partners; global only for Nobus admins
 router.get('/leaderboard', authenticate, (req, res) => {
   const { scope = 'global', orgId } = req.query;
   const isAdmin = req.user.role === 'super_admin';
@@ -83,7 +83,7 @@ router.get('/leaderboard', authenticate, (req, res) => {
   res.json(ranked);
 });
 
-// GET /api/gamification/org-leaderboard — org vs org standings (Nobus admins only;
+// GET /api/gamification/org-leaderboard - org vs org standings (Nobus admins only;
 // partners must not see other partners' activity)
 router.get('/org-leaderboard', authenticate, (req, res) => {
   if (req.user.role !== 'super_admin') {

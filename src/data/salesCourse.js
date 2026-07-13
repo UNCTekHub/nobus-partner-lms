@@ -28,28 +28,29 @@ const salesCourse = {
           title: '1.1 About Nobus',
           content: `## Company Background
 
-- **Company:** Nobus Cloud is a product of **Nkponani Limited**
-- **Mission:** Democratize cloud computing in Africa
-- **Data Center:** Hosted at **Rack Centre** (Tier III certified), Lagos, Nigeria
+- **Company:** Nobus Cloud Services is operated by **Nkponani Limited**
+- **Mission:** Unlock Africa's digital potential with a cloud purpose-built for Africa's digital evolution
+- **Infrastructure:** Tier III-certified data centers across multiple availability zones in Africa, anchored in Lagos, Nigeria (including Rack Centre), with a **Kenya region launching Q2 2026**
+- **Uptime:** 99.982% guarantee with N+1 redundancy
 - **Platform:** OpenStack-based hyperscale cloud infrastructure
-- **Console URL:** [cloud.nobus.io](https://cloud.nobus.io)
+- **Console URL:** [dashboard.nobus.io](https://dashboard.nobus.io)
 
 ### Platform Credentials
-- **Tier III Data Center** at Rack Centre — enterprise-grade reliability, redundant power, cooling, and network
-- **OpenStack Foundation** — same open-source platform powering CERN, Walmart, and major telcos worldwide
-- **PCI DSS Compliance** supported — customers in payment card processing can build PCI-compliant environments on Nobus
-- **ISO 27001 Certified** — internationally recognized information security management
+- **Tier III Data Centers** in strategic African locations: enterprise-grade reliability, redundant power, cooling, and network
+- **OpenStack Foundation** - same open-source platform powering CERN, Walmart, and major telcos worldwide
+- **PCI DSS Compliance** supported - customers in payment card processing can build PCI-compliant environments on Nobus
+- **ISO 27001 Certified** - internationally recognized information security management
 
 ### Billing & Pricing
-- **Naira Billing (NGN)** — all invoices in Nigerian Naira
-- **No FX Exposure** — customers never worry about dollar exchange rate fluctuations
-- **Pay-as-you-go** — no long-term commitments required
-- **No Egress Fees** — data transfer out of Nobus is completely FREE
+- **Naira Billing (NGN)** - all invoices in Nigerian Naira
+- **No FX Exposure** - customers never worry about dollar exchange rate fluctuations
+- **Pay-as-you-go** - no long-term commitments required
+- **No Egress Fees** - data transfer out of Nobus is completely FREE
 
 ### Why This Matters for Your Sales
 
 - **Local company** = easier procurement for Nigerian businesses (no offshore vendor approvals)
-- **Rack Centre Tier III** = same facility trusted by banks and telecoms
+- **Tier III facilities** (including Rack Centre, Lagos) = the same class of facility trusted by banks and telecoms
 - **Naira billing** = CFOs love budget certainty with no FX surprises
 - **OpenStack-based** = customers with AWS/Azure experience can use familiar tools (Terraform, CLI, APIs)
 - **PCI DSS support** = opens the door for fintech and banking customers handling card data`
@@ -60,27 +61,27 @@ const salesCourse = {
           content: `## Competitive Advantages (Your Selling Points)
 
 ### 1. Data Sovereignty
-- Data stays in Nigeria at **Rack Centre, Lagos** — a Tier III certified facility
+- Nigerian customer data stays in-country, in **Tier III-certified Nigerian availability zones** (including Rack Centre, Lagos)
 - Full **NDPR (Nigeria Data Protection Regulation)** compliance
 - No foreign government access to customer data
 - Critical for banks, government agencies, healthcare providers
 
-> **Sales Pitch:** *"Unlike AWS or Azure where your data sits in Europe or the US, Nobus keeps your data at Rack Centre in Lagos — a Tier III certified facility. For banks and government agencies, this isn't just convenient — it's often a legal requirement under NDPR. Can you afford the regulatory risk of offshore data?"*
+> **Sales Pitch:** *"Unlike AWS or Azure where your data sits in Europe or the US, Nobus keeps your data in Nigeria, in Tier III certified local data centers. For banks and government agencies, this isn't just convenient; it's often a legal requirement under NDPR. Can you afford the regulatory risk of offshore data?"*
 
-### 2. Naira Pricing — No Exchange Rate Risk
+### 2. Naira Pricing - No Exchange Rate Risk
 - All billing in Nigerian Naira (NGN)
 - No foreign exchange exposure whatsoever
 - Budget certainty month over month
 
-> **Sales Pitch:** *"Your CFO budgets in Naira. AWS bills in dollars. When the exchange rate moves, your AWS bill changes overnight — even if you used the same resources. With Nobus, your bill is in Naira. Period. No surprises."*
+> **Sales Pitch:** *"Your CFO budgets in Naira. AWS bills in dollars. When the exchange rate moves, your AWS bill changes overnight - even if you used the same resources. With Nobus, your bill is in Naira. Period. No surprises."*
 
-### 3. Local Support — Same City, Same Timezone
+### 3. Local Support - Same City, Same Timezone
 - Support team based in Lagos
 - Phone, email, and on-site support available
 - Understand Nigerian business context and infrastructure challenges
 - Can visit customer offices for enterprise accounts
 
-> **Sales Pitch:** *"When your system goes down at 9 PM Lagos time, who answers? AWS support might take hours across time zones. Nobus support is HERE — same city, same timezone, speaking your language."*
+> **Sales Pitch:** *"When your system goes down at 9 PM Lagos time, who answers? AWS support might take hours across time zones. Nobus support is HERE - same city, same timezone, speaking your language."*
 
 ### 4. Compliance First
 - **ISO 27001** certified information security
@@ -88,41 +89,41 @@ const salesCourse = {
 - **NDPR** aligned for data protection
 - Built for regulated industries (banking, insurance, healthcare)
 
-### 5. Cost Competitive — No Hidden Fees
+### 5. Cost Competitive - No Hidden Fees
 - 15-30% cheaper than global hyperscalers for equivalent workloads
-- **No egress fees** — data transfer out is completely FREE (AWS charges $0.09/GB!)
-- Transparent pricing — what you see is what you pay
+- **No egress fees** - data transfer out is completely FREE (AWS charges $0.09/GB!)
+- Transparent pricing - what you see is what you pay
 
-> **Sales Pitch:** *"AWS's egress fees alone can be 15-20% of your monthly bill. Every GB of data your users download, every API response — they charge for it. Nobus has ZERO egress fees. That's real money back in your pocket."*
+> **Sales Pitch:** *"AWS's egress fees alone can be 15-20% of your monthly bill. Every GB of data your users download, every API response - they charge for it. Nobus has ZERO egress fees. That's real money back in your pocket."*
 
-### 6. Full Service Catalogue — Everything They Need
+### 6. Full Service Catalogue - Everything They Need
 As a sales rep, know that Nobus offers a complete cloud platform:
-- **FCS (Flexible Cloud Server)** — Virtual machines, launch in minutes, 15+ instance sizes
-- **FBS (Flexible Block Storage)** — SSD-backed block storage, 1GB to 1TB, AES-256 encrypted
-- **FOS (Flexible Object Storage)** — Unlimited file/media/backup storage
+- **FCS (Flexible Cloud Server)** - Virtual machines, launch in minutes, 15+ instance sizes
+- **FBS (Flexible Block Storage)** - SSD-backed block storage, 1GB to 1TB, AES-256 encrypted
+- **FOS (Flexible Object Storage)** - Unlimited file/media/backup storage
 - **Networking:** VPC, Floating IPs, VPN, NFT (Fast Transit) for dedicated enterprise connectivity
 - **Security:** Sophos XG Firewall, FortiGate Firewall, Acronis Cyber Protect
 - **Managed Databases:** MySQL, PostgreSQL, MongoDB, MS SQL Server
 - **Containers:** Managed Kubernetes (CKE) for container orchestration
 - **Kafka:** Managed event streaming
 - **DNS:** Free managed DNS for Nobus resources
-- **Cloud Backup (NCB):** Cross-cloud backup — backs up AWS, Azure, on-prem, and Nobus workloads
+- **Cloud Backup (NCB):** Cross-cloud backup - backs up AWS, Azure, on-prem, and Nobus workloads
 
-> **Key Point:** You don't need to know how to configure these services — but you DO need to know they exist so you can have informed conversations and identify upsell opportunities.`
+> **Key Point:** You don't need to know how to configure these services - but you DO need to know they exist so you can have informed conversations and identify upsell opportunities.`
         },
         {
           id: 'sales-m1-l3',
           title: '1.3 The Market Opportunity',
           content: `## Cloud Adoption in Nigeria
 
-- Massive untapped opportunity — the majority of Nigerian businesses are still on-premise
+- Massive untapped opportunity - the majority of Nigerian businesses are still on-premise
 - Fast-growing cloud adoption driven by digital transformation, fintech boom, and regulatory pressure
-- Nobus is uniquely positioned as the **only OpenStack-based Nigerian hyperscale cloud** with Tier III hosting
+- Nobus is uniquely positioned as the **only OpenStack-based African hyperscale cloud** with Tier III multi-AZ hosting in Nigeria and a Kenya region launching Q2 2026
 
-### Target Sectors (Priority Order) — With Specific Value Props
+### Target Sectors (Priority Order) - With Specific Value Props
 
 #### 1. Banking & Financial Services (Highest Value)
-- **Why Nobus:** NDPR compliance, data sovereignty at Rack Centre, CBN regulatory alignment
+- **Why Nobus:** NDPR compliance, in-country data sovereignty, CBN regulatory alignment
 - **Key Services:** Sophos XG Firewall for network security, FBS encrypted storage (AES-256), managed databases
 - **Deal Size:** One bank deal = NGN 50M+/year
 - **Entry Point:** Disaster recovery, dev/test environments, then production migration
@@ -157,7 +158,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 #### 8. Manufacturing (ERP Migration)
 - **Why Nobus:** Migrate SAP/Oracle ERP to cloud, reduce CapEx on servers
 
-> **Why This Matters:** These sectors have BUDGET and URGENCY. Focus your pipeline on sectors 1-4 first — they have the strongest compliance drivers that make cloud migration non-optional.`
+> **Why This Matters:** These sectors have BUDGET and URGENCY. Focus your pipeline on sectors 1-4 first - they have the strongest compliance drivers that make cloud migration non-optional.`
         },
         {
           id: 'sales-m1-l4',
@@ -172,7 +173,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 - **What they care about:** "Will this work? Will I get fired if it fails?"
 
 **How to Sell:**
-- Lead with reliability and compliance (Rack Centre Tier III, ISO 27001)
+- Lead with reliability and compliance (Tier III facilities, ISO 27001)
 - Show case studies from similar companies
 - Offer referenceable customers
 - Emphasize risk mitigation (Acronis backup, Sophos XG firewall, encrypted storage)
@@ -187,11 +188,11 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 - **Pain points:** Understaffed team, late nights fixing servers, NEPA/power issues
 
 **How to Sell:**
-- Demonstrate the Nobus console (cloud.nobus.io) — intuitive UI
+- Demonstrate the Nobus console (dashboard.nobus.io): intuitive UI
 - Highlight managed services (managed databases, CKE) = less work for them
-- Emphasize local support — same timezone, phone support
+- Emphasize local support - same timezone, phone support
 - Show training options (Nobus Academy)
-- Mention OpenStack CLI and Terraform support — tools they may already know
+- Mention OpenStack CLI and Terraform support - tools they may already know
 
 ---
 
@@ -203,7 +204,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 **How to Sell:**
 - Lead with cost savings (15-30% vs AWS, zero egress fees)
 - TCO calculator (show CapEx to OpEx benefit)
-- Naira pricing stability — no FX risk
+- Naira pricing stability - no FX risk
 - Quick ROI (often <12 months)
 - Free DNS, no egress fees = hidden savings vs competitors
 
@@ -222,9 +223,9 @@ As a sales rep, know that Nobus offers a complete cloud platform:
         {
           id: 'sales-m1-l5',
           title: '1.5 The Complete Nobus Product Portfolio',
-          content: `## Everything Nobus Offers — A Sales-Friendly Reference
+          content: `## Everything Nobus Offers - A Sales-Friendly Reference
 
-As a sales rep, you need to know the full product catalogue so you can identify opportunities and have informed conversations. You do NOT need to know how to configure these — but you need to know they exist and what problems they solve.
+As a sales rep, you need to know the full product catalogue so you can identify opportunities and have informed conversations. You do NOT need to know how to configure these - but you need to know they exist and what problems they solve.
 
 ---
 
@@ -232,7 +233,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 
 | Product | What It Does | Sales Talking Point |
 |---------|-------------|-------------------|
-| **FCS (Flexible Cloud Server)** | Virtual machines — Linux & Windows. 15+ instance flavors from 1 to 16 vCPU. Launch in minutes. | "Need a server? It's running in 5 minutes, not 5 weeks." |
+| **FCS (Flexible Cloud Server)** | Virtual machines - Linux & Windows. 15+ instance flavors from 1 to 16 vCPU. Launch in minutes. | "Need a server? It's running in 5 minutes, not 5 weeks." |
 | **Auto Scaling** | Automatically adds/removes instances based on demand | "Black Friday traffic spike? Your app scales automatically." |
 | **Load Balancing** | Distributes traffic across multiple instances | "No single point of failure. Traffic balanced automatically." |
 
@@ -241,17 +242,17 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 | Product | What It Does | Sales Talking Point |
 |---------|-------------|-------------------|
 | **FBS (Flexible Block Storage)** | Block storage from 1GB to 1TB. SSD-backed. AES-256 encrypted. Supports snapshots. | "Your data is encrypted at rest. Snapshots for instant rollback." |
-| **FOS (Flexible Object Storage)** | Unlimited object storage for files, backups, media. Console: fos-az1.nobus.io | "Store unlimited files — backups, videos, documents. Pay only for what you use." |
+| **FOS (Flexible Object Storage)** | Unlimited object storage for files, backups, media. Console: fos-az1.nobus.io | "Store unlimited files - backups, videos, documents. Pay only for what you use." |
 
 ### Networking
 
 | Product | What It Does | Sales Talking Point |
 |---------|-------------|-------------------|
-| **VPC / DaaS** | Private cloud networks — your own isolated virtual data center | "Your own private network in the cloud. Fully isolated." |
+| **VPC / DaaS** | Private cloud networks - your own isolated virtual data center | "Your own private network in the cloud. Fully isolated." |
 | **Floating IPs** | Static public IP addresses. NGN 1,500/month when reserved. | "Dedicated public IP for your application. Stays the same." |
-| **NFT (Nobus Fast Transit)** | Dedicated connectivity from 50 Mbps to 10 Gbps. Enterprise-grade. | "Direct, dedicated connection to Nobus — not over public internet. Enterprise speed." |
+| **NFT (Nobus Fast Transit)** | Dedicated connectivity from 50 Mbps to 10 Gbps. Enterprise-grade. | "Direct, dedicated connection to Nobus - not over public internet. Enterprise speed." |
 | **VPN** | Site-to-site VPN via pfSense, IPSec | "Secure tunnel between your office and your Nobus cloud." |
-| **DNS** | Managed DNS service — FREE for Nobus resources | "DNS is included at no extra cost." |
+| **DNS** | Managed DNS service - FREE for Nobus resources | "DNS is included at no extra cost." |
 | **Cloud Router** | Route traffic between VPCs and networks | "Connect multiple networks together seamlessly." |
 | **Cloud Trunks** | VLAN trunking for advanced networking | "Advanced network segmentation for enterprise architectures." |
 | **Cloud Firewalls** | Network-level firewall rules | "Control what traffic enters and leaves your network." |
@@ -260,7 +261,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 
 | Product | What It Does | Sales Talking Point |
 |---------|-------------|-------------------|
-| **Sophos XG Firewall** | Enterprise firewall with IPS, ATP (Advanced Threat Protection), sandboxing | "Enterprise-grade security — intrusion prevention, threat detection, sandboxing. Same product banks use." |
+| **Sophos XG Firewall** | Enterprise firewall with IPS, ATP (Advanced Threat Protection), sandboxing | "Enterprise-grade security - intrusion prevention, threat detection, sandboxing. Same product banks use." |
 | **FortiGate Firewall** | Next-gen firewall with SD-WAN capabilities | "Next-generation firewall with built-in SD-WAN. One appliance, multiple functions." |
 | **Acronis Cyber Protect** | Backup + ransomware protection + antivirus in one | "Backup, anti-ransomware, and antivirus in a single solution. Protects against the threats keeping CISOs up at night." |
 | **Security Groups** | Per-instance firewall rules | "Fine-grained access control on every single server." |
@@ -270,18 +271,18 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 | Product | What It Does | Sales Talking Point |
 |---------|-------------|-------------------|
 | **Managed MySQL** | Fully managed MySQL database | "We manage patching, backups, scaling. Your team focuses on the app." |
-| **Managed PostgreSQL** | Fully managed PostgreSQL database | "The world's most advanced open-source database — fully managed." |
-| **Managed MongoDB** | Fully managed MongoDB (NoSQL) | "Document database for modern apps — fully managed." |
+| **Managed PostgreSQL** | Fully managed PostgreSQL database | "The world's most advanced open-source database - fully managed." |
+| **Managed MongoDB** | Fully managed MongoDB (NoSQL) | "Document database for modern apps - fully managed." |
 | **Managed MS SQL Server** | Fully managed Microsoft SQL Server | "Running .NET/Windows apps? SQL Server is available managed." |
 | **Kubernetes (CKE)** | Managed container orchestration | "Run containers at scale. We manage the control plane." |
-| **Kafka** | Managed event streaming | "Real-time data pipelines and event streaming — managed by us." |
-| **Cloud Backup (NCB)** | Cross-cloud backup — backs up AWS, Azure, on-prem, AND Nobus | "Back up everything — even your AWS and Azure workloads — to Nobus. One backup solution for all clouds." |
+| **Kafka** | Managed event streaming | "Real-time data pipelines and event streaming - managed by us." |
+| **Cloud Backup (NCB)** | Cross-cloud backup - backs up AWS, Azure, on-prem, AND Nobus | "Back up everything - even your AWS and Azure workloads - to Nobus. One backup solution for all clouds." |
 
 ### Platform Tools
 
 | Product | What It Does | Sales Talking Point |
 |---------|-------------|-------------------|
-| **Cloud Orchestration** | Infrastructure as Code — deploy entire stacks from templates | "Define your entire infrastructure in a template. Deploy in one click." |
+| **Cloud Orchestration** | Infrastructure as Code - deploy entire stacks from templates | "Define your entire infrastructure in a template. Deploy in one click." |
 | **Image Import/Export** | Migrate VM images from on-prem or other clouds | "Already have VMs? Import them directly to Nobus. No rebuild needed." |
 
 ---
@@ -314,8 +315,8 @@ As a sales rep, you need to know the full product catalogue so you can identify 
             correct: 2,
           },
           {
-            q: 'Where is Nobus Cloud physically hosted?',
-            options: ['AWS data center in Cape Town', 'Rack Centre (Tier III) in Lagos', 'Microsoft Azure facility in Abuja', 'Google Cloud region in Johannesburg'],
+            q: 'Where does Nobus Cloud infrastructure run?',
+            options: ['US and European data centers', 'Tier III-certified data centers across Africa (Nigeria today, Kenya from Q2 2026)', 'Microsoft Azure facility in Abuja', 'Google Cloud region in Johannesburg'],
             correct: 1,
           },
           {
@@ -363,7 +364,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 - Map current architecture
 - Identify migration candidates
 - Discuss concerns and objections
-- Demonstrate Nobus platform (cloud.nobus.io)
+- Demonstrate Nobus platform (dashboard.nobus.io)
 - **Your Goal:** Agreement to proceed with proposal
 
 ### Stage 4: Proposal & PoC (1-2 weeks)
@@ -534,27 +535,27 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 
 | Factor | Nobus | AWS | Your Talking Point |
 |--------|-------|-----|-------------------|
-| **Data Location** | Rack Centre, Lagos (Tier III) | Nearest region: Cape Town or Europe | "Your data stays in Nigeria at Rack Centre. NDPR compliant by design." |
-| **Currency** | Bill in Naira (NGN) | Bill in USD | "No exchange rate risk. Your bill is in Naira — period." |
+| **Data Location** | Nigeria, Tier III multi-AZ | Nearest region: Cape Town or Europe | "Your data stays in Nigeria. NDPR compliant by design." |
+| **Currency** | Bill in Naira (NGN) | Bill in USD | "No exchange rate risk. Your bill is in Naira - period." |
 | **Support** | Lagos-based, same timezone, phone | Different timezone, mostly online tickets | "When your system crashes at 9 PM, we answer in Lagos." |
 | **Pricing** | 15-30% cheaper for equivalent workloads | Premium pricing + hidden egress fees | "Same quality, better price. Plus zero egress fees." |
-| **Egress Fees** | NONE — completely free | $0.09/GB (can be 15-20% of bill) | "Data transfer out is FREE on Nobus. AWS charges per GB." |
+| **Egress Fees** | NONE - completely free | $0.09/GB (can be 15-20% of bill) | "Data transfer out is FREE on Nobus. AWS charges per GB." |
 | **Compliance** | ISO 27001, PCI-DSS supported, NDPR | ISO 27001, PCI-DSS | "Equally certified, but data stays in Nigeria." |
 | **Complexity** | Focused catalogue of essential services | 200+ services, overwhelming complexity | "We focus on what Nigerian businesses actually need." |
 | **Onboarding** | White-glove migration support | Self-service, figure it out yourself | "We train your team. Walk you through migration step by step." |
-| **Tooling** | OpenStack CLI, Terraform, REST APIs | AWS CLI, Terraform, SDKs | "Your team can use Terraform, CLI, APIs — same DevOps tools they know." |
-| **Compute** | FCS — 15+ flavors, launch in minutes | EC2 — hundreds of instance types | "Right-sized for Nigerian workloads. No analysis paralysis." |
+| **Tooling** | OpenStack CLI, Terraform, REST APIs | AWS CLI, Terraform, SDKs | "Your team can use Terraform, CLI, APIs - same DevOps tools they know." |
+| **Compute** | FCS - 15+ flavors, launch in minutes | EC2 - hundreds of instance types | "Right-sized for Nigerian workloads. No analysis paralysis." |
 | **Storage** | FBS (encrypted, SSD) + FOS (unlimited) | EBS + S3 | "SSD-backed, AES-256 encrypted storage. Object storage unlimited." |
 | **Security** | Sophos XG, FortiGate, Acronis included in catalogue | Marketplace add-ons at extra cost | "Enterprise firewalls and backup built into our platform." |
 
 ### What TO Say
 - "AWS is excellent for global companies with multi-region needs. For Nigerian businesses prioritizing data sovereignty, local support, and cost predictability, Nobus is the better fit."
 - "Many of our customers evaluated AWS and chose Nobus because of Naira billing, zero egress fees, and having support in the same city."
-- "Your team can use the same tools — Terraform, CLI — so there's no retraining cost."
+- "Your team can use the same tools - Terraform, CLI - so there's no retraining cost."
 
 ### What NOT to Say
 - "AWS sucks" (unprofessional, damages your credibility)
-- "We're better than AWS at everything" (not believable — be honest about trade-offs)`
+- "We're better than AWS at everything" (not believable - be honest about trade-offs)`
         },
         {
           id: 'sales-m3-l3',
@@ -564,10 +565,10 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 | Factor | Nobus | Azure | Talking Point |
 |--------|-------|-------|---------------|
 | **Focus** | Nigerian SMBs to Enterprise | Microsoft-centric shops | "If you're 100% Microsoft everywhere, Azure has integration advantages. If not, Nobus is simpler and cheaper." |
-| **Integration** | Cloud-agnostic — Linux, Windows, any stack | Deep Microsoft integration (AD, 365) | "Nobus supports Linux, Windows, any stack. No vendor lock-in." |
+| **Integration** | Cloud-agnostic - Linux, Windows, any stack | Deep Microsoft integration (AD, 365) | "Nobus supports Linux, Windows, any stack. No vendor lock-in." |
 | **Pricing** | Transparent, in Naira | Complex licensing, USD billing | "Nobus pricing is simple: NGN X per hour, no surprise licensing fees." |
-| **Data Location** | Rack Centre, Lagos | Nearest: South Africa | "Your data stays in Nigeria, not South Africa." |
-| **Managed DBs** | MySQL, PostgreSQL, MongoDB, MS SQL Server | Azure SQL, Cosmos DB, etc. | "We support MS SQL Server too — managed, in Nigeria." |
+| **Data Location** | Nigeria, Tier III multi-AZ | Nearest: South Africa | "Your data stays in Nigeria, not South Africa." |
+| **Managed DBs** | MySQL, PostgreSQL, MongoDB, MS SQL Server | Azure SQL, Cosmos DB, etc. | "We support MS SQL Server too - managed, in Nigeria." |
 
 ---
 
@@ -579,27 +580,27 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 |--------|-----------|-------|---------------|
 | **CapEx** | NGN 50M+ upfront for servers | NGN 0 upfront, pay-as-you-go | "No need to write a NGN 50M cheque. Pay monthly from NGN 50K." |
 | **OpEx** | NGN 10-20M/year (power, staff, cooling) | NGN 5-15M/year | "No power costs, no cooling, no hardware staff." |
-| **Scalability** | Buy ahead, wait weeks | Instant — launch FCS in minutes | "Black Friday traffic? Scale in 5 minutes, not 5 weeks." |
+| **Scalability** | Buy ahead, wait weeks | Instant - launch FCS in minutes | "Black Friday traffic? Scale in 5 minutes, not 5 weeks." |
 | **Downtime** | Your problem entirely | Nobus manages infrastructure | "Server fails? We replace it in minutes. You don't even know." |
 | **Compliance** | Build it yourself (expensive) | ISO 27001 certified, PCI-DSS supported | "You need ISO 27001? We already have it. You inherit compliance." |
-| **Power / NEPA** | Generator dependency, diesel costs | Rack Centre has redundant power systems | "Power goes out in Lagos? Rack Centre has redundant power — UPS, generators, dual utility feeds. Zero impact on your workloads." |
-| **Security** | Buy firewalls, hire security staff | Sophos XG, FortiGate, Acronis available | "Enterprise security built in — not a NGN 20M+ add-on project." |
+| **Power / NEPA** | Generator dependency, diesel costs | Nobus data centers have redundant power systems | "Power goes out in Lagos? Our Tier III data centers have redundant power: UPS, generators, dual utility feeds. Zero impact on your workloads." |
+| **Security** | Buy firewalls, hire security staff | Sophos XG, FortiGate, Acronis available | "Enterprise security built in - not a NGN 20M+ add-on project." |
 | **Backup** | Tapes, external drives, hope | NCB cross-cloud backup, Acronis Cyber Protect | "Automated backups with ransomware protection. Not a tape in a drawer." |
-| **Connectivity** | Your ISP | NFT (Fast Transit) — dedicated 50Mbps to 10Gbps | "Direct, dedicated connection to your cloud. Not dependent on public internet." |
+| **Connectivity** | Your ISP | NFT (Fast Transit) - dedicated 50Mbps to 10Gbps | "Direct, dedicated connection to your cloud. Not dependent on public internet." |
 
 ### Common On-Premise Objections
 
 **"But we already own the servers."**
-> "True, but that's sunk cost. What's cheaper for the NEXT 3 years — maintaining aging hardware or Nobus?"
+> "True, but that's sunk cost. What's cheaper for the NEXT 3 years - maintaining aging hardware or Nobus?"
 
 **"Our data is too sensitive for cloud."**
-> "Your data would be at Rack Centre — the same Tier III facility where banks host. AES-256 encrypted storage. Sophos XG firewall. More secure than most on-prem setups."
+> "Your data would sit in a Tier III certified facility, the same class of data center where banks host. AES-256 encrypted storage. Sophos XG firewall. More secure than most on-prem setups."
 
 **"Cloud is expensive."**
-> "Let's do the math. Your server: NGN 2M purchase + NGN 500K/year power/cooling/staff. Nobus equivalent: NGN 100K/month. In 3 years, we're cheaper — PLUS you get redundancy, backup, and 24/7 support."
+> "Let's do the math. Your server: NGN 2M purchase + NGN 500K/year power/cooling/staff. Nobus equivalent: NGN 100K/month. In 3 years, we're cheaper - PLUS you get redundancy, backup, and 24/7 support."
 
 **"What about when internet goes down?"**
-> "That's exactly what NFT (Fast Transit) solves — a dedicated connection from 50 Mbps to 10 Gbps, bypassing the public internet entirely. Enterprise-grade connectivity."`
+> "That's exactly what NFT (Fast Transit) solves - a dedicated connection from 50 Mbps to 10 Gbps, bypassing the public internet entirely. Enterprise-grade connectivity."`
         },
       ],
       quiz: {
@@ -623,7 +624,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
           },
           {
             q: 'What Nobus product addresses the on-premise objection "What about when internet goes down?"',
-            options: ['VPN', 'Floating IP', 'NFT (Nobus Fast Transit) — dedicated connectivity', 'Cloud Router'],
+            options: ['VPN', 'Floating IP', 'NFT (Nobus Fast Transit) - dedicated connectivity', 'Cloud Router'],
             correct: 2,
           },
         ],
@@ -681,7 +682,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 - Quote from customer if possible
 
 ### 7. Why Nobus (1 page)
-- Data sovereignty (Rack Centre, Lagos)
+- Data sovereignty (Tier III Nigerian data centers)
 - Compliance (ISO 27001, PCI-DSS, NDPR)
 - Support quality (local, same timezone)
 - Company stability (Nkponani Limited)
@@ -712,11 +713,11 @@ Ask in discovery:
 Nobus FCS instance flavors follow a naming convention: \`[type].[vCPUs].[RAM_GB].[Disk_GB].[OS]\`
 
 Common flavors you'll use in proposals:
-- **si.1.2.20.l** — 1 vCPU, 2GB RAM, 20GB disk, Linux (small apps, dev/test)
-- **si.2.4.30.l** — 2 vCPU, 4GB RAM, 30GB disk, Linux (web servers, small apps)
-- **si.4.8.60.l** — 4 vCPU, 8GB RAM, 60GB disk, Linux (medium workloads)
-- **si.8.16.120.l** — 8 vCPU, 16GB RAM, 120GB disk, Linux (databases, heavy apps)
-- **si.16.32.240.l** — 16 vCPU, 32GB RAM, 240GB disk, Linux (enterprise workloads)
+- **si.1.2.20.l** - 1 vCPU, 2GB RAM, 20GB disk, Linux (small apps, dev/test)
+- **si.2.4.30.l** - 2 vCPU, 4GB RAM, 30GB disk, Linux (web servers, small apps)
+- **si.4.8.60.l** - 4 vCPU, 8GB RAM, 60GB disk, Linux (medium workloads)
+- **si.8.16.120.l** - 8 vCPU, 16GB RAM, 120GB disk, Linux (databases, heavy apps)
+- **si.16.32.240.l** - 16 vCPU, 32GB RAM, 240GB disk, Linux (enterprise workloads)
 - Windows variants use \`.w\` suffix instead of \`.l\`
 
 ---
@@ -771,7 +772,7 @@ Common flavors you'll use in proposals:
 - Safety buffer: +10%
 
 ### Step 4: Position the Price
-**Good:** "For NGN 343,000 per month — less than the cost of one junior developer — you get enterprise-grade infrastructure at Rack Centre with 99.95% uptime, automated backups, managed DNS at no extra cost, and local support."
+**Good:** "For NGN 343,000 per month, less than the cost of one junior developer, you get enterprise-grade infrastructure in Tier III Nigerian data centers with a 99.982% uptime guarantee, automated backups, managed DNS at no extra cost, and local support."
 
 **Bad:** "It costs NGN 343,000 per month." (Just a number, no context)
 
@@ -885,7 +886,7 @@ Common flavors you'll use in proposals:
 > **Response:** "Of course! When is AWS's PoC scheduled? Can we agree that if Nobus matches or beats their results, you'll move forward with us?"
 
 ### The Close
-> "The PoC was successful — you saw [specific results]. You mentioned [pain point] is costing you [amount]. We can solve it. What questions remain before we proceed?"
+> "The PoC was successful - you saw [specific results]. You mentioned [pain point] is costing you [amount]. We can solve it. What questions remain before we proceed?"
 
 Then **SHUT UP**. First person who speaks loses. Let silence do the work.`
         },
@@ -911,7 +912,7 @@ Then **SHUT UP**. First person who speaks loses. Let silence do the work.`
           },
           {
             q: 'What should you do immediately after the prospect says "What questions remain before we proceed?"',
-            options: ['List all features again', 'Offer a discount', 'Stay silent — let them respond first', 'Schedule another meeting'],
+            options: ['List all features again', 'Offer a discount', 'Stay silent - let them respond first', 'Schedule another meeting'],
             correct: 2,
           },
         ],
@@ -953,7 +954,7 @@ Then **SHUT UP**. First person who speaks loses. Let silence do the work.`
 
 **"That's too expensive."**
 
-Don't argue! Ask: "Help me understand — what's too expensive relative to? What were you expecting?"
+Don't argue! Ask: "Help me understand - what's too expensive relative to? What were you expecting?"
 
 **If comparing to on-prem:**
 > "You're spending NGN 15M/year today including power, staff, and cooling. We're NGN 4.1M with backups, security, and support included. That's 73% cheaper. What am I missing?"
@@ -1013,7 +1014,7 @@ Sometimes the stated objection isn't the real objection.
           },
           {
             q: 'A prospect says "AWS quoted us less." What is the best response approach?',
-            options: ['Immediately match the AWS price', 'Ask to compare apples to apples — does AWS include egress fees, DNS, firewall?', 'Tell them AWS is lying', 'Walk away from the deal'],
+            options: ['Immediately match the AWS price', 'Ask to compare apples to apples - does AWS include egress fees, DNS, firewall?', 'Tell them AWS is lying', 'Walk away from the deal'],
             correct: 1,
           },
           {

@@ -80,7 +80,7 @@ export default function MarketingHub() {
           <h1 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-2">
             <Megaphone className="w-7 h-7 text-nobus-500" /> Marketing Materials
           </h1>
-          <p className="text-gray-600">Logos, brochures, battle cards, email templates and social kits — ready for co-branded campaigns.</p>
+          <p className="text-gray-600">Logos, brochures, battle cards, email templates and social kits - ready for co-branded campaigns.</p>
         </div>
         {isSuperAdmin && (
           <button className="btn-primary flex items-center gap-2" onClick={() => setShowForm(true)}>
@@ -165,7 +165,7 @@ export default function MarketingHub() {
         </div>
       )}
 
-      {/* Preview modal — view the asset online before deciding to download */}
+      {/* Preview modal - view the asset online before deciding to download */}
       {preview && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setPreview(null)}>
           <div className="bg-white rounded-xl max-w-4xl w-full max-h-[92vh] flex flex-col" onClick={(e) => e.stopPropagation()}>

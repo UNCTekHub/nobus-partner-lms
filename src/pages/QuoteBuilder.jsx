@@ -168,7 +168,7 @@ export default function QuoteBuilder() {
                 <img src="/nobus-logo.png" alt="Nobus Cloud Services" className="h-8 w-auto" />
               </div>
               <div className="text-xs text-gray-500">Nobus Cloud Services (Nkponani Limited)</div>
-              <div className="text-xs text-gray-500">Prepared by {printQuote.org_name} — Nobus Cloud Partner</div>
+              <div className="text-xs text-gray-500">Prepared by {printQuote.org_name} - Nobus Cloud Partner</div>
             </div>
             <div className="text-right">
               <div className="text-xl font-bold text-gray-900">Cloud Services Quote</div>
@@ -180,7 +180,7 @@ export default function QuoteBuilder() {
           <div className="grid grid-cols-2 gap-6 mb-6">
             <div>
               <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Prepared for</div>
-              <div className="font-semibold text-gray-900">{printQuote.customer_name || '—'}</div>
+              <div className="font-semibold text-gray-900">{printQuote.customer_name || '-'}</div>
             </div>
             <div>
               <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Quote</div>
@@ -249,7 +249,7 @@ export default function QuoteBuilder() {
 
           <div className="text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-4">
             All prices in Nigerian Naira (NGN), exclusive of VAT and applicable taxes. Billed in Naira with no
-            foreign-exchange exposure. This is an indicative estimate based on published Nobus rates — final
+            foreign-exchange exposure. This is an indicative estimate based on published Nobus rates - final
             pricing is confirmed at order via the Nobus Pricing Calculator (nobus.io/nobus-pricing-calculator).
             Items marked "priced on request" require a Nobus sales quotation. Valid for 30 days.
           </div>
@@ -302,7 +302,7 @@ export default function QuoteBuilder() {
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Quote title *</label>
-                  <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Zenith MFB — core banking environment"
+                  <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Zenith MFB - core banking environment"
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nobus-400" />
                 </div>
                 <div>
@@ -331,7 +331,7 @@ export default function QuoteBuilder() {
                           <select value={item.flavorId} onChange={(e) => updateItem(item.key, { flavorId: e.target.value })}
                             className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm max-w-[340px] focus:outline-none focus:ring-2 focus:ring-nobus-400">
                             {service.options.map((f) => (
-                              <option key={f.id} value={f.id}>{f.label} — {naira(f.monthly)}/mo</option>
+                              <option key={f.id} value={f.id}>{f.label} - {naira(f.monthly)}/mo</option>
                             ))}
                           </select>
                         )}
@@ -344,7 +344,7 @@ export default function QuoteBuilder() {
                             </select>
                             <select value={item.sizeId} onChange={(e) => updateItem(item.key, { sizeId: e.target.value })}
                               className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm max-w-[280px] focus:outline-none focus:ring-2 focus:ring-nobus-400">
-                              {service.sizes.map((s) => <option key={s.id} value={s.id}>{s.label} — {naira(s.monthly)}/mo</option>)}
+                              {service.sizes.map((s) => <option key={s.id} value={s.id}>{s.label} - {naira(s.monthly)}/mo</option>)}
                             </select>
                           </>
                         )}
@@ -408,7 +408,7 @@ export default function QuoteBuilder() {
                     <BadgePercent className="w-4 h-4 text-nobus-500" /> Apply exclusive partner pricing
                   </div>
                   <div className="text-xs text-gray-400">
-                    Preferential partner rates per the NCS Partner Agreement — applies to compute &amp; storage only (excludes connectivity, licensed software).
+                    Preferential partner rates per the NCS Partner Agreement - applies to compute &amp; storage only (excludes connectivity, licensed software).
                   </div>
                 </div>
               </label>
@@ -464,7 +464,7 @@ export default function QuoteBuilder() {
             <Calculator className="w-7 h-7 text-nobus-500" /> Quote Builder
           </h1>
           <p className="text-gray-600">
-            Build customer-ready Naira estimates from the Nobus service catalog — compute, storage, networking, databases and security.
+            Build customer-ready Naira estimates from the Nobus service catalog - compute, storage, networking, databases and security.
           </p>
         </div>
         <button className="btn-primary flex items-center gap-2" onClick={startNew}>

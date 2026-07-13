@@ -10,7 +10,7 @@ function canAccess(req, quote) {
   return req.user.role === 'super_admin' || quote.org_id === req.user.org_id;
 }
 
-// GET /api/quotes — my org's quotes (super admin: all)
+// GET /api/quotes - my org's quotes (super admin: all)
 router.get('/', authenticate, (req, res) => {
   const base = `
     SELECT q.*, u.name as author_name, o.name as org_name
@@ -23,7 +23,7 @@ router.get('/', authenticate, (req, res) => {
   res.json(db.prepare(base + ' WHERE q.org_id = ? ORDER BY q.updated_at DESC').all(req.user.org_id));
 });
 
-// GET /api/quotes/:id/export?format=pdf|xlsx — download the quotation document
+// GET /api/quotes/:id/export?format=pdf|xlsx - download the quotation document
 router.get('/:id/export', authenticate, async (req, res) => {
   const quote = db.prepare(`
     SELECT q.*, o.name as org_name FROM quotes q
@@ -49,7 +49,7 @@ router.get('/:id', authenticate, (req, res) => {
   res.json(quote);
 });
 
-// POST /api/quotes — create
+// POST /api/quotes - create
 router.post('/', authenticate, (req, res) => {
   if (!req.user.org_id) return res.status(403).json({ error: 'Only partner users can create quotes' });
   const { title, customerName, items, monthlyTotal, notes, status, discountPct, lines } = req.body;
@@ -67,7 +67,7 @@ router.post('/', authenticate, (req, res) => {
   res.status(201).json({ id: result.lastInsertRowid, message: 'Quote saved' });
 });
 
-// PUT /api/quotes/:id — update
+// PUT /api/quotes/:id - update
 router.put('/:id', authenticate, (req, res) => {
   const quote = db.prepare('SELECT * FROM quotes WHERE id = ?').get(req.params.id);
   if (!quote) return res.status(404).json({ error: 'Quote not found' });

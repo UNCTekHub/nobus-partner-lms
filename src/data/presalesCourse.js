@@ -27,15 +27,15 @@ const presalesCourse = {
           content: `## Positioning Nobus Compute
 
 ### Flexible Compute Service (FCS)
-The core compute offering — virtual machines on demand. Key presales talking points:
+The core compute offering - virtual machines on demand. Key presales talking points:
 
-- **Instance naming convention:** si.{vCPU}.{RAM}.{disk}.{os} — .l=Linux, .w=Windows
-- **Entry-level (si.1.x / si.2.x):** 1-2 vCPU, 2-8 GB RAM — web servers, microservices, dev/test
-- **Mid-range (si.4.x):** 4 vCPU, 4-32 GB RAM — enterprise apps, SAP, SharePoint, databases
-- **High-performance (si.8.x):** 8 vCPU, 16-32 GB RAM — direct hardware access, non-virtualized licensing
-- **Burstable (si.8.64 / si.16.64):** 8-16 vCPU, 64 GB RAM — variable workloads, staging environments
+- **Instance naming convention:** si.{vCPU}.{RAM}.{disk}.{os} - .l=Linux, .w=Windows
+- **Entry-level (si.1.x / si.2.x):** 1-2 vCPU, 2-8 GB RAM - web servers, microservices, dev/test
+- **Mid-range (si.4.x):** 4 vCPU, 4-32 GB RAM - enterprise apps, SAP, SharePoint, databases
+- **High-performance (si.8.x):** 8 vCPU, 16-32 GB RAM - direct hardware access, non-virtualized licensing
+- **Burstable (si.8.64 / si.16.64):** 8-16 vCPU, 64 GB RAM - variable workloads, staging environments
 - **OS support:** Ubuntu, CentOS, Debian, Rocky Linux, Oracle Linux, Windows Server 2019/2022
-- **Pre-billing model:** Instances billed from launch — educate customers on cost management
+- **Pre-billing model:** Instances billed from launch - educate customers on cost management
 - **Custom NMIs:** Create golden images from existing instances for standardised deployments
 - **VM Import/Export:** Migrate existing VMs from on-premise to Nobus NMIs
 
@@ -54,35 +54,35 @@ Required for any **production web application**:
 - **Session persistence** (sticky sessions) for stateful apps
 - Works natively within Nobus VPC subnet
 
-> **Presales Tip:** Always diagram Auto Scaling + Load Balancing together. Customers understand scalability better when they see the traffic flow visually. Example: "During Black Friday, your web tier auto-scales from 2 to 10 instances. The load balancer distributes traffic across all of them. When traffic drops, you scale back to 2 — paying only for what you used."`
+> **Presales Tip:** Always diagram Auto Scaling + Load Balancing together. Customers understand scalability better when they see the traffic flow visually. Example: "During Black Friday, your web tier auto-scales from 2 to 10 instances. The load balancer distributes traffic across all of them. When traffic drops, you scale back to 2 - paying only for what you used."`
         },
         {
           id: 'pre-m1-l2',
           title: '1.2 Storage & Data Services',
           content: `## Storage Portfolio
 
-### FBS (Block Storage) — "The Hard Drive in the Cloud"
+### FBS (Block Storage) - "The Hard Drive in the Cloud"
 - Volume sizes: **1 GB to 1 TB**, persist independently from instances
 - **AES-256 encryption** for data at rest, in transit, and snapshots
-- **Extendable volumes** — resize without detaching or restarting the instance
+- **Extendable volumes** - resize without detaching or restarting the instance
 - **Delete on Termination:** Root volumes delete by default; additional volumes persist by default
 
 | Type | Best Pitch | Performance |
 |------|-----------|-------------|
-| **GP2 (Standard SSD)** | "Default choice — fast, reliable, affordable" | 3 IOPS/GB, burst to 3,000 |
-| **IO1 (Provisioned IOPS)** | "For your database tier — guaranteed IOPS" | Up to 64,000 IOPS |
-| **ST1 (Throughput)** | "For your data warehouse — optimized for throughput" | HDD, throughput-focused |
-| **SC1 (Cold)** | "For your archives — lowest cost per GB" | HDD, lowest cost |
+| **GP2 (Standard SSD)** | "Default choice - fast, reliable, affordable" | 3 IOPS/GB, burst to 3,000 |
+| **IO1 (Provisioned IOPS)** | "For your database tier - guaranteed IOPS" | Up to 64,000 IOPS |
+| **ST1 (Throughput)** | "For your data warehouse - optimized for throughput" | HDD, throughput-focused |
+| **SC1 (Cold)** | "For your archives - lowest cost per GB" | HDD, lowest cost |
 
 **Snapshot selling points:**
-- Incremental — only changed blocks saved, but any single snapshot can restore the full volume
+- Incremental - only changed blocks saved, but any single snapshot can restore the full volume
 - Copy across Availability Zones for DR
 - Group snapshots for crash-consistent multi-volume backups
 - Share snapshots with other accounts
 
-### FOS (Object Storage) — "Unlimited File Storage"
+### FOS (Object Storage) - "Unlimited File Storage"
 - Console: **https://fos-az1.nobus.io/**
-- Containers (not nested) hold objects — like directories holding files
+- Containers (not nested) hold objects - like directories holding files
 - Per-container access control and permissions
 - Backup destination for all workloads
 - Static website hosting, media/document storage, big data lake
@@ -90,7 +90,7 @@ Required for any **production web application**:
 - DELETE operations are **free**
 
 ### Managed Databases
-Position as **operational savings** — "Your DBA manages queries, not patching and backups":
+Position as **operational savings** - "Your DBA manages queries, not patching and backups":
 
 | Database | Pitch to Customer |
 |----------|------------------|
@@ -99,7 +99,7 @@ Position as **operational savings** — "Your DBA manages queries, not patching 
 | **MongoDB** | "Flexible document DB for rapid development. Great for mobile apps, IoT, content management." |
 | **MS SQL Server** | "Native .NET integration. Essential for Windows shops running ERP or SharePoint." |
 
-> **Presales Tip:** When a customer says "we run our own MySQL," ask: "How many hours per month does your team spend on database patching, backups, and failover testing?" Then show the managed service as a direct time-saver — typically 20-40 hours/month reclaimed.`
+> **Presales Tip:** When a customer says "we run our own MySQL," ask: "How many hours per month does your team spend on database patching, backups, and failover testing?" Then show the managed service as a direct time-saver - typically 20-40 hours/month reclaimed.`
         },
         {
           id: 'pre-m1-l3',
@@ -109,32 +109,32 @@ Position as **operational savings** — "Your DBA manages queries, not patching 
 ### Core Networking Components
 - **VPC / DaaS:** Isolated network environments with custom IP ranges, subnets, route tables, gateways
 - **Subnets:** Segment by tier (web, app, database) with DHCP and DNS configuration
-- **Security Groups:** Stateful firewalls per instance — automatically applied to all associated instances
+- **Security Groups:** Stateful firewalls per instance - automatically applied to all associated instances
 - **Cloud Firewall (FaaS):** Tenant-level perimeter control with ordered policy rules
 - **Cloud Router:** BGP-enabled routing between subnets and external networks, static routes
 - **Cloud Trunks:** Multi-network via single vNIC using VLAN segmentation for complex topologies
-- **Floating IPs:** Static public IPv4 addresses — ₦1,500/month when reserved but unassigned, max 3 per account
+- **Floating IPs:** Static public IPv4 addresses - ₦1,500/month when reserved but unassigned, max 3 per account
 - **DNS:** Free managed DNS with A, AAAA, CNAME, MX, TXT, NS, PTR records (ns1/ns2.nobus.com)
-- **IPv4 only** — IPv6 not currently supported
+- **IPv4 only** - IPv6 not currently supported
 
 ### Connectivity Options
 | Option | Best For | Bandwidth | Cost |
 |--------|---------|-----------|------|
 | **Public Internet** | Dev/test, small workloads | Variable | Included |
 | **Site-to-Site VPN (pfSense)** | Hybrid connectivity | <1 Gbps | Low (FCS instance cost) |
-| **NFT Hosted Connection** | Mid-market enterprise | 50 Mbps – 10 Gbps | Medium |
+| **NFT Hosted Connection** | Mid-market enterprise | 50 Mbps - 10 Gbps | Medium |
 | **NFT Dedicated Connection** | Large enterprise, latency-sensitive | 1 Gbps or 10 Gbps | Premium |
 
 ### NFT Key Selling Points for Presales
-- Bypasses public internet entirely — lower latency, consistent bandwidth
+- Bypasses public internet entirely - lower latency, consistent bandwidth
 - Supports both IPv4 and IPv6
 - Requires 802.1Q VLAN, BGP with MD5 auth, single-mode fiber
-- LOA-CFA (Letter of Authorization) process — 7-day response window
+- LOA-CFA (Letter of Authorization) process - 7-day response window
 - **Partner Revenue:** NPN-certified partners can resell hosted connections
 
 ### Security Services Stack
 - **Security Groups:** Instance-level stateful packet filtering (web-sg, app-sg, db-sg pattern)
-- **Cloud Firewall:** Tenant-level ordered policy rules — shared across tenants, auditable
+- **Cloud Firewall:** Tenant-level ordered policy rules - shared across tenants, auditable
 - **Sophos XG Firewall:** Enterprise IPS, ATP with AI/ML, cloud sandboxing, dual AV, synchronized security
   - Deployment: 2 vCPU, 4 GB RAM, 2 vNIC (MTU 1458), two FBS volumes (30 GB + 80 GB)
 - **FortiGate NGFW:** Deep packet inspection, UTM, SD-WAN, FortiGuard threat intelligence
@@ -171,25 +171,25 @@ Nobus supports **self-managed Kubernetes** on FCS instances. Position this for c
 
 **Key Presales Points:**
 - Deploy Kubernetes using **kubeadm, kubelet, and kubectl** on FCS instances
-- Customer manages their own control plane and worker nodes — full flexibility
+- Customer manages their own control plane and worker nodes - full flexibility
 - Use FCS Auto Scaling to scale worker nodes based on demand
 - Pair with Managed PostgreSQL or MongoDB for stateful backend services
 
 **8 Container Use Cases to Position:**
-1. **Microservices architecture** — break monoliths into independently deployable services
-2. **CI/CD pipelines** — automated build, test, and deploy workflows
-3. **Dev/test environments** — spin up isolated environments in seconds
-4. **Batch processing** — run compute-intensive jobs, scale down when done
-5. **API gateways** — manage, route, and throttle API traffic
-6. **Machine learning inference** — serve ML models at scale
-7. **Multi-tenant SaaS** — isolate tenant workloads in separate namespaces
-8. **Legacy modernisation** — containerise existing apps for portability
+1. **Microservices architecture** - break monoliths into independently deployable services
+2. **CI/CD pipelines** - automated build, test, and deploy workflows
+3. **Dev/test environments** - spin up isolated environments in seconds
+4. **Batch processing** - run compute-intensive jobs, scale down when done
+5. **API gateways** - manage, route, and throttle API traffic
+6. **Machine learning inference** - serve ML models at scale
+7. **Multi-tenant SaaS** - isolate tenant workloads in separate namespaces
+8. **Legacy modernisation** - containerise existing apps for portability
 
 > **Presales Tip:** When positioning containers, focus on the business outcome: "Your dev team deploys 10x faster, your ops team manages fewer servers, and your CFO sees lower infrastructure costs." Don't lead with Kubernetes complexity.
 
 ---
 
-### Managed Databases — Deep Dive for Solution Design
+### Managed Databases - Deep Dive for Solution Design
 
 Position managed databases as **operational time savings**. The typical self-managed database costs 20-40 hours/month in DBA time (patching, backups, monitoring, failover testing). Managed services eliminate this entirely.
 
@@ -209,21 +209,21 @@ Position managed databases as **operational time savings**. The typical self-man
 
 ---
 
-### Nobus Kafka Service — Event Streaming
+### Nobus Kafka Service - Event Streaming
 
-Position Kafka for customers with **real-time data needs** — payment processing, IoT telemetry, log aggregation, or event-driven architectures.
+Position Kafka for customers with **real-time data needs** - payment processing, IoT telemetry, log aggregation, or event-driven architectures.
 
 **Core Concepts (know enough to position, not configure):**
 
 | Concept | What It Means | Why Customers Care |
 |---------|--------------|-------------------|
 | **Topics** | Named channels for messages | Organise data streams by type (payments, logs, events) |
-| **Partitions** | Parallel processing lanes within a topic | Higher throughput — more partitions = more parallelism |
+| **Partitions** | Parallel processing lanes within a topic | Higher throughput - more partitions = more parallelism |
 | **Producers** | Applications that publish messages | Any app can send events to Kafka |
 | **Consumers** | Applications that read messages | Multiple consumers can read independently |
 | **Consumer Groups** | Coordinated consumers sharing the workload | Scale processing without duplicating messages |
-| **Offsets** | Position tracking per consumer | Consumers can replay from any point — no data loss |
-| **Brokers** | Kafka cluster nodes | Fault tolerance — if one broker fails, others continue |
+| **Offsets** | Position tracking per consumer | Consumers can replay from any point - no data loss |
+| **Brokers** | Kafka cluster nodes | Fault tolerance - if one broker fails, others continue |
 
 **Use Cases to Position:**
 - Real-time payment event processing (fintech)
@@ -236,9 +236,9 @@ Position Kafka for customers with **real-time data needs** — payment processin
 
 ---
 
-### Nobus Cloud Backup (NCB) — Cross-Cloud Protection
+### Nobus Cloud Backup (NCB) - Cross-Cloud Protection
 
-NCB is powered by **Acronis Cyber Protect** and is a unique differentiator — it backs up not just Nobus workloads but also **AWS, Azure, GCP, VMware, and on-premises** environments.
+NCB is powered by **Acronis Cyber Protect** and is a unique differentiator - it backs up not just Nobus workloads but also **AWS, Azure, GCP, VMware, and on-premises** environments.
 
 **7 Key NCB Features:**
 1. Full-image and file-level backup
@@ -254,7 +254,7 @@ NCB is powered by **Acronis Cyber Protect** and is a unique differentiator — i
 - Per-GB storage licensing
 - Bundle options for enterprise accounts
 
-**Free Backup Offer:** Nobus provides a free backup allocation for qualifying customers — use this as a deal sweetener during negotiations.
+**Free Backup Offer:** Nobus provides a free backup allocation for qualifying customers - use this as a deal sweetener during negotiations.
 
 > **Presales Tip:** NCB is your secret weapon for competitive deals. When a customer says "We already use AWS but need backup," position NCB: "Back up your AWS, Azure, AND on-prem workloads to Nobus. One backup solution, one invoice, in Naira. And if you ever want to migrate, your data is already here."
 
@@ -264,7 +264,7 @@ NCB is powered by **Acronis Cyber Protect** and is a unique differentiator — i
 
 For mature DevOps teams, position Nobus Cloud Orchestration:
 - Deploy entire infrastructure stacks from templates (YAML/JSON)
-- Version-controlled infrastructure — track changes, rollback instantly
+- Version-controlled infrastructure - track changes, rollback instantly
 - Repeatable deployments across environments (dev → staging → production)
 
 > **Presales Tip:** "Infrastructure as Code means your entire environment is a template. Disaster recovery? Deploy the template. New environment? Deploy the template. Audit trail? It's in version control."`
@@ -364,33 +364,33 @@ For mature DevOps teams, position Nobus Cloud Orchestration:
           content: `## Building Effective Architecture Diagrams
 
 ### Every Diagram Should Show:
-1. **Network boundaries** — VPC, subnets, availability zones
-2. **Traffic flow** — arrows showing request path from user to backend
-3. **Security layers** — where firewalls, security groups, and encryption apply
-4. **Data flow** — how data moves between services
-5. **Backup/DR** — snapshot schedules, replication targets
+1. **Network boundaries** - VPC, subnets, availability zones
+2. **Traffic flow** - arrows showing request path from user to backend
+3. **Security layers** - where firewalls, security groups, and encryption apply
+4. **Data flow** - how data moves between services
+5. **Backup/DR** - snapshot schedules, replication targets
 
 ### Three-Tier Architecture Template
 \`\`\`
 Internet
    ↓
-[Load Balancer] — Public Subnet
+[Load Balancer] - Public Subnet
    ↓
-[Web Servers] — Private Subnet (web-sg: 80,443 from LB)
+[Web Servers] - Private Subnet (web-sg: 80,443 from LB)
    ↓
-[App Servers] — Private Subnet (app-sg: 8080 from web-sg)
+[App Servers] - Private Subnet (app-sg: 8080 from web-sg)
    ↓
-[Database] — Private Subnet (db-sg: 3306 from app-sg only)
+[Database] - Private Subnet (db-sg: 3306 from app-sg only)
    ↓
-[FOS Backup] — Object Storage
+[FOS Backup] - Object Storage
 \`\`\`
 
 ### Do's and Don'ts
 - ✅ **Do** include cost estimates next to each component
 - ✅ **Do** show the customer's current architecture alongside the Nobus proposal
 - ✅ **Do** highlight security controls at each layer
-- ❌ **Don't** make diagrams too complex — executives lose interest after 6 boxes
-- ❌ **Don't** show internal Nobus infrastructure — keep it at the service level`
+- ❌ **Don't** make diagrams too complex - executives lose interest after 6 boxes
+- ❌ **Don't** show internal Nobus infrastructure - keep it at the service level`
         },
       ],
       quiz: {
@@ -444,7 +444,7 @@ Internet
 | Year 2 | ₦15M (ops) | ₦7M (optimized) |
 | Year 3 | ₦15M (ops) | ₦7M |
 | **TOTAL** | **₦95M** | **₦22.5M** |
-| **SAVINGS** | — | **₦72.5M (76% reduction)** |
+| **SAVINGS** | - | **₦72.5M (76% reduction)** |
 
 > **Presales Tip:** Always present the 3-year view. Year 1 alone may not show dramatic savings due to migration costs, but the 3-year TCO tells the real story.`
         },
@@ -483,7 +483,7 @@ Internet
 - Similar industry, similar scale
 - Quantified results (cost savings, uptime, migration time)
 
-> **Presales Tip:** The best RFP responses are not generic — they repeat the customer's specific language and pain points from the RFP back to them in each section. Show you read it, not just templated a response.`
+> **Presales Tip:** The best RFP responses are not generic - they repeat the customer's specific language and pain points from the RFP back to them in each section. Show you read it, not just templated a response.`
         },
       ],
       quiz: {
@@ -514,14 +514,14 @@ Internet
 
 ### Before the Demo
 - ☐ Confirm what the customer wants to see (don't assume)
-- ☐ Pre-provision demo environment (never build live — too risky)
+- ☐ Pre-provision demo environment (never build live - too risky)
 - ☐ Test everything 1 hour before the meeting
 - ☐ Prepare a backup plan if live demo fails (screenshots, recorded video)
 - ☐ Know who will be in the room and their roles
 
 ### Demo Flow (30 minutes max)
 1. **Context (2 min):** "Based on our discovery, here's what we'll show you today..."
-2. **Dashboard tour (5 min):** Show cloud.nobus.io — instances, volumes, networking
+2. **Dashboard tour (5 min):** Show dashboard.nobus.io: instances, volumes, networking
 3. **Core use case (15 min):** Launch instance → attach storage → configure security → show monitoring
 4. **Differentiator (5 min):** Data sovereignty, Naira billing, local support
 5. **Q&A (remaining time):** Let them drive

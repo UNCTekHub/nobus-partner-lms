@@ -28,12 +28,12 @@ const technicalCourse = {
           title: '1.1 What is Nobus Cloud Services (NCS)?',
           content: `## Nobus Cloud Services (NCS)
 
-Nobus Cloud Services (NCS) is **Nigeria's first native hyperscale public cloud platform**, operated by Nkponani Limited and hosted at **Rack Centre** — one of Africa's premier Tier III data centre facilities in Lagos.
+Nobus Cloud Services (NCS) is **Nigeria's first native hyperscale public cloud platform**, operated by Nkponani Limited and purpose-built for Africa's digital evolution. Infrastructure runs in **Tier III-certified data centres across multiple availability zones in Africa**, anchored in Lagos, Nigeria (including Rack Centre), with a **Kenya region launching Q2 2026**.
 
 Nobus provides a software-defined, on-demand cloud infrastructure for businesses across Nigeria and the broader African continent, with **payment in Naira (NGN)**.
 
 ### Partner Positioning Note
-> Position NCS as the **sovereign cloud of choice** for Nigerian enterprises — data stays in-country, costs are in Naira, and latency to Nigerian users is dramatically lower than hyperscaler alternatives hosted in Europe or the US.`
+> Position NCS as the **sovereign cloud of choice** for Nigerian enterprises - data stays in-country, costs are in Naira, and latency to Nigerian users is dramatically lower than hyperscaler alternatives hosted in Europe or the US.`
         },
         {
           id: 'tech-m1-l2',
@@ -49,7 +49,7 @@ NCS is built on an **OpenStack-based hyperscale framework**, delivering Infrastr
 | **Availability Zones (AZs)** | Isolated physical infrastructure segments within the Nobus data centre. Instances and volumes are pinned to specific AZs. |
 | **Software-Defined Networking** | Neutron-based virtual network fabric supporting VPCs, subnets, routers, security groups, and floating IPs. |
 | **SSD-Backed Storage** | All primary block storage (FBS) is SSD-backed, ensuring consistent sub-millisecond latency. |
-| **Unified Management Console** | cloud.nobus.io provides full lifecycle control of all resources. |
+| **Unified Management Console** | dashboard.nobus.io provides full lifecycle control of all resources. |
 | **API-First Design** | All operations accessible via REST APIs, enabling full automation and Infrastructure-as-Code. |`
         },
         {
@@ -75,7 +75,7 @@ NCS is built on an **OpenStack-based hyperscale framework**, delivering Infrastr
 
 ## Access & Authentication
 
-- **Web Console:** https://cloud.nobus.io
+- **Web Console:** https://dashboard.nobus.io
 - **REST API:** OpenStack-compatible API endpoints
 - **CLI Tools:** Standard OpenStack CLI (python-openstackclient)
 - **Terraform Provider:** OpenStack provider for Terraform
@@ -83,7 +83,7 @@ NCS is built on an **OpenStack-based hyperscale framework**, delivering Infrastr
 > **Tech Tip:** Because Nobus is OpenStack-compatible, customers migrating from other OpenStack-based platforms can reuse their Terraform scripts and Ansible playbooks with minimal modification.
 
 ## Billing Model
-- FCS Instances are **pre-billed at launch** — costs accrue while instance exists
+- FCS Instances are **pre-billed at launch** - costs accrue while instance exists
 - Storage (FBS, FOS, snapshots) billed independently of instance state
 - Floating IPs incur charges regardless of attachment
 - Inbound data transfer is **free**
@@ -105,8 +105,8 @@ NCS is built on an **OpenStack-based hyperscale framework**, delivering Infrastr
             correct: 1,
           },
           {
-            q: 'What facility hosts the Nobus data centre?',
-            options: ['MainOne MDXi', 'Rack Centre (Tier III)', 'AWS Lagos Region', 'Azure Nigeria DC'],
+            q: 'Where does Nobus infrastructure run?',
+            options: ['A single facility in Abuja', 'Tier III-certified data centres across multiple availability zones in Africa', 'AWS Lagos Region', 'Azure Nigeria DC'],
             correct: 1,
           },
         ],
@@ -141,7 +141,7 @@ Nobus uses a structured naming: **si.{vCPU}.{RAM_GB}.{Disk_GB}.{OS}**
 
 ## Instance Types & Flavors
 
-### Entry-Level (1-2 vCPU) — Web Servers, Microservices, Dev/Test
+### Entry-Level (1-2 vCPU) - Web Servers, Microservices, Dev/Test
 | Flavor | vCPU | RAM | Disk | OS | Best For |
 |--------|------|-----|------|----|----------|
 | si.1.2.30.l | 1 | 2 GB | 30 GB | Linux | Lightweight web servers, caching |
@@ -153,7 +153,7 @@ Nobus uses a structured naming: **si.{vCPU}.{RAM_GB}.{Disk_GB}.{OS}**
 | si.2.4.6.50.w | 2 | 4-6 GB | 50 GB | Windows | Windows development |
 | si.2.8.50.w | 2 | 8 GB | 50 GB | Windows | Windows services |
 
-### Mid-Range (4 vCPU) — Enterprise Apps, Databases, Backend Servers
+### Mid-Range (4 vCPU) - Enterprise Apps, Databases, Backend Servers
 | Flavor | vCPU | RAM | Disk | OS | Best For |
 |--------|------|-----|------|----|----------|
 | si.4.4.30.l | 4 | 4 GB | 30 GB | Linux | Application servers |
@@ -161,17 +161,17 @@ Nobus uses a structured naming: **si.{vCPU}.{RAM_GB}.{Disk_GB}.{OS}**
 | si.4.16.30.l | 4 | 16 GB | 30 GB | Linux | Small/medium databases |
 | si.4.24.30.l | 4 | 24 GB | 30 GB | Linux | SAP, SharePoint, cluster computing |
 | si.4.32.30.l | 4 | 32 GB | 30 GB | Linux | Enterprise applications |
-| si.4.4.50.w – si.4.24.50.w | 4 | 4-24 GB | 50 GB | Windows | Windows enterprise apps |
+| si.4.4.50.w - si.4.24.50.w | 4 | 4-24 GB | 50 GB | Windows | Windows enterprise apps |
 
-### High-Performance (8 vCPU) — Direct Hardware Access, Bare-Metal-Like
+### High-Performance (8 vCPU) - Direct Hardware Access, Bare-Metal-Like
 | Flavor | vCPU | RAM | Disk | OS | Best For |
 |--------|------|-----|------|----|----------|
 | si.8.16.30.l | 8 | 16 GB | 30 GB | Linux | Non-virtualized licensing |
 | si.8.24.30.l | 8 | 24 GB | 30 GB | Linux | Low-level hardware features |
 | si.8.32.30.l | 8 | 32 GB | 30 GB | Linux | High-compute workloads |
-| si.8.16.50.w – si.8.32.50.w | 8 | 16-32 GB | 50 GB | Windows | Windows high-performance |
+| si.8.16.50.w - si.8.32.50.w | 8 | 16-32 GB | 50 GB | Windows | Windows high-performance |
 
-### Burstable (8-16 vCPU, 64 GB) — Variable Workloads
+### Burstable (8-16 vCPU, 64 GB) - Variable Workloads
 | Flavor | vCPU | RAM | Disk | OS | Best For |
 |--------|------|-----|------|----|----------|
 | si.8.64.30.l | 8 | 64 GB | 30 GB | Linux | Websites, code repos, staging |
@@ -179,7 +179,7 @@ Nobus uses a structured naming: **si.{vCPU}.{RAM_GB}.{Disk_GB}.{OS}**
 | si.8.64.50.w | 8 | 64 GB | 50 GB | Windows | Windows web apps |
 | si.16.64.50.w | 16 | 64 GB | 50 GB | Windows | Windows build environments |
 
-> **Important:** FCS Instances are **pre-billed at launch** — costs accrue while the instance exists, even when stopped. Advise customers to **terminate** (not just stop) instances they no longer need.`
+> **Important:** FCS Instances are **pre-billed at launch** - costs accrue while the instance exists, even when stopped. Advise customers to **terminate** (not just stop) instances they no longer need.`
         },
         {
           id: 'tech-m2-l2',
@@ -188,9 +188,9 @@ Nobus uses a structured naming: **si.{vCPU}.{RAM_GB}.{Disk_GB}.{OS}**
 
 NMIs are pre-configured VM templates (equivalent to AMIs on AWS):
 
-- **FBS-backed NMIs** (recommended) — data persists on stop/start
-- **Instance Store-backed NMIs** — ephemeral, data lost on stop/termination
-- **Custom NMIs** — created from existing instances for standardised deployments
+- **FBS-backed NMIs** (recommended) - data persists on stop/start
+- **Instance Store-backed NMIs** - ephemeral, data lost on stop/termination
+- **Custom NMIs** - created from existing instances for standardised deployments
 
 ### Available Public Images
 
@@ -204,7 +204,7 @@ NMIs are pre-configured VM templates (equivalent to AMIs on AWS):
 | **debian-12-generic-64Bit** | QCOW2 | 361 MB | 30 GB | 2048 MB | Latest Debian |
 | **Rocky-Linux-8-64bit** | QCOW2 | ~600 MB | 30 GB | 2048 MB | CentOS replacement |
 | **Rocky-Linux-9-64bit** | QCOW2 | ~600 MB | 30 GB | 2048 MB | Latest Rocky |
-| **Oracle_Linux_9_64bit** | QCOW2 | 561 MB | 40 GB | — | Oracle database workloads |
+| **Oracle_Linux_9_64bit** | QCOW2 | 561 MB | 40 GB | - | Oracle database workloads |
 | **Windows-Server-2019** | QCOW2 | ~12 GB | 50 GB | 4096 MB | Windows Server (licensed) |
 | **Windows-Server-2022** | QCOW2 | ~12 GB | 50 GB | 4096 MB | Latest Windows Server |
 | **pfsense-64bit** | QCOW2 | 2.94 GB | 30 GB | 2048 MB | Firewall/VPN appliance |
@@ -213,16 +213,16 @@ NMIs are pre-configured VM templates (equivalent to AMIs on AWS):
 | **Security-Sophos-XG-Firewall-DiskI** | QCOW2 | ~3 GB | 30 GB | 4096 MB | Sophos primary disk |
 | **cirros-0.5.1-64bit** | QCOW2 | 15 MB | 10 GB | 1024 MB | Tiny test image |
 
-> **Note:** Nobus also supports VM Import/Export — you can upload private images from your local environment and convert them into NMIs.
+> **Note:** Nobus also supports VM Import/Export - you can upload private images from your local environment and convert them into NMIs.
 
-## Launching an FCS Instance — Step by Step
+## Launching an FCS Instance - Step by Step
 
-1. Log in to **cloud.nobus.io** → click **Cloud Config Panel**
+1. Log in to **dashboard.nobus.io** → click **Cloud Config Panel**
 2. Navigate to **Project → Compute → Instances** → click **Launch Instance**
 3. **Details tab:**
-   - **Instance Name** — becomes the initial hostname
-   - **Availability Zone** — default is \`nova\` (must match bootable volume AZ if using boot-from-volume)
-   - **Count** — number of identical instances (max 10 by default)
+   - **Instance Name** - becomes the initial hostname
+   - **Availability Zone** - default is \`nova\` (must match bootable volume AZ if using boot-from-volume)
+   - **Count** - number of identical instances (max 10 by default)
 4. **Source tab:**
    - **Boot Source:** Boot from image, Boot from snapshot, or Boot from volume
    - Select the NMI (e.g., Ubuntu-22.04-64bit)
@@ -287,19 +287,19 @@ Distributes incoming traffic across multiple FCS instances:
           title: '3.1-3.2 FBS Overview & Operations',
           content: `## Flexible Block Storage (FBS)
 
-Nobus FBS provides **durable, block-level storage devices** that you can attach to FCS instances. FBS volumes behave like raw, unformatted block devices — you can create a file system on top or use them as raw block devices. Volumes range from **1 GB to 1 TB** and persist independently from the life of an instance.
+Nobus FBS provides **durable, block-level storage devices** that you can attach to FCS instances. FBS volumes behave like raw, unformatted block devices - you can create a file system on top or use them as raw block devices. Volumes range from **1 GB to 1 TB** and persist independently from the life of an instance.
 
 ### Key Characteristics
 - **Persistence:** FBS volumes persist independently from the running life of an FCS instance
 - **Availability Zone:** Created in a specific AZ and can only attach to instances in the same AZ
 - **Multiple volumes:** Multiple volumes can be attached to one instance, but each volume attaches to one instance at a time
-- **Encryption:** AES-256 encryption for data at rest, data in transit, and snapshots — all automatically encrypted
+- **Encryption:** AES-256 encryption for data at rest, data in transit, and snapshots - all automatically encrypted
 - **Extendable:** You can increase volume size, change type, and reset performance **without detaching or restarting** the instance
 
 ### Delete on Termination Behavior
 - **Root volume:** Deleted by default when instance terminates (set DeleteOnTermination=false to persist)
 - **Additional volumes:** Persist by default when instance terminates (set DeleteOnTermination=true to auto-delete)
-- **Important:** FBS volumes are billed regardless of instance state — you pay for the volume even if the instance is terminated
+- **Important:** FBS volumes are billed regardless of instance state - you pay for the volume even if the instance is terminated
 
 ### FBS Volume Types
 
@@ -310,8 +310,8 @@ Nobus FBS provides **durable, block-level storage devices** that you can attach 
 | **Throughput Optimized (ST1)** | HDD | Throughput-focused | Log processing, data warehouses, big data |
 | **Cold Storage (SC1)** | HDD | Lowest cost per GB | Cold archives, infrequently accessed data |
 
-### Creating an FBS Volume — Step by Step
-1. Log in to cloud.nobus.io → **Project → Volumes → Volumes**
+### Creating an FBS Volume - Step by Step
+1. Log in to dashboard.nobus.io → **Project → Volumes → Volumes**
 2. Click **Create Volume**
 3. Specify:
    - **Volume Name** and optional **Description**
@@ -342,7 +342,7 @@ echo '/dev/vdb /data ext4 defaults 0 0' | sudo tee -a /etc/fstab  # Persist
           title: '3.3-3.5 Snapshots & Object Storage (FOS)',
           content: `## FBS Snapshots
 
-Point-in-time backups of FBS volumes. **Incremental** — only changed blocks since the last snapshot are saved, but you only need the most recent snapshot to fully restore a volume.
+Point-in-time backups of FBS volumes. **Incremental** - only changed blocks since the last snapshot are saved, but you only need the most recent snapshot to fully restore a volume.
 
 ### Snapshot Features
 - **Immediately accessible:** Volumes created from snapshots are usable right away
@@ -360,29 +360,29 @@ Point-in-time backups of FBS volumes. **Incremental** — only changed blocks si
 
 ### Important Considerations
 - **Stop the instance** before snapshotting root device volumes for consistency
-- You can snapshot attached, in-use volumes — data is captured at the moment the command is issued
+- You can snapshot attached, in-use volumes - data is captured at the moment the command is issued
 - **Concurrent limit:** Maximum 5 snapshots in progress per account
 - **Database best practice:** Flush and quiesce before snapshot:
   - MySQL: \`FLUSH TABLES WITH READ LOCK\`
   - PostgreSQL: \`pg_start_backup() / pg_stop_backup()\`
-- Deleting a snapshot only removes data **uniquely referenced** by that snapshot — data referenced by other snapshots is preserved
+- Deleting a snapshot only removes data **uniquely referenced** by that snapshot - data referenced by other snapshots is preserved
 
 ### Group Snapshots
-Capture **crash-consistent snapshots across multiple FBS volumes** simultaneously — critical for applications that span multiple volumes (e.g., database data + logs on separate volumes).
+Capture **crash-consistent snapshots across multiple FBS volumes** simultaneously - critical for applications that span multiple volumes (e.g., database data + logs on separate volumes).
 
 ---
 
 ## Flexible Object Storage (FOS)
 
-Nobus FOS is an extensive distributed storage platform for **any type or amount of file** — backups, archives, media files, static websites, and data lakes.
+Nobus FOS is an extensive distributed storage platform for **any type or amount of file** - backups, archives, media files, static websites, and data lakes.
 
 ### Core Concepts
-- **Containers:** Top-level storage namespaces (similar to S3 buckets). Containers are **not nested** — you cannot create a container inside another container, but you can have multiple containers.
+- **Containers:** Top-level storage namespaces (similar to S3 buckets). Containers are **not nested** - you cannot create a container inside another container, but you can have multiple containers.
 - **Objects:** Files + associated metadata stored within containers
-- **Access Control:** Per-container permissions — who can create, delete, and list objects
+- **Access Control:** Per-container permissions - who can create, delete, and list objects
 - **Console URL:** Manage FOS at **https://fos-az1.nobus.io/**
 
-### FOS Operations — Step by Step
+### FOS Operations - Step by Step
 
 **Creating a Container:**
 1. Open FOS console → **Object Storage → Containers**
@@ -448,7 +448,7 @@ Nobus FOS is an extensive distributed storage platform for **any type or amount 
         {
           id: 'tech-m4-l1',
           title: '4.1 Networking Architecture',
-          content: `## Nobus Data Center as a Service (DaaS) — Networking Overview
+          content: `## Nobus Data Center as a Service (DaaS) - Networking Overview
 
 Nobus DaaS allows connection to public or private network infrastructure with encrypted VPN or dedicated Fast Transit connections. You have **complete control** over your virtual networking environment: IP address ranges, subnets, route tables, and network gateways.
 
@@ -461,7 +461,7 @@ Nobus DaaS allows connection to public or private network infrastructure with en
 
 ### IP Addressing
 - **Private IPv4:** Allocated via DHCP from your subnet's CIDR range (RFC 1918). Used for inter-instance communication within the same DaaS network.
-- **Public IPv4:** Auto-assigned from Nobus's pool. Mapped to private IP via NAT. **Released when instance is stopped or terminated** — you get a new one on restart.
+- **Public IPv4:** Auto-assigned from Nobus's pool. Mapped to private IP via NAT. **Released when instance is stopped or terminated** - you get a new one on restart.
 - **Floating IPs:** Static public IPv4 addresses that persist across stop/start. See Floating IPs section below.
 
 | Component | Description |
@@ -469,20 +469,20 @@ Nobus DaaS allows connection to public or private network infrastructure with en
 | **VPC / DaaS** | Logically isolated network environment with custom IP addressing and routing |
 | **Subnets** | IP address ranges within a VPC with DHCP, DNS, and gateway configuration |
 | **Cloud Router** | Routing between subnets and external networks. Supports BGP and static routes. |
-| **Floating IPs** | Reserved static public IPv4 addresses — persist across instance lifecycle |
+| **Floating IPs** | Reserved static public IPv4 addresses - persist across instance lifecycle |
 | **Security Groups** | Stateful virtual firewalls at instance level |
 | **Cloud Firewall (FaaS)** | Tenant-level logical firewall with ordered policy rules |
 | **Cloud Trunks** | Multi-network via single vNIC using VLAN segmentation |
-| **Nobus Fast Transit (NFT)** | Dedicated private connection from premises to Nobus (50Mbps – 10Gbps) |
+| **Nobus Fast Transit (NFT)** | Dedicated private connection from premises to Nobus (50Mbps - 10Gbps) |
 | **Site-to-Site VPN** | Encrypted IPSec tunnels via pfSense for hybrid connectivity |
 | **Nobus DNS** | Managed DNS service (free for Nobus resources) |
 
-### Creating a Network — Step by Step
+### Creating a Network - Step by Step
 1. Navigate to **Project → Network → Networks** → click **Create Network**
 2. **Network tab:** Name, Shared (admin only), Admin State, check "Create Subnet"
 3. **Subnet tab:** Subnet Name, Network Address (CIDR), IP Version (IPv4), Gateway IP
 4. **Subnet Details:** Enable DHCP, Allocation Pools, DNS Name Servers, Host Routes
-5. Click **Create** — the network appears on the Networks dashboard`
+5. Click **Create** - the network appears on the Networks dashboard`
         },
         {
           id: 'tech-m4-l2',
@@ -510,7 +510,7 @@ Security groups are **sets of IP filter rules** applied to network interfaces of
 | **Web Server (HTTPS)** | TCP | 443 | 0.0.0.0/0 | Encrypted web traffic |
 | **SSH Access** | TCP | 22 | Admin IP/CIDR only | **NEVER** open to 0.0.0.0/0 in production |
 | **RDP Access** | TCP | 3389 | Admin IP/CIDR only | Windows remote desktop |
-| **MySQL Database** | TCP | 3306 | App Server SG only | Backend only — no Floating IP |
+| **MySQL Database** | TCP | 3306 | App Server SG only | Backend only - no Floating IP |
 | **PostgreSQL** | TCP | 5432 | App Server SG only | Backend only |
 | **MongoDB** | TCP | 27017 | App Server SG only | Backend only |
 | **MS SQL Server** | TCP | 1433 | App Server SG only | Backend only |
@@ -523,7 +523,7 @@ Security groups are **sets of IP filter rules** applied to network interfaces of
 Tenant-level logical firewalls with **ordered policy-based rules**:
 
 - **Firewall Rules:** IP source/dest, protocol, port, action (Allow/Deny/Reject)
-- **Firewall Policies:** Ordered collection of rules — traffic matching the first rule stops further evaluation
+- **Firewall Policies:** Ordered collection of rules - traffic matching the first rule stops further evaluation
 - **Policies can be shared** across tenants and **audited** (audited flag resets to False when rules change)
 - **Firewalls** are associated with routers and reference one policy
 
@@ -541,7 +541,7 @@ Static, publicly-accessible IPv4 addresses that can be assigned to any FCS insta
 - **₦1,500/month** when reserved but NOT assigned (due to IPv4 scarcity)
 - **Limit:** 3 floating IPs per account initially (increase via dashboard quota request)
 - **Reassignment:** Can be moved between instances at any time, regardless of instance state
-- Floating IPs **do NOT replace** the instance's original public IP — they are additional
+- Floating IPs **do NOT replace** the instance's original public IP - they are additional
 - **No PTR/rDNS** support
 - **Not supported** on Kubernetes worker nodes
 
@@ -582,7 +582,7 @@ Dedicated, exclusive network connections that link your private network **direct
 ### Provisioning Process
 1. Determine NFT location, bandwidth, and redundancy needs
 2. Submit connection request to Nobus Cloud Support
-3. Receive **Letter of Authorization — Connecting Facility Assignment (LOA-CFA)** via email
+3. Receive **Letter of Authorization - Connecting Facility Assignment (LOA-CFA)** via email
 4. Provide LOA-CFA to your NPN Partner or network carrier for cross-connect
 5. If you don't have equipment at the NFT point, an NPN Partner can arrange it
 6. Once connection is up, create virtual interfaces in the Nobus Management Console
@@ -594,7 +594,7 @@ Dedicated, exclusive network connections that link your private network **direct
 
 ## Site-to-Site VPN with pfSense
 
-For customers needing hybrid connectivity without NFT cost. Nobus uses **pfSense** — an open-source firewall/VPN appliance.
+For customers needing hybrid connectivity without NFT cost. Nobus uses **pfSense** - an open-source firewall/VPN appliance.
 
 ### VPN Instance Setup
 - **Image:** pfsense-64bit (2.94 GB, min 30GB disk, 2048MB RAM)
@@ -602,7 +602,7 @@ For customers needing hybrid connectivity without NFT cost. Nobus uses **pfSense
 
 | Protocol | Port | Purpose |
 |----------|------|---------|
-| UDP | 500 | IKE — encryption key management |
+| UDP | 500 | IKE - encryption key management |
 | UDP | 4500 | IPSec NAT-Traversal |
 | ESP | 50 | IPSec data |
 | AH | 51 | IPSec authentication |
@@ -678,7 +678,7 @@ Managed DNS service for mapping domain names to IP addresses. **Free for all Nob
 
 ### Nobus Name Servers
 - **ns1.nobus.com** and **ns2.nobus.com**
-- Nobus does NOT provide domain registration — register with a registrar and point NS records to Nobus
+- Nobus does NOT provide domain registration - register with a registrar and point NS records to Nobus
 
 ### Creating DNS Zones
 1. **Project → DNS → Zones** → **Create Zone**
@@ -739,7 +739,7 @@ Managed DNS service for mapping domain names to IP addresses. **Free for all Nob
 - **Cloud Firewall (FaaS):** Tenant-level perimeter control
 - **Network ACLs:** Stateless access control at subnet level
 - **TLS Encryption:** All data in transit secured with TLS
-- **MFA:** Available for dashboard login — mandate for all admin accounts
+- **MFA:** Available for dashboard login - mandate for all admin accounts
 - **RBAC:** Granular permission assignment`
         },
         {
@@ -759,11 +759,11 @@ Enterprise-grade threat protection deployed within customer Nobus environments. 
 - **Synchronized Security:** Automatically responds to threats based on real-time endpoint data
 - **Central Management:** Unified console for monitoring and managing network security
 
-### Sophos XG Deployment on Nobus — Step by Step
+### Sophos XG Deployment on Nobus - Step by Step
 
 **Minimum Requirements:**
 - 2 vCPU, 4 GB vRAM, 2 vNIC
-- **Warning:** Nobus network MTU is **1458** — configure accordingly
+- **Warning:** Nobus network MTU is **1458** - configure accordingly
 - Two FBS volumes required:
   - **DiskI** (Security-Sophos-XG-Firewall-DiskI): **minimum 30 GB**
   - **DiskII** (Security-Sophos-XG-Firewall-DiskII): **minimum 80 GB**
@@ -801,7 +801,7 @@ Protect mission-critical systems from servers to desktops/laptops:
 
 - **Advanced Backup & Recovery** for various workloads (Nobus cloud, on-prem, AWS, Azure, GCP, VMware)
 - **Ransomware Protection** for all systems
-- **Forensic Backup** — capture and preserve evidence
+- **Forensic Backup** - capture and preserve evidence
 - **Vulnerability Scan** across your infrastructure
 - **Antivirus Protection** integrated with backup
 - **Single management view** for all protected workloads
@@ -810,7 +810,7 @@ Protect mission-critical systems from servers to desktops/laptops:
 
 **Deployment:** Select **acronis-cyberprotect** from image list. Min Disk: **100 GB**, Min RAM: **8192 MB**. Download User Guide and Admin Guide from the Acronis portal after deployment.
 
-> **Key Selling Point:** On-premise customers and customers with AWS/Azure/GCP can backup their applications to Nobus — making Nobus a backup-as-a-service destination for multi-cloud environments.
+> **Key Selling Point:** On-premise customers and customers with AWS/Azure/GCP can backup their applications to Nobus - making Nobus a backup-as-a-service destination for multi-cloud environments.
 
 ## Nigerian Compliance Frameworks
 
@@ -829,7 +829,7 @@ Protect mission-critical systems from servers to desktops/laptops:
         questions: [
           {
             q: 'In the shared responsibility model, who is responsible for OS patching?',
-            options: ['Nobus', 'The customer', 'Both equally', 'Neither — it\'s automated'],
+            options: ['Nobus', 'The customer', 'Both equally', 'Neither - it\'s automated'],
             correct: 1,
           },
           {
@@ -857,20 +857,20 @@ Cloud containers are lightweight, portable units that package an application and
 - **Scalability:** Easily scale up/down based on demand
 
 ### Use Cases on Nobus
-1. **Microservices Architecture** — Deploy loosely coupled services independently
-2. **CI/CD Pipelines** — Automate build, test, and deployment for faster release cycles
-3. **Hybrid Cloud Deployments** — Run identical containers across public and private clouds
-4. **Development & Testing** — Create isolated, consistent environments
-5. **Application Modernization** — Refactor legacy apps into containerized microservices
-6. **Serverless Functions** — Event-driven containers for efficient resource usage
-7. **Data Processing (ETL)** — Scalable extract-transform-load workflows
-8. **Security & Compliance** — Isolate applications to reduce attack surface
+1. **Microservices Architecture** - Deploy loosely coupled services independently
+2. **CI/CD Pipelines** - Automate build, test, and deployment for faster release cycles
+3. **Hybrid Cloud Deployments** - Run identical containers across public and private clouds
+4. **Development & Testing** - Create isolated, consistent environments
+5. **Application Modernization** - Refactor legacy apps into containerized microservices
+6. **Serverless Functions** - Event-driven containers for efficient resource usage
+7. **Data Processing (ETL)** - Scalable extract-transform-load workflows
+8. **Security & Compliance** - Isolate applications to reduce attack surface
 
 > Contact Nobus cloud support to get started with cloud containers.
 
 ## Cloud Kubernetes Engine (CKE)
 
-Nobus provides managed Kubernetes services — Kubernetes without the overhead of managing control plane infrastructure.
+Nobus provides managed Kubernetes services - Kubernetes without the overhead of managing control plane infrastructure.
 
 ### What Nobus Manages
 - **Provisioning:** Setting up the cluster with resources
@@ -885,7 +885,7 @@ Nobus provides managed Kubernetes services — Kubernetes without the overhead o
 |---------|-------------|
 | **Cluster** | Set of worker nodes managed by a control plane |
 | **Node** | FCS instance running containerised workloads |
-| **Pod** | Smallest deployable unit — one or more containers |
+| **Pod** | Smallest deployable unit - one or more containers |
 | **Deployment** | Desired state for pods (replica count, update strategy) |
 | **Service** | Network endpoint for pods (ClusterIP, NodePort, LoadBalancer) |
 | **Ingress** | HTTP/HTTPS routing to internal services |
@@ -918,7 +918,7 @@ Nobus cloud database services provide scalability, high availability, cost optim
 
 ### Microsoft SQL Server (MSSQL)
 - **Type:** Relational RDBMS by Microsoft
-- **Language:** Transact-SQL (T-SQL) — stored procedures, triggers, user-defined functions
+- **Language:** Transact-SQL (T-SQL) - stored procedures, triggers, user-defined functions
 - **Integration:** Tight integration with Windows Server, Visual Studio, .NET Framework
 - **Editions:** Express (free) through Enterprise for large-scale deployments
 - **Best For:** .NET workloads, Windows ERP, Active Directory-integrated apps, enterprise reporting
@@ -965,7 +965,7 @@ Apache Kafka is an open-source distributed **event streaming platform** for high
 | **Topic** | Category where records are published; partitioned for scalability |
 | **Partition** | Division of a topic for parallel processing |
 | **Broker** | Kafka server that stores data and serves clients |
-| **Consumer Group** | Consumers sharing load — each message goes to one consumer in the group |
+| **Consumer Group** | Consumers sharing load - each message goes to one consumer in the group |
 | **Offset** | Unique ID per message within a partition for position tracking |
 
 ### Use Cases
@@ -1013,9 +1013,9 @@ Apache Kafka is an open-source distributed **event streaming platform** for high
 Protect mission-critical systems from servers to desktops/laptops. Powered by **Acronis Cyber Protect**:
 
 ### NCB Features
-1. **Advanced Backup & Recovery** for various workloads — cloud, on-premise, or third-party cloud (AWS, Azure, GCP, VMware)
+1. **Advanced Backup & Recovery** for various workloads - cloud, on-premise, or third-party cloud (AWS, Azure, GCP, VMware)
 2. **Ransomware Protection** for all systems
-3. **Forensic Backup** — preserve evidence for investigation
+3. **Forensic Backup** - preserve evidence for investigation
 4. **Vulnerability Scan** across your entire infrastructure
 5. **Antivirus Protection** integrated with backup workflows
 6. **Single management view** for all protected workloads
@@ -1032,7 +1032,7 @@ NCB supports backing up workloads from **any source** to Nobus:
 - VMware-based hypervisor environments
 - Other third-party cloud providers
 
-> **Key Sales Point:** Nobus offers **free backup of your entire infrastructure** — subject to terms and conditions of the customer agreement. This is a unique differentiator.
+> **Key Sales Point:** Nobus offers **free backup of your entire infrastructure** - subject to terms and conditions of the customer agreement. This is a unique differentiator.
 
 ### Acronis Deployment
 - Image: **acronis-cyberprotect** (6.50 GB, Min Disk: 100 GB, Min RAM: 8192 MB)
@@ -1052,7 +1052,7 @@ NCB supports backing up workloads from **any source** to Nobus:
 
 - **Lifecycle policy:** Daily (7 days), Weekly (4 weeks), Monthly (12 months)
 - **Tag consistently:** Environment, Application, Owner, Date
-- **Test recovery quarterly** — never assume snapshots work without testing
+- **Test recovery quarterly** - never assume snapshots work without testing
 - **Database snapshots:** Flush and quiesce before snapshotting
   - MySQL: \`FLUSH TABLES WITH READ LOCK\`
   - PostgreSQL: \`pg_start_backup() / pg_stop_backup()\``
@@ -1082,13 +1082,13 @@ NCB supports backing up workloads from **any source** to Nobus:
         {
           id: 'tech-m8-l1',
           title: 'Lab 1: Provision a Web Server',
-          content: `## Lab 1 — Provision a Web Server with FCS
+          content: `## Lab 1 - Provision a Web Server with FCS
 
 **Objective:** Launch an FCS instance, configure security, attach floating IP, deploy Apache.
 
 ### Steps
 
-1. Log in to **cloud.nobus.io**
+1. Log in to **dashboard.nobus.io**
 2. Create Security Group \`web-sg\`:
    - Inbound TCP 22 from your IP
    - Inbound TCP 80 from 0.0.0.0/0
@@ -1107,12 +1107,12 @@ ssh -i your-key.pem ubuntu@<floating-ip>
 \`\`\`bash
 sudo apt-get update && sudo apt-get install -y apache2
 \`\`\`
-7. Verify: Open browser → \`http://<floating-ip>\` — Apache default page should display`
+7. Verify: Open browser → \`http://<floating-ip>\` - Apache default page should display`
         },
         {
           id: 'tech-m8-l2',
           title: 'Lab 2: Attach & Mount FBS Volume',
-          content: `## Lab 2 — Attach and Mount an FBS Volume
+          content: `## Lab 2 - Attach and Mount an FBS Volume
 
 **Objective:** Create, attach, and mount an FBS data volume as persistent storage.
 
@@ -1134,12 +1134,12 @@ sudo mount /dev/vdb /mnt/data       # Mount
 \`\`\`bash
 echo '/dev/vdb /mnt/data ext4 defaults 0 0' | sudo tee -a /etc/fstab
 \`\`\`
-5. Verify: \`df -h\` — confirm /mnt/data shows 50 GB`
+5. Verify: \`df -h\` - confirm /mnt/data shows 50 GB`
         },
         {
           id: 'tech-m8-l3',
           title: 'Lab 3: Upload to FOS & Lab 4: VPN',
-          content: `## Lab 3 — Upload Objects to Nobus FOS
+          content: `## Lab 3 - Upload Objects to Nobus FOS
 
 1. Navigate to **Object Storage** → **Create Container**
    - Name: \`partner-test-bucket\`
@@ -1150,7 +1150,7 @@ echo '/dev/vdb /mnt/data ext4 defaults 0 0' | sudo tee -a /etc/fstab
 
 ---
 
-## Lab 4 — Configure Site-to-Site VPN
+## Lab 4 - Configure Site-to-Site VPN
 
 ### On Nobus Side:
 1. Navigate to **Networking** → **VPN**
@@ -1194,32 +1194,32 @@ Configure matching IKE/IPSec profile on their router (Cisco, Fortinet, Palo Alto
 | **Rehost (Lift & Shift)** | Move VMs as-is to FCS. Minimal changes. Fastest path. | VM Import/Export or manual rebuild |
 | **Replatform** | Move with targeted optimizations (e.g., self-managed MySQL → Managed MySQL) | Leverage managed services |
 | **Refactor** | Redesign for cloud-native: containerize on CKE, use FOS, Auto Scaling | Highest effort, highest long-term benefit |
-| **Retire** | Decommission unneeded workloads. Reduces migration scope. | — |
+| **Retire** | Decommission unneeded workloads. Reduces migration scope. | - |
 | **Retain** | Keep specific workloads on-prem. Use NFT or VPN for hybrid. | Hybrid connectivity |
 
 ## Migration Checklist
 
-### Phase 1 — Discovery & Assessment
+### Phase 1 - Discovery & Assessment
 - ☐ Inventory all servers: OS, RAM, CPU, disk, network
 - ☐ Identify application dependencies
 - ☐ Define RTO/RPO requirements
 - ☐ Assess compliance requirements (NDPR, CBN, PCI-DSS)
 - ☐ Estimate sizing using NCS Monthly Calculator
 
-### Phase 2 — Preparation
+### Phase 2 - Preparation
 - ☐ Create VPC, subnets, and security groups
 - ☐ Set up VPN or NFT connectivity
 - ☐ Create base NMIs
 - ☐ Set up monitoring and alerting
 
-### Phase 3 — Migration Execution
+### Phase 3 - Migration Execution
 - ☐ Migrate non-production first, validate
 - ☐ Stage data via FBS snapshots and FOS
 - ☐ Pilot cutover with maintenance window
 - ☐ Production cutover, update DNS
 - ☐ Monitor 48-72 hours post-cutover
 
-### Phase 4 — Optimization
+### Phase 4 - Optimization
 - ☐ Right-size instances based on actual utilization
 - ☐ Implement Auto Scaling for variable workloads
 - ☐ Move cold data from FBS to FOS
@@ -1283,7 +1283,7 @@ Configure matching IKE/IPSec profile on their router (Cisco, Fortinet, Palo Alto
 
 | Channel | Usage |
 |---------|-------|
-| **Support Portal** (cloud.nobus.io) | Primary channel for technical tickets |
+| **Support Portal** (dashboard.nobus.io) | Primary channel for technical tickets |
 | **Email Support** | Non-urgent queries and billing |
 | **Partner Hotline** | Priority support for certified partners |
 | **Documentation** | nobus.io/documentation |`
@@ -1316,13 +1316,13 @@ Configure matching IKE/IPSec profile on their router (Cisco, Fortinet, Palo Alto
           content: `## Common Technical Objections
 
 ### "Nobus doesn't have as many services as AWS or Azure."
-> "80% of enterprise workloads run on compute, storage, and networking — all of which Nobus provides at production grade. For any gaps, we can architect a hybrid solution using NFT connectivity."
+> "80% of enterprise workloads run on compute, storage, and networking - all of which Nobus provides at production grade. For any gaps, we can architect a hybrid solution using NFT connectivity."
 
-### "We are concerned about uptime — this is a Nigerian company."
-> "Nobus is hosted at Rack Centre, a Tier III certified facility — 99.982% uptime with N+1 redundancy. Being Nigerian-operated is an advantage — no undersea cable dependency for local data, and support engineers are in your time zone."
+### "We are concerned about uptime - this is a Nigerian company."
+> "Nobus runs in Tier III certified data centres across multiple African availability zones, with a 99.982% uptime guarantee and N+1 redundancy. Being African-operated is an advantage: no undersea cable dependency for local data, and support engineers are in your time zone."
 
-### "Our developers know AWS APIs — steep learning curve?"
-> "Nobus is built on OpenStack. Terraform's OpenStack provider works natively. Core concepts (instances, security groups, object storage, VPC) are identical — just different names: FCS = EC2, FBS = EBS, FOS = S3."
+### "Our developers know AWS APIs - steep learning curve?"
+> "Nobus is built on OpenStack. Terraform's OpenStack provider works natively. Core concepts (instances, security groups, object storage, VPC) are identical - just different names: FCS = EC2, FBS = EBS, FOS = S3."
 
 ### "Can Nobus help with CBN/NDPR compliance?"
 > "Absolutely. Data hosted on Nobus resides entirely within Nigeria, supporting NDPR data residency. We can provide a compliance mapping document showing how Nobus controls align to CBN requirements."
@@ -1344,7 +1344,7 @@ Configure matching IKE/IPSec profile on their router (Cisco, Fortinet, Palo Alto
             correct: 2,
           },
           {
-            q: 'What Tier III uptime guarantee does Rack Centre provide?',
+            q: 'What uptime guarantee do Nobus Tier III data centres provide?',
             options: ['99.5%', '99.9%', '99.95%', '99.982%'],
             correct: 3,
           },
@@ -1362,20 +1362,20 @@ Configure matching IKE/IPSec profile on their router (Cisco, Fortinet, Palo Alto
 
 | Level | Requirements | Benefits |
 |-------|-------------|----------|
-| **Level 1 — Associate** | Complete this curriculum + pass NCS Associate Assessment | Authorized for FCS/FBS deployments. Access to partner resources. |
-| **Level 2 — Professional** | Level 1 + 3 successful deployments + Advanced Architecture Workshop | Authorized for complex architectures, migrations, K8s. Listed in Partner Directory. |
-| **Level 3 — Expert / NPN Certified** | Level 2 + NFT certification + 10 deployments + 2 enterprise accounts | Authorized for all NFT tiers. Priority support. Access to pre-sales team. |
+| **Level 1 - Associate** | Complete this curriculum + pass NCS Associate Assessment | Authorized for FCS/FBS deployments. Access to partner resources. |
+| **Level 2 - Professional** | Level 1 + 3 successful deployments + Advanced Architecture Workshop | Authorized for complex architectures, migrations, K8s. Listed in Partner Directory. |
+| **Level 3 - Expert / NPN Certified** | Level 2 + NFT certification + 10 deployments + 2 enterprise accounts | Authorized for all NFT tiers. Priority support. Access to pre-sales team. |
 
 ## NCS Associate Assessment Domains
 
 | Domain | Weight |
 |--------|--------|
-| **FCS** — Instance management, NMIs, flavors, Auto Scaling | 25% |
-| **Storage** — FBS volumes, snapshots, FOS containers | 20% |
-| **Networking** — VPC, Security Groups, Floating IPs, VPN | 20% |
-| **Security** — Shared responsibility, firewalls, compliance | 15% |
-| **Architecture** — HA patterns, DR tiers, migration | 15% |
-| **Operations** — Monitoring, troubleshooting, support | 5% |
+| **FCS** - Instance management, NMIs, flavors, Auto Scaling | 25% |
+| **Storage** - FBS volumes, snapshots, FOS containers | 20% |
+| **Networking** - VPC, Security Groups, Floating IPs, VPN | 20% |
+| **Security** - Shared responsibility, firewalls, compliance | 15% |
+| **Architecture** - HA patterns, DR tiers, migration | 15% |
+| **Operations** - Monitoring, troubleshooting, support | 5% |
 
 > **Passing Score:** 75% or higher
 > **Format:** 50 multiple-choice questions, 90 minutes`

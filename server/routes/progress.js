@@ -5,7 +5,7 @@ import { createNotification, awardPoints } from '../services/notifications.js';
 
 const router = Router();
 
-// GET /api/progress — get all progress for current user
+// GET /api/progress - get all progress for current user
 router.get('/', authenticate, (req, res) => {
   const lessons = db.prepare('SELECT lesson_id FROM lesson_progress WHERE user_id = ?').all(req.user.id);
   const quizzes = db.prepare(`
@@ -47,7 +47,7 @@ router.get('/', authenticate, (req, res) => {
   res.json({ lessons: lessonMap, quizzes: quizMap, attemptCounts, quizPolicies: policyMap });
 });
 
-// POST /api/progress/lesson/:lessonId — mark lesson complete
+// POST /api/progress/lesson/:lessonId - mark lesson complete
 router.post('/lesson/:lessonId', authenticate, (req, res) => {
   const { lessonId } = req.params;
 
@@ -68,7 +68,7 @@ router.post('/lesson/:lessonId', authenticate, (req, res) => {
   res.json({ message: 'Lesson marked complete', lessonId });
 });
 
-// POST /api/progress/quiz — save quiz result
+// POST /api/progress/quiz - save quiz result
 router.post('/quiz', authenticate, (req, res) => {
   const { quizId, score, total } = req.body;
   if (!quizId || score === undefined || !total) {
@@ -124,7 +124,7 @@ router.post('/quiz', authenticate, (req, res) => {
   res.json({ message: 'Quiz result saved', quizId, score, total, passed: !!passed });
 });
 
-// POST /api/progress/reset — reset all progress (dev/testing)
+// POST /api/progress/reset - reset all progress (dev/testing)
 router.post('/reset', authenticate, (req, res) => {
   db.prepare('DELETE FROM lesson_progress WHERE user_id = ?').run(req.user.id);
   db.prepare('DELETE FROM quiz_results WHERE user_id = ?').run(req.user.id);
@@ -134,7 +134,7 @@ router.post('/reset', authenticate, (req, res) => {
   res.json({ message: 'Progress reset' });
 });
 
-// GET /api/progress/recommendations — learning path recommendations
+// GET /api/progress/recommendations - learning path recommendations
 router.get('/recommendations', authenticate, (req, res) => {
   const completedPaths = db.prepare('SELECT path_id FROM completed_paths WHERE user_id = ?')
     .all(req.user.id).map(p => p.path_id);

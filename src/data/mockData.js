@@ -182,7 +182,7 @@ export const mockUsers = [
   },
 ];
 
-// Demo accounts for login — password is just for demo, not real auth
+// Demo accounts for login - password is just for demo, not real auth
 export const demoAccounts = [
   { email: 'admin@nobus.io', password: 'demo', userId: 'user-super', label: 'Nobus Super Admin' },
   { email: 'chinedu@acmetech.ng', password: 'demo', userId: 'user-001', label: 'Org Admin (Acme Technologies)' },

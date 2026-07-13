@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { LayoutDashboard, BookOpen, Award, Trophy, MessageSquare, Compass, ShieldCheck, Calculator, Megaphone, Library, FlaskConical, Building2, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-// Grouped navigation — the information architecture of the partner portal.
+// Grouped navigation - the information architecture of the partner portal.
 export const NAV_GROUPS = [
   {
     title: null,

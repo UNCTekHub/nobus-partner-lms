@@ -17,7 +17,7 @@ function requireOrg(req, res) {
   return true;
 }
 
-// GET /api/pipeline — all leads for my org (super admin: pass ?orgId= or gets all)
+// GET /api/pipeline - all leads for my org (super admin: pass ?orgId= or gets all)
 router.get('/', authenticate, (req, res) => {
   const base = `
     SELECT l.*, u.name as owner_name,
@@ -33,7 +33,7 @@ router.get('/', authenticate, (req, res) => {
   res.json(db.prepare(base + ' WHERE l.org_id = ? ORDER BY l.updated_at DESC').all(req.user.org_id));
 });
 
-// GET /api/pipeline/forecast — Naira revenue forecast summary for my org
+// GET /api/pipeline/forecast - Naira revenue forecast summary for my org
 router.get('/forecast', authenticate, (req, res) => {
   const orgId = req.user.role === 'super_admin' ? req.query.orgId : req.user.org_id;
   let sql = 'SELECT stage, COUNT(*) as count, COALESCE(SUM(est_value), 0) as total FROM leads';
@@ -50,7 +50,7 @@ router.get('/forecast', authenticate, (req, res) => {
   res.json({ byStage, weightedForecast, openPipeline: byStage.lead.total + byStage.qualified.total + byStage.proposal.total });
 });
 
-// POST /api/pipeline — create a lead
+// POST /api/pipeline - create a lead
 router.post('/', authenticate, (req, res) => {
   if (!requireOrg(req, res)) return;
   const { company, contactName, contactEmail, contactPhone, industry, estValue, services, nextAction } = req.body;
@@ -67,7 +67,7 @@ router.post('/', authenticate, (req, res) => {
   res.status(201).json({ id: result.lastInsertRowid, message: 'Lead created' });
 });
 
-// PATCH /api/pipeline/:id — update lead fields / move stage
+// PATCH /api/pipeline/:id - update lead fields / move stage
 router.patch('/:id', authenticate, (req, res) => {
   const lead = db.prepare('SELECT * FROM leads WHERE id = ?').get(req.params.id);
   if (!lead) return res.status(404).json({ error: 'Lead not found' });
@@ -103,7 +103,7 @@ router.patch('/:id', authenticate, (req, res) => {
   res.json({ message: 'Lead updated' });
 });
 
-// DELETE /api/pipeline/:id — remove a lead
+// DELETE /api/pipeline/:id - remove a lead
 router.delete('/:id', authenticate, (req, res) => {
   const lead = db.prepare('SELECT * FROM leads WHERE id = ?').get(req.params.id);
   if (!lead) return res.status(404).json({ error: 'Lead not found' });
@@ -115,7 +115,7 @@ router.delete('/:id', authenticate, (req, res) => {
   res.json({ message: 'Lead deleted' });
 });
 
-// GET /api/pipeline/:id/activities — activity timeline
+// GET /api/pipeline/:id/activities - activity timeline
 router.get('/:id/activities', authenticate, (req, res) => {
   const lead = db.prepare('SELECT * FROM leads WHERE id = ?').get(req.params.id);
   if (!lead) return res.status(404).json({ error: 'Lead not found' });
@@ -129,7 +129,7 @@ router.get('/:id/activities', authenticate, (req, res) => {
   res.json(activities);
 });
 
-// POST /api/pipeline/:id/activities — add an activity note
+// POST /api/pipeline/:id/activities - add an activity note
 router.post('/:id/activities', authenticate, (req, res) => {
   const { note } = req.body;
   if (!note) return res.status(400).json({ error: 'Note is required' });

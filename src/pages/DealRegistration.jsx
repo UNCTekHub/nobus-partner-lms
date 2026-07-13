@@ -54,7 +54,7 @@ export default function DealRegistration() {
       const res = await api.registerDeal({ ...form, estValue: Number(form.estValue) || 0, quoteId: form.quoteId ? Number(form.quoteId) : null });
       setShowForm(false);
       setForm(EMPTY_FORM);
-      setNotice(res.duplicateWarning ? `Deal submitted — ${res.duplicateWarning}` : 'Deal submitted for review.');
+      setNotice(res.duplicateWarning ? `Deal submitted - ${res.duplicateWarning}` : 'Deal submitted for review.');
       load();
     } catch (err) {
       setError(err.message);
@@ -150,7 +150,7 @@ export default function DealRegistration() {
                   </div>
                   <div className="text-sm text-gray-600">
                     {deal.customer_name}{deal.customer_industry ? ` · ${deal.customer_industry}` : ''}
-                    {isSuperAdmin && <span className="text-gray-400"> — by {deal.org_name}</span>}
+                    {isSuperAdmin && <span className="text-gray-400"> - by {deal.org_name}</span>}
                   </div>
                   {deal.description && <p className="text-sm text-gray-500 mt-1.5 max-w-3xl">{deal.description}</p>}
                   {services.length > 0 && (
@@ -162,7 +162,7 @@ export default function DealRegistration() {
                     <div className="mt-2 text-sm text-gray-600 flex items-center gap-1.5">
                       <Calculator className="w-3.5 h-3.5 text-nobus-500" />
                       Quote NCS-Q-{String(deal.quote_id).padStart(5, '0')}
-                      {deal.quote_title ? ` — ${deal.quote_title}` : ''}
+                      {deal.quote_title ? ` - ${deal.quote_title}` : ''}
                       {deal.quote_monthly_total ? ` (${naira(deal.quote_monthly_total)}/mo)` : ''}
                     </div>
                   )}
@@ -274,7 +274,7 @@ export default function DealRegistration() {
                   <option value="">No quote attached</option>
                   {quotes.map((q) => (
                     <option key={q.id} value={q.id}>
-                      NCS-Q-{String(q.id).padStart(5, '0')} — {q.title} (₦{Number(q.monthly_total).toLocaleString('en-NG')}/mo)
+                      NCS-Q-{String(q.id).padStart(5, '0')} - {q.title} (₦{Number(q.monthly_total).toLocaleString('en-NG')}/mo)
                     </option>
                   ))}
                 </select>

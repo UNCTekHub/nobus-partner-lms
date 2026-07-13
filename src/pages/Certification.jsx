@@ -61,12 +61,12 @@ const levels = [
 ];
 
 const assessmentDomains = [
-  { domain: 'FCS — Instances, NMIs, flavors, Auto Scaling', weight: '25%' },
-  { domain: 'Storage — FBS volumes, snapshots, FOS containers', weight: '20%' },
-  { domain: 'Networking — VPC, Security Groups, Floating IPs, VPN', weight: '20%' },
-  { domain: 'Security — Shared responsibility, firewalls, compliance', weight: '15%' },
-  { domain: 'Architecture — HA patterns, DR tiers, migration', weight: '15%' },
-  { domain: 'Operations — Monitoring, troubleshooting, support', weight: '5%' },
+  { domain: 'FCS - Instances, NMIs, flavors, Auto Scaling', weight: '25%' },
+  { domain: 'Storage - FBS volumes, snapshots, FOS containers', weight: '20%' },
+  { domain: 'Networking - VPC, Security Groups, Floating IPs, VPN', weight: '20%' },
+  { domain: 'Security - Shared responsibility, firewalls, compliance', weight: '15%' },
+  { domain: 'Architecture - HA patterns, DR tiers, migration', weight: '15%' },
+  { domain: 'Operations - Monitoring, troubleshooting, support', weight: '5%' },
 ];
 
 export default function Certification() {
@@ -165,7 +165,7 @@ export default function Certification() {
                   <lvl.icon className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">Level {lvl.level} — {lvl.title}</h3>
+                  <h3 className="text-lg font-bold text-gray-900">Level {lvl.level} - {lvl.title}</h3>
                 </div>
               </div>
               <div className="p-5 grid md:grid-cols-2 gap-6">

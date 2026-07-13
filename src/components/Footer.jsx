@@ -9,7 +9,7 @@ export default function Footer() {
               <span className="text-white font-bold">Nobus PartnerCentral</span>
             </div>
             <p className="text-sm leading-relaxed">
-              The partner portal for Nobus Cloud Services — enablement, sales,
+              The partner portal for Nobus Cloud Services - enablement, sales,
               deal protection, quoting and resources for partners delivering
               Nigeria's sovereign cloud.
             </p>
@@ -18,7 +18,7 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-3">Resources</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="https://nobus.io/documentation" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Documentation</a></li>
-              <li><a href="https://cloud.nobus.io" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Cloud Console</a></li>
+              <li><a href="https://dashboard.nobus.io" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Cloud Console</a></li>
               <li><a href="https://nobus.io" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Nobus Website</a></li>
             </ul>
           </div>

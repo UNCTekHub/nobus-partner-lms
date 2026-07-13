@@ -298,7 +298,7 @@ export default function SuperAdminDashboard() {
                 {selectedOrg.users?.map(u => (
                   <tr key={u.id} className="hover:bg-gray-50">
                     <td className="px-6 py-3"><div className="text-sm font-medium">{u.name}</div><div className="text-xs text-gray-500">{u.email}</div></td>
-                    <td className="px-6 py-3 text-sm">{u.role_category || '—'}</td>
+                    <td className="px-6 py-3 text-sm">{u.role_category || '-'}</td>
                     <td className="px-6 py-3 text-sm">{u.completedPaths?.length || 0}</td>
                     <td className="px-6 py-3 text-sm font-medium text-nobus-600">{u.totalPoints || 0}</td>
                     <td className="px-6 py-3"><span className={`text-xs px-2 py-0.5 rounded-full ${u.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{u.status}</span></td>
@@ -407,7 +407,7 @@ export default function SuperAdminDashboard() {
               {allUsers.map(u => (
                 <tr key={u.id} className="hover:bg-gray-50">
                   <td className="px-6 py-3"><div className="text-sm font-medium">{u.name}</div><div className="text-xs text-gray-500">{u.email}</div></td>
-                  <td className="px-6 py-3 text-sm text-gray-600">{u.org_name || '—'}</td>
+                  <td className="px-6 py-3 text-sm text-gray-600">{u.org_name || '-'}</td>
                   <td className="px-6 py-3 text-sm capitalize">{u.role?.replace('_', ' ')}</td>
                   <td className="px-6 py-3"><span className={`text-xs px-2 py-0.5 rounded-full ${u.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{u.status}</span></td>
                   <td className="px-6 py-3">
@@ -496,7 +496,7 @@ export default function SuperAdminDashboard() {
                   <td className="px-6 py-3 text-xs text-gray-500">{new Date(log.created_at).toLocaleString()}</td>
                   <td className="px-6 py-3 text-sm">{log.user_name || 'System'}</td>
                   <td className="px-6 py-3"><span className="text-xs px-2 py-0.5 bg-gray-100 rounded font-mono">{log.action}</span></td>
-                  <td className="px-6 py-3 text-xs text-gray-500 max-w-xs truncate">{log.details || '—'}</td>
+                  <td className="px-6 py-3 text-xs text-gray-500 max-w-xs truncate">{log.details || '-'}</td>
                 </tr>
               ))}
             </tbody>

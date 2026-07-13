@@ -13,7 +13,7 @@ const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 2 *
 
 // ==================== USER MANAGEMENT ====================
 
-// PATCH /api/admin/users/:id — edit user (role, role_category, status, name, email)
+// PATCH /api/admin/users/:id - edit user (role, role_category, status, name, email)
 router.patch('/users/:id', authenticate, requireRole('super_admin'), (req, res) => {
   const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.params.id);
   if (!user) return res.status(404).json({ error: 'User not found' });
@@ -42,7 +42,7 @@ router.patch('/users/:id', authenticate, requireRole('super_admin'), (req, res) 
   res.json({ message: 'User updated' });
 });
 
-// POST /api/admin/users/:id/reset-password — reset user password
+// POST /api/admin/users/:id/reset-password - reset user password
 router.post('/users/:id/reset-password', authenticate, requireRole('super_admin'), (req, res) => {
   const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.params.id);
   if (!user) return res.status(404).json({ error: 'User not found' });
@@ -57,7 +57,7 @@ router.post('/users/:id/reset-password', authenticate, requireRole('super_admin'
   res.json({ message: 'Password reset', tempPassword });
 });
 
-// DELETE /api/admin/users/:id — delete user
+// DELETE /api/admin/users/:id - delete user
 router.delete('/users/:id', authenticate, requireRole('super_admin'), (req, res) => {
   const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.params.id);
   if (!user) return res.status(404).json({ error: 'User not found' });
@@ -79,7 +79,7 @@ router.delete('/users/:id', authenticate, requireRole('super_admin'), (req, res)
 
 // ==================== ORGANIZATION DRILL-DOWN ====================
 
-// GET /api/admin/organizations/:id — get organization detail with full team data
+// GET /api/admin/organizations/:id - get organization detail with full team data
 router.get('/organizations/:id', authenticate, requireRole('super_admin'), (req, res) => {
   const org = db.prepare('SELECT * FROM organizations WHERE id = ?').get(req.params.id);
   if (!org) return res.status(404).json({ error: 'Organization not found' });
@@ -123,7 +123,7 @@ router.get('/organizations/:id', authenticate, requireRole('super_admin'), (req,
   });
 });
 
-// PATCH /api/admin/organizations/:id — update org details (tier, status, etc)
+// PATCH /api/admin/organizations/:id - update org details (tier, status, etc)
 router.patch('/organizations/:id', authenticate, requireRole('super_admin'), (req, res) => {
   const org = db.prepare('SELECT * FROM organizations WHERE id = ?').get(req.params.id);
   if (!org) return res.status(404).json({ error: 'Organization not found' });
@@ -146,7 +146,7 @@ router.patch('/organizations/:id', authenticate, requireRole('super_admin'), (re
 
 // ==================== SEARCH & FILTER ====================
 
-// GET /api/admin/search — search across orgs and users
+// GET /api/admin/search - search across orgs and users
 router.get('/search', authenticate, requireRole('super_admin'), (req, res) => {
   const { q, type } = req.query;
   if (!q || q.length < 2) return res.json({ organizations: [], users: [] });
@@ -177,7 +177,7 @@ router.get('/search', authenticate, requireRole('super_admin'), (req, res) => {
 
 // ==================== AUDIT LOG ====================
 
-// GET /api/admin/audit — get audit trail
+// GET /api/admin/audit - get audit trail
 router.get('/audit', authenticate, requireRole('super_admin'), (req, res) => {
   const { page = 1, limit = 50, action, entity_type } = req.query;
   const offset = (parseInt(page) - 1) * parseInt(limit);
@@ -202,7 +202,7 @@ router.get('/audit', authenticate, requireRole('super_admin'), (req, res) => {
 
 // ==================== REPORTING & EXPORT ====================
 
-// GET /api/admin/reports/users — CSV export of all users
+// GET /api/admin/reports/users - CSV export of all users
 router.get('/reports/users', authenticate, requireRole('super_admin'), (req, res) => {
   const users = db.prepare(`
     SELECT u.name, u.email, u.role, u.role_category, u.status, u.joined_date, u.last_active, u.learning_streak,
@@ -220,7 +220,7 @@ router.get('/reports/users', authenticate, requireRole('super_admin'), (req, res
   res.send(headers + rows);
 });
 
-// GET /api/admin/reports/organizations — CSV export of orgs
+// GET /api/admin/reports/organizations - CSV export of orgs
 router.get('/reports/organizations', authenticate, requireRole('super_admin'), (req, res) => {
   const orgs = db.prepare(`
     SELECT o.*, (SELECT COUNT(*) FROM users WHERE org_id = o.id) as user_count
@@ -237,7 +237,7 @@ router.get('/reports/organizations', authenticate, requireRole('super_admin'), (
   res.send(headers + rows);
 });
 
-// GET /api/admin/reports/progress — CSV export of learning progress
+// GET /api/admin/reports/progress - CSV export of learning progress
 router.get('/reports/progress', authenticate, requireRole('super_admin'), (req, res) => {
   const data = db.prepare(`
     SELECT u.name, u.email, o.name as org_name,
@@ -260,7 +260,7 @@ router.get('/reports/progress', authenticate, requireRole('super_admin'), (req, 
   res.send(headers + rows);
 });
 
-// GET /api/admin/reports/dashboard — analytics data for dashboard
+// GET /api/admin/reports/dashboard - analytics data for dashboard
 router.get('/reports/dashboard', authenticate, requireRole('super_admin'), (req, res) => {
   const totalUsers = db.prepare('SELECT COUNT(*) as count FROM users').get().count;
   const activeUsers = db.prepare("SELECT COUNT(*) as count FROM users WHERE status = 'active'").get().count;
@@ -294,7 +294,7 @@ router.get('/reports/dashboard', authenticate, requireRole('super_admin'), (req,
 
 // ==================== BULK USER IMPORT ====================
 
-// POST /api/admin/users/bulk-import — CSV upload
+// POST /api/admin/users/bulk-import - CSV upload
 router.post('/users/bulk-import', authenticate, requireRole('super_admin', 'org_admin'), upload.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'CSV file is required' });
 
@@ -344,13 +344,13 @@ router.post('/users/bulk-import', authenticate, requireRole('super_admin', 'org_
 
 // ==================== QUIZ RETAKE POLICY ====================
 
-// GET /api/admin/quiz-policies — list all policies
+// GET /api/admin/quiz-policies - list all policies
 router.get('/quiz-policies', authenticate, requireRole('super_admin'), (req, res) => {
   const policies = db.prepare('SELECT * FROM quiz_policies ORDER BY quiz_id').all();
   res.json(policies);
 });
 
-// PUT /api/admin/quiz-policies/:quizId — set policy for a quiz
+// PUT /api/admin/quiz-policies/:quizId - set policy for a quiz
 router.put('/quiz-policies/:quizId', authenticate, requireRole('super_admin'), (req, res) => {
   const { maxAttempts, cooldownHours } = req.body;
   db.prepare(`
@@ -364,7 +364,7 @@ router.put('/quiz-policies/:quizId', authenticate, requireRole('super_admin'), (
 
 // ==================== CONTENT VERSIONING ====================
 
-// GET /api/admin/content-history — get content change history
+// GET /api/admin/content-history - get content change history
 router.get('/content-history', authenticate, requireRole('super_admin'), (req, res) => {
   const history = db.prepare(`
     SELECT cv.*, u.name as changed_by_name
@@ -376,13 +376,13 @@ router.get('/content-history', authenticate, requireRole('super_admin'), (req, r
 
 // ==================== SSO CONFIG ====================
 
-// GET /api/admin/sso/:orgId — get SSO config for an org
+// GET /api/admin/sso/:orgId - get SSO config for an org
 router.get('/sso/:orgId', authenticate, requireRole('super_admin'), (req, res) => {
   const config = db.prepare('SELECT * FROM sso_configs WHERE org_id = ?').get(req.params.orgId);
   res.json(config || { enabled: false });
 });
 
-// PUT /api/admin/sso/:orgId — update SSO config
+// PUT /api/admin/sso/:orgId - update SSO config
 router.put('/sso/:orgId', authenticate, requireRole('super_admin'), (req, res) => {
   const { provider, entityId, ssoUrl, certificate, enabled } = req.body;
   db.prepare(`

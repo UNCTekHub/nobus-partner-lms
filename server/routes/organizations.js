@@ -7,7 +7,7 @@ import { sendPartnerApprovalEmail, sendPartnerRejectionEmail } from '../services
 
 const router = Router();
 
-// GET /api/organizations — super admin: list all orgs
+// GET /api/organizations - super admin: list all orgs
 router.get('/', authenticate, requireRole('super_admin'), (req, res) => {
   const orgs = db.prepare('SELECT * FROM organizations ORDER BY created_at DESC').all();
   const result = orgs.map((org) => {
@@ -23,7 +23,7 @@ router.get('/', authenticate, requireRole('super_admin'), (req, res) => {
   res.json(result);
 });
 
-// GET /api/organizations/mine — org admin: get own org
+// GET /api/organizations/mine - org admin: get own org
 router.get('/mine', authenticate, requireRole('org_admin'), (req, res) => {
   if (!req.user.org_id) return res.status(404).json({ error: 'No organization found' });
 
@@ -41,13 +41,13 @@ router.get('/mine', authenticate, requireRole('org_admin'), (req, res) => {
   });
 });
 
-// GET /api/organizations/pending — super admin: list pending applications
+// GET /api/organizations/pending - super admin: list pending applications
 router.get('/pending', authenticate, requireRole('super_admin'), (req, res) => {
   const pending = db.prepare('SELECT * FROM pending_organizations ORDER BY submitted_date DESC').all();
   res.json(pending);
 });
 
-// POST /api/organizations/approve/:id — super admin: approve an application
+// POST /api/organizations/approve/:id - super admin: approve an application
 router.post('/approve/:id', authenticate, requireRole('super_admin'), (req, res) => {
   const pending = db.prepare('SELECT * FROM pending_organizations WHERE id = ?').get(req.params.id);
   if (!pending) return res.status(404).json({ error: 'Application not found' });
@@ -78,7 +78,7 @@ router.post('/approve/:id', authenticate, requireRole('super_admin'), (req, res)
     UPDATE pending_organizations SET status = 'approved', reviewed_by = ?, reviewed_at = datetime('now') WHERE id = ?
   `).run(req.user.id, pending.id);
 
-  // Send onboarding email (non-blocking — don't fail approval if email fails)
+  // Send onboarding email (non-blocking - don't fail approval if email fails)
   sendPartnerApprovalEmail({
     contactName: pending.contact_name,
     contactEmail: pending.contact_email,

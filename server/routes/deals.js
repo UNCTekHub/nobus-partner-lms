@@ -20,7 +20,7 @@ function expireStaleDeals() {
   `).run();
 }
 
-// GET /api/deals — own org's deals (super admin sees all)
+// GET /api/deals - own org's deals (super admin sees all)
 router.get('/', authenticate, (req, res) => {
   expireStaleDeals();
   const base = `
@@ -41,7 +41,7 @@ router.get('/', authenticate, (req, res) => {
   res.json(db.prepare(base + ' WHERE d.org_id = ? ORDER BY d.created_at DESC').all(req.user.org_id));
 });
 
-// POST /api/deals — register a deal
+// POST /api/deals - register a deal
 router.post('/', authenticate, (req, res) => {
   if (!req.user.org_id) return res.status(403).json({ error: 'Only partner users can register deals' });
   const { customerName, customerEmail, customerIndustry, opportunityName, description, services, estValue, expectedCloseDate, quoteId } = req.body;
@@ -92,7 +92,7 @@ router.post('/', authenticate, (req, res) => {
   });
 });
 
-// PATCH /api/deals/:id/approve — super admin approval
+// PATCH /api/deals/:id/approve - super admin approval
 router.patch('/:id/approve', authenticate, requireRole('super_admin'), (req, res) => {
   const deal = db.prepare('SELECT * FROM deals WHERE id = ?').get(req.params.id);
   if (!deal) return res.status(404).json({ error: 'Deal not found' });
@@ -114,7 +114,7 @@ router.patch('/:id/approve', authenticate, requireRole('super_admin'), (req, res
   res.json({ message: 'Deal approved' });
 });
 
-// PATCH /api/deals/:id/reject — super admin rejection
+// PATCH /api/deals/:id/reject - super admin rejection
 router.patch('/:id/reject', authenticate, requireRole('super_admin'), (req, res) => {
   const { reason } = req.body;
   const deal = db.prepare('SELECT * FROM deals WHERE id = ?').get(req.params.id);
@@ -136,7 +136,7 @@ router.patch('/:id/reject', authenticate, requireRole('super_admin'), (req, res)
   res.json({ message: 'Deal rejected' });
 });
 
-// PATCH /api/deals/:id/close — partner marks an approved deal won or lost
+// PATCH /api/deals/:id/close - partner marks an approved deal won or lost
 router.patch('/:id/close', authenticate, (req, res) => {
   const { outcome } = req.body; // 'won' | 'lost'
   if (!['won', 'lost'].includes(outcome)) return res.status(400).json({ error: 'Outcome must be won or lost' });

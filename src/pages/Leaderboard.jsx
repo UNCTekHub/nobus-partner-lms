@@ -141,7 +141,7 @@ export default function Leaderboard() {
                     <div className="font-medium text-gray-900">{entry.name}</div>
                     {entry.org_name && <div className="text-xs text-gray-500">{entry.org_name}</div>}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{entry.role_category || '—'}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{entry.role_category || '-'}</td>
                   <td className="px-6 py-4 text-sm text-gray-600">{entry.paths_completed}</td>
                   <td className="px-6 py-4 text-sm text-gray-600">{entry.badge_count}</td>
                   <td className="px-6 py-4 font-bold text-nobus-600">{entry.total_points}</td>

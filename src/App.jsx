@@ -67,7 +67,7 @@ function AppRoutes() {
       <Route path="/forgot-password" element={isAuthenticated ? <Navigate to={home} replace /> : <ForgotPassword />} />
       <Route path="/reset-password" element={isAuthenticated ? <Navigate to={home} replace /> : <ResetPassword />} />
 
-      {/* Nobus operations console — unlisted, super_admin only, own layout */}
+      {/* Nobus operations console - unlisted, super_admin only, own layout */}
       <Route
         path="/ncs-console"
         element={

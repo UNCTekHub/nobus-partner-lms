@@ -1,4 +1,4 @@
-# Nobus Cloud Services — Product & Pricing Reference
+# Nobus Cloud Services - Product & Pricing Reference
 
 Extracted from nobus.io documentation and pricing pages (July 2026). Source material for the
 Sales, Presales Engineering, and Technical Engineering training tracks.
@@ -8,12 +8,12 @@ Sales, Presales Engineering, and Technical Engineering training tracks.
 ## Compute
 
 ### Nobus Flexible Compute Service (FCS)
-- Web service providing **resizable compute capacity in the cloud** — on-demand VM instances.
+- Web service providing **resizable compute capacity in the cloud** - on-demand VM instances.
 - Core concepts: instances, instance types (CPU/memory/storage/network combos), Nobus Machine
-  Images (NMIs — preconfigured templates), key-pair SSH login, FBS volumes (1 GB–1 TB),
+  Images (NMIs - preconfigured templates), key-pair SSH login, FBS volumes (1 GB-1 TB),
   snapshots, Availability Zones, security groups, static IPv4 (Flexible IP), isolated virtual networks.
 - **Instance families**: Standard (si.1.x → si.16.x), Compute Optimized, Storage Optimized, GPU,
-  Burstable (si.8.64 / si.16.64). Naming: `si.<vCPU>.<RAM>.<disk>.<l|w>` — `.30.l` = Linux 30 GB disk,
+  Burstable (si.8.64 / si.16.64). Naming: `si.<vCPU>.<RAM>.<disk>.<l|w>` - `.30.l` = Linux 30 GB disk,
   `.50.w` = Windows 50 GB disk.
 - Standard instance examples: si.2.2.30.l (2 vCPU/2 GiB), si.2.4.30.l, si.2.8.30.l, si.4.4.30.l,
   si.4.8.30.l, si.4.16.30.l, si.8.16.30.l; Windows: si.2.4.50.w … si.8.64.50.w.
@@ -34,15 +34,15 @@ Sales, Presales Engineering, and Technical Engineering training tracks.
 - Compliance-driven workloads; automatic host maintenance with scheduling control.
 
 ### Image Listing
-- **Windows distributions** — managed licensing or BYOL.
-- **Open-source Linux** — Ubuntu (e.g. Ubuntu-22.04-64bit), CentOS, etc.
-- **Nobus Machine Images (NMI)** — preconfigured templates; custom uploads, instance snapshots,
+- **Windows distributions** - managed licensing or BYOL.
+- **Open-source Linux** - Ubuntu (e.g. Ubuntu-22.04-64bit), CentOS, etc.
+- **Nobus Machine Images (NMI)** - preconfigured templates; custom uploads, instance snapshots,
   volume snapshots. Image Import/Export service for VM migration.
 
 ### CloudOrchestration Templates
 - Infrastructure-as-code: native **Heat** template format + **AWS CloudFormation compatibility**.
 - Native ReST API + CloudFormation-compatible Query API (existing IaC scripts run with minimal changes).
-- Deploys **Stacks** — logical resource groups (instances, floating IPs, volumes, security groups)
+- Deploys **Stacks** - logical resource groups (instances, floating IPs, volumes, security groups)
   with unified lifecycle. Parameters: stack name, creation timeout, rollback-on-failure, KeyName,
   InstanceType. Templates via URL, file upload, or direct entry.
 
@@ -51,7 +51,7 @@ Sales, Presales Engineering, and Technical Engineering training tracks.
 ## Storage & Backup
 
 ### Nobus Flexible Block Storage (FBS)
-- Durable **block-level volumes (1 GB–1 TB)** attachable to a single FCS instance.
+- Durable **block-level volumes (1 GB-1 TB)** attachable to a single FCS instance.
 - Persists independently of instance lifecycle; reattach to new instances; same-AZ requirement.
 - Multiple volumes per instance; striping supported; dynamic resize without downtime
   (5-hour wait recommended between modifications).
@@ -63,7 +63,7 @@ Sales, Presales Engineering, and Technical Engineering training tracks.
 
 ### Flexible Object Storage (FOS)
 - Extensive, effectively unlimited object storage; distributed across data zones.
-- **Containers** (bucket-like, flat structure) hold objects = file + metadata; any type/size —
+- **Containers** (bucket-like, flat structure) hold objects = file + metadata; any type/size -
   backups, archives, media.
 - Per-container access control (create/delete/list permissions), access logs, zone selection.
 - Pay-as-you-go for storage + transfer. Managed via dashboard.nobus.io.
@@ -86,11 +86,11 @@ Sales, Presales Engineering, and Technical Engineering training tracks.
 - Logically isolated virtual data centers; user-defined IP ranges, subnets, route tables, gateways.
 - Encrypted VPN tunnels (MPLS or Internet); multi-cloud/physical infrastructure support.
 - Includes Security Groups, FWaaS, Network ACLs, Load Balancers, Auto-Scaling. **IPv4 only** (CIDR
-  required at creation). No charge for the DaaS itself — pay for resources inside it.
+  required at creation). No charge for the DaaS itself - pay for resources inside it.
 
 ### Nobus Fast Transit (NFT)
-- **Dedicated private connection** from customer premises to a Nobus FastTransit point — bypasses ISP.
-- Dedicated (1/10 Gbps fixed fiber: 1000BASE-LX / 10GBASE-LR) or Hosted via partner (50 Mbps–10 Gbps).
+- **Dedicated private connection** from customer premises to a Nobus FastTransit point - bypasses ISP.
+- Dedicated (1/10 Gbps fixed fiber: 1000BASE-LX / 10GBASE-LR) or Hosted via partner (50 Mbps-10 Gbps).
 - 802.1Q VLAN encapsulation, BGP + MD5 auth, BFD, IPv4 & IPv6.
 - Setup: choose location/port → support creates request → LOA-CFA issued → partner cross-connect →
   configure virtual interfaces (public = FOS etc., private = data centers). 7-day response window.
@@ -132,7 +132,7 @@ Sales, Presales Engineering, and Technical Engineering training tracks.
   (port 2200). Multi-domain routing use case.
 
 ### DNS & Domains
-- Free DNS management for Nobus and non-Nobus resources (no domain registration — point registrar
+- Free DNS management for Nobus and non-Nobus resources (no domain registration - point registrar
   NS to ns1.nobus.com / ns2.nobus.com).
 - Records: A, AAAA, CNAME, MX, TXT, PTR, NS. Console: Project > DNS.
 
@@ -185,10 +185,10 @@ Sales, Presales Engineering, and Technical Engineering training tracks.
 ## Database Services
 - Managed engines with autoscaling, HA (automatic failover + replication), pay-as-you-use,
   encryption/access control/auditing. VCPU unit price ₦85.00 (FCS-based).
-- **MSSQL** — T-SQL, BI tools, Express→Enterprise editions, .NET/Windows ecosystem. Mission-critical enterprise.
-- **MySQL** — open-source relational, multiple storage engines, replication/sharding/clustering. Web apps (PHP/Python/Ruby).
-- **PostgreSQL** — object-relational, ACID, rich extensions (geospatial, full-text, ML). BI, scientific, geospatial.
-- **MongoDB** — document NoSQL, dynamic schemas, sharding/replication, rich indexing. CMS, mobile, real-time analytics, IoT.
+- **MSSQL** - T-SQL, BI tools, Express→Enterprise editions, .NET/Windows ecosystem. Mission-critical enterprise.
+- **MySQL** - open-source relational, multiple storage engines, replication/sharding/clustering. Web apps (PHP/Python/Ruby).
+- **PostgreSQL** - object-relational, ACID, rich extensions (geospatial, full-text, ML). BI, scientific, geospatial.
+- **MongoDB** - document NoSQL, dynamic schemas, sharding/replication, rich indexing. CMS, mobile, real-time analytics, IoT.
 
 ---
 
@@ -223,6 +223,6 @@ Sales, Presales Engineering, and Technical Engineering training tracks.
 - Customer console: https://dashboard.nobus.io/
 
 ### Sales angles
-- **Naira-native billing** — no FX exposure vs AWS/Azure/GCP dollar billing.
+- **Naira-native billing** - no FX exposure vs AWS/Azure/GCP dollar billing.
 - Pay-as-you-use, no upfront commitment; free DaaS, free DNS, no autoscaling surcharge.
 - Local support, local data residency, PCI DSS / ISO 27001 / GDPR posture.

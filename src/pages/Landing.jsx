@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 
 const SERVICES = [
-  { icon: Server, name: 'Compute', desc: 'FCS instances, dedicated hosting, autoscaling and CloudOrchestration — from ₦9,309/month.' },
+  { icon: Server, name: 'Compute', desc: 'FCS instances, dedicated hosting, autoscaling and CloudOrchestration - from ₦9,309/month.' },
   { icon: HardDrive, name: 'Storage & Backup', desc: 'FBS block volumes, unlimited FOS object storage and Acronis-powered Cloud Backup.' },
   { icon: Network, name: 'Networking', desc: 'Virtual data centers, Fast Transit, floating IPs, VPN, DNS, firewalls and load balancing.' },
   { icon: ShieldCheck, name: 'Security', desc: 'Sophos XG, FortiGate NGFW and Acronis Cyber Protect on ISO 27001 / PCI DSS-ready infrastructure.' },
@@ -26,7 +26,7 @@ const BENEFITS = [
   { icon: BadgePercent, title: 'Exclusive Partner Pricing', desc: 'Access preferential partner rates on compute and storage for every registered deal, per the Partner Agreement.' },
   { icon: ShieldCheck, title: 'Protected Deals', desc: 'Registered opportunities are shielded from channel conflict for 90 days.' },
   { icon: Award, title: 'Certification & Tiers', desc: 'Certify your team and climb from Registered to Platinum with growing benefits.' },
-  { icon: Calculator, title: 'Your Own Fees', desc: 'Charge setup and recurring managed-services fees on top — your pricing, your margin.' },
+  { icon: Calculator, title: 'Your Own Fees', desc: 'Charge setup and recurring managed-services fees on top - your pricing, your margin.' },
 ];
 
 export default function Landing() {
@@ -67,7 +67,7 @@ export default function Landing() {
                 Build a cloud business on <span className="text-nobus-400">Nigeria's sovereign cloud</span>
               </h1>
               <p className="text-lg text-nobus-200 leading-relaxed mb-8">
-                Nobus PartnerCentral is the one portal for everything you do with Nobus Cloud — enablement and
+                Nobus PartnerCentral is the one portal for everything you do with Nobus Cloud - enablement and
                 certification, deal registration with channel protection, Naira quoting, pipeline management,
                 demo labs and campaign-ready marketing content.
               </p>
@@ -80,7 +80,7 @@ export default function Landing() {
                 </Link>
               </div>
               <div className="flex flex-wrap gap-x-6 gap-y-2 mt-10 text-sm text-nobus-300">
-                {['Naira billing — zero FX risk', 'Tier III data center, Lagos', 'NDPR · ISO 27001 · PCI DSS'].map((t) => (
+                {['Naira billing, zero FX risk', 'Tier III data centers across Africa', 'NDPR · ISO 27001 · PCI DSS'].map((t) => (
                   <span key={t} className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-nobus-400" /> {t}</span>
                 ))}
               </div>
@@ -157,7 +157,7 @@ export default function Landing() {
           <h2 className="text-3xl font-bold text-gray-900 mb-3">Why partner with Nobus?</h2>
           <p className="text-gray-500">
             Nigerian businesses are moving to local cloud for data sovereignty, Naira budgeting and local support.
-            Partners are how they get there — and the program pays you for it.
+            Partners are how they get there - and the program pays you for it.
           </p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -178,7 +178,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-3">Everything a partner needs, in one portal</h2>
-            <p className="text-gray-500">From first training to closed deal — PartnerCentral covers the whole journey.</p>
+            <p className="text-gray-500">From first training to closed deal - PartnerCentral covers the whole journey.</p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {MODULES.map((m) => (
@@ -199,7 +199,7 @@ export default function Landing() {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-3">The catalog you'll sell</h2>
           <p className="text-gray-500">
-            A complete cloud platform hosted at Rack Centre (Tier III), Lagos — priced in Naira, pay-as-you-use.
+            A complete cloud platform hosted in Tier III-certified data centers across Africa, priced in Naira, pay-as-you-use.
           </p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

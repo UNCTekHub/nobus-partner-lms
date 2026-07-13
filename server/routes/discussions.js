@@ -5,7 +5,7 @@ import { awardPoints } from '../services/notifications.js';
 
 const router = Router();
 
-// GET /api/discussions — list discussions (optional filter by course/module)
+// GET /api/discussions - list discussions (optional filter by course/module)
 router.get('/', authenticate, (req, res) => {
   const { course_id, module_id } = req.query;
   let sql = `
@@ -23,7 +23,7 @@ router.get('/', authenticate, (req, res) => {
   res.json(db.prepare(sql).all(...params));
 });
 
-// GET /api/discussions/:id — get a discussion with replies
+// GET /api/discussions/:id - get a discussion with replies
 router.get('/:id', authenticate, (req, res) => {
   const discussion = db.prepare(`
     SELECT d.*, u.name as author_name, u.role as author_role
@@ -40,7 +40,7 @@ router.get('/:id', authenticate, (req, res) => {
   res.json({ ...discussion, replies });
 });
 
-// POST /api/discussions — create a new discussion
+// POST /api/discussions - create a new discussion
 router.post('/', authenticate, (req, res) => {
   const { title, body, courseId, moduleId } = req.body;
   if (!title || !body) return res.status(400).json({ error: 'Title and body are required' });
@@ -54,7 +54,7 @@ router.post('/', authenticate, (req, res) => {
   res.status(201).json({ id: result.lastInsertRowid, message: 'Discussion created' });
 });
 
-// POST /api/discussions/:id/reply — add a reply
+// POST /api/discussions/:id/reply - add a reply
 router.post('/:id/reply', authenticate, (req, res) => {
   const { body } = req.body;
   if (!body) return res.status(400).json({ error: 'Reply body is required' });
@@ -71,7 +71,7 @@ router.post('/:id/reply', authenticate, (req, res) => {
   res.status(201).json({ id: result.lastInsertRowid, message: 'Reply posted' });
 });
 
-// PATCH /api/discussions/:id/reply/:replyId/answer — mark reply as answer (discussion author or admin)
+// PATCH /api/discussions/:id/reply/:replyId/answer - mark reply as answer (discussion author or admin)
 router.patch('/:id/reply/:replyId/answer', authenticate, (req, res) => {
   const discussion = db.prepare('SELECT user_id FROM discussions WHERE id = ?').get(req.params.id);
   if (!discussion) return res.status(404).json({ error: 'Discussion not found' });

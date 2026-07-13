@@ -5,7 +5,7 @@ import { generateCertificate } from '../services/certificates.js';
 
 const router = Router();
 
-// GET /api/certificates/:pathId — download PDF certificate for a completed path
+// GET /api/certificates/:pathId - download PDF certificate for a completed path
 router.get('/:pathId', authenticate, async (req, res) => {
   const { pathId } = req.params;
 
@@ -53,7 +53,7 @@ router.get('/:pathId', authenticate, async (req, res) => {
   }
 });
 
-// GET /api/certificates — list all certificates for current user
+// GET /api/certificates - list all certificates for current user
 router.get('/', authenticate, (req, res) => {
   const paths = db.prepare('SELECT path_id, completed_at FROM completed_paths WHERE user_id = ?')
     .all(req.user.id);

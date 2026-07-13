@@ -7,13 +7,13 @@ const router = Router();
 
 const TIME_SLOTS = ['09:00 - 11:00', '11:00 - 13:00', '14:00 - 16:00', '16:00 - 18:00'];
 
-// GET /api/labs — lab catalogue
+// GET /api/labs - lab catalogue
 router.get('/', authenticate, (req, res) => {
   const labs = db.prepare('SELECT * FROM demo_labs WHERE active = 1 ORDER BY service_area, title').all();
   res.json(labs);
 });
 
-// GET /api/labs/bookings — my bookings (super admin sees all)
+// GET /api/labs/bookings - my bookings (super admin sees all)
 router.get('/bookings', authenticate, (req, res) => {
   const base = `
     SELECT b.*, l.title as lab_title, l.service_area, l.duration_minutes, u.name as user_name, o.name as org_name
@@ -28,14 +28,14 @@ router.get('/bookings', authenticate, (req, res) => {
   res.json(db.prepare(base + ' WHERE b.user_id = ? ORDER BY b.scheduled_date DESC').all(req.user.id));
 });
 
-// GET /api/labs/:id — lab detail with guide
+// GET /api/labs/:id - lab detail with guide
 router.get('/:id', authenticate, (req, res) => {
   const lab = db.prepare('SELECT * FROM demo_labs WHERE id = ? AND active = 1').get(req.params.id);
   if (!lab) return res.status(404).json({ error: 'Lab not found' });
   res.json(lab);
 });
 
-// GET /api/labs/:id/availability?date=YYYY-MM-DD — free slots for a day
+// GET /api/labs/:id/availability?date=YYYY-MM-DD - free slots for a day
 router.get('/:id/availability', authenticate, (req, res) => {
   const { date } = req.query;
   if (!date) return res.status(400).json({ error: 'Date is required' });
@@ -45,7 +45,7 @@ router.get('/:id/availability', authenticate, (req, res) => {
   res.json({ slots: TIME_SLOTS.map((slot) => ({ slot, available: !taken.includes(slot) })) });
 });
 
-// POST /api/labs/:id/book — book a session
+// POST /api/labs/:id/book - book a session
 router.post('/:id/book', authenticate, (req, res) => {
   const { date, timeSlot, notes } = req.body;
   if (!date || !timeSlot) return res.status(400).json({ error: 'Date and time slot are required' });
@@ -73,7 +73,7 @@ router.post('/:id/book', authenticate, (req, res) => {
   res.status(201).json({ id: result.lastInsertRowid, message: 'Lab session booked' });
 });
 
-// PATCH /api/labs/bookings/:id/cancel — cancel own booking
+// PATCH /api/labs/bookings/:id/cancel - cancel own booking
 router.patch('/bookings/:id/cancel', authenticate, (req, res) => {
   const booking = db.prepare('SELECT * FROM lab_bookings WHERE id = ?').get(req.params.id);
   if (!booking) return res.status(404).json({ error: 'Booking not found' });
@@ -84,7 +84,7 @@ router.patch('/bookings/:id/cancel', authenticate, (req, res) => {
   res.json({ message: 'Booking cancelled' });
 });
 
-// PATCH /api/labs/bookings/:id/complete — mark session done (super admin)
+// PATCH /api/labs/bookings/:id/complete - mark session done (super admin)
 router.patch('/bookings/:id/complete', authenticate, requireRole('super_admin'), (req, res) => {
   const booking = db.prepare('SELECT * FROM lab_bookings WHERE id = ?').get(req.params.id);
   if (!booking) return res.status(404).json({ error: 'Booking not found' });
@@ -98,7 +98,7 @@ router.patch('/bookings/:id/complete', authenticate, requireRole('super_admin'),
   res.json({ message: 'Booking completed' });
 });
 
-// POST /api/labs — create a lab (super admin)
+// POST /api/labs - create a lab (super admin)
 router.post('/', authenticate, requireRole('super_admin'), (req, res) => {
   const { title, description, serviceArea, difficulty, durationMinutes, guide } = req.body;
   if (!title) return res.status(400).json({ error: 'Title is required' });
@@ -109,7 +109,7 @@ router.post('/', authenticate, requireRole('super_admin'), (req, res) => {
   res.status(201).json({ id: result.lastInsertRowid, message: 'Lab created' });
 });
 
-// PATCH /api/labs/:id — edit / deactivate a lab (super admin)
+// PATCH /api/labs/:id - edit / deactivate a lab (super admin)
 router.patch('/:id', authenticate, requireRole('super_admin'), (req, res) => {
   const lab = db.prepare('SELECT id FROM demo_labs WHERE id = ?').get(req.params.id);
   if (!lab) return res.status(404).json({ error: 'Lab not found' });

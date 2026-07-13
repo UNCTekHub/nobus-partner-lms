@@ -98,7 +98,7 @@ export default function QuizPage() {
             )}
             <div>
               <h3 className={`text-lg font-bold ${passed ? 'text-green-800' : 'text-amber-800'}`}>
-                {passed ? 'Congratulations! You passed!' : 'Not quite — review and try again'}
+                {passed ? 'Congratulations! You passed!' : 'Not quite - review and try again'}
               </h3>
               <p className={`text-sm ${passed ? 'text-green-600' : 'text-amber-600'}`}>
                 Score: {score}/{quiz.questions.length} ({Math.round((score / quiz.questions.length) * 100)}%)

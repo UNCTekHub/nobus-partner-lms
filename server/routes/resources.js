@@ -7,7 +7,7 @@ const router = Router();
 
 // ===================== Marketing materials =====================
 
-// GET /api/resources/marketing — filterable list
+// GET /api/resources/marketing - filterable list
 router.get('/marketing', authenticate, (req, res) => {
   const { category, q } = req.query;
   let sql = 'SELECT * FROM marketing_assets WHERE active = 1';
@@ -18,7 +18,7 @@ router.get('/marketing', authenticate, (req, res) => {
   res.json(db.prepare(sql).all(...params));
 });
 
-// POST /api/resources/marketing/:id/download — count a download, return the URL
+// POST /api/resources/marketing/:id/download - count a download, return the URL
 router.post('/marketing/:id/download', authenticate, (req, res) => {
   const asset = db.prepare('SELECT * FROM marketing_assets WHERE id = ? AND active = 1').get(req.params.id);
   if (!asset) return res.status(404).json({ error: 'Asset not found' });
@@ -26,7 +26,7 @@ router.post('/marketing/:id/download', authenticate, (req, res) => {
   res.json({ url: asset.file_url });
 });
 
-// POST /api/resources/marketing — add asset (super admin)
+// POST /api/resources/marketing - add asset (super admin)
 router.post('/marketing', authenticate, requireRole('super_admin'), (req, res) => {
   const { title, description, category, fileUrl, fileType, tags } = req.body;
   if (!title || !category || !fileUrl) return res.status(400).json({ error: 'Title, category and file URL are required' });
@@ -38,7 +38,7 @@ router.post('/marketing', authenticate, requireRole('super_admin'), (req, res) =
   res.status(201).json({ id: result.lastInsertRowid, message: 'Asset added' });
 });
 
-// PATCH /api/resources/marketing/:id — edit / deactivate (super admin)
+// PATCH /api/resources/marketing/:id - edit / deactivate (super admin)
 router.patch('/marketing/:id', authenticate, requireRole('super_admin'), (req, res) => {
   const asset = db.prepare('SELECT id FROM marketing_assets WHERE id = ?').get(req.params.id);
   if (!asset) return res.status(404).json({ error: 'Asset not found' });
@@ -59,7 +59,7 @@ router.patch('/marketing/:id', authenticate, requireRole('super_admin'), (req, r
 
 // ===================== Content hub =====================
 
-// GET /api/resources/content — filterable list (without body, for the grid)
+// GET /api/resources/content - filterable list (without body, for the grid)
 router.get('/content', authenticate, (req, res) => {
   const { type, q } = req.query;
   let sql = `SELECT id, title, type, summary, file_url, tags, views, created_at FROM content_items WHERE active = 1`;
@@ -70,7 +70,7 @@ router.get('/content', authenticate, (req, res) => {
   res.json(db.prepare(sql).all(...params));
 });
 
-// GET /api/resources/content/:id — full item, increments views
+// GET /api/resources/content/:id - full item, increments views
 router.get('/content/:id', authenticate, (req, res) => {
   const item = db.prepare('SELECT * FROM content_items WHERE id = ? AND active = 1').get(req.params.id);
   if (!item) return res.status(404).json({ error: 'Content not found' });
@@ -78,7 +78,7 @@ router.get('/content/:id', authenticate, (req, res) => {
   res.json({ ...item, views: item.views + 1 });
 });
 
-// POST /api/resources/content — add content (super admin)
+// POST /api/resources/content - add content (super admin)
 router.post('/content', authenticate, requireRole('super_admin'), (req, res) => {
   const { title, type, summary, body, fileUrl, tags } = req.body;
   if (!title || !type) return res.status(400).json({ error: 'Title and type are required' });
@@ -90,7 +90,7 @@ router.post('/content', authenticate, requireRole('super_admin'), (req, res) => 
   res.status(201).json({ id: result.lastInsertRowid, message: 'Content published' });
 });
 
-// PATCH /api/resources/content/:id — edit / deactivate (super admin)
+// PATCH /api/resources/content/:id - edit / deactivate (super admin)
 router.patch('/content/:id', authenticate, requireRole('super_admin'), (req, res) => {
   const item = db.prepare('SELECT id FROM content_items WHERE id = ?').get(req.params.id);
   if (!item) return res.status(404).json({ error: 'Content not found' });

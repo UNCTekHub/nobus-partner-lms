@@ -199,7 +199,7 @@ export default function OrgAdminDashboard() {
                         u.role_category === 'Presales' ? 'bg-purple-50 text-purple-700' :
                         'bg-accent-50 text-accent-700'
                       }`}>
-                        {u.role_category || '—'}
+                        {u.role_category || '-'}
                       </span>
                     </td>
                     <td className="py-3">
@@ -210,7 +210,7 @@ export default function OrgAdminDashboard() {
                         {u.status}
                       </span>
                     </td>
-                    <td className="py-3 text-xs text-gray-500">{u.last_active?.split('T')[0] || '—'}</td>
+                    <td className="py-3 text-xs text-gray-500">{u.last_active?.split('T')[0] || '-'}</td>
                   </tr>
                 ))}
               </tbody>

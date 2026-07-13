@@ -43,20 +43,20 @@ function seedPortalContent() {
         title: 'Data Sovereignty and NDPR: Why Nigerian Enterprises Are Repatriating Their Cloud',
         type: 'whitepaper',
         summary: 'How NDPR compliance, FX volatility and latency are driving Nigerian banks, fintechs and government agencies to local cloud infrastructure.',
-        body: `## Executive Summary\n\nNigerian enterprises face a triple squeeze: **NDPR data-residency expectations**, **dollar-denominated cloud bills** in a volatile FX market, and **latency** to European and US regions. This paper examines how a Tier III, Lagos-hosted cloud addresses all three.\n\n## The FX Problem\n\nA ₦50M annual AWS budget can swing by 20-30% purely on exchange-rate movement. Nobus bills in Naira: the price agreed is the price paid.\n\n## Data Residency\n\nNobus infrastructure is hosted at Rack Centre (Tier III certified), Lagos. Customer data never leaves Nigeria, simplifying NDPR compliance for regulated industries.\n\n## Performance\n\nLagos-hosted workloads serve Nigerian users at single-digit millisecond latency versus 100ms+ to eu-west-1.\n\n## Conclusion\n\nFor workloads serving Nigerian users under Nigerian regulation, local cloud is no longer a compromise — it is the optimum.`,
+        body: `## Executive Summary\n\nNigerian enterprises face a triple squeeze: **NDPR data-residency expectations**, **dollar-denominated cloud bills** in a volatile FX market, and **latency** to European and US regions. This paper examines how a Tier III, Lagos-hosted cloud addresses all three.\n\n## The FX Problem\n\nA ₦50M annual AWS budget can swing by 20-30% purely on exchange-rate movement. Nobus bills in Naira: the price agreed is the price paid.\n\n## Data Residency\n\nNobus infrastructure is hosted at Rack Centre (Tier III certified), Lagos. Customer data never leaves Nigeria, simplifying NDPR compliance for regulated industries.\n\n## Performance\n\nLagos-hosted workloads serve Nigerian users at single-digit millisecond latency versus 100ms+ to eu-west-1.\n\n## Conclusion\n\nFor workloads serving Nigerian users under Nigerian regulation, local cloud is no longer a compromise - it is the optimum.`,
         file_url: null,
         tags: JSON.stringify(['NDPR', 'data sovereignty', 'compliance', 'whitepaper']),
       },
       {
-        title: 'Nobus FCS Datasheet — Flexible Compute Service',
+        title: 'Nobus FCS Datasheet - Flexible Compute Service',
         type: 'datasheet',
         summary: 'Instance families, specifications, autoscaling and pricing for the Nobus Flexible Compute Service.',
-        body: `## Nobus Flexible Compute Service (FCS)\n\nResizable compute capacity in the cloud, from ₦9,309/month.\n\n### Instance Families\n\n| Family | vCPU | Memory | Typical Use |\n|---|---|---|---|\n| si.2.x | 2 | 2-8 GiB | Web servers, dev/test |\n| si.4.x | 4 | 4-32 GiB | Enterprise apps, databases |\n| si.8.x | 8 | 16-64 GiB | High performance workloads |\n\nNaming: \`si.<vCPU>.<RAM>.<disk>.<l|w>\` — .30.l = Linux 30 GB, .50.w = Windows 50 GB.\n\n### Key Features\n- Dynamic, predictive and scheduled autoscaling (no extra charge)\n- Nobus Machine Images (Windows managed licensing or BYOL, open-source Linux)\n- FBS block volumes 1 GB - 1 TB, AES-256 encrypted\n- Security groups, floating IPs, availability zones\n- PCI DSS compliant environments supported\n\n### Pricing\n- vCPU unit: ₦93.50 · Memory unit: ₦96.80\n- Pre-billing: charges start at running, stop at shutdown`,
+        body: `## Nobus Flexible Compute Service (FCS)\n\nResizable compute capacity in the cloud, from ₦9,309/month.\n\n### Instance Families\n\n| Family | vCPU | Memory | Typical Use |\n|---|---|---|---|\n| si.2.x | 2 | 2-8 GiB | Web servers, dev/test |\n| si.4.x | 4 | 4-32 GiB | Enterprise apps, databases |\n| si.8.x | 8 | 16-64 GiB | High performance workloads |\n\nNaming: \`si.<vCPU>.<RAM>.<disk>.<l|w>\` - .30.l = Linux 30 GB, .50.w = Windows 50 GB.\n\n### Key Features\n- Dynamic, predictive and scheduled autoscaling (no extra charge)\n- Nobus Machine Images (Windows managed licensing or BYOL, open-source Linux)\n- FBS block volumes 1 GB - 1 TB, AES-256 encrypted\n- Security groups, floating IPs, availability zones\n- PCI DSS compliant environments supported\n\n### Pricing\n- vCPU unit: ₦93.50 · Memory unit: ₦96.80\n- Pre-billing: charges start at running, stop at shutdown`,
         file_url: 'https://nobus.io/documentation/fcs',
         tags: JSON.stringify(['FCS', 'compute', 'datasheet']),
       },
       {
-        title: 'Nobus Storage Datasheet — FBS & FOS',
+        title: 'Nobus Storage Datasheet - FBS & FOS',
         type: 'datasheet',
         summary: 'Block storage (FBS) and unlimited object storage (FOS) specifications and Naira pricing.',
         body: `## Flexible Block Storage (FBS)\n\n- Durable block volumes, 1 GB - 1 TB, single-instance attach\n- AES-256 at rest, encrypted in transit, incremental snapshots\n- Resize without downtime; snapshots copy across availability zones\n- **₦120/GB-month** provisioned storage · **₦120/GB-month** snapshots (stored in FOS)\n\n## Flexible Object Storage (FOS)\n\n- Effectively unlimited object storage in containers\n- Per-container access control and logs\n- **₦60/GB** storage (all tiers) · transfer in free · requests ₦2 per 1,000\n\n## Nobus Cloud Backup\n\nAcronis-powered protection for Nobus, on-prem, AWS, Azure, GCP and VMware workloads: ransomware protection, forensic backup, vulnerability scanning, single console.`,
@@ -67,7 +67,7 @@ function seedPortalContent() {
         title: 'Case Study: Fintech Cuts Infrastructure Spend 40% Moving to Nobus',
         type: 'case-study',
         summary: 'A Lagos payments company migrated 60 workloads from AWS to Nobus FCS and eliminated egress fees and FX exposure.',
-        body: `## The Customer\n\nA fast-growing Lagos payments processor running 60+ workloads on AWS.\n\n## The Problem\n\n- Monthly AWS bill swinging with the exchange rate\n- Egress fees approaching 18% of total spend\n- NDPR pressure to keep transaction data in Nigeria\n\n## The Solution\n\nPartner-led migration to Nobus FCS with FBS volumes, managed PostgreSQL, Sophos XG perimeter and Site-to-Site VPN to their office network. CloudOrchestration templates automated the environment build.\n\n## The Results\n\n- **40% lower** monthly infrastructure cost\n- **Zero egress fees** — instant saving on every GB served\n- **PCI DSS** compliant environment at Rack Centre Tier III\n- Budget certainty: bills in Naira, no FX exposure`,
+        body: `## The Customer\n\nA fast-growing Lagos payments processor running 60+ workloads on AWS.\n\n## The Problem\n\n- Monthly AWS bill swinging with the exchange rate\n- Egress fees approaching 18% of total spend\n- NDPR pressure to keep transaction data in Nigeria\n\n## The Solution\n\nPartner-led migration to Nobus FCS with FBS volumes, managed PostgreSQL, Sophos XG perimeter and Site-to-Site VPN to their office network. CloudOrchestration templates automated the environment build.\n\n## The Results\n\n- **40% lower** monthly infrastructure cost\n- **Zero egress fees** - instant saving on every GB served\n- **PCI DSS** compliant environment at Rack Centre Tier III\n- Budget certainty: bills in Naira, no FX exposure`,
         file_url: null,
         tags: JSON.stringify(['case study', 'fintech', 'migration', 'cost savings']),
       },
@@ -75,7 +75,7 @@ function seedPortalContent() {
         title: 'FAQ: Answering the 12 Most Common Customer Objections',
         type: 'faq',
         summary: 'Ready answers for partners: reliability, security, pricing, migration and comparison questions customers ask.',
-        body: `## "Is a local cloud as reliable as AWS?"\nNobus runs on OpenStack at Rack Centre, a Tier III certified facility — the same standard trusted by banks and telcos, with redundant power, cooling and network.\n\n## "What if I need to scale suddenly?"\nFCS Autoscaling adds instances automatically (dynamic, predictive or scheduled) at no extra charge.\n\n## "How is my data secured?"\nAES-256 encryption at rest, encrypted transit, security groups, cloud firewalls, plus optional Sophos XG / FortiGate NGFW and Acronis Cyber Protect. ISO 27001 and PCI DSS supported.\n\n## "Can we keep our Microsoft licenses?"\nYes — Dedicated Hosting supports BYOL for Microsoft and Oracle per-socket, per-core and per-VM licenses.\n\n## "What does migration involve?"\nThe FCS Image Import/Export service migrates existing VMs into Nobus Machine Images; certified partners run structured migration engagements.\n\n## "Why not just stay on-premise?"\nCompare a ₦25M hardware refresh plus power, cooling and staff against pay-as-you-use FCS from ₦9,309/month with no upfront commitment.`,
+        body: `## "Is a local cloud as reliable as AWS?"\nNobus runs on OpenStack at Rack Centre, a Tier III certified facility - the same standard trusted by banks and telcos, with redundant power, cooling and network.\n\n## "What if I need to scale suddenly?"\nFCS Autoscaling adds instances automatically (dynamic, predictive or scheduled) at no extra charge.\n\n## "How is my data secured?"\nAES-256 encryption at rest, encrypted transit, security groups, cloud firewalls, plus optional Sophos XG / FortiGate NGFW and Acronis Cyber Protect. ISO 27001 and PCI DSS supported.\n\n## "Can we keep our Microsoft licenses?"\nYes - Dedicated Hosting supports BYOL for Microsoft and Oracle per-socket, per-core and per-VM licenses.\n\n## "What does migration involve?"\nThe FCS Image Import/Export service migrates existing VMs into Nobus Machine Images; certified partners run structured migration engagements.\n\n## "Why not just stay on-premise?"\nCompare a ₦25M hardware refresh plus power, cooling and staff against pay-as-you-use FCS from ₦9,309/month with no upfront commitment.`,
         file_url: null,
         tags: JSON.stringify(['faq', 'objection handling', 'sales']),
       },
@@ -133,13 +133,13 @@ function seedPortalContent() {
         title: 'Provision a Managed Database (PostgreSQL)',
         description: 'Stand up a managed PostgreSQL service, connect an app, and demonstrate failover and backups.',
         service_area: 'Databases', difficulty: 'Intermediate', duration_minutes: 90,
-        guide: `## Lab Guide\n\n1. Request a managed PostgreSQL cluster via the database services console.\n2. Configure the security group so only the app tier can reach 5432.\n3. Connect with \`psql\` and load the sample dataset.\n4. Snapshot the database volume; restore into a second instance.\n5. Review the HA story: automatic failover and replication.\n6. Discussion: engine selection — MSSQL vs MySQL vs PostgreSQL vs MongoDB by workload.`,
+        guide: `## Lab Guide\n\n1. Request a managed PostgreSQL cluster via the database services console.\n2. Configure the security group so only the app tier can reach 5432.\n3. Connect with \`psql\` and load the sample dataset.\n4. Snapshot the database volume; restore into a second instance.\n5. Review the HA story: automatic failover and replication.\n6. Discussion: engine selection - MSSQL vs MySQL vs PostgreSQL vs MongoDB by workload.`,
       },
       {
         title: 'Automate with CloudOrchestration Templates',
         description: 'Deploy a full application stack (instances, volumes, security groups, floating IP) from a single Heat template.',
         service_area: 'Automation', difficulty: 'Advanced', duration_minutes: 120,
-        guide: `## Lab Guide\n\n1. Review the provided Heat template: parameters, resources, outputs.\n2. Launch a stack (Project > Orchestration > Stacks) with rollback-on-failure enabled.\n3. Watch resource creation order and inspect the stack topology.\n4. Update the stack to add a second web instance — observe in-place change.\n5. Delete the stack and confirm all resources are cleaned up.\n6. Discussion: CloudFormation compatibility — running existing AWS IaC on Nobus with minimal changes.`,
+        guide: `## Lab Guide\n\n1. Review the provided Heat template: parameters, resources, outputs.\n2. Launch a stack (Project > Orchestration > Stacks) with rollback-on-failure enabled.\n3. Watch resource creation order and inspect the stack topology.\n4. Update the stack to add a second web instance - observe in-place change.\n5. Delete the stack and confirm all resources are cleaned up.\n6. Discussion: CloudFormation compatibility - running existing AWS IaC on Nobus with minimal changes.`,
       },
     ];
     for (const l of labs) insertLab.run(l);
@@ -147,7 +147,7 @@ function seedPortalContent() {
   }
 }
 
-// Check if data already exists — don't wipe real data
+// Check if data already exists - don't wipe real data
 const existingUsers = db.prepare('SELECT COUNT(*) as count FROM users').get().count;
 
 if (existingUsers > 0) {
@@ -242,7 +242,7 @@ for (const po of pendingOrgs) insertPending.run(po);
 
 // Users
 const users = [
-  // === NOBUS SUPER ADMIN — the real platform admin ===
+  // === NOBUS SUPER ADMIN - the real platform admin ===
   {
     id: 'user-nobus-admin', org_id: null, name: 'Nobus Cloud Admin',
     email: 'admin@nobus.cloud', password_hash: hash('Nobus@2026!'),
@@ -354,7 +354,7 @@ console.log(`  ${pendingOrgs.length} pending applications`);
 console.log(`  ${users.length} users`);
 console.log('');
 console.log('=== Nobus Platform Admin ===');
-console.log('  admin@nobus.cloud / Nobus@2026!  (Super Admin — full platform control)');
+console.log('  admin@nobus.cloud / Nobus@2026!  (Super Admin - full platform control)');
 console.log('');
 console.log('=== Demo Partner Accounts ===');
 console.log('  chinedu@acmetech.ng / demo  (Org Admin - Acme)');

@@ -7,7 +7,7 @@ import { createNotification, awardPoints } from '../services/notifications.js';
 
 const router = Router();
 
-// GET /api/users/org — org admin: list users in my org
+// GET /api/users/org - org admin: list users in my org
 router.get('/org', authenticate, requireRole('org_admin'), (req, res) => {
   if (!req.user.org_id) return res.json([]);
 
@@ -26,7 +26,7 @@ router.get('/org', authenticate, requireRole('org_admin'), (req, res) => {
   res.json(result);
 });
 
-// GET /api/users/all — super admin: list all users
+// GET /api/users/all - super admin: list all users
 router.get('/all', authenticate, requireRole('super_admin'), (req, res) => {
   const { search, role, status, orgId } = req.query;
   let sql = `
@@ -48,7 +48,7 @@ router.get('/all', authenticate, requireRole('super_admin'), (req, res) => {
   res.json(users);
 });
 
-// POST /api/users/invite — org admin: invite a user
+// POST /api/users/invite - org admin: invite a user
 router.post('/invite', authenticate, requireRole('org_admin'), (req, res) => {
   const { name, email, roleCategory } = req.body;
   if (!name || !email) {
@@ -84,7 +84,7 @@ router.post('/invite', authenticate, requireRole('org_admin'), (req, res) => {
   });
 });
 
-// PATCH /api/users/:id/status — org admin: activate/deactivate user
+// PATCH /api/users/:id/status - org admin: activate/deactivate user
 router.patch('/:id/status', authenticate, requireRole('org_admin'), (req, res) => {
   const { status } = req.body;
   if (!['active', 'inactive'].includes(status)) {
@@ -99,7 +99,7 @@ router.patch('/:id/status', authenticate, requireRole('org_admin'), (req, res) =
   res.json({ message: `User ${status === 'active' ? 'activated' : 'deactivated'}` });
 });
 
-// GET /api/users/profile — get own profile with full details
+// GET /api/users/profile - get own profile with full details
 router.get('/profile', authenticate, (req, res) => {
   const user = req.user;
   const badges = db.prepare('SELECT badge_name, earned_at FROM badges WHERE user_id = ?').all(user.id);
@@ -124,7 +124,7 @@ router.get('/profile', authenticate, (req, res) => {
   });
 });
 
-// PUT /api/users/profile — update own profile
+// PUT /api/users/profile - update own profile
 router.put('/profile', authenticate, (req, res) => {
   const { name, phone, jobTitle, bio, timezone, language } = req.body;
 

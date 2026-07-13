@@ -66,7 +66,7 @@ export function ProgressProvider({ children }) {
     try {
       await api.saveQuiz(quizId, score, total);
     } catch {
-      // Keep the optimistic state — quiz was attempted
+      // Keep the optimistic state - quiz was attempted
     }
   }, []);
 

@@ -3,7 +3,7 @@
 //   FCS vCPU ₦93.50/unit·day · memory ₦96.80/GB·day · entry instance from ₦9,309/mo
 //   FBS ₦120/GB-mo · FOS ₦60/GB-mo · bandwidth ₦6,000/GB-mo · Floating IP ₦1,500/mo
 //   Windows licensed instance +₦35,000/mo · database vCPU unit ₦85.00
-// Totals are indicative — final pricing must be validated with the official
+// Totals are indicative - final pricing must be validated with the official
 // Nobus Pricing Calculator (https://nobus.io/nobus-pricing-calculator).
 
 export const RATES = {
@@ -28,39 +28,39 @@ const computeMonthly = (vcpu, ramGb, diskGb, os, vcpuRate = RATES.vcpuDay) => {
 
 // Standard FCS instance flavors (from nobus.io/documentation/fcs image & type list)
 export const FCS_INSTANCES = [
-  { id: 'si.1.2.30.l',  label: 'si.1.2 — 1 vCPU · 2 GiB · 30 GB (Linux)',    vcpu: 1, ram: 2,  disk: 30, os: 'linux' },
-  { id: 'si.2.2.30.l',  label: 'si.2.2 — 2 vCPU · 2 GiB · 30 GB (Linux)',    vcpu: 2, ram: 2,  disk: 30, os: 'linux' },
-  { id: 'si.2.4.30.l',  label: 'si.2.4 — 2 vCPU · 4 GiB · 30 GB (Linux)',    vcpu: 2, ram: 4,  disk: 30, os: 'linux' },
-  { id: 'si.2.8.30.l',  label: 'si.2.8 — 2 vCPU · 8 GiB · 30 GB (Linux)',    vcpu: 2, ram: 8,  disk: 30, os: 'linux' },
-  { id: 'si.4.4.30.l',  label: 'si.4.4 — 4 vCPU · 4 GiB · 30 GB (Linux)',    vcpu: 4, ram: 4,  disk: 30, os: 'linux' },
-  { id: 'si.4.8.30.l',  label: 'si.4.8 — 4 vCPU · 8 GiB · 30 GB (Linux)',    vcpu: 4, ram: 8,  disk: 30, os: 'linux' },
-  { id: 'si.4.16.30.l', label: 'si.4.16 — 4 vCPU · 16 GiB · 30 GB (Linux)',  vcpu: 4, ram: 16, disk: 30, os: 'linux' },
-  { id: 'si.8.16.30.l', label: 'si.8.16 — 8 vCPU · 16 GiB · 30 GB (Linux)',  vcpu: 8, ram: 16, disk: 30, os: 'linux' },
-  { id: 'si.2.4.50.w',  label: 'si.2.4 — 2 vCPU · 4 GiB · 50 GB (Windows)',  vcpu: 2, ram: 4,  disk: 50, os: 'windows' },
-  { id: 'si.2.8.50.w',  label: 'si.2.8 — 2 vCPU · 8 GiB · 50 GB (Windows)',  vcpu: 2, ram: 8,  disk: 50, os: 'windows' },
-  { id: 'si.4.8.50.w',  label: 'si.4.8 — 4 vCPU · 8 GiB · 50 GB (Windows)',  vcpu: 4, ram: 8,  disk: 50, os: 'windows' },
-  { id: 'si.4.16.50.w', label: 'si.4.16 — 4 vCPU · 16 GiB · 50 GB (Windows)', vcpu: 4, ram: 16, disk: 50, os: 'windows' },
-  { id: 'si.4.32.50.w', label: 'si.4.32 — 4 vCPU · 32 GiB · 50 GB (Windows)', vcpu: 4, ram: 32, disk: 50, os: 'windows' },
-  { id: 'si.8.16.50.w', label: 'si.8.16 — 8 vCPU · 16 GiB · 50 GB (Windows)', vcpu: 8, ram: 16, disk: 50, os: 'windows' },
-  { id: 'si.8.32.50.w', label: 'si.8.32 — 8 vCPU · 32 GiB · 50 GB (Windows)', vcpu: 8, ram: 32, disk: 50, os: 'windows' },
-  { id: 'si.8.64.50.w', label: 'si.8.64 — 8 vCPU · 64 GiB · 50 GB (Windows, burstable)', vcpu: 8, ram: 64, disk: 50, os: 'windows' },
+  { id: 'si.1.2.30.l',  label: 'si.1.2 - 1 vCPU · 2 GiB · 30 GB (Linux)',    vcpu: 1, ram: 2,  disk: 30, os: 'linux' },
+  { id: 'si.2.2.30.l',  label: 'si.2.2 - 2 vCPU · 2 GiB · 30 GB (Linux)',    vcpu: 2, ram: 2,  disk: 30, os: 'linux' },
+  { id: 'si.2.4.30.l',  label: 'si.2.4 - 2 vCPU · 4 GiB · 30 GB (Linux)',    vcpu: 2, ram: 4,  disk: 30, os: 'linux' },
+  { id: 'si.2.8.30.l',  label: 'si.2.8 - 2 vCPU · 8 GiB · 30 GB (Linux)',    vcpu: 2, ram: 8,  disk: 30, os: 'linux' },
+  { id: 'si.4.4.30.l',  label: 'si.4.4 - 4 vCPU · 4 GiB · 30 GB (Linux)',    vcpu: 4, ram: 4,  disk: 30, os: 'linux' },
+  { id: 'si.4.8.30.l',  label: 'si.4.8 - 4 vCPU · 8 GiB · 30 GB (Linux)',    vcpu: 4, ram: 8,  disk: 30, os: 'linux' },
+  { id: 'si.4.16.30.l', label: 'si.4.16 - 4 vCPU · 16 GiB · 30 GB (Linux)',  vcpu: 4, ram: 16, disk: 30, os: 'linux' },
+  { id: 'si.8.16.30.l', label: 'si.8.16 - 8 vCPU · 16 GiB · 30 GB (Linux)',  vcpu: 8, ram: 16, disk: 30, os: 'linux' },
+  { id: 'si.2.4.50.w',  label: 'si.2.4 - 2 vCPU · 4 GiB · 50 GB (Windows)',  vcpu: 2, ram: 4,  disk: 50, os: 'windows' },
+  { id: 'si.2.8.50.w',  label: 'si.2.8 - 2 vCPU · 8 GiB · 50 GB (Windows)',  vcpu: 2, ram: 8,  disk: 50, os: 'windows' },
+  { id: 'si.4.8.50.w',  label: 'si.4.8 - 4 vCPU · 8 GiB · 50 GB (Windows)',  vcpu: 4, ram: 8,  disk: 50, os: 'windows' },
+  { id: 'si.4.16.50.w', label: 'si.4.16 - 4 vCPU · 16 GiB · 50 GB (Windows)', vcpu: 4, ram: 16, disk: 50, os: 'windows' },
+  { id: 'si.4.32.50.w', label: 'si.4.32 - 4 vCPU · 32 GiB · 50 GB (Windows)', vcpu: 4, ram: 32, disk: 50, os: 'windows' },
+  { id: 'si.8.16.50.w', label: 'si.8.16 - 8 vCPU · 16 GiB · 50 GB (Windows)', vcpu: 8, ram: 16, disk: 50, os: 'windows' },
+  { id: 'si.8.32.50.w', label: 'si.8.32 - 8 vCPU · 32 GiB · 50 GB (Windows)', vcpu: 8, ram: 32, disk: 50, os: 'windows' },
+  { id: 'si.8.64.50.w', label: 'si.8.64 - 8 vCPU · 64 GiB · 50 GB (Windows, burstable)', vcpu: 8, ram: 64, disk: 50, os: 'windows' },
 ].map((i) => ({ ...i, monthly: computeMonthly(i.vcpu, i.ram, i.disk, i.os) }));
 
 export const DB_ENGINES = ['PostgreSQL', 'MySQL', 'MSSQL', 'MongoDB'];
 
 export const DB_SIZES = [
-  { id: 'db.2.4',  label: 'Small — 2 vCPU · 4 GiB · 50 GB',   vcpu: 2, ram: 4,  disk: 50 },
-  { id: 'db.4.8',  label: 'Medium — 4 vCPU · 8 GiB · 100 GB', vcpu: 4, ram: 8,  disk: 100 },
-  { id: 'db.4.16', label: 'Large — 4 vCPU · 16 GiB · 200 GB', vcpu: 4, ram: 16, disk: 200 },
-  { id: 'db.8.32', label: 'XL — 8 vCPU · 32 GiB · 500 GB',    vcpu: 8, ram: 32, disk: 500 },
+  { id: 'db.2.4',  label: 'Small - 2 vCPU · 4 GiB · 50 GB',   vcpu: 2, ram: 4,  disk: 50 },
+  { id: 'db.4.8',  label: 'Medium - 4 vCPU · 8 GiB · 100 GB', vcpu: 4, ram: 8,  disk: 100 },
+  { id: 'db.4.16', label: 'Large - 4 vCPU · 16 GiB · 200 GB', vcpu: 4, ram: 16, disk: 200 },
+  { id: 'db.8.32', label: 'XL - 8 vCPU · 32 GiB · 500 GB',    vcpu: 8, ram: 32, disk: 500 },
 ].map((s) => ({ ...s, monthly: computeMonthly(s.vcpu, s.ram, s.disk, 'linux', RATES.dbVcpuDay) }));
 
 // Quote line-item catalog. Each entry describes how the Quote Builder renders
 // and prices one service. kind:
-//   'instance'  — pick a flavor + quantity
-//   'perUnit'   — quantity × unit price (GB, IPs, …)
-//   'database'  — engine + size + quantity
-//   'appliance' — fixed config, priced on request (customPrice editable)
+//   'instance'  - pick a flavor + quantity
+//   'perUnit'   - quantity × unit price (GB, IPs, …)
+//   'database'  - engine + size + quantity
+//   'appliance' - fixed config, priced on request (customPrice editable)
 export const CATALOG = [
   {
     category: 'Compute',
@@ -69,22 +69,22 @@ export const CATALOG = [
         blurb: 'Resizable virtual machines. Windows price includes the managed license (+₦35,000/mo).' },
       { id: 'k8s-node', name: 'Kubernetes Worker Node', kind: 'instance',
         options: FCS_INSTANCES.filter((i) => i.os === 'linux'),
-        blurb: 'Managed Nobus Kubernetes Engine — priced per Linux worker node.' },
+        blurb: 'Managed Nobus Kubernetes Engine - priced per Linux worker node.' },
       { id: 'dedicated', name: 'Dedicated Host (BYOL)', kind: 'appliance', defaultPrice: 0,
-        blurb: 'Dedicated physical server for compliance / BYOL licensing. Priced on request — enter the agreed rate.' },
+        blurb: 'Dedicated physical server for compliance / BYOL licensing. Priced on request - enter the agreed rate.' },
     ],
   },
   {
     category: 'Storage & Backup',
     services: [
       { id: 'fbs', name: 'FBS Block Storage', kind: 'perUnit', unit: 'GB', unitPrice: RATES.fbsGbMonth, max: 1024,
-        blurb: 'Provisioned block volumes, ₦120 per GB-month. 1 GB – 1 TB per volume.' },
+        blurb: 'Provisioned block volumes, ₦120 per GB-month. 1 GB - 1 TB per volume.' },
       { id: 'fbs-snap', name: 'FBS Snapshots (stored in FOS)', kind: 'perUnit', unit: 'GB', unitPrice: RATES.fbsSnapshotGbMonth,
         blurb: 'Incremental snapshots billed on consumed data, ₦120 per GB-month.' },
       { id: 'fos', name: 'FOS Object Storage', kind: 'perUnit', unit: 'GB', unitPrice: RATES.fosGbMonth,
         blurb: 'Unlimited object storage, ₦60 per GB-month. Transfer-in free.' },
       { id: 'ncb', name: 'Nobus Cloud Backup (Acronis)', kind: 'appliance', defaultPrice: 0,
-        blurb: 'Per-workload or consumption licensing. Priced on request — enter the agreed rate.' },
+        blurb: 'Per-workload or consumption licensing. Priced on request - enter the agreed rate.' },
     ],
   },
   {
@@ -96,7 +96,7 @@ export const CATALOG = [
         blurb: 'Reserved public IPv4, ₦1,500 per month each.' },
       { id: 'vpn', name: 'Site-to-Site VPN Gateway', kind: 'instance',
         options: FCS_INSTANCES.filter((i) => i.os === 'linux' && i.vcpu <= 2),
-        blurb: 'pfSense-based IPsec gateway — billed as the underlying FCS instance.' },
+        blurb: 'pfSense-based IPsec gateway - billed as the underlying FCS instance.' },
       { id: 'nft', name: 'Nobus Fast Transit', kind: 'appliance', defaultPrice: 0,
         blurb: 'Dedicated 1/10 Gbps private connection. Priced on request per location and port speed.' },
     ],
@@ -127,7 +127,7 @@ export const VAT_RATE = 0.075; // Nigerian VAT 7.5%
 export const PARTNER_DISCOUNT_PCT = 10; // standard partner credit per the NCS Partner Agreement
 
 // Per the Partner Agreement, the 10% credit applies only to compute and storage
-// resources directly provided by NCS — it excludes external connectivity
+// resources directly provided by NCS - it excludes external connectivity
 // (internet bandwidth, NFT, IPs), licensed software (Windows, Sophos, FortiGate,
 // Acronis) and other non-NCS services.
 const DISCOUNT_ELIGIBLE = {
@@ -187,7 +187,7 @@ export function quoteBreakdown(items, discountPct = 0) {
   };
 }
 
-// Serializable line rows for exports (PDF/XLSX) — description, qty, unit cost, monthly
+// Serializable line rows for exports (PDF/XLSX) - description, qty, unit cost, monthly
 export function buildQuoteLines(items) {
   const groupOf = (serviceId) => {
     for (const cat of CATALOG) {
@@ -206,7 +206,7 @@ export function buildQuoteLines(items) {
       config = `${item.qty} ${item.unit} @ ${naira(item.unitPrice)}/${item.unit}-month`;
     } else if (item.kind === 'database') {
       const size = DB_SIZES.find((s) => s.id === item.sizeId);
-      config = size ? `${item.engine} — ${size.vcpu} vCPU, ${size.ram}GB RAM, ${size.disk}GB Volume` : item.engine;
+      config = size ? `${item.engine} - ${size.vcpu} vCPU, ${size.ram}GB RAM, ${size.disk}GB Volume` : item.engine;
     } else if (item.kind === 'appliance') {
       config = item.customPrice > 0 ? 'Agreed rate' : 'Priced on request';
     }
