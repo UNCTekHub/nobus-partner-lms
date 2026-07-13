@@ -184,6 +184,13 @@ export const api = {
   createLab: (data) => request('/labs', { method: 'POST', body: JSON.stringify(data) }),
   updateLab: (id, data) => request(`/labs/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
 
+  // Quotes
+  getQuotes: () => request('/quotes'),
+  getQuote: (id) => request(`/quotes/${id}`),
+  createQuote: (data) => request('/quotes', { method: 'POST', body: JSON.stringify(data) }),
+  updateQuote: (id, data) => request(`/quotes/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteQuote: (id) => request(`/quotes/${id}`, { method: 'DELETE' }),
+
   // Public API key management
   generateApiKey: (data) => request('/public/keys', { method: 'POST', body: JSON.stringify(data) }),
   getApiKeys: (orgId) => request(`/public/keys${orgId ? '?orgId=' + orgId : ''}`),

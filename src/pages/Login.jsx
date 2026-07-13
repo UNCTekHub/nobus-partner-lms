@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { GraduationCap, LogIn, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { LogIn, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
@@ -26,7 +26,6 @@ export default function Login() {
   };
 
   const demoAccounts = [
-    { email: 'admin@nobus.cloud', password: 'Nobus@2026!', label: 'Nobus Platform Admin' },
     { email: 'chinedu@acmetech.ng', password: 'demo', label: 'Org Admin (Acme Technologies)' },
     { email: 'amaka@acmetech.ng', password: 'demo', label: 'Sales User (Acme Technologies)' },
     { email: 'fatima@datastream.ng', password: 'demo', label: 'Org Admin (DataStream)' },
@@ -48,11 +47,9 @@ export default function Login() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-nobus-500 rounded-2xl mb-4">
-            <GraduationCap className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-white">Nobus Cloud Partner LMS</h1>
-          <p className="text-nobus-300 mt-1">Sign in to your learning account</p>
+          <img src="/nobus-logo.png" alt="Nobus Cloud Services" className="h-12 w-auto mx-auto mb-3" />
+          <h1 className="text-2xl font-bold text-white tracking-tight">NCS PartnerCentral</h1>
+          <p className="text-nobus-300 mt-1">One portal for everything you do with Nobus Cloud</p>
         </div>
 
         {/* Login form */}

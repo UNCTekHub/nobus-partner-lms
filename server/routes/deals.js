@@ -24,8 +24,10 @@ function expireStaleDeals() {
 router.get('/', authenticate, (req, res) => {
   expireStaleDeals();
   const base = `
-    SELECT d.*, o.name as org_name, u.name as submitted_by_name
+    SELECT d.*, o.name as org_name, u.name as submitted_by_name,
+      q.title as quote_title, q.monthly_total as quote_monthly_total
     FROM deals d JOIN organizations o ON d.org_id = o.id JOIN users u ON d.submitted_by = u.id
+    LEFT JOIN quotes q ON d.quote_id = q.id
   `;
   if (req.user.role === 'super_admin') {
     const { status } = req.query;
@@ -42,9 +44,17 @@ router.get('/', authenticate, (req, res) => {
 // POST /api/deals — register a deal
 router.post('/', authenticate, (req, res) => {
   if (!req.user.org_id) return res.status(403).json({ error: 'Only partner users can register deals' });
-  const { customerName, customerEmail, customerIndustry, opportunityName, description, services, estValue, expectedCloseDate } = req.body;
+  const { customerName, customerEmail, customerIndustry, opportunityName, description, services, estValue, expectedCloseDate, quoteId } = req.body;
   if (!customerName || !opportunityName) {
     return res.status(400).json({ error: 'Customer name and opportunity name are required' });
+  }
+
+  // A quote can only be attached to a deal by its own organization
+  if (quoteId) {
+    const quote = db.prepare('SELECT org_id FROM quotes WHERE id = ?').get(quoteId);
+    if (!quote || quote.org_id !== req.user.org_id) {
+      return res.status(400).json({ error: 'Invalid quote' });
+    }
   }
 
   // Duplicate detection: same customer already protected by an active registration
@@ -58,12 +68,12 @@ router.post('/', authenticate, (req, res) => {
 
   const result = db.prepare(`
     INSERT INTO deals (org_id, submitted_by, customer_name, customer_email, customer_industry,
-      opportunity_name, description, services, est_value, expected_close_date, status, duplicate_of)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?)
+      opportunity_name, description, services, est_value, expected_close_date, status, duplicate_of, quote_id)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)
   `).run(
     req.user.org_id, req.user.id, customerName, customerEmail || null, customerIndustry || null,
     opportunityName, description || null, JSON.stringify(services || []),
-    estValue || 0, expectedCloseDate || null, duplicate ? duplicate.id : null
+    estValue || 0, expectedCloseDate || null, duplicate ? duplicate.id : null, quoteId || null
   );
 
   notifySuperAdmins({

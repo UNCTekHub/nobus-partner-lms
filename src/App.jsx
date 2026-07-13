@@ -4,6 +4,7 @@ import { ProgressProvider } from './context/ProgressContext';
 import { I18nProvider } from './lib/i18n.jsx';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
+import AdminLayout from './components/AdminLayout';
 import Dashboard from './pages/Dashboard';
 import Catalog from './pages/Catalog';
 import CoursePage from './pages/CoursePage';
@@ -22,6 +23,7 @@ import Discussions from './pages/Discussions';
 import Leaderboard from './pages/Leaderboard';
 import SalesNavigator from './pages/SalesNavigator';
 import DealRegistration from './pages/DealRegistration';
+import QuoteBuilder from './pages/QuoteBuilder';
 import MarketingHub from './pages/MarketingHub';
 import DemoLabs from './pages/DemoLabs';
 import ContentHub from './pages/ContentHub';
@@ -46,19 +48,34 @@ function AuthGate({ children }) {
 }
 
 function AppRoutes() {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, isSuperAdmin, loading } = useAuth();
 
   if (loading) return <LoadingScreen />;
+
+  // Nobus staff land on the operations console; partners land on the dashboard
+  const home = isSuperAdmin ? '/ncs-console' : '/';
 
   return (
     <Routes>
       {/* Public routes */}
-      <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <Login />} />
-      <Route path="/register" element={isAuthenticated ? <Navigate to="/" replace /> : <OrgRegistration />} />
-      <Route path="/forgot-password" element={isAuthenticated ? <Navigate to="/" replace /> : <ForgotPassword />} />
-      <Route path="/reset-password" element={isAuthenticated ? <Navigate to="/" replace /> : <ResetPassword />} />
+      <Route path="/login" element={isAuthenticated ? <Navigate to={home} replace /> : <Login />} />
+      <Route path="/register" element={isAuthenticated ? <Navigate to={home} replace /> : <OrgRegistration />} />
+      <Route path="/forgot-password" element={isAuthenticated ? <Navigate to={home} replace /> : <ForgotPassword />} />
+      <Route path="/reset-password" element={isAuthenticated ? <Navigate to={home} replace /> : <ResetPassword />} />
 
-      {/* Protected routes inside Layout */}
+      {/* Nobus operations console — unlisted, super_admin only, own layout */}
+      <Route
+        path="/ncs-console"
+        element={
+          <AuthGate>
+            <AdminLayout>
+              <SuperAdminDashboard />
+            </AdminLayout>
+          </AuthGate>
+        }
+      />
+
+      {/* Partner portal inside the main layout */}
       <Route
         path="/*"
         element={
@@ -74,6 +91,7 @@ function AppRoutes() {
                 <Route path="/certification" element={<Certification />} />
                 <Route path="/sales-navigator" element={<SalesNavigator />} />
                 <Route path="/deals" element={<DealRegistration />} />
+                <Route path="/quotes" element={<QuoteBuilder />} />
                 <Route path="/marketing" element={<MarketingHub />} />
                 <Route path="/demo-labs" element={<DemoLabs />} />
                 <Route path="/content-hub" element={<ContentHub />} />
@@ -85,14 +103,6 @@ function AppRoutes() {
                   element={
                     <ProtectedRoute allowedRoles={[ROLES.ORG_ADMIN]}>
                       <OrgAdminDashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/admin"
-                  element={
-                    <ProtectedRoute allowedRoles={[ROLES.SUPER_ADMIN]}>
-                      <SuperAdminDashboard />
                     </ProtectedRoute>
                   }
                 />

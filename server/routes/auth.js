@@ -1,4 +1,4 @@
-import { Router } from 'express';
+﻿import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import db from '../db.js';
@@ -148,7 +148,7 @@ router.post('/register-org', (req, res) => {
     type: 'approval',
     title: 'New Partner Application',
     message: `${companyName} has applied to become a Nobus Cloud Partner.`,
-    link: '/admin',
+    link: '/ncs-console',
   });
 
   logAudit({ userId: null, action: 'org_application', entityType: 'pending_org', entityId: id, details: companyName });

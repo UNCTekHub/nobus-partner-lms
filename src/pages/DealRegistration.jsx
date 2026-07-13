@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ShieldCheck, Plus, X, Loader2, Clock, CheckCircle, XCircle, AlertTriangle, Trophy, Ban } from 'lucide-react';
+import { ShieldCheck, Plus, X, Loader2, Clock, CheckCircle, XCircle, AlertTriangle, Trophy, Ban, Calculator } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../lib/api';
 
@@ -16,11 +17,12 @@ const STATUS_META = {
 
 const naira = (n) => '₦' + Number(n || 0).toLocaleString('en-NG');
 
-const EMPTY_FORM = { customerName: '', customerEmail: '', customerIndustry: '', opportunityName: '', description: '', services: [], estValue: '', expectedCloseDate: '' };
+const EMPTY_FORM = { customerName: '', customerEmail: '', customerIndustry: '', opportunityName: '', description: '', services: [], estValue: '', expectedCloseDate: '', quoteId: '' };
 
 export default function DealRegistration() {
   const { isSuperAdmin } = useAuth();
   const [deals, setDeals] = useState([]);
+  const [quotes, setQuotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
@@ -31,7 +33,9 @@ export default function DealRegistration() {
 
   const load = useCallback(async () => {
     try {
-      setDeals(await api.getDeals());
+      const [dealData, quoteData] = await Promise.all([api.getDeals(), api.getQuotes().catch(() => [])]);
+      setDeals(dealData);
+      setQuotes(quoteData);
       setError('');
     } catch (err) {
       setError(err.message);
@@ -47,7 +51,7 @@ export default function DealRegistration() {
     setSaving(true);
     setNotice('');
     try {
-      const res = await api.registerDeal({ ...form, estValue: Number(form.estValue) || 0 });
+      const res = await api.registerDeal({ ...form, estValue: Number(form.estValue) || 0, quoteId: form.quoteId ? Number(form.quoteId) : null });
       setShowForm(false);
       setForm(EMPTY_FORM);
       setNotice(res.duplicateWarning ? `Deal submitted — ${res.duplicateWarning}` : 'Deal submitted for review.');
@@ -154,6 +158,14 @@ export default function DealRegistration() {
                       {services.map((s) => <span key={s} className="badge-blue">{s}</span>)}
                     </div>
                   )}
+                  {deal.quote_id && (
+                    <div className="mt-2 text-sm text-gray-600 flex items-center gap-1.5">
+                      <Calculator className="w-3.5 h-3.5 text-nobus-500" />
+                      Quote NCS-Q-{String(deal.quote_id).padStart(5, '0')}
+                      {deal.quote_title ? ` — ${deal.quote_title}` : ''}
+                      {deal.quote_monthly_total ? ` (${naira(deal.quote_monthly_total)}/mo)` : ''}
+                    </div>
+                  )}
                   {deal.status === 'rejected' && deal.rejection_reason && (
                     <div className="mt-2 text-sm text-red-600">Reason: {deal.rejection_reason}</div>
                   )}
@@ -250,6 +262,26 @@ export default function DealRegistration() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Expected close date</label>
                 <input type="date" value={form.expectedCloseDate} onChange={(e) => setForm({ ...form, expectedCloseDate: e.target.value })}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nobus-400" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Attach a quote (optional)</label>
+                <select value={form.quoteId}
+                  onChange={(e) => {
+                    const q = quotes.find((x) => x.id === Number(e.target.value));
+                    setForm({ ...form, quoteId: e.target.value, estValue: q ? String(q.monthly_total * 12) : form.estValue });
+                  }}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nobus-400">
+                  <option value="">No quote attached</option>
+                  {quotes.map((q) => (
+                    <option key={q.id} value={q.id}>
+                      NCS-Q-{String(q.id).padStart(5, '0')} — {q.title} (₦{Number(q.monthly_total).toLocaleString('en-NG')}/mo)
+                    </option>
+                  ))}
+                </select>
+                <p className="text-xs text-gray-400 mt-1">
+                  Selecting a quote sets the estimated value to its annual total. Build quotes in the{' '}
+                  <Link to="/quotes" className="text-nobus-600 hover:underline">Quote Builder</Link>.
+                </p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Nobus services in scope</label>

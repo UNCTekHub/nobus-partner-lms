@@ -1,20 +1,16 @@
-import { GraduationCap } from 'lucide-react';
-
 export default function Footer() {
   return (
-    <footer className="bg-nobus-950 text-nobus-300 mt-auto">
+    <footer className="bg-nobus-950 text-nobus-300 mt-auto print:hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-8 bg-nobus-500 rounded-lg flex items-center justify-center">
-                <GraduationCap className="w-4 h-4 text-white" />
-              </div>
-              <span className="text-white font-bold">Nobus Cloud LMS</span>
+              <img src="/nobus-logo.png" alt="Nobus Cloud Services" className="h-7 w-auto" />
+              <span className="text-white font-bold">NCS PartnerCentral</span>
             </div>
             <p className="text-sm leading-relaxed">
-              Partner enablement platform for Nobus Cloud Services.
-              Empowering partners with the knowledge to sell and deliver
+              The partner portal for Nobus Cloud Services — enablement, sales,
+              deal protection, quoting and resources for partners delivering
               Nigeria's sovereign cloud.
             </p>
           </div>

@@ -53,9 +53,6 @@ jobs:
             echo "=== Health Check ==="
             curl -s http://localhost:3001/api/health || echo "HEALTH CHECK FAILED"
             echo ""
-            echo "=== Test Login ==="
-            curl -s -X POST http://localhost:3001/api/auth/login -H "Content-Type: application/json" -d '{"email":"admin@nobus.io","password":"admin123"}' || echo "LOGIN TEST FAILED"
-            echo ""
 
       - name: Configure Nginx
         uses: appleboy/ssh-action@v1.0.3

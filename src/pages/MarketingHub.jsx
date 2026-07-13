@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Megaphone, Search, Download, Plus, X, Loader2, FileText, Image, Presentation, Mail, Share2, Swords } from 'lucide-react';
+import { Megaphone, Search, Download, Plus, X, Loader2, FileText, Image, Presentation, Mail, Share2, Swords, Eye, ExternalLink } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../lib/api';
 
@@ -24,6 +24,7 @@ export default function MarketingHub() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
+  const [preview, setPreview] = useState(null);
 
   const load = useCallback(async () => {
     try {
@@ -141,10 +142,16 @@ export default function MarketingHub() {
                 )}
                 <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                   <span className="text-xs text-gray-400">{asset.downloads} download{asset.downloads === 1 ? '' : 's'}</span>
-                  <button onClick={() => download(asset)}
-                    className="flex items-center gap-1.5 text-sm font-medium text-nobus-600 hover:text-nobus-700">
-                    <Download className="w-4 h-4" /> Download
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button onClick={() => setPreview(asset)}
+                      className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700">
+                      <Eye className="w-4 h-4" /> Preview
+                    </button>
+                    <button onClick={() => download(asset)}
+                      className="flex items-center gap-1.5 text-sm font-medium text-nobus-600 hover:text-nobus-700">
+                      <Download className="w-4 h-4" /> Download
+                    </button>
+                  </div>
                 </div>
               </div>
             );
@@ -155,6 +162,46 @@ export default function MarketingHub() {
               No materials match your filters.
             </div>
           )}
+        </div>
+      )}
+
+      {/* Preview modal — view the asset online before deciding to download */}
+      {preview && (
+        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setPreview(null)}>
+          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[92vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-start justify-between p-5 border-b border-gray-100">
+              <div className="min-w-0">
+                <h2 className="text-lg font-bold text-gray-900 truncate">{preview.title}</h2>
+                <div className="text-sm text-gray-500">{preview.category} · {preview.file_type || 'FILE'} · {preview.downloads} downloads</div>
+              </div>
+              <button onClick={() => setPreview(null)} className="p-1.5 rounded hover:bg-gray-100 shrink-0"><X className="w-5 h-5" /></button>
+            </div>
+
+            <div className="flex-1 min-h-[420px] bg-gray-100">
+              {['PNG', 'SVG', 'JPG'].includes(preview.file_type) ? (
+                <div className="h-full flex items-center justify-center p-6">
+                  <img src={preview.file_url} alt={preview.title} className="max-w-full max-h-[60vh] object-contain rounded-lg shadow" />
+                </div>
+              ) : (
+                <iframe title={preview.title} src={preview.file_url} className="w-full h-[60vh] border-0"
+                  sandbox="allow-scripts allow-same-origin" />
+              )}
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 p-5 border-t border-gray-100">
+              <p className="text-sm text-gray-500 flex-1 min-w-[200px]">{preview.description}</p>
+              <div className="flex gap-2">
+                <a href={preview.file_url} target="_blank" rel="noopener noreferrer"
+                  className="btn-secondary !py-2 text-sm flex items-center gap-1.5">
+                  <ExternalLink className="w-4 h-4" /> Open in new tab
+                </a>
+                <button onClick={() => { download(preview); setPreview(null); }}
+                  className="btn-primary !py-2 text-sm flex items-center gap-1.5">
+                  <Download className="w-4 h-4" /> Download
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

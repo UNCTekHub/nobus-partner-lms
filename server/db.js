@@ -380,6 +380,26 @@ db.exec(`
     FOREIGN KEY (lab_id) REFERENCES demo_labs(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
   );
+
+  -- Customer quotes built from the Nobus pricing catalog
+  CREATE TABLE IF NOT EXISTS quotes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    org_id TEXT NOT NULL,
+    created_by TEXT NOT NULL,
+    title TEXT NOT NULL,
+    customer_name TEXT,
+    items TEXT DEFAULT '[]',
+    monthly_total INTEGER DEFAULT 0,
+    notes TEXT,
+    status TEXT DEFAULT 'draft',
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (org_id) REFERENCES organizations(id),
+    FOREIGN KEY (created_by) REFERENCES users(id)
+  );
 `);
+
+// Migrations for columns added after tables shipped (no-op when already present)
+try { db.exec('ALTER TABLE deals ADD COLUMN quote_id INTEGER'); } catch { /* column exists */ }
 
 export default db;

@@ -19,6 +19,7 @@ import dealRoutes from './routes/deals.js';
 import pipelineRoutes from './routes/pipeline.js';
 import resourceRoutes from './routes/resources.js';
 import labRoutes from './routes/labs.js';
+import quoteRoutes from './routes/quotes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -60,6 +61,7 @@ app.use('/api/deals', dealRoutes);
 app.use('/api/pipeline', pipelineRoutes);
 app.use('/api/resources', resourceRoutes);
 app.use('/api/labs', labRoutes);
+app.use('/api/quotes', quoteRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
