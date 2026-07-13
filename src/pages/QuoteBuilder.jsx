@@ -218,7 +218,7 @@ export default function QuoteBuilder() {
                     </tr>
                     {pfin.discountMonthly > 0 && (
                       <tr>
-                        <td colSpan="3" className="p-2.5 text-right text-green-700">Partner discount ({printQuote.discount_pct}% — compute &amp; storage)</td>
+                        <td colSpan="3" className="p-2.5 text-right text-green-700">Exclusive partner pricing (compute &amp; storage)</td>
                         <td className="p-2.5 text-right text-green-700 font-medium">−{naira(pfin.discountMonthly)}</td>
                       </tr>
                     )}
@@ -405,10 +405,10 @@ export default function QuoteBuilder() {
                   className="w-4 h-4 rounded border-gray-300 text-nobus-500 focus:ring-nobus-400" />
                 <div>
                   <div className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
-                    <BadgePercent className="w-4 h-4 text-nobus-500" /> Apply {PARTNER_DISCOUNT_PCT}% partner discount
+                    <BadgePercent className="w-4 h-4 text-nobus-500" /> Apply exclusive partner pricing
                   </div>
                   <div className="text-xs text-gray-400">
-                    Per the NCS Partner Agreement — applies to compute &amp; storage only (excludes connectivity, licensed software).
+                    Preferential partner rates per the NCS Partner Agreement — applies to compute &amp; storage only (excludes connectivity, licensed software).
                   </div>
                 </div>
               </label>
@@ -424,7 +424,7 @@ export default function QuoteBuilder() {
                   </div>
                   {discount && (
                     <div className="flex justify-between gap-10 text-green-300">
-                      <span>Partner discount ({PARTNER_DISCOUNT_PCT}%)</span><span>−{naira(fin.discountMonthly)}</span>
+                      <span>Exclusive partner pricing</span><span>−{naira(fin.discountMonthly)}</span>
                     </div>
                   )}
                   <div className="flex justify-between gap-10 text-nobus-300">

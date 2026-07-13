@@ -127,7 +127,7 @@ export function streamQuotePdf(quote, res) {
 
   totalRow('Sub Total Monthly', fmt(fin.subtotalMonthly));
   if (fin.discountMonthly > 0) {
-    totalRow(`Partner Discount (${quote.discount_pct}% — compute & storage)`, `-${fmt(fin.discountMonthly)}`);
+    totalRow('Exclusive Partner Pricing (compute & storage)', `-${fmt(fin.discountMonthly)}`);
     totalRow('Net Monthly', fmt(fin.netMonthly));
   }
   totalRow('Sub Total Annual Cost', fmt(fin.netAnnual));
@@ -144,8 +144,8 @@ export function streamQuotePdf(quote, res) {
   doc.fillColor('#9ca3af').fontSize(7.5).font('Helvetica').text(
     'All prices in Nigerian Naira (NGN). Billed in Naira with no foreign-exchange exposure. This is an indicative ' +
     'estimate based on published Nobus rates; final pricing is confirmed at order via the Nobus Pricing Calculator ' +
-    '(nobus.io/nobus-pricing-calculator). The partner discount applies to compute and storage resources only, per the ' +
-    'NCS Partner Agreement. Items marked "priced on request" require a Nobus sales quotation. Valid for 30 days.',
+    '(nobus.io/nobus-pricing-calculator). Exclusive partner pricing applies to compute and storage resources only, per ' +
+    'the NCS Partner Agreement. Items marked "priced on request" require a Nobus sales quotation. Valid for 30 days.',
     left, y, { width }
   );
 
@@ -221,7 +221,7 @@ export async function streamQuoteXlsx(quote, res) {
 
   totalRow('Sub Total Monthly', fin.subtotalMonthly);
   if (fin.discountMonthly > 0) {
-    totalRow(`Partner Discount (${quote.discount_pct}% — compute & storage)`, -fin.discountMonthly);
+    totalRow('Exclusive Partner Pricing (compute & storage)', -fin.discountMonthly);
     totalRow('Net Monthly', fin.netMonthly);
   }
   totalRow('Sub Total Annual Cost', fin.netAnnual);
@@ -229,7 +229,7 @@ export async function streamQuoteXlsx(quote, res) {
   totalRow('Total', fin.totalAnnual, true);
 
   ws.addRow([]);
-  const note = ws.addRow(['', 'All prices in NGN. Indicative estimate per published Nobus rates; partner discount applies to compute & storage only per the NCS Partner Agreement. Valid 30 days.']);
+  const note = ws.addRow(['', 'All prices in NGN. Indicative estimate per published Nobus rates; exclusive partner pricing applies to compute & storage only per the NCS Partner Agreement. Valid 30 days.']);
   note.getCell(2).font = { size: 8, color: { argb: 'FF9CA3AF' } };
 
   res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

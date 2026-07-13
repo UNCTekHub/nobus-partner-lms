@@ -23,7 +23,7 @@ const MODULES = [
 ];
 
 const BENEFITS = [
-  { icon: BadgePercent, title: '10% NCS Credit', desc: 'Earn 10% of compute and storage consumption on every registered deal, for 12 months, per the Partner Agreement.' },
+  { icon: BadgePercent, title: 'Exclusive Partner Pricing', desc: 'Access preferential partner rates on compute and storage for every registered deal, per the Partner Agreement.' },
   { icon: ShieldCheck, title: 'Protected Deals', desc: 'Registered opportunities are shielded from channel conflict for 90 days.' },
   { icon: Award, title: 'Certification & Tiers', desc: 'Certify your team and climb from Registered to Platinum with growing benefits.' },
   { icon: Calculator, title: 'Your Own Fees', desc: 'Charge setup and recurring managed-services fees on top — your pricing, your margin.' },
@@ -131,7 +131,7 @@ export default function Landing() {
                 <div className="flex items-center gap-2">
                   <BadgePercent className="w-5 h-5" />
                   <div>
-                    <div className="font-extrabold leading-tight">10% NCS Credit</div>
+                    <div className="font-extrabold leading-tight">Exclusive Partner Pricing</div>
                     <div className="text-[10px] text-nobus-100">on every registered deal</div>
                   </div>
                 </div>

@@ -38,7 +38,7 @@ export function AuthProvider({ children }) {
       setToken(data.token);
       setCurrentUser(data.user);
       setOrganization(data.organization);
-      return { success: true };
+      return { success: true, user: data.user };
     } catch (err) {
       return { success: false, error: err.message };
     }

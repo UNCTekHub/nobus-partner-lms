@@ -19,7 +19,8 @@ export default function Login() {
     const result = await login(email, password);
     setSubmitting(false);
     if (result.success) {
-      navigate('/');
+      // Nobus staff land on the operations console; partners on the dashboard
+      navigate(result.user?.role === 'super_admin' ? '/ncs-console' : '/');
     } else {
       setError(result.error);
     }

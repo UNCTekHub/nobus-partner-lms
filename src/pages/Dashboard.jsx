@@ -228,7 +228,7 @@ export default function Dashboard() {
                 <h2 className="font-bold">Partner Benefit</h2>
               </div>
               <p className="text-sm text-nobus-200 leading-relaxed mb-3">
-                Earn <strong className="text-white">10% NCS credit</strong> on compute and storage consumed by every
+                Enjoy <strong className="text-white">exclusive partner pricing</strong> on compute and storage for every
                 registered deal you close, per the Partner Agreement — plus your own managed-services fees on top.
               </p>
               <Link to="/deals" className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-300 hover:text-accent-200">

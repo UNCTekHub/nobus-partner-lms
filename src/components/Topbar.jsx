@@ -1,11 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, LogOut, ExternalLink } from 'lucide-react';
+import { Menu, LogOut, ExternalLink, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import NotificationBell from './NotificationBell';
 
 export default function Topbar({ onMenuClick }) {
   const navigate = useNavigate();
-  const { currentUser, logout } = useAuth();
+  const { currentUser, logout, isSuperAdmin } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -29,6 +29,12 @@ export default function Topbar({ onMenuClick }) {
         </div>
 
         <div className="flex items-center gap-1.5">
+          {isSuperAdmin && (
+            <Link to="/ncs-console"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold text-white bg-gray-900 hover:bg-gray-800 transition-colors">
+              <Shield className="w-3.5 h-3.5" /> Ops Console
+            </Link>
+          )}
           <a href="https://dashboard.nobus.io" target="_blank" rel="noopener noreferrer"
             className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">
             <ExternalLink className="w-3.5 h-3.5" /> Cloud Console
