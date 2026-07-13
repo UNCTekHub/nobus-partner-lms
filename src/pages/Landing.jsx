@@ -37,8 +37,8 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img src="/nobus-logo.png" alt="Nobus Cloud Services" className="h-8 w-auto" />
-            <span className="hidden sm:block text-[10px] text-nobus-300 uppercase tracking-[0.2em] font-semibold border-l border-nobus-800 pl-3">
-              NCS PartnerCentral
+            <span className="hidden sm:block text-sm text-white uppercase tracking-[0.14em] font-extrabold border-l border-nobus-800 pl-3">
+              PartnerCentral
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -53,30 +53,99 @@ export default function Landing() {
       </header>
 
       {/* Hero */}
-      <section className="bg-nobus-950 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-          <div className="max-w-3xl">
-            <div className="badge bg-nobus-800 text-nobus-200 mb-5">Nobus Cloud Services Partner Network</div>
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-6">
-              Build a cloud business on <span className="text-nobus-400">Nigeria's sovereign cloud</span>
-            </h1>
-            <p className="text-lg text-nobus-200 leading-relaxed mb-8 max-w-2xl">
-              NCS PartnerCentral is the one portal for everything you do with Nobus Cloud — enablement and
-              certification, deal registration with channel protection, Naira quoting, pipeline management,
-              demo labs and campaign-ready marketing content.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link to="/register" className="btn-primary inline-flex items-center gap-2 text-base !px-7 !py-3">
-                Become a Partner <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link to="/login" className="inline-flex items-center gap-2 px-7 py-3 rounded-lg font-semibold text-white bg-white/10 hover:bg-white/20 transition-colors">
-                <LogIn className="w-4 h-4" /> Partner Login
-              </Link>
+      <section className="bg-nobus-950 text-white relative overflow-hidden">
+        {/* Ambient glow */}
+        <div className="absolute -top-40 -right-40 w-[560px] h-[560px] bg-nobus-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-56 left-1/3 w-[480px] h-[480px] bg-accent-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* Copy */}
+            <div>
+              <div className="badge bg-nobus-800 text-nobus-200 mb-5">Nobus Cloud Services Partner Network</div>
+              <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-6">
+                Build a cloud business on <span className="text-nobus-400">Nigeria's sovereign cloud</span>
+              </h1>
+              <p className="text-lg text-nobus-200 leading-relaxed mb-8">
+                Nobus PartnerCentral is the one portal for everything you do with Nobus Cloud — enablement and
+                certification, deal registration with channel protection, Naira quoting, pipeline management,
+                demo labs and campaign-ready marketing content.
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Link to="/register" className="btn-primary inline-flex items-center gap-2 text-base !px-7 !py-3">
+                  Become a Partner <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link to="/login" className="inline-flex items-center gap-2 px-7 py-3 rounded-lg font-semibold text-white bg-white/10 hover:bg-white/20 transition-colors">
+                  <LogIn className="w-4 h-4" /> Partner Login
+                </Link>
+              </div>
+              <div className="flex flex-wrap gap-x-6 gap-y-2 mt-10 text-sm text-nobus-300">
+                {['Naira billing — zero FX risk', 'Tier III data center, Lagos', 'NDPR · ISO 27001 · PCI DSS'].map((t) => (
+                  <span key={t} className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-nobus-400" /> {t}</span>
+                ))}
+              </div>
             </div>
-            <div className="flex flex-wrap gap-x-6 gap-y-2 mt-10 text-sm text-nobus-300">
-              {['Naira billing — zero FX risk', 'Tier III data center, Lagos', 'NDPR · ISO 27001 · PCI DSS'].map((t) => (
-                <span key={t} className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-nobus-400" /> {t}</span>
-              ))}
+
+            {/* Portal preview composition */}
+            <div className="hidden lg:block relative">
+              {/* Main dashboard card */}
+              <div className="bg-white rounded-2xl shadow-2xl p-6 text-gray-900 relative z-10">
+                <div className="flex items-center justify-between mb-5">
+                  <div>
+                    <div className="text-xs text-gray-400">Acme Technologies Ltd · NBS-NG-2026-001</div>
+                    <div className="font-bold text-lg">Partner Dashboard</div>
+                  </div>
+                  <span className="badge bg-nobus-50 text-nobus-700 font-bold">Gold Tier</span>
+                </div>
+                <div className="grid grid-cols-3 gap-3 mb-5">
+                  {[
+                    { label: 'Open Pipeline', value: '₦7.6M' },
+                    { label: 'Forecast', value: '₦10.2M' },
+                    { label: 'Protected Deals', value: '4' },
+                  ].map((s) => (
+                    <div key={s.label} className="bg-gray-50 rounded-xl p-3">
+                      <div className="text-lg font-bold text-gray-900">{s.value}</div>
+                      <div className="text-[10px] text-gray-400 font-medium">{s.label}</div>
+                    </div>
+                  ))}
+                </div>
+                <div className="space-y-2.5">
+                  {[
+                    { name: 'Core banking migration', status: 'Protected', cls: 'badge-green', val: '₦4.5M' },
+                    { name: 'Health records platform', status: 'Pending', cls: 'badge-amber', val: '₦12M' },
+                    { name: 'Retail e-commerce stack', status: 'Won', cls: 'badge-green', val: '₦6.8M' },
+                  ].map((d) => (
+                    <div key={d.name} className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50">
+                      <div className="text-sm font-medium text-gray-800">{d.name}</div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-400">{d.val}</span>
+                        <span className={d.cls}>{d.status}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Floating benefit cards */}
+              <div className="absolute -top-6 -right-4 z-20 bg-nobus-500 text-white rounded-xl shadow-xl px-5 py-4">
+                <div className="flex items-center gap-2">
+                  <BadgePercent className="w-5 h-5" />
+                  <div>
+                    <div className="font-extrabold leading-tight">10% NCS Credit</div>
+                    <div className="text-[10px] text-nobus-100">on every registered deal</div>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute -bottom-6 -left-6 z-20 bg-white rounded-xl shadow-xl px-5 py-4 text-gray-900">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-5 h-5 text-green-600" />
+                  <div>
+                    <div className="font-extrabold leading-tight">90-Day Protection</div>
+                    <div className="text-[10px] text-gray-400">channel-conflict shield</div>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute top-1/2 -right-10 z-0 w-40 h-40 bg-nobus-500/30 rounded-full blur-2xl" />
             </div>
           </div>
         </div>

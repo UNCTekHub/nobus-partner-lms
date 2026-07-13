@@ -6,7 +6,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <img src="/nobus-logo.png" alt="Nobus Cloud Services" className="h-7 w-auto" />
-              <span className="text-white font-bold">NCS PartnerCentral</span>
+              <span className="text-white font-bold">Nobus PartnerCentral</span>
             </div>
             <p className="text-sm leading-relaxed">
               The partner portal for Nobus Cloud Services — enablement, sales,

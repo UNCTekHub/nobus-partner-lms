@@ -31,7 +31,7 @@ export default function Login() {
         {/* Logo */}
         <div className="text-center mb-8">
           <img src="/nobus-logo.png" alt="Nobus Cloud Services" className="h-12 w-auto mx-auto mb-3" />
-          <h1 className="text-2xl font-bold text-white tracking-tight">NCS PartnerCentral</h1>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Nobus PartnerCentral</h1>
           <p className="text-nobus-300 mt-1">One portal for everything you do with Nobus Cloud</p>
         </div>
 

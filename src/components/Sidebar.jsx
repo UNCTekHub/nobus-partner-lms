@@ -53,8 +53,8 @@ export default function Sidebar({ mobileOpen, onClose }) {
       <div className="px-5 pt-5 pb-4 border-b border-nobus-800/60">
         <Link to="/" className="block" onClick={onClose}>
           <img src="/nobus-logo.png" alt="Nobus Cloud Services" className="h-9 w-auto" />
-          <div className="text-[10px] text-nobus-300 uppercase tracking-[0.2em] mt-1.5 font-semibold">
-            NCS PartnerCentral
+          <div className="text-sm text-white tracking-[0.14em] mt-1.5 font-extrabold uppercase">
+            PartnerCentral
           </div>
         </Link>
       </div>

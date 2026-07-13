@@ -153,14 +153,20 @@ const existingUsers = db.prepare('SELECT COUNT(*) as count FROM users').get().co
 if (existingUsers > 0) {
   console.log('Database already has data. Ensuring Nobus admin exists...');
 
-  // Always ensure the Nobus super admin exists
+  // Always ensure the Nobus super admin exists. Set ADMIN_PASSWORD in server/.env
+  // to rotate the credential away from the default in this public repository.
+  const adminPassword = process.env.ADMIN_PASSWORD || 'Nobus@2026!';
   const admin = db.prepare('SELECT id FROM users WHERE email = ?').get('admin@nobus.cloud');
   if (!admin) {
     db.prepare(`
       INSERT INTO users (id, org_id, name, email, password_hash, role, role_category, status, joined_date)
       VALUES (?, NULL, ?, ?, ?, 'super_admin', NULL, 'active', datetime('now'))
-    `).run('user-nobus-admin', 'Nobus Cloud Admin', 'admin@nobus.cloud', hash('Nobus@2026!'));
+    `).run('user-nobus-admin', 'Nobus Cloud Admin', 'admin@nobus.cloud', hash(adminPassword));
     console.log('Created Nobus admin: admin@nobus.cloud');
+  } else if (process.env.ADMIN_PASSWORD) {
+    db.prepare('UPDATE users SET password_hash = ? WHERE email = ?')
+      .run(hash(process.env.ADMIN_PASSWORD), 'admin@nobus.cloud');
+    console.log('Nobus admin password rotated from ADMIN_PASSWORD env.');
   } else {
     console.log('Nobus admin already exists.');
   }
