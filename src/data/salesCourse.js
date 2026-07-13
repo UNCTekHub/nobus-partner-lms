@@ -42,9 +42,9 @@ Nobus Cloud Services (NCS) is a public cloud provider purpose-built for Africa's
 
 | Fact | Detail | Why the customer cares |
 |---|---|---|
-| Data centers | Tier III-certified facilities across multiple availability zones in Africa | Same certification class trusted by banks and telcos |
+| Data centers | Three Tier III availability zones: nobus-wa-az1 (Rack Centre, Ikeja Lagos), nobus-wa-az2 (Lekki, Lagos), nobus-ea-az1 (Nairobi, Kenya) | Same certification class trusted by banks and telcos |
 | Anchor region | Lagos, Nigeria (including Rack Centre) | In-country data residency for Nigerian customers |
-| Expansion | Kenya region launching Q2 2026 | A growing pan-African footprint, not a single-site host |
+| East Africa | nobus-ea-az1 in Nairobi, Kenya | In-region service for East African customers |
 | Uptime | 99.982% guarantee with N+1 redundancy | Beats most on-premise setups by a wide margin |
 | Platform | OpenStack-based hyperscale infrastructure | Same open-source platform powering CERN and Walmart; standard tooling works |
 | Console | dashboard.nobus.io | One console for every service; easy to demo |
@@ -56,15 +56,15 @@ Nobus Cloud Services (NCS) is a public cloud provider purpose-built for Africa's
 - **No egress fees.** Data leaving Nobus is free. On AWS, egress alone can be 15-20% of the monthly bill.
 
 ### Compliance posture
-- **NDPR** aligned: Nigerian data protection regulation, critical for banks, government and healthcare
+- **NDPA** aligned: Nigerian data protection regulation, critical for banks, government and healthcare
 - **ISO 27001** certified information security management
 - **PCI DSS** supported: payment-card workloads can be built compliant on Nobus
 
 ### Tell the story in 60 seconds (memorize this)
-> "Nobus is Africa's cloud. We run Tier III-certified data centers across African availability zones, anchored in Lagos with Kenya coming in Q2 2026. You get the same building blocks as AWS: virtual machines, block and object storage, Kubernetes, managed databases, firewalls. The difference is that your data stays in Africa, your bill is in Naira, your support engineer is in your time zone, and there are no egress fees. That is why banks, fintechs and government agencies are moving here."
+> "Nobus is Africa's cloud. We run Tier III-certified data centers across African availability zones, two zones in Lagos (Ikeja and Lekki) and one in Nairobi, Kenya. You get the same building blocks as AWS: virtual machines, block and object storage, Kubernetes, managed databases, firewalls. The difference is that your data stays in Africa, your bill is in Naira, your support engineer is in your time zone, and there are no egress fees. That is why banks, fintechs and government agencies are moving here."
 
 ### Key takeaways
-- Never say "hosted at Rack Centre" as if it were one building: Nobus is multi-AZ, Tier III, expanding to Kenya
+- Never say "hosted at Rack Centre" as if it were one building: Nobus runs three Tier III zones, Ikeja and Lekki in Lagos plus Nairobi in Kenya
 - Lead with Naira billing and zero egress fees in every first conversation
 - 99.982% uptime and ISO 27001 are your credibility anchors with technical and compliance buyers`
         },
@@ -74,12 +74,12 @@ Nobus Cloud Services (NCS) is a public cloud provider purpose-built for Africa's
           content: `## Competitive Advantages (Your Selling Points)
 
 ### 1. Data Sovereignty
-- Nigerian customer data stays in-country, in **Tier III-certified Nigerian availability zones** (including Rack Centre, Lagos)
-- Full **NDPR (Nigeria Data Protection Regulation)** compliance
+- Nigerian customer data stays in-country, in **two Tier III-certified Nigerian availability zones**: nobus-wa-az1 (Rack Centre, Ikeja) and nobus-wa-az2 (Lekki)
+- Full **NDPA (Nigeria Data Protection Act)** compliance
 - No foreign government access to customer data
 - Critical for banks, government agencies, healthcare providers
 
-> **Sales Pitch:** *"Unlike AWS or Azure where your data sits in Europe or the US, Nobus keeps your data in Nigeria, in Tier III certified local data centers. For banks and government agencies, this isn't just convenient; it's often a legal requirement under NDPR. Can you afford the regulatory risk of offshore data?"*
+> **Sales Pitch:** *"Unlike AWS or Azure where your data sits in Europe or the US, Nobus keeps your data in Nigeria, in Tier III certified local data centers. For banks and government agencies, this isn't just convenient; it's often a legal requirement under NDPA. Can you afford the regulatory risk of offshore data?"*
 
 ### 2. Naira Pricing - No Exchange Rate Risk
 - All billing in Nigerian Naira (NGN)
@@ -99,7 +99,7 @@ Nobus Cloud Services (NCS) is a public cloud provider purpose-built for Africa's
 ### 4. Compliance First
 - **ISO 27001** certified information security
 - **PCI DSS** compliance supported for payment card environments
-- **NDPR** aligned for data protection
+- **NDPA** aligned for data protection
 - Built for regulated industries (banking, insurance, healthcare)
 
 ### 5. Cost Competitive - No Hidden Fees
@@ -131,12 +131,12 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 
 - Massive untapped opportunity - the majority of Nigerian businesses are still on-premise
 - Fast-growing cloud adoption driven by digital transformation, fintech boom, and regulatory pressure
-- Nobus is uniquely positioned as the **only OpenStack-based African hyperscale cloud** with Tier III multi-AZ hosting in Nigeria and a Kenya region launching Q2 2026
+- Nobus is uniquely positioned as the **only OpenStack-based African hyperscale cloud** with Tier III availability zones in Lagos (Ikeja and Lekki) and Nairobi, Kenya
 
 ### Target Sectors (Priority Order) - With Specific Value Props
 
 #### 1. Banking & Financial Services (Highest Value)
-- **Why Nobus:** NDPR compliance, in-country data sovereignty, CBN regulatory alignment
+- **Why Nobus:** NDPA compliance, in-country data sovereignty, CBN regulatory alignment
 - **Key Services:** Sophos XG Firewall for network security, FBS encrypted storage (AES-256), managed databases
 - **Deal Size:** One bank deal = NGN 50M+/year
 - **Entry Point:** Disaster recovery, dev/test environments, then production migration
@@ -147,7 +147,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 - **Entry Point:** New application deployments, payment processing infrastructure
 
 #### 3. Healthcare (Data Sensitivity)
-- **Why Nobus:** Patient data must stay in Nigeria (NDPR), Acronis Cyber Protect for ransomware protection, AES-256 encrypted storage
+- **Why Nobus:** Patient data must stay in Nigeria (NDPA), Acronis Cyber Protect for ransomware protection, AES-256 encrypted storage
 - **Key Services:** FBS encrypted volumes, Acronis backup, Sophos XG firewall
 - **Entry Point:** Electronic medical records, diagnostic imaging storage (FOS)
 
@@ -207,11 +207,11 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 - **Opening question:** *"Walk me through what happened the last time something went down after hours."*
 
 ### Persona 4: The Compliance / Risk Officer (the veto holder)
-- **Cares about:** NDPR, data residency, auditability, regulator comfort
+- **Cares about:** NDPA, data residency, auditability, regulator comfort
 - **Fears:** Signing off on offshore data storage and being personally accountable later
-- **Your message:** "Data stays in Nigeria in Tier III-certified facilities. NDPR-aligned, ISO 27001 certified, PCI DSS supported."
+- **Your message:** "Data stays in Nigeria in Tier III-certified facilities. NDPA-aligned, ISO 27001 certified, PCI DSS supported."
 - **Proof points:** Compliance one-pager from the Content Hub, encryption story (AES-256 at rest, encrypted transit)
-- **Opening question:** *"How does your current provider evidence NDPR compliance when the regulator asks?"*
+- **Opening question:** *"How does your current provider evidence NDPA compliance when the regulator asks?"*
 
 ### Multi-threading: the golden rule
 Deals stall when you are single-threaded. In every opportunity, map all four personas by name within the first two meetings, and give each one their own version of the value proposition. Log them as contacts on the lead in Sales Navigator so your whole team sees the map.
@@ -300,7 +300,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
         questions: [
           {
             q: 'What is the primary compliance advantage Nobus offers over AWS/Azure for Nigerian businesses?',
-            options: ['Lower pricing', 'Data sovereignty - data stays in Nigeria (NDPR compliance)', 'More services available', 'Faster compute instances'],
+            options: ['Lower pricing', 'Data sovereignty - data stays in Nigeria (NDPA compliance)', 'More services available', 'Faster compute instances'],
             correct: 1,
           },
           {
@@ -320,7 +320,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
           },
           {
             q: 'Where does Nobus Cloud infrastructure run?',
-            options: ['US and European data centers', 'Tier III-certified data centers across Africa (Nigeria today, Kenya from Q2 2026)', 'Microsoft Azure facility in Abuja', 'Google Cloud region in Johannesburg'],
+            options: ['US and European data centers', 'Tier III-certified availability zones: two in Lagos (Ikeja and Lekki) and one in Nairobi, Kenya', 'Microsoft Azure facility in Abuja', 'Google Cloud region in Johannesburg'],
             correct: 1,
           },
           {
@@ -374,7 +374,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 ### Triggers that start deals (stage 1 fuel)
 - Dollar-billed cloud renewal approaching (FX pain)
 - Hardware refresh quote landed (NGN 20M+ capex shock)
-- NDPR or CBN audit finding on offshore data
+- NDPA or CBN audit finding on offshore data
 - Outage or ransomware scare
 - New CTO or CFO (new brooms review infrastructure)
 
@@ -493,7 +493,7 @@ Rate each dimension 1-3 in Sales Navigator notes. A deal below 8/12 is not ready
 
 ### Disqualifying gracefully
 Walking away well creates future deals. Script:
-> "Based on what you have shared, I do not think the timing is right for this to succeed, and I will not waste your time. Let me send you our NDPR data-residency whitepaper, and I will check back in when your renewal window opens in Q3."
+> "Based on what you have shared, I do not think the timing is right for this to succeed, and I will not waste your time. Let me send you our NDPA data-residency whitepaper, and I will check back in when your renewal window opens in Q3."
 
 ### Field example
 A partner scored a government prospect: Budget 3 (approved project), Need 3 (audit finding), Timeline 3 (fiscal-year deadline), Authority 1 (talking to a webmaster). Instead of proposing, they spent two weeks getting introduced to the Director of ICT, moved Authority to 3, then registered and won a NGN 12M/year deal. The score told them exactly which lever to pull.
@@ -551,7 +551,7 @@ A partner scored a government prospect: Budget 3 (approved project), Need 3 (aud
 
 ### Category 1: Global hyperscalers (AWS, Azure, GCP)
 - **Their strengths:** Enormous service catalogs, brand safety ("nobody gets fired for buying AWS"), mature tooling
-- **Their weaknesses in this market:** Dollar billing with FX exposure, egress fees, data offshore (NDPR friction), support in distant time zones, complexity that demands expensive skills
+- **Their weaknesses in this market:** Dollar billing with FX exposure, egress fees, data offshore (NDPA friction), support in distant time zones, complexity that demands expensive skills
 - **Your line:** "Same core building blocks: compute, storage, Kubernetes, managed databases. Your data in Africa, your bill in Naira, your support in your time zone, and zero egress fees."
 - Detailed battlecards for AWS and Azure follow in the next lessons.
 
@@ -589,12 +589,12 @@ Never fabricate competitor weaknesses. State facts you can defend, acknowledge g
 
 | Factor | Nobus | AWS | Your Talking Point |
 |--------|-------|-----|-------------------|
-| **Data Location** | Nigeria, Tier III multi-AZ | Nearest region: Cape Town or Europe | "Your data stays in Nigeria. NDPR compliant by design." |
+| **Data Location** | Nigeria, Tier III multi-AZ | Nearest region: Cape Town or Europe | "Your data stays in Nigeria. NDPA compliant by design." |
 | **Currency** | Bill in Naira (NGN) | Bill in USD | "No exchange rate risk. Your bill is in Naira - period." |
 | **Support** | Lagos-based, same timezone, phone | Different timezone, mostly online tickets | "When your system crashes at 9 PM, we answer in Lagos." |
 | **Pricing** | 15-30% cheaper for equivalent workloads | Premium pricing + hidden egress fees | "Same quality, better price. Plus zero egress fees." |
 | **Egress Fees** | NONE - completely free | $0.09/GB (can be 15-20% of bill) | "Data transfer out is FREE on Nobus. AWS charges per GB." |
-| **Compliance** | ISO 27001, PCI-DSS supported, NDPR | ISO 27001, PCI-DSS | "Equally certified, but data stays in Nigeria." |
+| **Compliance** | ISO 27001, PCI-DSS supported, NDPA | ISO 27001, PCI-DSS | "Equally certified, but data stays in Nigeria." |
 | **Complexity** | Focused catalogue of essential services | 200+ services, overwhelming complexity | "We focus on what Nigerian businesses actually need." |
 | **Onboarding** | White-glove migration support | Self-service, figure it out yourself | "We train your team. Walk you through migration step by step." |
 | **Tooling** | OpenStack CLI, Terraform, REST APIs | AWS CLI, Terraform, SDKs | "Your team can use Terraform, CLI, APIs - same DevOps tools they know." |
@@ -706,7 +706,7 @@ Never fabricate competitor weaknesses. State facts you can defend, acknowledge g
 
 **1. Executive summary (one page, written last, read first)**
 The formula: *their situation, their cost of inaction, your solution in one sentence, the outcome with numbers, the ask.*
-> "Acme processes 40,000 orders monthly on infrastructure that renews in dollars this March. At current FX rates that renewal costs 31% more than last year. We propose migrating to Nobus Cloud: equivalent capacity, billed in Naira, with zero egress fees, cutting projected annual infrastructure cost from NGN 48M to NGN 33M while moving customer data onshore for NDPR compliance. We ask for approval to begin a two-week proof of concept on 1 May."
+> "Acme processes 40,000 orders monthly on infrastructure that renews in dollars this March. At current FX rates that renewal costs 31% more than last year. We propose migrating to Nobus Cloud: equivalent capacity, billed in Naira, with zero egress fees, cutting projected annual infrastructure cost from NGN 48M to NGN 33M while moving customer data onshore for NDPA compliance. We ask for approval to begin a two-week proof of concept on 1 May."
 
 **2. Understanding of your requirements**
 Replay discovery in their words. This section proves you listened; it is why discovery quality decides proposal quality. List their stated problems as bullets, each with the business impact they told you.
@@ -721,7 +721,7 @@ Generated from the Quote Builder and attached as the formal quotation (ref NCS-Q
 Phased, with dates and owners: migration windows, testing, cutover, rollback plan. Include your managed-services offer (setup fee plus monthly support) as its own line so the customer sees ongoing partnership, not a drive-by sale.
 
 **6. Why Nobus, why us**
-Three Nobus proofs (Tier III multi-AZ across Africa, 99.982% uptime, NDPR/ISO 27001) and three partner proofs (your certifications from this academy, reference customers, your support SLA).
+Three Nobus proofs (Tier III multi-AZ across Africa, 99.982% uptime, NDPA/ISO 27001) and three partner proofs (your certifications from this academy, reference customers, your support SLA).
 
 **7. Next step and validity**
 One specific ask with a date, and quote validity (30 days, matching the Quote Builder terms).
@@ -1067,7 +1067,7 @@ Every objection you hear in the field goes into your team's shared playbook with
 
 **1. "Nobus is too small / we have never heard of you."**
 - Clarify: "Is the concern about the platform's capability, or about long-term viability?"
-- Evidence: Tier III multi-AZ infrastructure, 99.982% uptime guarantee, OpenStack (the platform CERN runs), ISO 27001, expanding to Kenya Q2 2026. Offer a reference call with an existing customer.
+- Evidence: Tier III multi-AZ infrastructure, 99.982% uptime guarantee, OpenStack (the platform CERN runs), ISO 27001, with zones in Lagos (Ikeja and Lekki) and Nairobi. Offer a reference call with an existing customer.
 
 **2. "AWS/Azure has more services."**
 - Clarify: "Which specific services on your roadmap are you concerned about?"
@@ -1082,8 +1082,8 @@ Every objection you hear in the field goes into your team's shared playbook with
 - Evidence: Phased migration plan, image import/export tooling, parallel-run approach proven in the PoC, and your managed-services team doing the heavy lifting. Offer the migration lab demo.
 
 **5. "Our data is fine where it is."**
-- Clarify: "Has compliance formally reviewed where it sits under NDPR?"
-- Evidence: NDPR alignment, in-country residency in Tier III facilities, the regulator trend line. Share the data-sovereignty whitepaper from the Content Hub.
+- Clarify: "Has compliance formally reviewed where it sits under NDPA?"
+- Evidence: NDPA alignment, in-country residency in Tier III facilities, the regulator trend line. Share the data-sovereignty whitepaper from the Content Hub.
 
 **6. "What if Nobus goes down?"**
 - Clarify: "What is your current uptime, honestly measured?"

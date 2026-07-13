@@ -172,7 +172,7 @@ Internet → Cloud Firewall (FaaS) → Sophos XG / FortiGate
    → TLS (data in transit)
 \`\`\`
 
-> **Presales Tip:** For financial services prospects, map this stack to CBN framework requirements. Show: Security Groups + Cloud Firewall + Sophos XG + Acronis + AES-256 encryption = full compliance-ready architecture. Add NDPR data residency (Lagos DC) as the compliance cherry on top.`
+> **Presales Tip:** For financial services prospects, map this stack to CBN framework requirements. Show: Security Groups + Cloud Firewall + Sophos XG + Acronis + AES-256 encryption = full compliance-ready architecture. Add NDPA data residency (Lagos DC) as the compliance cherry on top.`
         },
         {
           id: 'pre-m1-l4',
@@ -366,7 +366,7 @@ For mature DevOps teams, position Nobus Cloud Orchestration:
 - **Watch out:** Floating IPs do not attach to Kubernetes worker nodes; expose services through the load balancer
 
 ### Scenario 5: Regulated enterprise (bank, insurer, government)
-- **Signals:** NDPR/CBN language, compliance officers in meetings, formal RFPs
+- **Signals:** NDPA/CBN language, compliance officers in meetings, formal RFPs
 - **Architecture:** Isolated virtual data center (DaaS), Sophos XG + security groups layered, AES-256 encrypted FBS everywhere, VPN or Nobus Fast Transit for dedicated connectivity, full audit logging, in-country data residency documented
 - **Why it wins:** Data sovereignty is a legal requirement, not a preference; Tier III certification and ISO 27001 satisfy procurement checklists
 - **Key move:** Bring the compliance one-pager from the Content Hub to the SECOND meeting, unprompted
@@ -548,7 +548,7 @@ If the answer to two or more is no: decline politely, and ask for a meeting befo
 ### Standard evidence for common RFP sections
 - **Infrastructure and availability:** Tier III-certified data centers across multiple African availability zones, 99.982% uptime guarantee, N+1 redundancy
 - **Security:** ISO 27001, AES-256 at rest, encrypted transit, security groups + cloud firewalls + optional Sophos XG/FortiGate, shared-responsibility model explained
-- **Data protection and residency:** NDPR alignment, in-country storage, PCI DSS supported
+- **Data protection and residency:** NDPA alignment, in-country storage, PCI DSS supported
 - **Business continuity:** Nobus Cloud Backup (Acronis), cross-zone snapshot copies, documented restore drills
 - **Pricing:** Quote Builder export (PDF or XLSX) with VAT explicit and validity stated; transparent published rates on nobus.io
 - **Support:** local time-zone support plus your own managed-services SLA as the first line
@@ -556,7 +556,7 @@ If the answer to two or more is no: decline politely, and ask for a meeting befo
 ### Handling the questions you cannot fully meet
 Never bluff an RFP; evaluators compare answers across bidders and bluffs are obvious.
 - Partial compliance, honestly framed: "Compliant via [approach], with the following consideration..."
-- Roadmap answers only where true (example: Kenya region, Q2 2026)
+- Roadmap answers only where true and publicly dated; never promise undated capabilities
 - A credible workaround beats a fake yes: "Requirement met through Nobus Cloud Backup replication rather than native cross-region replication."
 
 ### Deadline discipline
@@ -666,7 +666,7 @@ Same day: send a two-line recap listing each confirmed moment ("provisioning in 
 Beyond the sales-level SPIN call, you need engineering facts. Capture per workload: CPU/RAM/storage today, OS and versions, dependencies, licensing model (per-core matters for BYOL and Dedicated Hosts), data volumes, growth rate, RTO/RPO expectations, and interconnectivity (what talks to what, on which ports). Use a standard inventory sheet; memory is not a system.
 
 ### Step 2: Current-state assessment
-Draw the as-is diagram and list hard constraints: compliance requirements (NDPR residency, PCI), non-movable systems, bandwidth realities at their sites, maintenance windows. Constraints discovered now are design inputs; discovered later, they are crises.
+Draw the as-is diagram and list hard constraints: compliance requirements (NDPA residency, PCI), non-movable systems, bandwidth realities at their sites, maintenance windows. Constraints discovered now are design inputs; discovered later, they are crises.
 
 ### Step 3: Solution design
 Map every workload to a Nobus service and size: FCS flavor per server (right-size from measured usage, not the old box's spec: most on-prem servers run at 20% utilization), FBS volumes, FOS for archives and media, database engine and size, network design (security groups per tier, VPN or Fast Transit, floating IPs), security stack, and the backup/DR layer. Produce the three diagram altitudes from the diagramming lesson.

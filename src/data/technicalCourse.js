@@ -39,8 +39,9 @@ const technicalCourse = {
 Nobus Cloud Services (NCS) is Nigeria's first native hyperscale public cloud platform, operated by **Nkponani Limited** and purpose-built for Africa's digital evolution. It is built on **OpenStack**, the open-source cloud platform that also powers CERN, Walmart and major global telcos, which means standard tooling (Terraform, OpenStack CLI, REST APIs) works as engineers expect.
 
 ### Where it runs
-- **Tier III-certified data centres across multiple availability zones in Africa**, anchored in Lagos, Nigeria (including Rack Centre)
-- **Kenya region launching Q2 2026**, extending the pan-African footprint
+- **West Africa AZ 1 (nobus-wa-az1):** Rack Centre, Ikeja, Lagos, Nigeria
+- **West Africa AZ 2 (nobus-wa-az2):** Lekki, Lagos, Nigeria
+- **East Africa AZ 1 (nobus-ea-az1):** Nairobi, Kenya
 - **99.982% uptime guarantee** with N+1 redundancy on power, cooling and network
 - Managed entirely from one console: **dashboard.nobus.io**
 
@@ -90,7 +91,7 @@ Pre-billing: resources charge from the start of each cycle while in **running or
 - How the OpenStack foundation shapes what is possible
 
 ### The physical layer
-- **Regions and availability zones (AZs):** Nobus runs Tier III-certified data centres in multiple AZs across Africa (Lagos anchored, Kenya Q2 2026). An AZ is a physically isolated facility with independent power, cooling and network; zone names appear in the console (for example nobus-wa-az1).
+- **Regions and availability zones (AZs):** Nobus runs three Tier III-certified zones: **nobus-wa-az1** (Rack Centre, Ikeja Lagos), **nobus-wa-az2** (Lekki, Lagos) and **nobus-ea-az1** (Nairobi, Kenya). An AZ is a physically isolated facility with independent power, cooling and network; zone names appear in the console when you place resources.
 - **Tier III means:** concurrent maintainability, N+1 redundancy on every critical system, 99.982% uptime design. You can honestly tell customers this exceeds what any office server room achieves.
 - **Design rule:** production workloads that need high availability should spread across AZs; FBS snapshots can be copied cross-zone for disaster recovery.
 
@@ -844,7 +845,7 @@ Managed DNS service for mapping domain names to IP addresses. **Free for all Nob
 - Physical security of Tier III data centres (24/7 facility control)
 - Infrastructure: hypervisors, storage fabric, core network
 - Platform encryption machinery, IDS/IPS, SIEM monitoring, incident response process
-- Compliance certifications: ISO 27001, GDPR posture, PCI DSS support, NDPR alignment
+- Compliance certifications: ISO 27001, GDPR posture, PCI DSS support, NDPA alignment
 
 **The customer (with you) secures what runs IN the cloud:**
 - Data classification and encryption choices
@@ -877,7 +878,7 @@ The one-line version for meetings: **"Nobus secures the building and the platfor
 ### Running the enterprise security conversation
 1. Open with the shared responsibility split (whiteboard it; two columns)
 2. Walk the layers table top to bottom, mapping each to their stated concerns
-3. Name the certifications once, precisely: ISO 27001 certified, PCI DSS supported, NDPR aligned
+3. Name the certifications once, precisely: ISO 27001 certified, PCI DSS supported, NDPA aligned
 4. Close with the restore-drill offer: "Security you have not tested is a hope. We schedule quarterly restore drills."
 
 ### Key takeaways
@@ -959,7 +960,7 @@ Protect mission-critical systems from servers to desktops/laptops:
 
 | Framework | Relevance | How Nobus Helps |
 |-----------|-----------|-----------------|
-| **NDPR** | Data about Nigerian citizens must comply with NDPR | Data residency in Nigeria, encryption, access controls |
+| **NDPA** | Data about Nigerian citizens must comply with NDPA | Data residency in Nigeria, encryption, access controls |
 | **CBN Cybersecurity** | Banks must comply with CBN IT security standards | Tier III DC, AES-256 encryption, MFA, RBAC, IDS/IPS |
 | **PCI-DSS** | Credit card data processing/storage | Nobus is PCI-DSS compliant; application-layer compliance is customer's responsibility |
 | **ISO 27001** | International information security standard | Nobus is ISO 27001 certified |
@@ -977,7 +978,7 @@ Protect mission-critical systems from servers to desktops/laptops:
           },
           {
             q: 'Which Nigerian regulation requires data about citizens to be processed in accordance with data residency guidelines?',
-            options: ['PCI-DSS', 'CBN Framework', 'NDPR', 'ISO 27001'],
+            options: ['PCI-DSS', 'CBN Framework', 'NDPA', 'ISO 27001'],
             correct: 2,
           },
         ],
@@ -1564,7 +1565,7 @@ Answer: Autoscaling groups with dynamic, predictive and scheduled policies; mult
 Answer: It is the Tier III design standard: concurrent maintainability, N+1 power and cooling, multi-AZ. Offer the honest comparison: "Measure your current environment's real availability first; most on-prem rooms cannot document 99.5%." Then put the SLA in the contract.
 
 **6. "IPv6? Multi-region replication? [Feature X]?"**
-Answer: The platform is IPv4-only for virtual data centers today; cross-zone DR is achieved with snapshot copies and NCB replication; Kenya (Q2 2026) adds a second country region. State roadmap items only when they are public and dated. Engineers forgive gaps; they never forgive discovered bluffs.
+Answer: The platform is IPv4-only for virtual data centers today; cross-zone DR is achieved with snapshot copies and NCB replication across the Lagos zones (Ikeja, Lekki) or to the East Africa zone in Nairobi. State roadmap items only when they are public and dated. Engineers forgive gaps; they never forgive discovered bluffs.
 
 **7. "Migration will break things."**
 Answer: Agree: unmanaged migrations do. Walk the four-phase framework: pathfinder workload, parallel runs, validation gates, tested rollback, two-week warm standby. Offer the migration lab demo as proof the tooling exists.
@@ -1627,7 +1628,7 @@ Concede small points quickly and completely ("correct, we do not have that today
 - **Assessment:** scenario-based exam plus a documented real or lab migration
 
 **Level 3: NCS Expert**
-- **Scope:** Complex estates: Kubernetes and Kafka architectures, regulated-industry designs (NDPR/PCI), performance engineering, multi-workload cutovers
+- **Scope:** Complex estates: Kubernetes and Kafka architectures, regulated-industry designs (NDPA/PCI), performance engineering, multi-workload cutovers
 - **Qualifies you to:** act as the customer-facing architect on enterprise accounts, and train/mentor Associates
 - **Assessment:** panel review of a delivered project plus an advanced practical
 

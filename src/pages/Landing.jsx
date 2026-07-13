@@ -80,7 +80,7 @@ export default function Landing() {
                 </Link>
               </div>
               <div className="flex flex-wrap gap-x-6 gap-y-2 mt-10 text-sm text-nobus-300">
-                {['Naira billing, zero FX risk', 'Tier III data centers across Africa', 'NDPR · ISO 27001 · PCI DSS'].map((t) => (
+                {['Naira billing, zero FX risk', 'Tier III zones in Lagos and Nairobi', 'NDPA · ISO 27001 · PCI DSS'].map((t) => (
                   <span key={t} className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-nobus-400" /> {t}</span>
                 ))}
               </div>
@@ -199,7 +199,7 @@ export default function Landing() {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-3">The catalog you'll sell</h2>
           <p className="text-gray-500">
-            A complete cloud platform hosted in Tier III-certified data centers across Africa, priced in Naira, pay-as-you-use.
+            A complete cloud platform hosted in Tier III-certified availability zones in Lagos (Ikeja and Lekki) and Nairobi, priced in Naira, pay-as-you-use.
           </p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

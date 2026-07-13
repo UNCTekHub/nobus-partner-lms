@@ -21,7 +21,7 @@ function seedPortalContent() {
       { title: 'Nobus Partner Brand Guidelines', description: 'How to use the Nobus brand in partner marketing: colors, typography, logo clearance.', category: 'Logos & Brand', file_url: 'https://nobus.io/', file_type: 'PDF', tags: JSON.stringify(['brand', 'guidelines']) },
       { title: 'Nobus Cloud Corporate Brochure', description: 'Customer-facing overview of the full Nobus service catalogue with Naira pricing story.', category: 'Brochures', file_url: 'https://nobus.io/documentation/fcs', file_type: 'PDF', tags: JSON.stringify(['overview', 'catalogue']) },
       { title: 'FCS Compute Solution Brief', description: 'Two-pager on Flexible Compute Service: instance families, autoscaling, dedicated hosting, BYOL.', category: 'Brochures', file_url: 'https://nobus.io/documentation/fcs', file_type: 'PDF', tags: JSON.stringify(['fcs', 'compute']) },
-      { title: 'AWS/Azure vs Nobus Battle Card', description: 'Competitive positioning: Naira billing, zero egress fees, local support, NDPR data residency.', category: 'Battle Cards', file_url: 'https://nobus.io/nobus-pricing-calculator', file_type: 'PDF', tags: JSON.stringify(['competitive', 'aws', 'azure']) },
+      { title: 'AWS/Azure vs Nobus Battle Card', description: 'Competitive positioning: Naira billing, zero egress fees, local support, NDPA data residency.', category: 'Battle Cards', file_url: 'https://nobus.io/nobus-pricing-calculator', file_type: 'PDF', tags: JSON.stringify(['competitive', 'aws', 'azure']) },
       { title: 'Security Stack Battle Card', description: 'Selling Sophos XG, FortiGate NGFW and Acronis Cyber Protect on Nobus.', category: 'Battle Cards', file_url: 'https://nobus.io/documentation/cloud-security', file_type: 'PDF', tags: JSON.stringify(['security', 'sophos', 'fortigate', 'acronis']) },
       { title: 'Cloud Migration Email Sequence', description: '5-email nurture campaign template for on-premise to Nobus migration prospects.', category: 'Email Templates', file_url: 'https://nobus.io/', file_type: 'DOCX', tags: JSON.stringify(['email', 'migration', 'nurture']) },
       { title: 'Naira Billing Social Kit', description: 'LinkedIn/X post templates and graphics on the "budget in Naira, pay in Naira" message.', category: 'Social Media', file_url: 'https://nobus.io/', file_type: 'ZIP', tags: JSON.stringify(['social', 'naira', 'billing']) },
@@ -40,12 +40,12 @@ function seedPortalContent() {
     `);
     const items = [
       {
-        title: 'Data Sovereignty and NDPR: Why Nigerian Enterprises Are Repatriating Their Cloud',
+        title: 'Data Sovereignty and NDPA: Why Nigerian Enterprises Are Repatriating Their Cloud',
         type: 'whitepaper',
-        summary: 'How NDPR compliance, FX volatility and latency are driving Nigerian banks, fintechs and government agencies to local cloud infrastructure.',
-        body: `## Executive Summary\n\nNigerian enterprises face a triple squeeze: **NDPR data-residency expectations**, **dollar-denominated cloud bills** in a volatile FX market, and **latency** to European and US regions. This paper examines how a Tier III, Lagos-hosted cloud addresses all three.\n\n## The FX Problem\n\nA ₦50M annual AWS budget can swing by 20-30% purely on exchange-rate movement. Nobus bills in Naira: the price agreed is the price paid.\n\n## Data Residency\n\nNobus infrastructure is hosted at Rack Centre (Tier III certified), Lagos. Customer data never leaves Nigeria, simplifying NDPR compliance for regulated industries.\n\n## Performance\n\nLagos-hosted workloads serve Nigerian users at single-digit millisecond latency versus 100ms+ to eu-west-1.\n\n## Conclusion\n\nFor workloads serving Nigerian users under Nigerian regulation, local cloud is no longer a compromise - it is the optimum.`,
+        summary: 'How NDPA compliance, FX volatility and latency are driving Nigerian banks, fintechs and government agencies to local cloud infrastructure.',
+        body: `## Executive Summary\n\nNigerian enterprises face a triple squeeze: **NDPA data-residency expectations**, **dollar-denominated cloud bills** in a volatile FX market, and **latency** to European and US regions. This paper examines how a Tier III, Lagos-hosted cloud addresses all three.\n\n## The FX Problem\n\nA ₦50M annual AWS budget can swing by 20-30% purely on exchange-rate movement. Nobus bills in Naira: the price agreed is the price paid.\n\n## Data Residency\n\nNobus infrastructure is hosted at Rack Centre (Tier III certified), Lagos. Customer data never leaves Nigeria, simplifying NDPA compliance for regulated industries.\n\n## Performance\n\nLagos-hosted workloads serve Nigerian users at single-digit millisecond latency versus 100ms+ to eu-west-1.\n\n## Conclusion\n\nFor workloads serving Nigerian users under Nigerian regulation, local cloud is no longer a compromise - it is the optimum.`,
         file_url: null,
-        tags: JSON.stringify(['NDPR', 'data sovereignty', 'compliance', 'whitepaper']),
+        tags: JSON.stringify(['NDPA', 'data sovereignty', 'compliance', 'whitepaper']),
       },
       {
         title: 'Nobus FCS Datasheet - Flexible Compute Service',
@@ -67,7 +67,7 @@ function seedPortalContent() {
         title: 'Case Study: Fintech Cuts Infrastructure Spend 40% Moving to Nobus',
         type: 'case-study',
         summary: 'A Lagos payments company migrated 60 workloads from AWS to Nobus FCS and eliminated egress fees and FX exposure.',
-        body: `## The Customer\n\nA fast-growing Lagos payments processor running 60+ workloads on AWS.\n\n## The Problem\n\n- Monthly AWS bill swinging with the exchange rate\n- Egress fees approaching 18% of total spend\n- NDPR pressure to keep transaction data in Nigeria\n\n## The Solution\n\nPartner-led migration to Nobus FCS with FBS volumes, managed PostgreSQL, Sophos XG perimeter and Site-to-Site VPN to their office network. CloudOrchestration templates automated the environment build.\n\n## The Results\n\n- **40% lower** monthly infrastructure cost\n- **Zero egress fees** - instant saving on every GB served\n- **PCI DSS** compliant environment at Rack Centre Tier III\n- Budget certainty: bills in Naira, no FX exposure`,
+        body: `## The Customer\n\nA fast-growing Lagos payments processor running 60+ workloads on AWS.\n\n## The Problem\n\n- Monthly AWS bill swinging with the exchange rate\n- Egress fees approaching 18% of total spend\n- NDPA pressure to keep transaction data in Nigeria\n\n## The Solution\n\nPartner-led migration to Nobus FCS with FBS volumes, managed PostgreSQL, Sophos XG perimeter and Site-to-Site VPN to their office network. CloudOrchestration templates automated the environment build.\n\n## The Results\n\n- **40% lower** monthly infrastructure cost\n- **Zero egress fees** - instant saving on every GB served\n- **PCI DSS** compliant environment at Rack Centre Tier III\n- Budget certainty: bills in Naira, no FX exposure`,
         file_url: null,
         tags: JSON.stringify(['case study', 'fintech', 'migration', 'cost savings']),
       },
@@ -342,7 +342,7 @@ insertDeal.run({
 insertDeal.run({
   org_id: 'org-002', submitted_by: 'user-004', customer_name: 'Federal Health Agency',
   customer_email: null, customer_industry: 'Public Sector',
-  opportunity_name: 'Health records platform hosting', description: 'NDPR-compliant hosting for national health records with Cloud Backup and DR.',
+  opportunity_name: 'Health records platform hosting', description: 'NDPA-compliant hosting for national health records with Cloud Backup and DR.',
   services: JSON.stringify(['FCS', 'FOS', 'Cloud Backup', 'VPN']), est_value: 12000000,
   expected_close_date: '2026-09-15', status: 'pending',
   protection_expires: null,
