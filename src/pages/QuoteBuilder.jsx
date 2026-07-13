@@ -436,7 +436,7 @@ export default function QuoteBuilder() {
                   <div className="flex justify-between gap-10 text-white font-bold text-lg pt-1 border-t border-white/20">
                     <span>Total (annual, incl. VAT)</span><span>{naira(fin.totalAnnual)}</span>
                   </div>
-                  <div className="text-xs text-nobus-400 pt-1">{naira(monthly)}/month net · Naira billing, zero FX risk</div>
+                  <div className="text-xs text-nobus-400 pt-1">{naira(monthly)}/month net · Local billing, zero FX risk</div>
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => save('draft')} disabled={saving}

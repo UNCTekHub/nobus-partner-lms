@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth, ROLES } from './context/AuthContext';
 import { ProgressProvider } from './context/ProgressContext';
+import { CountryProvider } from './context/CountryContext';
 import { I18nProvider } from './lib/i18n.jsx';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
@@ -123,13 +124,15 @@ function AppRoutes() {
 export default function App() {
   return (
     <I18nProvider>
-      <AuthProvider>
-        <ProgressProvider>
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
-        </ProgressProvider>
-      </AuthProvider>
+      <CountryProvider>
+        <AuthProvider>
+          <ProgressProvider>
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </ProgressProvider>
+        </AuthProvider>
+      </CountryProvider>
     </I18nProvider>
   );
 }

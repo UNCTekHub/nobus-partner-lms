@@ -11,7 +11,7 @@ export default function Footer() {
             <p className="text-sm leading-relaxed">
               The partner portal for Nobus Cloud Services - enablement, sales,
               deal protection, quoting and resources for partners delivering
-              Nigeria's sovereign cloud.
+              Africa's Public Cloud.
             </p>
           </div>
           <div>
