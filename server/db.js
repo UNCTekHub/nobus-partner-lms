@@ -401,5 +401,7 @@ db.exec(`
 
 // Migrations for columns added after tables shipped (no-op when already present)
 try { db.exec('ALTER TABLE deals ADD COLUMN quote_id INTEGER'); } catch { /* column exists */ }
+try { db.exec('ALTER TABLE quotes ADD COLUMN discount_pct INTEGER DEFAULT 0'); } catch { /* column exists */ }
+try { db.exec("ALTER TABLE quotes ADD COLUMN lines TEXT DEFAULT '[]'"); } catch { /* column exists */ }
 
 export default db;

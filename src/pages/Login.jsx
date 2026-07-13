@@ -25,23 +25,6 @@ export default function Login() {
     }
   };
 
-  const demoAccounts = [
-    { email: 'chinedu@acmetech.ng', password: 'demo', label: 'Org Admin (Acme Technologies)' },
-    { email: 'amaka@acmetech.ng', password: 'demo', label: 'Sales User (Acme Technologies)' },
-    { email: 'fatima@datastream.ng', password: 'demo', label: 'Org Admin (DataStream)' },
-  ];
-
-  const handleDemoLogin = async (account) => {
-    setEmail(account.email);
-    setPassword(account.password);
-    setError('');
-    setSubmitting(true);
-    const result = await login(account.email, account.password);
-    setSubmitting(false);
-    if (result.success) navigate('/');
-    else setError(result.error);
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-nobus-900 via-nobus-800 to-nobus-950 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
@@ -109,28 +92,14 @@ export default function Login() {
               Forgot password?
             </Link>
             <Link to="/register" className="text-sm text-nobus-600 hover:underline">
-              Register as partner
+              Become a Partner
             </Link>
           </div>
         </div>
 
-        {/* Demo accounts */}
-        <div className="mt-6">
-          <p className="text-center text-nobus-400 text-xs uppercase tracking-wider mb-3">Demo Accounts (click to login)</p>
-          <div className="space-y-2">
-            {demoAccounts.map((account) => (
-              <button
-                key={account.email}
-                onClick={() => handleDemoLogin(account)}
-                disabled={submitting}
-                className="w-full text-left px-4 py-3 bg-white/10 hover:bg-white/20 backdrop-blur rounded-lg text-sm text-white transition-colors"
-              >
-                <div className="font-medium">{account.label}</div>
-                <div className="text-nobus-300 text-xs">{account.email}</div>
-              </button>
-            ))}
-          </div>
-        </div>
+        <p className="text-center text-nobus-400 text-xs mt-6">
+          <Link to="/" className="hover:text-nobus-200 hover:underline">← Back to PartnerCentral</Link>
+        </p>
       </div>
     </div>
   );

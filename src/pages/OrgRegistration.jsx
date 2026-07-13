@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Building2, CheckCircle, ArrowLeft, AlertCircle } from 'lucide-react';
+import { CheckCircle, ArrowLeft, AlertCircle, X } from 'lucide-react';
 import { api } from '../lib/api';
+import MarkdownRenderer from '../components/MarkdownRenderer';
+import partnerTerms from '../data/partnerTerms';
 
 export default function OrgRegistration() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
   const [form, setForm] = useState({
     companyName: '',
     rcNumber: '',
@@ -24,6 +28,10 @@ export default function OrgRegistration() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!acceptedTerms) {
+      setError('You must accept the NCS Partner Terms and Conditions to apply.');
+      return;
+    }
     setError('');
     setSubmitting(true);
     try {
@@ -65,11 +73,9 @@ export default function OrgRegistration() {
     <div className="min-h-screen bg-gradient-to-br from-nobus-900 via-nobus-800 to-nobus-950 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-lg">
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-nobus-500 rounded-2xl mb-4">
-            <Building2 className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-white">Partner Registration</h1>
-          <p className="text-nobus-300 mt-1">Register your organization to join the Nobus partner ecosystem</p>
+          <img src="/nobus-logo.png" alt="Nobus Cloud Services" className="h-11 w-auto mx-auto mb-3" />
+          <h1 className="text-2xl font-bold text-white">Become a Partner</h1>
+          <p className="text-nobus-300 mt-1">Register your organization to join the NCS Partner Network</p>
         </div>
 
         <div className="card p-6">
@@ -99,7 +105,7 @@ export default function OrgRegistration() {
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nobus-500 focus:border-nobus-500 outline-none" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Estimated Staff to Train *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Number of Employees *</label>
                 <input name="estimatedStaff" type="number" min="1" value={form.estimatedStaff} onChange={handleChange} required
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nobus-500 focus:border-nobus-500 outline-none" />
               </div>
@@ -125,14 +131,46 @@ export default function OrgRegistration() {
               </div>
             </div>
 
+            <label className="flex items-start gap-3 p-3 bg-gray-50 border border-gray-200 rounded-lg cursor-pointer">
+              <input type="checkbox" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)}
+                className="w-4 h-4 mt-0.5 rounded border-gray-300 text-nobus-500 focus:ring-nobus-400" />
+              <span className="text-sm text-gray-600">
+                I have read and agree to the{' '}
+                <button type="button" onClick={() => setShowTerms(true)} className="text-nobus-600 font-medium hover:underline">
+                  NCS Partner Terms and Conditions
+                </button>
+                , and I have legal authority to bind the organization named above. *
+              </span>
+            </label>
+
             <button
               type="submit"
-              disabled={submitting}
-              className={`btn-primary w-full mt-2 ${submitting ? 'opacity-60 cursor-not-allowed' : ''}`}
+              disabled={submitting || !acceptedTerms}
+              className={`btn-primary w-full mt-2 ${submitting || !acceptedTerms ? 'opacity-60 cursor-not-allowed' : ''}`}
             >
               {submitting ? 'Submitting...' : 'Submit Application'}
             </button>
           </form>
+
+          {showTerms && (
+            <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setShowTerms(false)}>
+              <div className="bg-white rounded-xl max-w-3xl w-full max-h-[88vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-between p-5 border-b border-gray-100">
+                  <h2 className="text-lg font-bold text-gray-900">NCS Partner Terms and Conditions</h2>
+                  <button onClick={() => setShowTerms(false)} className="p-1.5 rounded hover:bg-gray-100"><X className="w-5 h-5" /></button>
+                </div>
+                <div className="flex-1 overflow-y-auto p-6">
+                  <MarkdownRenderer content={partnerTerms} />
+                </div>
+                <div className="p-4 border-t border-gray-100 flex justify-end gap-2">
+                  <button onClick={() => setShowTerms(false)} className="btn-secondary !py-2 text-sm">Close</button>
+                  <button onClick={() => { setAcceptedTerms(true); setShowTerms(false); }} className="btn-primary !py-2 text-sm">
+                    Accept Terms
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="mt-4 text-center">
             <Link to="/login" className="text-sm text-nobus-600 hover:underline">

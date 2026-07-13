@@ -190,6 +190,7 @@ export const api = {
   createQuote: (data) => request('/quotes', { method: 'POST', body: JSON.stringify(data) }),
   updateQuote: (id, data) => request(`/quotes/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteQuote: (id) => request(`/quotes/${id}`, { method: 'DELETE' }),
+  exportQuote: (id, format) => request(`/quotes/${id}/export?format=${format}`, { responseType: 'blob' }),
 
   // Public API key management
   generateApiKey: (data) => request('/public/keys', { method: 'POST', body: JSON.stringify(data) }),

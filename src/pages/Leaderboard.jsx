@@ -4,8 +4,9 @@ import { api } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
 
 export default function Leaderboard() {
-  const { currentUser } = useAuth();
-  const [tab, setTab] = useState('global');
+  const { currentUser, isSuperAdmin } = useAuth();
+  // Partners only ever see their own organization's standings
+  const [tab, setTab] = useState(isSuperAdmin ? 'global' : 'team');
   const [leaderboard, setLeaderboard] = useState([]);
   const [orgBoard, setOrgBoard] = useState([]);
   const [myStats, setMyStats] = useState(null);
@@ -33,11 +34,13 @@ export default function Leaderboard() {
     return <span className="w-5 h-5 flex items-center justify-center text-sm font-bold text-gray-500">{rank}</span>;
   };
 
-  const tabs = [
-    { id: 'global', label: 'Global' },
-    { id: 'team', label: 'My Team' },
-    { id: 'organizations', label: 'Organizations' },
-  ];
+  const tabs = isSuperAdmin
+    ? [
+        { id: 'global', label: 'Global' },
+        { id: 'team', label: 'My Team' },
+        { id: 'organizations', label: 'Organizations' },
+      ]
+    : [{ id: 'team', label: 'My Team' }];
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-10">
@@ -63,7 +66,7 @@ export default function Leaderboard() {
           <div className="card p-4 text-center">
             <Medal className="w-5 h-5 text-amber-500 mx-auto mb-1" />
             <div className="text-2xl font-bold text-gray-900">#{myStats.rank}</div>
-            <div className="text-xs text-gray-500">Global Rank</div>
+            <div className="text-xs text-gray-500">Team Rank</div>
           </div>
           <div className="card p-4 text-center">
             <div className="w-full bg-gray-200 rounded-full h-2 mb-2 mt-2">

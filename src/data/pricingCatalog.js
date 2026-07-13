@@ -123,6 +123,20 @@ export const CATALOG = [
 
 export const naira = (n) => '₦' + Math.round(Number(n) || 0).toLocaleString('en-NG');
 
+export const VAT_RATE = 0.075; // Nigerian VAT 7.5%
+export const PARTNER_DISCOUNT_PCT = 10; // standard partner credit per the NCS Partner Agreement
+
+// Per the Partner Agreement, the 10% credit applies only to compute and storage
+// resources directly provided by NCS — it excludes external connectivity
+// (internet bandwidth, NFT, IPs), licensed software (Windows, Sophos, FortiGate,
+// Acronis) and other non-NCS services.
+const DISCOUNT_ELIGIBLE = {
+  fcs: true, 'k8s-node': true, dedicated: true, vpn: true,
+  fbs: true, 'fbs-snap': true, fos: true, db: true,
+  ncb: false, bandwidth: false, fip: false, nft: false,
+  sophos: false, fortigate: false, acronis: false,
+};
+
 // Compute the monthly price of a single line item
 export function itemMonthly(item) {
   switch (item.kind) {
@@ -143,6 +157,67 @@ export function itemMonthly(item) {
   }
 }
 
+// Portion of an item's monthly price that qualifies for the partner discount.
+// Windows managed-license fees are licensed software and never discounted.
+export function itemDiscountableMonthly(item) {
+  if (!DISCOUNT_ELIGIBLE[item.serviceId]) return 0;
+  let monthly = itemMonthly(item);
+  if (item.kind === 'instance') {
+    const flavor = FCS_INSTANCES.find((f) => f.id === item.flavorId);
+    if (flavor?.os === 'windows') monthly -= RATES.windowsLicenseMonth * (item.qty || 1);
+  }
+  return Math.max(monthly, 0);
+}
+
 export function quoteTotal(items) {
   return items.reduce((sum, item) => sum + itemMonthly(item), 0);
+}
+
+// Full quote financials: subtotal, partner discount, VAT and grand totals
+export function quoteBreakdown(items, discountPct = 0) {
+  const subtotalMonthly = quoteTotal(items);
+  const discountableMonthly = items.reduce((sum, item) => sum + itemDiscountableMonthly(item), 0);
+  const discountMonthly = Math.round(discountableMonthly * (discountPct / 100));
+  const netMonthly = subtotalMonthly - discountMonthly;
+  const netAnnual = netMonthly * 12;
+  const vatAnnual = Math.round(netAnnual * VAT_RATE);
+  return {
+    subtotalMonthly, discountMonthly, netMonthly, netAnnual, vatAnnual,
+    totalAnnual: netAnnual + vatAnnual,
+  };
+}
+
+// Serializable line rows for exports (PDF/XLSX) — description, qty, unit cost, monthly
+export function buildQuoteLines(items) {
+  const groupOf = (serviceId) => {
+    for (const cat of CATALOG) {
+      if (cat.services.some((s) => s.id === serviceId)) return cat.category;
+    }
+    return 'Other';
+  };
+  return items.map((item) => {
+    const monthly = itemMonthly(item);
+    const qty = item.qty || 1;
+    let config = '';
+    if (item.kind === 'instance') {
+      const flavor = FCS_INSTANCES.find((f) => f.id === item.flavorId);
+      config = flavor ? `${flavor.vcpu} vCPU, ${flavor.ram}GB RAM, ${flavor.disk}GB Volume (${flavor.os === 'windows' ? 'Windows' : 'Linux'} Server)` : item.flavorId;
+    } else if (item.kind === 'perUnit') {
+      config = `${item.qty} ${item.unit} @ ${naira(item.unitPrice)}/${item.unit}-month`;
+    } else if (item.kind === 'database') {
+      const size = DB_SIZES.find((s) => s.id === item.sizeId);
+      config = size ? `${item.engine} — ${size.vcpu} vCPU, ${size.ram}GB RAM, ${size.disk}GB Volume` : item.engine;
+    } else if (item.kind === 'appliance') {
+      config = item.customPrice > 0 ? 'Agreed rate' : 'Priced on request';
+    }
+    return {
+      group: groupOf(item.serviceId),
+      label: item.name,
+      config,
+      qty: item.kind === 'perUnit' ? 1 : qty,
+      unitCost: item.kind === 'perUnit' ? monthly : Math.round(monthly / qty),
+      monthly,
+      discountable: itemDiscountableMonthly(item),
+    };
+  });
 }

@@ -21,6 +21,8 @@ import SuperAdminDashboard from './pages/SuperAdminDashboard';
 import UserProfile from './pages/UserProfile';
 import Discussions from './pages/Discussions';
 import Leaderboard from './pages/Leaderboard';
+import Landing from './pages/Landing';
+import TermsPage from './pages/TermsPage';
 import SalesNavigator from './pages/SalesNavigator';
 import DealRegistration from './pages/DealRegistration';
 import QuoteBuilder from './pages/QuoteBuilder';
@@ -58,6 +60,8 @@ function AppRoutes() {
   return (
     <Routes>
       {/* Public routes */}
+      {!isAuthenticated && <Route path="/" element={<Landing />} />}
+      <Route path="/terms" element={<TermsPage />} />
       <Route path="/login" element={isAuthenticated ? <Navigate to={home} replace /> : <Login />} />
       <Route path="/register" element={isAuthenticated ? <Navigate to={home} replace /> : <OrgRegistration />} />
       <Route path="/forgot-password" element={isAuthenticated ? <Navigate to={home} replace /> : <ForgotPassword />} />

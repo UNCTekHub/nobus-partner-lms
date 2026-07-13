@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Calculator, Plus, X, Trash2, Loader2, Printer, Save, ArrowLeft, FileText, ExternalLink, ShieldCheck } from 'lucide-react';
+import { Calculator, Plus, X, Trash2, Loader2, Printer, Save, ArrowLeft, FileText, ExternalLink, ShieldCheck, FileDown, Sheet, BadgePercent } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
-import { CATALOG, DB_SIZES, itemMonthly, quoteTotal, naira } from '../data/pricingCatalog';
+import { CATALOG, DB_SIZES, itemMonthly, quoteBreakdown, buildQuoteLines, naira, PARTNER_DISCOUNT_PCT } from '../data/pricingCatalog';
 
 let itemSeq = 1;
 
@@ -29,6 +29,8 @@ export default function QuoteBuilder() {
   const [editingId, setEditingId] = useState(null);
   const [saving, setSaving] = useState(false);
   const [printQuote, setPrintQuote] = useState(null);
+  const [discount, setDiscount] = useState(false);
+  const [exporting, setExporting] = useState(null);
 
   const load = useCallback(async () => {
     try {
@@ -44,7 +46,7 @@ export default function QuoteBuilder() {
   useEffect(() => { load(); }, [load]);
 
   const startNew = () => {
-    setItems([]); setTitle(''); setCustomerName(''); setNotes(''); setEditingId(null);
+    setItems([]); setTitle(''); setCustomerName(''); setNotes(''); setEditingId(null); setDiscount(false);
     setView('build');
   };
 
@@ -53,25 +55,48 @@ export default function QuoteBuilder() {
     try { parsed = JSON.parse(q.items || '[]'); } catch { /* ignore */ }
     parsed.forEach((it) => { it.key = itemSeq++; });
     setItems(parsed); setTitle(q.title); setCustomerName(q.customer_name || ''); setNotes(q.notes || '');
+    setDiscount((q.discount_pct || 0) > 0);
     setEditingId(q.id);
     setView('build');
+  };
+
+  const exportQuote = async (q, format) => {
+    setExporting(`${q.id}-${format}`);
+    try {
+      const blob = await api.exportQuote(q.id, format);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `NCS-Q-${String(q.id).padStart(5, '0')}.${format}`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setExporting(null);
+    }
   };
 
   const addItem = (service) => setItems((prev) => [...prev, newItem(service)]);
   const updateItem = (key, patch) => setItems((prev) => prev.map((it) => (it.key === key ? { ...it, ...patch } : it)));
   const removeItem = (key) => setItems((prev) => prev.filter((it) => it.key !== key));
 
-  const monthly = quoteTotal(items);
+  const discountPct = discount ? PARTNER_DISCOUNT_PCT : 0;
+  const fin = quoteBreakdown(items, discountPct);
+  const monthly = fin.netMonthly;
 
   const save = async (status) => {
     if (!title.trim()) { setError('Give the quote a title first.'); return; }
     setSaving(true);
     setError('');
     try {
+      const cleanItems = items.map(({ key, ...rest }) => rest);
       const payload = {
         title: title.trim(),
         customerName: customerName.trim() || null,
-        items: items.map(({ key, ...rest }) => rest),
+        items: cleanItems,
+        lines: buildQuoteLines(cleanItems),
+        discountPct,
         monthlyTotal: monthly,
         notes: notes.trim() || null,
         status,
@@ -183,14 +208,35 @@ export default function QuoteBuilder() {
               ))}
             </tbody>
             <tfoot>
-              <tr>
-                <td colSpan="3" className="p-2.5 text-right font-bold text-gray-900">Monthly total</td>
-                <td className="p-2.5 text-right font-bold text-nobus-600 text-base">{naira(printQuote.monthly_total)}</td>
-              </tr>
-              <tr>
-                <td colSpan="3" className="p-2.5 text-right text-gray-500">Indicative annual</td>
-                <td className="p-2.5 text-right text-gray-700 font-medium">{naira(printQuote.monthly_total * 12)}</td>
-              </tr>
+              {(() => {
+                const pfin = quoteBreakdown(printQuote.parsedItems, printQuote.discount_pct || 0);
+                return (
+                  <>
+                    <tr>
+                      <td colSpan="3" className="p-2.5 text-right font-bold text-gray-900">Sub total monthly</td>
+                      <td className="p-2.5 text-right font-bold text-gray-900">{naira(pfin.subtotalMonthly)}</td>
+                    </tr>
+                    {pfin.discountMonthly > 0 && (
+                      <tr>
+                        <td colSpan="3" className="p-2.5 text-right text-green-700">Partner discount ({printQuote.discount_pct}% — compute &amp; storage)</td>
+                        <td className="p-2.5 text-right text-green-700 font-medium">−{naira(pfin.discountMonthly)}</td>
+                      </tr>
+                    )}
+                    <tr>
+                      <td colSpan="3" className="p-2.5 text-right text-gray-500">Sub total annual</td>
+                      <td className="p-2.5 text-right text-gray-700 font-medium">{naira(pfin.netAnnual)}</td>
+                    </tr>
+                    <tr>
+                      <td colSpan="3" className="p-2.5 text-right text-gray-500">VAT (7.5%)</td>
+                      <td className="p-2.5 text-right text-gray-700 font-medium">{naira(pfin.vatAnnual)}</td>
+                    </tr>
+                    <tr>
+                      <td colSpan="3" className="p-2.5 text-right font-bold text-gray-900">Total (annual, incl. VAT)</td>
+                      <td className="p-2.5 text-right font-bold text-nobus-600 text-base">{naira(pfin.totalAnnual)}</td>
+                    </tr>
+                  </>
+                );
+              })()}
             </tfoot>
           </table>
 
@@ -352,21 +398,55 @@ export default function QuoteBuilder() {
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-nobus-400" />
             </div>
 
+            {/* Partner discount */}
+            <div className="card p-4 flex flex-wrap items-center justify-between gap-3">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" checked={discount} onChange={(e) => setDiscount(e.target.checked)}
+                  className="w-4 h-4 rounded border-gray-300 text-nobus-500 focus:ring-nobus-400" />
+                <div>
+                  <div className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
+                    <BadgePercent className="w-4 h-4 text-nobus-500" /> Apply {PARTNER_DISCOUNT_PCT}% partner discount
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    Per the NCS Partner Agreement — applies to compute &amp; storage only (excludes connectivity, licensed software).
+                  </div>
+                </div>
+              </label>
+              {discount && <span className="badge-green">−{naira(fin.discountMonthly)}/mo</span>}
+            </div>
+
             {/* Total bar */}
-            <div className="card p-5 bg-nobus-950 !border-nobus-900 text-white flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <div className="text-xs text-nobus-300 uppercase tracking-wider">Estimated monthly total</div>
-                <div className="text-3xl font-bold">{naira(monthly)}<span className="text-base font-medium text-nobus-300">/mo</span></div>
-                <div className="text-xs text-nobus-400 mt-0.5">≈ {naira(monthly * 12)} annually · excl. VAT · Naira billing, zero FX risk</div>
-              </div>
-              <div className="flex gap-2">
-                <button onClick={() => save('draft')} disabled={saving}
-                  className="px-4 py-2.5 rounded-lg text-sm font-semibold bg-white/10 hover:bg-white/20 transition-colors flex items-center gap-2">
-                  <Save className="w-4 h-4" /> Save Draft
-                </button>
-                <button onClick={() => save('final')} disabled={saving} className="btn-primary flex items-center gap-2">
-                  {saving ? 'Saving…' : <><FileText className="w-4 h-4" /> Finalize Quote</>}
-                </button>
+            <div className="card p-5 bg-nobus-950 !border-nobus-900 text-white">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="space-y-0.5 text-sm">
+                  <div className="flex justify-between gap-10 text-nobus-300">
+                    <span>Sub total monthly</span><span>{naira(fin.subtotalMonthly)}</span>
+                  </div>
+                  {discount && (
+                    <div className="flex justify-between gap-10 text-green-300">
+                      <span>Partner discount ({PARTNER_DISCOUNT_PCT}%)</span><span>−{naira(fin.discountMonthly)}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between gap-10 text-nobus-300">
+                    <span>Sub total annual</span><span>{naira(fin.netAnnual)}</span>
+                  </div>
+                  <div className="flex justify-between gap-10 text-nobus-300">
+                    <span>VAT (7.5%)</span><span>{naira(fin.vatAnnual)}</span>
+                  </div>
+                  <div className="flex justify-between gap-10 text-white font-bold text-lg pt-1 border-t border-white/20">
+                    <span>Total (annual, incl. VAT)</span><span>{naira(fin.totalAnnual)}</span>
+                  </div>
+                  <div className="text-xs text-nobus-400 pt-1">{naira(monthly)}/month net · Naira billing, zero FX risk</div>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => save('draft')} disabled={saving}
+                    className="px-4 py-2.5 rounded-lg text-sm font-semibold bg-white/10 hover:bg-white/20 transition-colors flex items-center gap-2">
+                    <Save className="w-4 h-4" /> Save Draft
+                  </button>
+                  <button onClick={() => save('final')} disabled={saving} className="btn-primary flex items-center gap-2">
+                    {saving ? 'Saving…' : <><FileText className="w-4 h-4" /> Finalize Quote</>}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -412,7 +492,15 @@ export default function QuoteBuilder() {
                 <div className="text-xs text-gray-400">{new Date(q.updated_at + 'Z').toLocaleDateString()}</div>
               </div>
               <div className="flex gap-1.5">
-                <button onClick={() => openPrint(q)} title="Print / PDF"
+                <button onClick={() => exportQuote(q, 'pdf')} title="Download PDF" disabled={exporting === `${q.id}-pdf`}
+                  className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-40">
+                  {exporting === `${q.id}-pdf` ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileDown className="w-4 h-4" />}
+                </button>
+                <button onClick={() => exportQuote(q, 'xlsx')} title="Download Excel (.xlsx)" disabled={exporting === `${q.id}-xlsx`}
+                  className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-40">
+                  {exporting === `${q.id}-xlsx` ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sheet className="w-4 h-4" />}
+                </button>
+                <button onClick={() => openPrint(q)} title="Print view"
                   className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700"><Printer className="w-4 h-4" /></button>
                 <button onClick={() => startEdit(q)} title="Edit"
                   className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700"><Calculator className="w-4 h-4" /></button>

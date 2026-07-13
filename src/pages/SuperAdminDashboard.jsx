@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { api } from '../lib/api';
 import { getTierDef, TIER_DEFINITIONS } from '../data/tiers';
+import { AdminDealsQuotes, AdminResources, AdminLabs } from '../components/AdminPortalOps';
 
 export default function SuperAdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -122,6 +123,9 @@ export default function SuperAdminDashboard() {
     { id: 'organizations', label: 'Organizations' },
     { id: 'approvals', label: `Approvals (${pendingCount})` },
     { id: 'users', label: 'Users' },
+    { id: 'dealsQuotes', label: 'Deals & Quotes' },
+    { id: 'resources', label: 'Resources' },
+    { id: 'labs', label: 'Demo Labs' },
     { id: 'reports', label: 'Reports' },
     { id: 'audit', label: 'Audit Log' },
     { id: 'tools', label: 'Tools' },
@@ -193,6 +197,11 @@ export default function SuperAdminDashboard() {
           </button>
         ))}
       </div>
+
+      {/* Partner portal operations */}
+      {activeTab === 'dealsQuotes' && <AdminDealsQuotes />}
+      {activeTab === 'resources' && <AdminResources />}
+      {activeTab === 'labs' && <AdminLabs />}
 
       {/* Overview */}
       {activeTab === 'overview' && (

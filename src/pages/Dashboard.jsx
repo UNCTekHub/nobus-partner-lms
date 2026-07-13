@@ -1,140 +1,276 @@
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { TrendingUp, Server, BookOpen, Award, ArrowRight, Target, Zap, Lightbulb } from 'lucide-react';
+import {
+  TrendingUp, Server, BookOpen, Award, ArrowRight, Lightbulb, ShieldCheck, Compass,
+  Calculator, Megaphone, FlaskConical, Wallet, Target, Star, Gift, Clock, ChevronRight,
+} from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
 import { useAuth } from '../context/AuthContext';
 import ProgressBar from '../components/ProgressBar';
+import { api } from '../lib/api';
 import salesCourse from '../data/salesCourse';
 import technicalCourse from '../data/technicalCourse';
 import presalesCourse from '../data/presalesCourse';
 
-const tracks = [
-  {
-    course: salesCourse,
-    icon: TrendingUp,
-    gradient: 'from-nobus-500 to-nobus-700',
-    accent: 'nobus',
-  },
-  {
-    course: presalesCourse,
-    icon: Lightbulb,
-    gradient: 'from-purple-500 to-purple-700',
-    accent: 'nobus',
-  },
-  {
-    course: technicalCourse,
-    icon: Server,
-    gradient: 'from-accent-500 to-accent-700',
-    accent: 'accent',
-  },
+const naira = (n) => '₦' + Math.round(Number(n) || 0).toLocaleString('en-NG');
+
+const TRACKS = [
+  { course: salesCourse, icon: TrendingUp },
+  { course: presalesCourse, icon: Lightbulb },
+  { course: technicalCourse, icon: Server },
 ];
+
+const QUICK_ACTIONS = [
+  { to: '/deals', label: 'Register a Deal', desc: '90-day protection', icon: ShieldCheck },
+  { to: '/quotes', label: 'Build a Quote', desc: 'Naira pricing engine', icon: Calculator },
+  { to: '/sales-navigator', label: 'Track Pipeline', desc: 'Kanban & forecast', icon: Compass },
+  { to: '/demo-labs', label: 'Book a Demo Lab', desc: 'Hands-on sandbox', icon: FlaskConical },
+  { to: '/marketing', label: 'Get Collateral', desc: 'Campaign-ready assets', icon: Megaphone },
+];
+
+const STAGE_LABELS = { lead: 'Lead', qualified: 'Qualified', proposal: 'Proposal', won: 'Won', lost: 'Lost' };
+const DEAL_BADGES = {
+  pending: 'badge-amber',
+  approved: 'badge-green',
+  rejected: 'badge bg-red-50 text-red-700',
+  expired: 'badge bg-gray-100 text-gray-600',
+  won: 'badge-green',
+  lost: 'badge bg-gray-100 text-gray-600',
+};
 
 export default function Dashboard() {
   const { getCourseProgress } = useProgress();
-  const { currentUser } = useAuth();
+  const { currentUser, organization } = useAuth();
+  const [forecast, setForecast] = useState(null);
+  const [deals, setDeals] = useState([]);
+  const [quotes, setQuotes] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [stats, setStats] = useState(null);
 
-  const salesProgress = getCourseProgress('sales-enablement');
-  const presalesProgress = getCourseProgress('presales-enablement');
-  const techProgress = getCourseProgress('technical-enablement');
+  useEffect(() => {
+    api.getForecast().then(setForecast).catch(() => {});
+    api.getDeals().then(setDeals).catch(() => {});
+    api.getQuotes().then(setQuotes).catch(() => {});
+    api.getLabBookings().then(setBookings).catch(() => {});
+    api.getMyStats().then(setStats).catch(() => {});
+  }, []);
 
-  const totalLessons = salesProgress.totalLessons + presalesProgress.totalLessons + techProgress.totalLessons;
-  const totalCompleted = salesProgress.completedLessons + presalesProgress.completedLessons + techProgress.completedLessons;
-  const totalQuizzes = salesProgress.totalQuizzes + presalesProgress.totalQuizzes + techProgress.totalQuizzes;
-  const totalPassed = salesProgress.passedQuizzes + presalesProgress.passedQuizzes + techProgress.passedQuizzes;
+  const progress = TRACKS.map(({ course }) => getCourseProgress(course.id));
+  const totalLessons = progress.reduce((s, p) => s + p.totalLessons, 0);
+  const totalCompleted = progress.reduce((s, p) => s + p.completedLessons, 0);
+  const trainingPct = totalLessons ? Math.round((totalCompleted / totalLessons) * 100) : 0;
+
+  const protectedDeals = deals.filter((d) => d.status === 'approved');
+  const pendingDeals = deals.filter((d) => d.status === 'pending');
+  const upcomingLabs = bookings.filter((b) => b.status === 'booked');
+  const firstName = currentUser?.name?.split(' ')[0] || 'Partner';
+
+  const kpis = [
+    { label: 'Open Pipeline', value: forecast ? naira(forecast.openPipeline) : '—', sub: 'Lead → Proposal', icon: Wallet, to: '/sales-navigator' },
+    { label: 'Weighted Forecast', value: forecast ? naira(Math.round(forecast.weightedForecast)) : '—', sub: 'probability adjusted', icon: Target, to: '/sales-navigator' },
+    { label: 'Protected Deals', value: protectedDeals.length, sub: pendingDeals.length ? `${pendingDeals.length} pending review` : 'registered & approved', icon: ShieldCheck, to: '/deals' },
+    { label: 'Active Quotes', value: quotes.length, sub: quotes.length ? naira(quotes.reduce((s, q) => s + (q.monthly_total || 0), 0)) + '/mo quoted' : 'build your first', icon: Calculator, to: '/quotes' },
+    { label: 'Team Enablement', value: `${trainingPct}%`, sub: `${totalCompleted}/${totalLessons} lessons`, icon: BookOpen, to: '/catalog' },
+  ];
 
   return (
     <div>
-      {/* Hero */}
-      <div className="bg-gradient-to-br from-nobus-900 via-nobus-800 to-nobus-950 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-          <div className="max-w-3xl">
-            <div className="badge bg-nobus-700 text-nobus-200 mb-4">Partner Enablement</div>
-            <h1 className="text-3xl md:text-4xl font-extrabold mb-4 leading-tight">
-              {currentUser ? `Welcome back, ${currentUser.name.split(' ')[0]}` : 'Nobus Cloud Partner'}<br />
-              <span className="text-nobus-300 text-2xl md:text-3xl font-bold">Learning Platform</span>
-            </h1>
-            <p className="text-nobus-200 text-lg mb-8 leading-relaxed">
-              Master the skills to sell and deliver Nobus Cloud solutions.
-              Complete the learning paths to become a certified Nobus partner.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link to="/catalog" className="btn-primary inline-flex items-center gap-2">
-                <BookOpen className="w-4 h-4" /> Browse Courses
-              </Link>
-              <Link to="/certification" className="btn-secondary !border-nobus-500 !text-nobus-200 hover:!bg-nobus-800 inline-flex items-center gap-2">
-                <Award className="w-4 h-4" /> Certification Path
-              </Link>
+      {/* Hero band */}
+      <div className="bg-nobus-950 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <div className="text-nobus-300 text-sm mb-1">
+                {organization?.name || 'Nobus Cloud Partner'}
+                {organization?.partner_id ? ` · ${organization.partner_id}` : ''}
+              </div>
+              <h1 className="text-2xl md:text-3xl font-bold leading-tight">
+                Welcome back, {firstName}
+              </h1>
+            </div>
+            <div className="flex items-center gap-3">
+              {stats && (
+                <div className="text-right">
+                  <div className="flex items-center gap-1.5 text-amber-300 font-bold justify-end">
+                    <Star className="w-4 h-4" /> {stats.totalPoints} pts
+                  </div>
+                  <div className="text-xs text-nobus-300">Level {stats.level} · #{stats.rank} in your team</div>
+                </div>
+              )}
+              <div className="bg-white/10 rounded-lg px-4 py-2 text-center">
+                <div className="text-[10px] uppercase tracking-wider text-nobus-300">Tier</div>
+                <div className="font-bold">{organization?.tier || 'Registered'}</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          {[
-            { label: 'Lessons Completed', value: `${totalCompleted}/${totalLessons}`, icon: BookOpen, color: 'text-nobus-600' },
-            { label: 'Quizzes Passed', value: `${totalPassed}/${totalQuizzes}`, icon: Target, color: 'text-accent-600' },
-            { label: 'Learning Paths', value: '3', icon: Zap, color: 'text-amber-600' },
-            { label: 'Certification Levels', value: '3', icon: Award, color: 'text-green-600' },
-          ].map((stat) => (
-            <div key={stat.label} className="card p-5">
-              <stat.icon className={`w-5 h-5 ${stat.color} mb-2`} />
-              <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
-              <div className="text-xs text-gray-500">{stat.label}</div>
-            </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* KPI row */}
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 mb-8 -mt-14">
+          {kpis.map((kpi) => (
+            <Link key={kpi.label} to={kpi.to} className="card p-4 hover:border-nobus-300 border border-transparent">
+              <div className="flex items-center justify-between mb-1.5">
+                <kpi.icon className="w-5 h-5 text-nobus-500" />
+              </div>
+              <div className="text-xl font-bold text-gray-900 truncate">{kpi.value}</div>
+              <div className="text-xs font-medium text-gray-600">{kpi.label}</div>
+              <div className="text-[11px] text-gray-400 truncate">{kpi.sub}</div>
+            </Link>
           ))}
         </div>
 
-        {/* Learning Paths */}
-        <h2 className="text-xl font-bold text-gray-900 mb-5">Learning Paths</h2>
-        <div className="grid md:grid-cols-3 gap-6 mb-12">
-          {tracks.map(({ course, icon: Icon, gradient, accent }) => {
-            const prog = getCourseProgress(course.id);
-            return (
-              <Link
-                key={course.id}
-                to={`/course/${course.id}`}
-                className="card overflow-hidden group"
-              >
-                <div className={`bg-gradient-to-r ${gradient} p-6 text-white`}>
-                  <Icon className="w-8 h-8 mb-3 opacity-80" />
-                  <h3 className="text-lg font-bold mb-1">{course.title}</h3>
-                  <p className="text-sm opacity-80">{course.duration}</p>
-                </div>
-                <div className="p-5">
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">{course.description}</p>
-                  <ProgressBar value={prog.completedLessons} max={prog.totalLessons} color={accent} />
-                  <div className="flex items-center justify-between mt-4">
-                    <span className="text-xs text-gray-500">
-                      {prog.completedLessons}/{prog.totalLessons} lessons &middot; {prog.passedQuizzes}/{prog.totalQuizzes} quizzes
-                    </span>
-                    <span className="text-nobus-600 text-sm font-medium group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                      Continue <ArrowRight className="w-3 h-3" />
-                    </span>
+        {/* Quick actions */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-10">
+          {QUICK_ACTIONS.map((a) => (
+            <Link key={a.to} to={a.to}
+              className="group flex items-center gap-3 bg-white border border-gray-200 rounded-xl px-4 py-3 hover:border-nobus-400 hover:shadow-sm transition-all">
+              <div className="w-9 h-9 bg-nobus-50 rounded-lg flex items-center justify-center group-hover:bg-nobus-500 transition-colors shrink-0">
+                <a.icon className="w-5 h-5 text-nobus-500 group-hover:text-white transition-colors" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-sm font-semibold text-gray-900 truncate">{a.label}</div>
+                <div className="text-[11px] text-gray-400 truncate">{a.desc}</div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-6 mb-10">
+          {/* Pipeline snapshot */}
+          <div className="card p-5 lg:col-span-1">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-bold text-gray-900">Pipeline Snapshot</h2>
+              <Link to="/sales-navigator" className="text-xs font-medium text-nobus-600 hover:underline flex items-center">
+                Open <ChevronRight className="w-3 h-3" />
+              </Link>
+            </div>
+            {forecast ? (
+              <div className="space-y-3">
+                {Object.entries(STAGE_LABELS).map(([stage, label]) => {
+                  const s = forecast.byStage[stage];
+                  const max = Math.max(...Object.values(forecast.byStage).map((x) => x.total), 1);
+                  return (
+                    <div key={stage}>
+                      <div className="flex items-center justify-between text-xs mb-1">
+                        <span className="font-medium text-gray-600">{label} ({s.count})</span>
+                        <span className="text-gray-400">{naira(s.total)}</span>
+                      </div>
+                      <div className="w-full bg-gray-100 rounded-full h-2">
+                        <div className={`h-2 rounded-full ${stage === 'won' ? 'bg-green-500' : stage === 'lost' ? 'bg-gray-300' : 'bg-nobus-500'}`}
+                          style={{ width: `${Math.max((s.total / max) * 100, s.count ? 4 : 0)}%` }} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-sm text-gray-400 py-6 text-center">Add leads in the Sales Navigator to see your pipeline.</div>
+            )}
+          </div>
+
+          {/* Recent deals */}
+          <div className="card p-5 lg:col-span-1">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-bold text-gray-900">Deal Registrations</h2>
+              <Link to="/deals" className="text-xs font-medium text-nobus-600 hover:underline flex items-center">
+                All deals <ChevronRight className="w-3 h-3" />
+              </Link>
+            </div>
+            <div className="space-y-2.5">
+              {deals.slice(0, 5).map((d) => (
+                <div key={d.id} className="flex items-center justify-between gap-2 py-1.5 border-b border-gray-50 last:border-0">
+                  <div className="min-w-0">
+                    <div className="text-sm font-medium text-gray-800 truncate">{d.opportunity_name}</div>
+                    <div className="text-xs text-gray-400 truncate">{d.customer_name} · {naira(d.est_value)}</div>
                   </div>
+                  <span className={DEAL_BADGES[d.status] || 'badge-blue'}>{d.status}</span>
+                </div>
+              ))}
+              {deals.length === 0 && (
+                <div className="text-sm text-gray-400 py-6 text-center">
+                  No registered deals yet. <Link to="/deals" className="text-nobus-600 hover:underline">Protect your first opportunity</Link>.
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Right rail: labs + program benefit */}
+          <div className="space-y-6 lg:col-span-1">
+            <div className="card p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="font-bold text-gray-900">Upcoming Lab Sessions</h2>
+                <Link to="/demo-labs" className="text-xs font-medium text-nobus-600 hover:underline flex items-center">
+                  Book <ChevronRight className="w-3 h-3" />
+                </Link>
+              </div>
+              {upcomingLabs.length > 0 ? (
+                <div className="space-y-2">
+                  {upcomingLabs.slice(0, 3).map((b) => (
+                    <div key={b.id} className="flex items-center gap-2.5 text-sm">
+                      <Clock className="w-4 h-4 text-nobus-400 shrink-0" />
+                      <div className="min-w-0">
+                        <div className="font-medium text-gray-800 truncate">{b.lab_title}</div>
+                        <div className="text-xs text-gray-400">{b.scheduled_date} · {b.time_slot}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-400">No sessions booked. Run a guided demo for your next customer meeting.</p>
+              )}
+            </div>
+
+            <div className="card p-5 bg-nobus-950 !border-nobus-900 text-white">
+              <div className="flex items-center gap-2 mb-2">
+                <Gift className="w-5 h-5 text-accent-300" />
+                <h2 className="font-bold">Partner Benefit</h2>
+              </div>
+              <p className="text-sm text-nobus-200 leading-relaxed mb-3">
+                Earn <strong className="text-white">10% NCS credit</strong> on compute and storage consumed by every
+                registered deal you close, per the Partner Agreement — plus your own managed-services fees on top.
+              </p>
+              <Link to="/deals" className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-300 hover:text-accent-200">
+                Register a deal <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Enablement tracks */}
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-lg font-bold text-gray-900">Team Enablement</h2>
+          <Link to="/certification" className="text-sm font-medium text-nobus-600 hover:underline flex items-center gap-1">
+            <Award className="w-4 h-4" /> Certification path
+          </Link>
+        </div>
+        <div className="grid md:grid-cols-3 gap-5">
+          {TRACKS.map(({ course, icon: Icon }, i) => {
+            const prog = progress[i];
+            return (
+              <Link key={course.id} to={`/course/${course.id}`} className="card p-5 group">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-nobus-50 rounded-lg flex items-center justify-center group-hover:bg-nobus-500 transition-colors">
+                    <Icon className="w-5 h-5 text-nobus-500 group-hover:text-white transition-colors" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-semibold text-gray-900 text-sm truncate">{course.title}</div>
+                    <div className="text-xs text-gray-400">{course.duration}</div>
+                  </div>
+                </div>
+                <ProgressBar value={prog.completedLessons} max={prog.totalLessons} color="nobus" />
+                <div className="flex items-center justify-between mt-3">
+                  <span className="text-xs text-gray-500">
+                    {prog.completedLessons}/{prog.totalLessons} lessons · {prog.passedQuizzes}/{prog.totalQuizzes} quizzes
+                  </span>
+                  <span className="text-nobus-600 text-xs font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                    Continue <ArrowRight className="w-3 h-3" />
+                  </span>
                 </div>
               </Link>
             );
           })}
-        </div>
-
-        {/* Why Nobus */}
-        <div className="card p-8 bg-gradient-to-br from-gray-50 to-white">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Why Nobus Cloud?</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { title: 'Data Sovereignty', desc: 'Data stays in Nigeria. NDPR compliant by design.', icon: '🇳🇬' },
-              { title: 'Naira Pricing', desc: 'No FX risk. Budget certainty with local currency billing.', icon: '₦' },
-              { title: 'Local Support', desc: 'Same timezone, same language. We can visit your office.', icon: '🤝' },
-              { title: '15-30% Cheaper', desc: 'No egress fees. Transparent pricing. Real savings.', icon: '📉' },
-            ].map((item) => (
-              <div key={item.title} className="text-center">
-                <div className="text-3xl mb-3">{item.icon}</div>
-                <h4 className="font-semibold text-gray-900 mb-1">{item.title}</h4>
-                <p className="text-sm text-gray-600">{item.desc}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </div>
