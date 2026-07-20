@@ -27,7 +27,7 @@ function getTransporter() {
   return transporter;
 }
 
-const FROM_NAME = process.env.SMTP_FROM_NAME || 'Nobus Cloud Partner LMS';
+const FROM_NAME = process.env.SMTP_FROM_NAME || 'Nobus PartnerCentral';
 const FROM_EMAIL = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || 'noreply@nobus.cloud';
 const PLATFORM_URL = process.env.PLATFORM_URL || 'http://localhost:3001';
 
@@ -93,7 +93,7 @@ export async function sendPartnerApprovalEmail({ contactName, contactEmail, comp
         <div style="text-align: center; margin: 32px 0;">
           <a href="${PLATFORM_URL}"
              style="display: inline-block; background: #0f766e; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px;">
-            Login to Your LMS
+            Login to PartnerCentral
           </a>
         </div>
 

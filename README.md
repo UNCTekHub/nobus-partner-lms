@@ -1,73 +1,54 @@
-# Nobus Cloud Partner LMS
+# Nobus PartnerCentral
 
-Learning Management System for Nobus Cloud Partner Sales and Technical/Presales Enablement.
+The partner portal for Nobus Cloud Services (Nkponani Limited): one platform for
+everything partners do with Nobus Cloud, Africa's Public Cloud.
 
-## Features
+## Modules
 
-- **Two Learning Paths**: Sales Enablement Bootcamp & Technical Enablement Bootcamp
-- **Interactive Quizzes**: Module-end assessments with instant feedback
-- **Progress Tracking**: localStorage-based progress persistence
-- **Certification Path**: Three-level partner competency framework
-- **Responsive Design**: Mobile-first, works on all devices
-- **Nobus Branded**: Custom color scheme matching Nobus Cloud identity
-
-## Learning Paths
-
-### Partner Module 1: Sales Enablement Bootcamp
-- 2 Days (16 Hours) | 6 Sessions | 6 Quizzes
-- Covers: Nobus overview, sales process, competitive positioning, proposals, PoC strategy, objection handling
-
-### Partner Module 2: Technical Enablement Bootcamp
-- 3 Days (24 Hours) | 12 Modules | 12 Quizzes
-- Covers: Platform architecture, FCS, FBS/FOS, networking, security, containers/K8s, backup/DR, hands-on labs, migration, monitoring, objection handling, certification
+- **Landing & Enrollment**: country-aware public landing page (Nigeria, Kenya, Other
+  Countries) with partner signup, NCS Partner Terms acceptance, and admin approval workflow
+- **Training Academy**: three role-based tracks (Sales, Presales Engineering, Technical
+  Engineering) with a full course player, quizzes, progress tracking and PDF certificates
+- **Deal Registration**: 90-day channel protection with duplicate detection and admin review
+- **Quote Builder**: customer-ready quotes from the live Nobus pricing catalog with
+  exclusive partner pricing, VAT, and branded PDF/XLSX export
+- **Sales Navigator**: Kanban pipeline, activity notes and weighted revenue forecasting
+- **Marketing Materials & Content Hub**: collateral library with online preview, plus
+  whitepapers, datasheets, case studies and FAQs
+- **Demo Labs**: guided sandbox scenarios with a slot-based booking calendar
+- **Community**: discussion forum, org-scoped leaderboard and gamification
+- **Operations Console**: unlisted admin console (`/ncs-console`, super admins only)
+  managing organizations, users, deals, quotes, resources, labs, reports and audit logs
 
 ## Tech Stack
 
-- **React 18** with Vite
-- **Tailwind CSS** for styling
-- **React Router** for navigation
-- **Lucide React** for icons
-- **localStorage** for progress persistence
+- **Frontend**: React 18 + Vite, Tailwind CSS, React Router, Lucide icons
+- **Backend**: Node.js + Express, better-sqlite3, JWT auth, pdfkit + exceljs exports
+- **Deploy**: GitHub Actions to production via SSH, PM2 + Nginx
 
 ## Getting Started
 
 ```bash
-# Install dependencies
+# Backend
+cd server && npm install
+node seed.js        # seeds demo data; safe on existing databases
+node index.js       # http://localhost:3001
+
+# Frontend (separate terminal)
 npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
+npm run dev         # http://localhost:5173 (proxies /api to :3001)
 ```
 
-## Project Structure
+Set `ADMIN_PASSWORD` in `server/.env` to rotate the seeded super-admin credential.
 
-```
-src/
-  components/     # Reusable UI components
-  context/        # React context for state management
-  data/           # Course curriculum data
-  pages/          # Page components
-  assets/         # Static assets
-  index.css       # Global styles + Tailwind
-  App.jsx         # Root component with routing
-  main.jsx        # Entry point
-```
-
-## Deployment
-
-Build the project and deploy the `dist/` folder to any static hosting:
+## Build & Deploy
 
 ```bash
-npm run build
+npm run build       # production bundle in dist/
 ```
 
-Compatible with: Vercel, Netlify, GitHub Pages, Cloudflare Pages, or any static file server.
+Pushing to `main` deploys automatically: the workflow pulls on the production server,
+reseeds (preserving data), rebuilds the frontend, and restarts the app under PM2.
 
 ---
 

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import db from '../db.js';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'nobus-lms-fallback-secret';
+const JWT_SECRET = process.env.JWT_SECRET || 'nobus-partnercentral-fallback-secret';
 
 export function generateToken(userId) {
   return jwt.sign({ userId }, JWT_SECRET, { expiresIn: '7d' });

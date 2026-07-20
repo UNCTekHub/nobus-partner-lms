@@ -1,9 +1,20 @@
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 
-function getToken() {
+const TOKEN_KEY = 'nobus-pc-token';
+const LEGACY_TOKEN_KEY = 'nobus-lms-token';
+
+export function getToken() {
   try {
-    const stored = localStorage.getItem('nobus-lms-token');
-    return stored || null;
+    const stored = localStorage.getItem(TOKEN_KEY);
+    if (stored) return stored;
+    // Migrate sessions created under the old key so nobody is logged out
+    const legacy = localStorage.getItem(LEGACY_TOKEN_KEY);
+    if (legacy) {
+      localStorage.setItem(TOKEN_KEY, legacy);
+      localStorage.removeItem(LEGACY_TOKEN_KEY);
+      return legacy;
+    }
+    return null;
   } catch {
     return null;
   }
@@ -11,9 +22,10 @@ function getToken() {
 
 export function setToken(token) {
   if (token) {
-    localStorage.setItem('nobus-lms-token', token);
+    localStorage.setItem(TOKEN_KEY, token);
   } else {
-    localStorage.removeItem('nobus-lms-token');
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(LEGACY_TOKEN_KEY);
   }
 }
 

@@ -117,7 +117,7 @@ export default function OrgRegistration() {
         <div className="card p-6">
           <div className="bg-nobus-50 border border-nobus-200 rounded-lg p-3 mb-6 text-sm text-nobus-700">
             <strong>How it works:</strong> Submit your application below. Once approved by the Nobus team,
-            you'll receive an invitation link to create your organization's admin account on the LMS.
+            you'll receive an invitation link to create your organization's admin account on PartnerCentral.
             Your Nobus partner account is activated after enrollment.
           </div>
 

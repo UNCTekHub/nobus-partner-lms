@@ -131,7 +131,7 @@ router.get('/v1/certificates', authenticateApiKey, (req, res) => {
 // GET /api/public/docs - API documentation
 router.get('/docs', (req, res) => {
   res.json({
-    name: 'Nobus Cloud Partner LMS API',
+    name: 'Nobus PartnerCentral API',
     version: '1.0',
     baseUrl: '/api/public/v1',
     authentication: 'API Key via x-api-key header',

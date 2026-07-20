@@ -72,7 +72,7 @@ router.post('/invite', authenticate, requireRole('org_admin'), (req, res) => {
   // Notify the new user
   createNotification({
     userId, type: 'welcome',
-    title: 'Welcome to Nobus Cloud LMS!',
+    title: 'Welcome to Nobus PartnerCentral!',
     message: 'Your account has been created. Start exploring your learning paths!',
     link: '/catalog',
   });

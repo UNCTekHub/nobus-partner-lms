@@ -87,5 +87,5 @@ app.get('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Nobus LMS server v2.0 running on http://localhost:${PORT}`);
+  console.log(`Nobus PartnerCentral server v2.0 running on http://localhost:${PORT}`);
 });

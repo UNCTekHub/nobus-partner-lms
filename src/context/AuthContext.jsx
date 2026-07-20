@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { api, setToken } from '../lib/api';
+import { api, setToken, getToken } from '../lib/api';
 
 const AuthContext = createContext();
 
@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
 
   // On mount, check for existing token and restore session
   useEffect(() => {
-    const token = localStorage.getItem('nobus-lms-token');
+    const token = getToken();
     if (token) {
       api.getMe()
         .then(({ user, organization: org }) => {

@@ -89,11 +89,11 @@ const translations = {
 const I18nContext = createContext();
 
 export function I18nProvider({ children }) {
-  const [locale, setLocale] = useState(() => localStorage.getItem('nobus-lms-locale') || 'en');
+  const [locale, setLocale] = useState(() => localStorage.getItem('nobus-pc-locale') || localStorage.getItem('nobus-lms-locale') || 'en');
 
   const changeLocale = useCallback((newLocale) => {
     setLocale(newLocale);
-    localStorage.setItem('nobus-lms-locale', newLocale);
+    localStorage.setItem('nobus-pc-locale', newLocale);
   }, []);
 
   const t = useCallback((key) => {

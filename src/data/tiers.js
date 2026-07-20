@@ -9,7 +9,7 @@ export const TIER_DEFINITIONS = [
     name: 'Registered',
     color: 'gray',
     bgClass: 'bg-gray-100 text-gray-700 border-gray-300',
-    requirements: { Sales: 0, Presales: 0, Technical: 0, description: 'Org admin enrolled; 1+ user active on LMS' },
+    requirements: { Sales: 0, Presales: 0, Technical: 0, description: 'Org admin enrolled; 1+ user active on PartnerCentral' },
     benefits: ['Access to Nobus partner portal', 'Deal registration', 'Basic partner resources'],
   },
   {

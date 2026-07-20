@@ -4,7 +4,7 @@ import {
   ChevronRight, Loader2, Search, Download, Upload, ChevronLeft,
   Shield, FileText, Trash2, Edit3, KeyRound, BarChart3, Settings,
 } from 'lucide-react';
-import { api } from '../lib/api';
+import { api, getToken } from '../lib/api';
 import { getTierDef, TIER_DEFINITIONS } from '../data/tiers';
 import { AdminDealsQuotes, AdminResources, AdminLabs } from '../components/AdminPortalOps';
 
@@ -105,7 +105,7 @@ export default function SuperAdminDashboard() {
   }
 
   function downloadExport(type) {
-    const token = localStorage.getItem('nobus-lms-token');
+    const token = getToken();
     const url = type === 'users' ? api.adminExportUsers() : type === 'orgs' ? api.adminExportOrgs() : api.adminExportProgress();
     window.open(url + `?token=${token}`, '_blank');
   }

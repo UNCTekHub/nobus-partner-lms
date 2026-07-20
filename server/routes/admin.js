@@ -216,7 +216,7 @@ router.get('/reports/users', authenticate, requireRole('super_admin'), (req, res
   ).join('\n');
 
   res.setHeader('Content-Type', 'text/csv');
-  res.setHeader('Content-Disposition', 'attachment; filename=nobus-lms-users.csv');
+  res.setHeader('Content-Disposition', 'attachment; filename=nobus-partnercentral-users.csv');
   res.send(headers + rows);
 });
 
@@ -233,7 +233,7 @@ router.get('/reports/organizations', authenticate, requireRole('super_admin'), (
   ).join('\n');
 
   res.setHeader('Content-Type', 'text/csv');
-  res.setHeader('Content-Disposition', 'attachment; filename=nobus-lms-organizations.csv');
+  res.setHeader('Content-Disposition', 'attachment; filename=nobus-partnercentral-organizations.csv');
   res.send(headers + rows);
 });
 
@@ -256,7 +256,7 @@ router.get('/reports/progress', authenticate, requireRole('super_admin'), (req, 
   ).join('\n');
 
   res.setHeader('Content-Type', 'text/csv');
-  res.setHeader('Content-Disposition', 'attachment; filename=nobus-lms-progress.csv');
+  res.setHeader('Content-Disposition', 'attachment; filename=nobus-partnercentral-progress.csv');
   res.send(headers + rows);
 });
 
