@@ -157,6 +157,7 @@ export const api = {
   approveDeal: (id) => request(`/deals/${id}/approve`, { method: 'PATCH' }),
   rejectDeal: (id, reason) => request(`/deals/${id}/reject`, { method: 'PATCH', body: JSON.stringify({ reason }) }),
   closeDeal: (id, outcome) => request(`/deals/${id}/close`, { method: 'PATCH', body: JSON.stringify({ outcome }) }),
+  reaffirmDeal: (id, note) => request(`/deals/${id}/reaffirm`, { method: 'PATCH', body: JSON.stringify({ note }) }),
 
   // Sales navigator / pipeline
   getLeads: () => request('/pipeline'),

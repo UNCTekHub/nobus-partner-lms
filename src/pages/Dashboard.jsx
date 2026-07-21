@@ -21,7 +21,7 @@ const TRACKS = [
 ];
 
 const QUICK_ACTIONS = [
-  { to: '/deals', label: 'Register a Deal', desc: '90-day protection', icon: ShieldCheck },
+  { to: '/deals', label: 'Register a Deal', desc: 'active protection', icon: ShieldCheck },
   { to: '/quotes', label: 'Build a Quote', desc: 'Naira pricing engine', icon: Calculator },
   { to: '/sales-navigator', label: 'Track Pipeline', desc: 'Kanban & forecast', icon: Compass },
   { to: '/demo-labs', label: 'Book a Demo Lab', desc: 'Hands-on sandbox', icon: FlaskConical },

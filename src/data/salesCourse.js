@@ -368,7 +368,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 | 1 | Prospect | Identify a company with a real infrastructure trigger | Named contact, known trigger event | Create the lead in Sales Navigator |
 | 2 | Discover | Understand pain, environment and stakes | SPIN questions answered; current spend known | Log discovery notes on the lead |
 | 3 | Qualify | Confirm this is winnable and worth it | BANT scored; personas mapped | Move lead to Qualified |
-| 4 | Register | Protect the opportunity | Deal registered and approved | Register the deal (90-day protection) |
+| 4 | Register | Protect the opportunity | Deal registered and approved | Register the deal (active protection) |
 | 5 | Propose | Put a number and a design in front of the buyer | Quote delivered; proposal presented to the economic buyer | Build the quote in Quote Builder; attach it to the deal |
 | 6 | Prove | Remove the last technical doubt | PoC success criteria met and signed off | Book demo-lab sessions for the customer |
 | 7 | Close & grow | Win, onboard, then expand | Contract signed; first invoice paid | Mark deal Won; plan the expansion follow-up |
@@ -573,8 +573,8 @@ A partner scored a government prospect: Budget 3 (approved project), Need 3 (aud
 - **Your line:** "Doing nothing is also a decision, and it has a price. Let me show you what the next 12 months cost on your current path versus this one."
 
 ### Category 5: Other Nobus partners
-- **Reality:** Channel conflict happens. Your defense is speed and registration.
-- **Your weapon:** Deal Registration. First qualified partner to register gets 90-day protection. Register the moment BANT passes; never sit on a qualified deal overnight.
+- **Reality:** Channel conflict happens. Your defense is speed, registration, and staying engaged.
+- **Your weapon:** Deal Registration. The first qualified partner to register earns **active protection**: the deal stays yours for as long as you keep the account engaged and delivering value, not a ticking countdown. Register the moment BANT passes, never sit on a qualified deal overnight, and log a value update whenever you advance the account so protection never lapses. Go silent and the deal can be reviewed and released to another partner.
 
 ### Ethics of competitive selling
 Never fabricate competitor weaknesses. State facts you can defend, acknowledge genuine strengths, and reframe to where Nobus objectively wins: currency, residency, egress, support proximity, and total cost. Customers trust sellers who are fair to competitors.

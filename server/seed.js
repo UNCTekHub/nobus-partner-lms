@@ -328,8 +328,8 @@ for (const l of demoLeads) insertLead.run(l);
 
 // Demo registered deals
 const insertDeal = db.prepare(`
-  INSERT INTO deals (org_id, submitted_by, customer_name, customer_email, customer_industry, opportunity_name, description, services, est_value, expected_close_date, status, protection_expires)
-  VALUES (@org_id, @submitted_by, @customer_name, @customer_email, @customer_industry, @opportunity_name, @description, @services, @est_value, @expected_close_date, @status, @protection_expires)
+  INSERT INTO deals (org_id, submitted_by, customer_name, customer_email, customer_industry, opportunity_name, description, services, est_value, expected_close_date, status, last_activity_at, last_activity_note)
+  VALUES (@org_id, @submitted_by, @customer_name, @customer_email, @customer_industry, @opportunity_name, @description, @services, @est_value, @expected_close_date, @status, @last_activity_at, @last_activity_note)
 `);
 insertDeal.run({
   org_id: 'org-001', submitted_by: 'user-002', customer_name: 'Zenith Microfinance',
@@ -337,7 +337,8 @@ insertDeal.run({
   opportunity_name: 'Core banking migration to Nobus', description: 'Migrate core banking VMs to FCS with Sophos XG perimeter and FBS-backed PostgreSQL.',
   services: JSON.stringify(['FCS', 'FBS', 'Sophos XG', 'PostgreSQL']), est_value: 4500000,
   expected_close_date: '2026-08-30', status: 'approved',
-  protection_expires: '2026-10-09 00:00:00',
+  last_activity_at: new Date(Date.now() - 6 * 86400000).toISOString().slice(0, 19).replace('T', ' '),
+  last_activity_note: 'Presented TCO comparison to CFO',
 });
 insertDeal.run({
   org_id: 'org-002', submitted_by: 'user-004', customer_name: 'Federal Health Agency',
@@ -345,7 +346,7 @@ insertDeal.run({
   opportunity_name: 'Health records platform hosting', description: 'NDPA-compliant hosting for national health records with Cloud Backup and DR.',
   services: JSON.stringify(['FCS', 'FOS', 'Cloud Backup', 'VPN']), est_value: 12000000,
   expected_close_date: '2026-09-15', status: 'pending',
-  protection_expires: null,
+  last_activity_at: null, last_activity_note: null,
 });
 
 console.log('Seed complete!');

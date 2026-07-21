@@ -403,5 +403,9 @@ db.exec(`
 try { db.exec('ALTER TABLE deals ADD COLUMN quote_id INTEGER'); } catch { /* column exists */ }
 try { db.exec('ALTER TABLE quotes ADD COLUMN discount_pct INTEGER DEFAULT 0'); } catch { /* column exists */ }
 try { db.exec("ALTER TABLE quotes ADD COLUMN lines TEXT DEFAULT '[]'"); } catch { /* column exists */ }
+// Active Protection: protection lasts while the partner keeps the account engaged.
+// last_activity_at is refreshed on every value update; last_activity_note stores the latest one.
+try { db.exec('ALTER TABLE deals ADD COLUMN last_activity_at TEXT'); } catch { /* column exists */ }
+try { db.exec('ALTER TABLE deals ADD COLUMN last_activity_note TEXT'); } catch { /* column exists */ }
 
 export default db;

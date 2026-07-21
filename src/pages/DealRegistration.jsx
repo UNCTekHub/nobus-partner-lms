@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ShieldCheck, Plus, X, Loader2, Clock, CheckCircle, XCircle, AlertTriangle, Trophy, Ban, Calculator } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Plus, X, Loader2, Clock, CheckCircle, XCircle, AlertTriangle, Trophy, Ban, Calculator, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../lib/api';
@@ -8,12 +8,21 @@ const SERVICE_OPTIONS = ['FCS', 'Dedicated Hosting', 'FBS', 'FOS', 'Cloud Backup
 
 const STATUS_META = {
   pending: { label: 'Pending Review', icon: Clock, cls: 'badge-amber' },
-  approved: { label: 'Approved · Protected', icon: ShieldCheck, cls: 'badge-green' },
+  approved: { label: 'Protected', icon: ShieldCheck, cls: 'badge-green' },
   rejected: { label: 'Rejected', icon: XCircle, cls: 'badge bg-red-50 text-red-700' },
-  expired: { label: 'Protection Expired', icon: AlertTriangle, cls: 'badge bg-gray-100 text-gray-600' },
+  expired: { label: 'Released', icon: AlertTriangle, cls: 'badge bg-gray-100 text-gray-600' },
   won: { label: 'Won', icon: Trophy, cls: 'badge-green' },
   lost: { label: 'Lost', icon: Ban, cls: 'badge bg-gray-100 text-gray-600' },
 };
+
+// Time-ago helper for engagement recency
+function agoLabel(days) {
+  if (days <= 0) return 'today';
+  if (days === 1) return 'yesterday';
+  if (days < 30) return `${days} days ago`;
+  const months = Math.round(days / 30);
+  return `${months} month${months === 1 ? '' : 's'} ago`;
+}
 
 const naira = (n) => '₦' + Number(n || 0).toLocaleString('en-NG');
 
@@ -78,6 +87,18 @@ export default function DealRegistration() {
     load();
   };
 
+  const reaffirm = async (deal) => {
+    const note = window.prompt('Log a value update to keep this account protected (e.g. "Delivered PoC", "Met with CTO"):', '');
+    if (note === null) return; // cancelled
+    try {
+      const res = await api.reaffirmDeal(deal.id, note);
+      setNotice(res.message);
+      load();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   const toggleService = (svc) => {
     setForm((f) => ({
       ...f,
@@ -104,7 +125,8 @@ export default function DealRegistration() {
             <ShieldCheck className="w-7 h-7 text-nobus-500" /> Deal Registration
           </h1>
           <p className="text-gray-600">
-            Register opportunities for 90-day channel protection. Approved deals are shielded from partner conflict.
+            Register opportunities for active channel protection. Approved deals stay shielded from partner conflict
+            for as long as you keep the account engaged.
           </p>
         </div>
         {!isSuperAdmin && (
@@ -123,7 +145,7 @@ export default function DealRegistration() {
       )}
 
       <div className="flex flex-wrap gap-2 mb-6">
-        {['all', 'pending', 'approved', 'won', 'lost', 'rejected', 'expired'].map((s) => (
+        {['all', 'pending', 'approved', 'won', 'lost', 'rejected'].map((s) => (
           <button key={s} onClick={() => setFilter(s)}
             className={`text-sm px-3 py-1.5 rounded-lg font-medium capitalize transition-colors ${
               filter === s ? 'bg-nobus-500 text-white' : 'bg-white border border-gray-200 text-gray-600 hover:border-nobus-300'
@@ -145,7 +167,13 @@ export default function DealRegistration() {
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2 mb-1">
                     <h3 className="font-semibold text-gray-900">{deal.opportunity_name}</h3>
-                    <span className={meta.cls}><Icon className="w-3 h-3 mr-1" />{meta.label}</span>
+                    {deal.status === 'approved' && deal.protection_state === 'review' ? (
+                      <span className="badge bg-amber-50 text-amber-700"><ShieldAlert className="w-3 h-3 mr-1" />Protected · Review Needed</span>
+                    ) : deal.status === 'approved' ? (
+                      <span className="badge-green"><ShieldCheck className="w-3 h-3 mr-1" />Protected · Active</span>
+                    ) : (
+                      <span className={meta.cls}><Icon className="w-3 h-3 mr-1" />{meta.label}</span>
+                    )}
                     {deal.duplicate_of && <span className="badge bg-red-50 text-red-700"><AlertTriangle className="w-3 h-3 mr-1" />Possible duplicate</span>}
                   </div>
                   <div className="text-sm text-gray-600">
@@ -166,6 +194,12 @@ export default function DealRegistration() {
                       {deal.quote_monthly_total ? ` (${naira(deal.quote_monthly_total)}/mo)` : ''}
                     </div>
                   )}
+                  {deal.status === 'approved' && deal.last_activity_note && (
+                    <div className="mt-2 text-xs text-gray-500 flex items-center gap-1.5">
+                      <RefreshCw className="w-3 h-3 text-nobus-400" />
+                      Latest value update: {deal.last_activity_note}
+                    </div>
+                  )}
                   {deal.status === 'rejected' && deal.rejection_reason && (
                     <div className="mt-2 text-sm text-red-600">Reason: {deal.rejection_reason}</div>
                   )}
@@ -173,8 +207,11 @@ export default function DealRegistration() {
                 <div className="text-right shrink-0">
                   <div className="text-lg font-bold text-nobus-600">{naira(deal.est_value)}</div>
                   {deal.expected_close_date && <div className="text-xs text-gray-500">Close: {deal.expected_close_date}</div>}
-                  {deal.status === 'approved' && deal.protection_expires && (
-                    <div className="text-xs text-green-600 mt-1">Protected until {deal.protection_expires.slice(0, 10)}</div>
+                  {deal.status === 'approved' && deal.protection_state === 'active' && (
+                    <div className="text-xs text-green-600 mt-1">Protected · last engaged {agoLabel(deal.days_inactive)}</div>
+                  )}
+                  {deal.status === 'approved' && deal.protection_state === 'review' && (
+                    <div className="text-xs text-amber-600 mt-1">Silent {agoLabel(deal.days_inactive)} · re-engage to keep protection</div>
                   )}
                 </div>
               </div>
@@ -198,6 +235,14 @@ export default function DealRegistration() {
                   )}
                   {!isSuperAdmin && deal.status === 'approved' && (
                     <>
+                      <button onClick={() => reaffirm(deal)}
+                        className={`flex items-center gap-1 text-sm font-medium px-3 py-1.5 rounded-lg transition-colors ${
+                          deal.protection_state === 'review'
+                            ? 'text-amber-700 bg-amber-50 hover:bg-amber-100'
+                            : 'text-nobus-700 bg-nobus-50 hover:bg-nobus-100'
+                        }`}>
+                        <RefreshCw className="w-4 h-4" /> Log Value Update
+                      </button>
                       <button onClick={() => close(deal, 'won')}
                         className="flex items-center gap-1 text-sm font-medium text-green-700 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-lg transition-colors">
                         <Trophy className="w-4 h-4" /> Mark Won

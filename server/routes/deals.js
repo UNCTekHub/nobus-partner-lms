@@ -6,23 +6,34 @@ import { logAudit, getIP } from '../services/audit.js';
 
 const router = Router();
 
-const PROTECTION_DAYS = 90;
+// Active Protection model: a registered deal stays protected for as long as the
+// partner keeps the account engaged (delivering value). There is no fixed expiry.
+// If a partner goes silent past this dormancy window, the deal is flagged
+// "Review Needed" (a soft, at-risk state) so it can be re-engaged or released.
+const DORMANCY_DAYS = 120;
 
 function normalizeCustomer(name) {
   return (name || '').toLowerCase().replace(/\s+/g, ' ').replace(/(ltd|limited|plc|inc|llc)\.?$/i, '').trim();
 }
 
-// Expire protection windows lazily on read
-function expireStaleDeals() {
-  db.prepare(`
-    UPDATE deals SET status = 'expired', updated_at = datetime('now')
-    WHERE status = 'approved' AND protection_expires IS NOT NULL AND protection_expires < datetime('now')
-  `).run();
+// Derive the live protection state of an approved deal from its last engagement.
+// Falls back to review/approval timestamps for deals created before this model.
+function withProtection(deal) {
+  if (!deal || deal.status !== 'approved') return deal;
+  const baseline = deal.last_activity_at || deal.reviewed_at || deal.updated_at || deal.created_at;
+  const ageMs = Date.now() - new Date((baseline || '') + 'Z').getTime();
+  const daysInactive = Number.isFinite(ageMs) ? Math.max(0, Math.floor(ageMs / 86400000)) : 0;
+  return {
+    ...deal,
+    protection_state: daysInactive >= DORMANCY_DAYS ? 'review' : 'active',
+    days_inactive: daysInactive,
+    dormancy_days: DORMANCY_DAYS,
+    last_activity: baseline,
+  };
 }
 
 // GET /api/deals - own org's deals (super admin sees all)
 router.get('/', authenticate, (req, res) => {
-  expireStaleDeals();
   const base = `
     SELECT d.*, o.name as org_name, u.name as submitted_by_name,
       q.title as quote_title, q.monthly_total as quote_monthly_total
@@ -35,10 +46,10 @@ router.get('/', authenticate, (req, res) => {
     const params = [];
     if (status) { sql += ' WHERE d.status = ?'; params.push(status); }
     sql += ' ORDER BY d.created_at DESC LIMIT 500';
-    return res.json(db.prepare(sql).all(...params));
+    return res.json(db.prepare(sql).all(...params).map(withProtection));
   }
   if (!req.user.org_id) return res.json([]);
-  res.json(db.prepare(base + ' WHERE d.org_id = ? ORDER BY d.created_at DESC').all(req.user.org_id));
+  res.json(db.prepare(base + ' WHERE d.org_id = ? ORDER BY d.created_at DESC').all(req.user.org_id).map(withProtection));
 });
 
 // POST /api/deals - register a deal
@@ -100,18 +111,39 @@ router.patch('/:id/approve', authenticate, requireRole('super_admin'), (req, res
 
   db.prepare(`
     UPDATE deals SET status = 'approved', reviewed_by = ?, reviewed_at = datetime('now'),
-      protection_expires = datetime('now', '+${PROTECTION_DAYS} days'), updated_at = datetime('now')
+      protection_expires = NULL, last_activity_at = datetime('now'),
+      last_activity_note = 'Deal approved', updated_at = datetime('now')
     WHERE id = ?
   `).run(req.user.id, req.params.id);
 
   createNotification({
     userId: deal.submitted_by, type: 'deal',
-    title: 'Deal approved',
-    message: `Your deal "${deal.opportunity_name}" is approved and protected for ${PROTECTION_DAYS} days.`,
+    title: 'Deal approved and protected',
+    message: `Your deal "${deal.opportunity_name}" is approved. It stays protected for as long as you keep the account active.`,
     link: '/deals',
   });
   logAudit({ userId: req.user.id, action: 'deal_approved', entityType: 'deal', entityId: String(deal.id), details: deal.opportunity_name, ipAddress: getIP(req) });
   res.json({ message: 'Deal approved' });
+});
+
+// PATCH /api/deals/:id/reaffirm - partner logs a value update to keep protection active
+router.patch('/:id/reaffirm', authenticate, (req, res) => {
+  const { note } = req.body;
+  const deal = db.prepare('SELECT * FROM deals WHERE id = ?').get(req.params.id);
+  if (!deal) return res.status(404).json({ error: 'Deal not found' });
+  if (req.user.role !== 'super_admin' && deal.org_id !== req.user.org_id) {
+    return res.status(403).json({ error: 'Not your deal' });
+  }
+  if (deal.status !== 'approved') return res.status(400).json({ error: 'Only protected deals can be reaffirmed' });
+
+  db.prepare(`
+    UPDATE deals SET last_activity_at = datetime('now'),
+      last_activity_note = ?, updated_at = datetime('now') WHERE id = ?
+  `).run((note || 'Engagement reaffirmed').slice(0, 300), req.params.id);
+
+  awardPoints(req.user.id, 'deal_reaffirmed', 3, `Reaffirmed protection: ${deal.opportunity_name}`);
+  logAudit({ userId: req.user.id, action: 'deal_reaffirmed', entityType: 'deal', entityId: String(deal.id), details: note || '', ipAddress: getIP(req) });
+  res.json({ message: 'Protection reaffirmed. Your account engagement keeps this deal protected.' });
 });
 
 // PATCH /api/deals/:id/reject - super admin rejection

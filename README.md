@@ -9,7 +9,7 @@ everything partners do with Nobus Cloud, Africa's Public Cloud.
   Countries) with partner signup, NCS Partner Terms acceptance, and admin approval workflow
 - **Training Academy**: three role-based tracks (Sales, Presales Engineering, Technical
   Engineering) with a full course player, quizzes, progress tracking and PDF certificates
-- **Deal Registration**: 90-day channel protection with duplicate detection and admin review
+- **Deal Registration**: active channel protection (protected while the account stays engaged) with duplicate detection and admin review
 - **Quote Builder**: customer-ready quotes from the live Nobus pricing catalog with
   exclusive partner pricing, VAT, and branded PDF/XLSX export
 - **Sales Navigator**: Kanban pipeline, activity notes and weighted revenue forecasting

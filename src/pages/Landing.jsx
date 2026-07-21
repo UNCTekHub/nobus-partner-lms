@@ -10,7 +10,7 @@ import CountrySelect from '../components/CountrySelect';
 
 const MODULES = [
   { icon: GraduationCap, name: 'Training Academy', desc: 'Role-based enablement for Sales, Presales and Technical engineers, with quizzes and certifications.' },
-  { icon: ShieldCheck, name: 'Deal Registration', desc: 'Register opportunities for 90-day channel protection with conflict detection.' },
+  { icon: ShieldCheck, name: 'Deal Registration', desc: 'Register opportunities for active channel protection that lasts while you stay engaged.' },
   { icon: Calculator, name: 'Quote Builder', desc: 'Customer-ready quotes from the live Nobus catalog, exportable to PDF and Excel.' },
   { icon: Compass, name: 'Sales Navigator', desc: 'Kanban pipeline, activity tracking and weighted revenue forecasting.' },
   { icon: Megaphone, name: 'Marketing & Content', desc: 'Brochures, battle cards, whitepapers, datasheets and co-branded campaign kits.' },
@@ -19,7 +19,7 @@ const MODULES = [
 
 const BENEFITS = [
   { icon: BadgePercent, title: 'Exclusive Partner Pricing', desc: 'Access preferential partner rates on compute and storage for every registered deal, per the Partner Agreement.' },
-  { icon: ShieldCheck, title: 'Protected Deals', desc: 'Registered opportunities are shielded from channel conflict for 90 days.' },
+  { icon: ShieldCheck, title: 'Protected Deals', desc: 'Registered opportunities stay shielded from channel conflict for as long as you keep the account active.' },
   { icon: Award, title: 'Certification & Tiers', desc: 'Certify your team and climb from Registered to Platinum with growing benefits.' },
   { icon: Calculator, title: 'Your Own Fees', desc: 'Charge setup and recurring managed-services fees on top - your pricing, your margin.' },
 ];
@@ -186,8 +186,8 @@ export default function Landing() {
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-green-600" />
                   <div>
-                    <div className="font-extrabold leading-tight">90-Day Protection</div>
-                    <div className="text-[10px] text-gray-400">channel-conflict shield</div>
+                    <div className="font-extrabold leading-tight">Active Protection</div>
+                    <div className="text-[10px] text-gray-400">protected while you're engaged</div>
                   </div>
                 </div>
               </div>
