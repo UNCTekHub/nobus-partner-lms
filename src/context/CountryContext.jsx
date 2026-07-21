@@ -35,7 +35,7 @@ export const COUNTRIES = {
     currencyName: 'US Dollars (USD)',
     currencyShort: 'US Dollar',
     complianceChip: 'NDPA · ODPC · ISO 27001 · PCI DSS',
-    regulator: 'NDPA, ODPC, ISO 27001 and PCI DSS aligned',
+    regulator: 'NDPA & ODPC compliant, ISO 27001 & PCI DSS certified',
     homeZone: 'Lagos (Ikeja & Lekki) and Nairobi',
     computePrice: 'with transparent pricing',
     partnerProgram: false,

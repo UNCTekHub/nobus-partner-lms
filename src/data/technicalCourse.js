@@ -835,7 +835,7 @@ Managed DNS service for mapping domain names to IP addresses. **Free for all Nob
 - Physical security of Tier III data centres (24/7 facility control)
 - Infrastructure: hypervisors, storage fabric, core network
 - Platform encryption machinery, IDS/IPS, SIEM monitoring, incident response process
-- Compliance certifications: ISO 27001, GDPR posture, PCI DSS support, NDPA alignment (Nigeria), ODPC compliance (Kenya)
+- Compliance certifications (Nigerian market): ISO 27001 certified, PCI DSS certified, NDPA compliant; GDPR posture; ODPC compliant (Kenya)
 
 **The customer (with you) secures what runs IN the cloud:**
 - Data classification and encryption choices
@@ -868,7 +868,7 @@ The one-line version for meetings: **"Nobus secures the building and the platfor
 ### Running the enterprise security conversation
 1. Open with the shared responsibility split (whiteboard it; two columns)
 2. Walk the layers table top to bottom, mapping each to their stated concerns
-3. Name the certifications once, precisely: ISO 27001 certified, PCI DSS supported, NDPA aligned (Nigeria), ODPC compliant (Kenya)
+3. Name the certifications once, precisely: ISO 27001 certified, PCI DSS certified, NDPA compliant (Nigeria), ODPC compliant (Kenya)
 4. Close with the restore-drill offer: "Security you have not tested is a hope. We schedule quarterly restore drills."
 
 ### Key takeaways
@@ -1001,7 +1001,7 @@ Cloud containers are lightweight, portable units that package an application and
 
 > Contact Nobus cloud support to get started with cloud containers.
 
-## Cloud Kubernetes Engine (CKE)
+## Nobus Kubernetes Engine (NKE)
 
 Nobus provides managed Kubernetes services - Kubernetes without the overhead of managing control plane infrastructure.
 

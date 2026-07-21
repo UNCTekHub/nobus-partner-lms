@@ -94,7 +94,7 @@ export default function Landing() {
     { icon: Server, name: 'Compute', desc: `FCS instances, dedicated hosting, autoscaling and CloudOrchestration, ${c.computePrice}.` },
     { icon: HardDrive, name: 'Storage & Backup', desc: 'FBS block volumes, unlimited FOS object storage and Acronis-powered Cloud Backup.' },
     { icon: Network, name: 'Networking', desc: 'Virtual data centers, Fast Transit, floating IPs, VPN, DNS, firewalls and load balancing.' },
-    { icon: ShieldCheck, name: 'Security', desc: 'Sophos XG, FortiGate NGFW and Acronis Cyber Protect on ISO 27001 / PCI DSS-ready infrastructure.' },
+    { icon: ShieldCheck, name: 'Security', desc: 'Sophos XG, FortiGate NGFW and Acronis Cyber Protect on ISO 27001 / PCI DSS certified infrastructure.' },
     { icon: Container, name: 'Containers', desc: 'Managed Kubernetes, cloud containers and Kafka event streaming.' },
     { icon: Database, name: 'Databases', desc: 'Managed PostgreSQL, MySQL, MSSQL and MongoDB with HA and automated failover.' },
   ];

@@ -356,7 +356,7 @@ For mature DevOps teams, position Nobus Cloud Orchestration:
 ### Scenario 4: Cloud-native fintech / SaaS startup
 - **Signals:** Microservices talk, Kubernetes on the CV, transaction spikes, investor pressure on burn rate
 - **Architecture:** Managed Nobus Kubernetes Engine (Linux worker nodes), managed Kafka for event streaming, managed PostgreSQL or MongoDB, load balancing, security groups per service tier
-- **Why it wins:** Naira billing extends runway; local latency beats eu-west-1 by 100ms+; PCI DSS support unlocks payments work
+- **Why it wins:** Naira billing extends runway; local latency beats eu-west-1 by 100ms+; PCI DSS certification unlocks payments work
 - **Watch out:** Floating IPs do not attach to Kubernetes worker nodes; expose services through the load balancer
 
 ### Scenario 5: Regulated enterprise (bank, insurer, government)
@@ -540,7 +540,7 @@ If the answer to two or more is no: decline politely, and ask for a meeting befo
 ### Standard evidence for common RFP sections
 - **Infrastructure and availability:** Tier III-certified data centers across multiple African availability zones, 99.982% uptime guarantee, N+1 redundancy
 - **Security:** ISO 27001, AES-256 at rest, encrypted transit, security groups + cloud firewalls + optional Sophos XG/FortiGate, shared-responsibility model explained
-- **Data protection and residency:** NDPA alignment (Nigeria), ODPC compliance (Kenya), in-country storage, PCI DSS supported
+- **Data protection and residency:** NDPA compliance (Nigeria), ODPC compliance (Kenya), in-country storage, PCI DSS certified
 - **Business continuity:** Nobus Cloud Backup (Acronis), cross-zone snapshot copies, documented restore drills
 - **Pricing:** Quote Builder export (PDF or XLSX) with VAT explicit and validity stated; transparent published rates on nobus.io
 - **Support:** local time-zone support plus your own managed-services SLA as the first line

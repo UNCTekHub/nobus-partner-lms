@@ -42,7 +42,7 @@ Nobus Cloud Services (NCS) is a public cloud provider purpose-built for Africa's
 
 | Fact | Detail | Why the customer cares |
 |---|---|---|
-| Data centers | Three Tier III availability zones: nobus-wa-az1 (Rack Centre, Ikeja Lagos), nobus-wa-az2 (OADC, Lekki Lagos), nobus-ea-az1 (Nairobi, Kenya) | Same certification class trusted by banks and telcos |
+| Data centers | Nobus Cloud infrastructure is **hosted in** Tier III data centers across three availability zones: nobus-wa-az1 (Rack Centre, Ikeja Lagos), nobus-wa-az2 (OADC, Lekki Lagos), nobus-ea-az1 (Nairobi, Kenya) | Same facility class trusted by banks and telcos |
 | Anchor region | Lagos, Nigeria (including Rack Centre) | In-country data residency for Nigerian customers |
 | East Africa | nobus-ea-az1 in Nairobi, Kenya | In-region service for East African customers |
 | Uptime | 99.982% guarantee with N+1 redundancy | Beats most on-premise setups by a wide margin |
@@ -56,18 +56,15 @@ Nobus Cloud Services (NCS) is a public cloud provider purpose-built for Africa's
 - **No egress fees.** Data leaving Nobus is free. On AWS, egress alone can be 15-20% of the monthly bill.
 
 ### Compliance posture
-- **NDPA** aligned: Nigeria Data Protection Act, critical for banks, government and healthcare
-- **ODPC** compliant: Kenya's Office of the Data Protection Commissioner, covering workloads in the Nairobi zone
-- **ISO 27001** certified information security management
-- **PCI DSS** supported: payment-card workloads can be built compliant on Nobus
+For the **Nigerian market**, Nobus is **ISO 27001 certified**, **PCI DSS certified** and **NDPA compliant** (Nigeria Data Protection Act) - the exact credentials banks, government and healthcare buyers demand. For **Kenya**, Nobus is **ODPC compliant** (Office of the Data Protection Commissioner), covering workloads in the Nairobi zone.
 
 ### Tell the story in 60 seconds (memorize this)
-> "Nobus is Africa's cloud. We run Tier III-certified data centers across African availability zones, two zones in Lagos (Ikeja and Lekki) and one in Nairobi, Kenya. You get the same building blocks as AWS: virtual machines, block and object storage, Kubernetes, managed databases, firewalls. The difference is that your data stays in Africa, your bill is in Naira, your support engineer is in your time zone, and there are no egress fees. That is why banks, fintechs and government agencies are moving here."
+> "Nobus is Africa's cloud. Nobus Cloud infrastructure is hosted in Tier III data centers across African availability zones, two in Lagos (Ikeja and Lekki) and one in Nairobi, Kenya. You get the same building blocks as AWS: virtual machines, block and object storage, Kubernetes, managed databases, firewalls. The difference is that your data stays in Africa, your bill is in Naira, your support engineer is in your time zone, and there are no egress fees. That is why banks, fintechs and government agencies are moving here."
 
 ### Key takeaways
-- Never say "hosted at Rack Centre" as if it were one building: Nobus runs three Tier III zones, Ikeja and Lekki in Lagos plus Nairobi in Kenya
+- Nobus does not own the buildings: its infrastructure is **hosted in** Tier III data centers across three zones, Ikeja and Lekki in Lagos plus Nairobi in Kenya
 - Lead with Naira billing and zero egress fees in every first conversation
-- 99.982% uptime and ISO 27001 are your credibility anchors with technical and compliance buyers`
+- For the Nigerian market, **ISO 27001, PCI DSS and NDPA compliance** are your credibility anchors with technical and compliance buyers; uptime and data residency reinforce them`
         },
         {
           id: 'sales-m1-l2',
@@ -97,10 +94,10 @@ Nobus Cloud Services (NCS) is a public cloud provider purpose-built for Africa's
 
 > **Sales Pitch:** *"When your system goes down at 9 PM Lagos time, who answers? AWS support might take hours across time zones. Nobus support is HERE - same city, same timezone, speaking your language."*
 
-### 4. Compliance First
+### 4. Compliance First (Nigerian market)
 - **ISO 27001** certified information security
-- **PCI DSS** compliance supported for payment card environments
-- **NDPA** aligned for data protection in Nigeria
+- **PCI DSS** certified for payment card environments
+- **NDPA** compliant for data protection in Nigeria
 - **ODPC** compliant for data protection in Kenya
 - Built for regulated industries (banking, insurance, healthcare)
 
@@ -119,7 +116,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 - **Networking:** VPC, Floating IPs, VPN, NFT (Fast Transit) for dedicated enterprise connectivity
 - **Security:** Sophos XG Firewall, FortiGate Firewall, Acronis Cyber Protect
 - **Managed Databases:** MySQL, PostgreSQL, MongoDB, MS SQL Server
-- **Containers:** Managed Kubernetes (CKE) for container orchestration
+- **Containers:** Managed Kubernetes (NKE) for container orchestration
 - **Kafka:** Managed event streaming
 - **DNS:** Free managed DNS for Nobus resources
 - **Cloud Backup (NCB):** Cross-cloud backup - backs up AWS, Azure, on-prem, and Nobus workloads
@@ -144,9 +141,10 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 - **Entry Point:** Disaster recovery, dev/test environments, then production migration
 
 #### 2. Fintech (Fast-Growing, Cloud-Native)
-- **Why Nobus:** Kubernetes (CKE) for microservices architecture, Kafka for event streaming, auto-scaling for transaction spikes
-- **Key Services:** CKE, Kafka, Load Balancers, managed PostgreSQL
-- **Entry Point:** New application deployments, payment processing infrastructure
+- **Why Nobus:** Nobus Kubernetes Engine (NKE) for microservices architecture, Kafka for event streaming, auto-scaling for transaction spikes
+- **Migration driver:** Many fintechs sit on a foreign hyperscaler (AWS/Azure/GCP) and now face a **data localization mandate** - customer and transaction data must reside in-country. That mandate is the single biggest trigger to migrate to Nobus, which keeps the data in Nigeria while preserving the cloud-native tooling they already use.
+- **Key Services:** NKE, Kafka, Load Balancers, managed PostgreSQL
+- **Entry Point:** New application deployments, payment processing infrastructure, or a compliance-driven migration off a foreign hyperscaler
 
 #### 3. Healthcare (Data Sensitivity)
 - **Why Nobus:** Patient data must stay in Nigeria (NDPA), Acronis Cyber Protect for ransomware protection, AES-256 encrypted storage
@@ -211,7 +209,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 ### Persona 4: The Compliance / Risk Officer (the veto holder)
 - **Cares about:** NDPA, data residency, auditability, regulator comfort
 - **Fears:** Signing off on offshore data storage and being personally accountable later
-- **Your message:** "Data stays in-country in Tier III-certified facilities. NDPA-aligned in Nigeria, ODPC compliant in Kenya, ISO 27001 certified, PCI DSS supported."
+- **Your message:** "Data stays in-country in Tier III-certified facilities. NDPA compliant in Nigeria, ODPC compliant in Kenya, ISO 27001 certified, PCI DSS certified."
 - **Proof points:** Compliance one-pager from the Content Hub, encryption story (AES-256 at rest, encrypted transit)
 - **Opening question:** *"How does your current provider evidence NDPA compliance when the regulator asks?"*
 
@@ -280,7 +278,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 | **Managed PostgreSQL** | Fully managed PostgreSQL database | "The world's most advanced open-source database - fully managed." |
 | **Managed MongoDB** | Fully managed MongoDB (NoSQL) | "Document database for modern apps - fully managed." |
 | **Managed MS SQL Server** | Fully managed Microsoft SQL Server | "Running .NET/Windows apps? SQL Server is available managed." |
-| **Kubernetes (CKE)** | Managed container orchestration | "Run containers at scale. We manage the control plane." |
+| **Kubernetes (NKE)** | Managed container orchestration | "Run containers at scale. We manage the control plane." |
 | **Kafka** | Managed event streaming | "Real-time data pipelines and event streaming - managed by us." |
 | **Cloud Backup (NCB)** | Cross-cloud backup - backs up AWS, Azure, on-prem, AND Nobus | "Back up everything - even your AWS and Azure workloads - to Nobus. One backup solution for all clouds." |
 
@@ -803,7 +801,7 @@ Common flavors you'll use in proposals:
 - Safety buffer: +10%
 
 ### Step 4: Position the Price
-**Good:** "For NGN 343,000 per month, less than the cost of one junior developer, you get enterprise-grade infrastructure in Tier III Nigerian data centers with a 99.982% uptime guarantee, automated backups, managed DNS at no extra cost, and local support."
+**Good:** "For NGN 343,000 per month, less than the cost of one junior developer, you get enterprise-grade infrastructure hosted in Tier III data centers in Nigeria with a 99.982% uptime guarantee, automated backups, managed DNS at no extra cost, and local support."
 
 **Bad:** "It costs NGN 343,000 per month." (Just a number, no context)
 
@@ -1013,7 +1011,7 @@ Never stack three answers on one objection; one piece of strong evidence, then c
 > **Acknowledge:** "Completely fair, and you should hold us to that standard."
 > **Clarify:** "Is the concern about the data centers themselves, or about the platform's track record?"
 > **Customer:** "Mostly the data centers, honestly."
-> **Evidence:** "Nobus runs in Tier III-certified facilities across multiple availability zones with a 99.982% uptime guarantee and N+1 redundancy: the same certification class where Nigerian banks host their core systems. I can also set up a two-week proof of concept so your team measures it directly."
+> **Evidence:** "Nobus Cloud infrastructure is hosted in Tier III-certified data centers across multiple availability zones, with a 99.982% uptime guarantee and N+1 redundancy: the same facility class where Nigerian banks host their core systems. I can also set up a two-week proof of concept so your team measures it directly."
 > **Confirm:** "Would seeing those numbers from your own workload settle it?"
 
 ### Smokescreen detection
@@ -1061,7 +1059,7 @@ Every objection you hear in the field goes into your team's shared playbook with
 
 **5. "Our data is fine where it is."**
 - Clarify: "Has compliance formally reviewed where it sits under NDPA?"
-- Evidence: NDPA alignment, in-country residency in Tier III facilities, the regulator trend line. Share the data-sovereignty whitepaper from the Content Hub.
+- Evidence: NDPA compliance, in-country residency in Tier III facilities, the regulator trend line. Share the data-sovereignty whitepaper from the Content Hub.
 
 **6. "What if Nobus goes down?"**
 - Clarify: "What is your current uptime, honestly measured?"
