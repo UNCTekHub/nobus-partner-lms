@@ -2,7 +2,7 @@ import { Router } from 'express';
 import db from '../db.js';
 import { authenticate } from '../middleware/auth.js';
 import { createNotification, awardPoints } from '../services/notifications.js';
-import { QUIZ_KEYS, PATH_QUIZZES, PASS_THRESHOLD } from '../data/quizKeys.js';
+import { QUIZ_KEYS, PATH_QUIZZES, PASS_THRESHOLD } from '../quizKeys.js';
 
 const router = Router();
 
