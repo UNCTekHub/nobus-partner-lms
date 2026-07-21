@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import rateLimit from 'express-rate-limit';
@@ -41,8 +42,20 @@ const authLimiter = rateLimit({
   message: { error: 'Too many authentication attempts, please try again later.' },
 });
 
-// Middleware
-app.use(cors());
+// Security headers. CSP is disabled here because the SPA is served from the same
+// origin and uses inline module scripts from the Vite build; other helmet
+// protections (HSTS, no-sniff, frameguard, referrer-policy, etc.) are applied.
+app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
+
+// CORS: the SPA is same-origin in production. Restrict to an explicit allow-list
+// via CORS_ORIGINS (comma-separated) when set; otherwise reflect the request
+// origin (no cookies are used, so this is not a CSRF vector) for local dev.
+const corsOrigins = (process.env.CORS_ORIGINS || '').split(',').map((s) => s.trim()).filter(Boolean);
+app.use(cors({
+  origin: corsOrigins.length ? corsOrigins : true,
+  credentials: false,
+}));
+
 app.use(express.json({ limit: '5mb' }));
 app.use('/api', globalLimiter);
 
@@ -73,10 +86,11 @@ app.all('/api/*', (req, res) => {
   res.status(404).json({ error: 'API endpoint not found' });
 });
 
-// Global error handler for API routes
-app.use('/api', (err, req, res, next) => {
-  console.error('API Error:', err.message);
-  res.status(500).json({ error: err.message || 'Internal server error' });
+// Global error handler for API routes. Internal error detail is logged server
+// side but never returned to clients (prevents information disclosure).
+app.use('/api', (err, req, res, next) => { // eslint-disable-line no-unused-vars
+  console.error('API Error:', err.stack || err.message);
+  res.status(err.status || 500).json({ error: 'Internal server error' });
 });
 
 // Serve frontend in production

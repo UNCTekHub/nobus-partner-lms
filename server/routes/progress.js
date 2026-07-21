@@ -2,6 +2,7 @@ import { Router } from 'express';
 import db from '../db.js';
 import { authenticate } from '../middleware/auth.js';
 import { createNotification, awardPoints } from '../services/notifications.js';
+import { QUIZ_KEYS, PATH_QUIZZES, PASS_THRESHOLD } from '../data/quizKeys.js';
 
 const router = Router();
 
@@ -68,12 +69,17 @@ router.post('/lesson/:lessonId', authenticate, (req, res) => {
   res.json({ message: 'Lesson marked complete', lessonId });
 });
 
-// POST /api/progress/quiz - save quiz result
+// POST /api/progress/quiz - grade a quiz submission server-side
+// Client sends { quizId, answers: [selectedOptionIndex per question] }.
+// The server grades against its own answer key; scores are never trusted from the client.
 router.post('/quiz', authenticate, (req, res) => {
-  const { quizId, score, total } = req.body;
-  if (!quizId || score === undefined || !total) {
-    return res.status(400).json({ error: 'quizId, score, and total are required' });
+  const { quizId, answers } = req.body;
+  if (!quizId || !Array.isArray(answers)) {
+    return res.status(400).json({ error: 'quizId and an answers array are required' });
   }
+
+  const key = QUIZ_KEYS[quizId];
+  if (!key) return res.status(400).json({ error: 'Unknown quiz' });
 
   // Check quiz retake policy
   const policy = db.prepare('SELECT * FROM quiz_policies WHERE quiz_id = ?').get(quizId);
@@ -92,7 +98,7 @@ router.post('/quiz', authenticate, (req, res) => {
       .get(req.user.id, quizId).last;
 
     if (lastAttempt && policy.cooldown_hours > 0) {
-      const cooldownEnd = new Date(new Date(lastAttempt).getTime() + policy.cooldown_hours * 60 * 60 * 1000);
+      const cooldownEnd = new Date(new Date(lastAttempt + 'Z').getTime() + policy.cooldown_hours * 60 * 60 * 1000);
       if (new Date() < cooldownEnd) {
         const hoursLeft = Math.ceil((cooldownEnd - new Date()) / (60 * 60 * 1000));
         return res.status(429).json({
@@ -102,7 +108,13 @@ router.post('/quiz', authenticate, (req, res) => {
     }
   }
 
-  const passed = (score / total) >= 0.75 ? 1 : 0;
+  // Grade against the authoritative server-side key
+  const total = key.length;
+  let score = 0;
+  for (let i = 0; i < total; i++) {
+    if (Number(answers[i]) === key[i]) score++;
+  }
+  const passed = (score / total) >= PASS_THRESHOLD ? 1 : 0;
 
   db.prepare(`
     INSERT INTO quiz_results (user_id, quiz_id, score, total, passed) VALUES (?, ?, ?, ?, ?)
@@ -121,7 +133,8 @@ router.post('/quiz', authenticate, (req, res) => {
   // Check if all quizzes in a course path are passed
   checkPathCompletion(req.user.id);
 
-  res.json({ message: 'Quiz result saved', quizId, score, total, passed: !!passed });
+  // Return the authoritative result plus the correct answers for review display
+  res.json({ message: 'Quiz result saved', quizId, score, total, passed: !!passed, correctAnswers: key });
 });
 
 // POST /api/progress/reset - reset all progress (dev/testing)
@@ -189,8 +202,9 @@ function updateActivity(userId) {
   const user = db.prepare('SELECT last_active, learning_streak FROM users WHERE id = ?').get(userId);
   if (!user) return;
 
-  const today = new Date().toISOString().split('T')[0];
-  const lastDate = user.last_active ? user.last_active.split('T')[0] : null;
+  const today = new Date().toISOString().slice(0, 10);
+  // last_active is stored as 'YYYY-MM-DD HH:MM:SS' (space separator, UTC)
+  const lastDate = user.last_active ? user.last_active.slice(0, 10) : null;
 
   let newStreak = user.learning_streak || 0;
   if (lastDate) {
@@ -218,11 +232,7 @@ function updateActivity(userId) {
 
 // Helper: check if user completed all quizzes in a course path
 function checkPathCompletion(userId) {
-  const pathQuizzes = {
-    'sales-enablement': ['quiz-sales-m1', 'quiz-sales-m2', 'quiz-sales-m3', 'quiz-sales-m4'],
-    'presales-enablement': ['quiz-pre-m1', 'quiz-pre-m2', 'quiz-pre-m3', 'quiz-pre-m4'],
-    'technical-enablement': ['quiz-tech-m1', 'quiz-tech-m2', 'quiz-tech-m3', 'quiz-tech-m4', 'quiz-tech-m5'],
-  };
+  const pathQuizzes = PATH_QUIZZES;
 
   const pathBadges = {
     'sales-enablement': 'Sales Certified',

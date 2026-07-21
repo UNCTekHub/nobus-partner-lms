@@ -54,6 +54,10 @@ router.post('/invite', authenticate, requireRole('org_admin'), (req, res) => {
   if (!name || !email) {
     return res.status(400).json({ error: 'Name and email are required' });
   }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'Invalid email address' });
+  }
+  const category = ['Sales', 'Presales', 'Technical'].includes(roleCategory) ? roleCategory : 'Sales';
 
   const existing = db.prepare('SELECT id FROM users WHERE LOWER(email) = LOWER(?)').get(email);
   if (existing) {
@@ -61,13 +65,13 @@ router.post('/invite', authenticate, requireRole('org_admin'), (req, res) => {
   }
 
   const userId = `user-${crypto.randomUUID().slice(0, 8)}`;
-  const tempPassword = crypto.randomBytes(4).toString('hex');
+  const tempPassword = crypto.randomBytes(12).toString('base64url');
   const passwordHash = bcrypt.hashSync(tempPassword, 10);
 
   db.prepare(`
     INSERT INTO users (id, org_id, name, email, password_hash, role, role_category, status)
     VALUES (?, ?, ?, ?, ?, 'user', ?, 'active')
-  `).run(userId, req.user.org_id, name, email, passwordHash, roleCategory || 'Sales');
+  `).run(userId, req.user.org_id, name, email, passwordHash, category);
 
   // Notify the new user
   createNotification({
@@ -79,7 +83,7 @@ router.post('/invite', authenticate, requireRole('org_admin'), (req, res) => {
 
   res.status(201).json({
     message: `User ${name} created successfully`,
-    user: { id: userId, name, email, roleCategory: roleCategory || 'Sales' },
+    user: { id: userId, name, email, roleCategory: category },
     tempPassword,
   });
 });

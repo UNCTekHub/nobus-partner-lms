@@ -177,17 +177,14 @@ Launch with a key pair, then retrieve the auto-generated administrator password 
           {
             q: 'What technology stack is Nobus Cloud built on?',
             options: ['AWS CloudFormation', 'OpenStack-based hyperscale framework', 'VMware vSphere', 'Custom proprietary stack'],
-            correct: 1,
           },
           {
             q: 'Which statement about Nobus billing is TRUE?',
             options: ['Stopped instances are free', 'FCS instances are pre-billed and accrue costs even when stopped', 'Outbound data is free', 'Billing is in USD'],
-            correct: 1,
           },
           {
             q: 'Where does Nobus infrastructure run?',
             options: ['A single facility in Abuja', 'Tier III-certified data centres across multiple availability zones in Africa', 'AWS Lagos Region', 'Azure Nigeria DC'],
-            correct: 1,
           },
         ],
       },
@@ -384,12 +381,10 @@ Internet -> Floating IP -> Load balancer (HAProxy) -> Autoscaling web tier (2-10
           {
             q: 'What happens to data on an Instance Store-backed NMI when the instance is stopped?',
             options: ['Data is persisted to FBS', 'Data is lost', 'Data is backed up to FOS', 'Data is moved to another AZ'],
-            correct: 1,
           },
           {
             q: 'What should always be combined with Auto Scaling for production workloads?',
             options: ['Cloud Firewall', 'Flexible Load Balancing', 'Nobus Fast Transit', 'Cloud Backup'],
-            correct: 1,
           },
         ],
       },
@@ -542,17 +537,14 @@ Nobus FOS is an extensive distributed storage platform for **any type or amount 
           {
             q: 'Which FBS volume type is best for mission-critical databases requiring high IOPS?',
             options: ['GP2', 'IO1', 'ST1', 'SC1'],
-            correct: 1,
           },
           {
             q: 'FBS snapshots are stored in which Nobus service?',
             options: ['FCS', 'FBS', 'FOS', 'NCB'],
-            correct: 2,
           },
           {
             q: 'What is the cost of DELETE operations in Nobus FOS?',
             options: ['Per request', 'Per GB', 'Free', 'Monthly flat fee'],
-            correct: 2,
           },
         ],
       },
@@ -813,12 +805,10 @@ Managed DNS service for mapping domain names to IP addresses. **Free for all Nob
           {
             q: 'What is the recommended practice for SSH (port 22) access to production Linux servers?',
             options: ['Open to 0.0.0.0/0', 'Restrict to specific admin IP/CIDR', 'Disable SSH entirely', 'Use port 80 instead'],
-            correct: 1,
           },
           {
             q: 'What bandwidth tier requires Nobus Partner Network (NPN) certification for NFT?',
             options: ['50 Mbps', '500 Mbps', '1 Gbps and above', 'All tiers'],
-            correct: 2,
           },
         ],
       },
@@ -975,12 +965,10 @@ Protect mission-critical systems from servers to desktops/laptops:
           {
             q: 'In the shared responsibility model, who is responsible for OS patching?',
             options: ['Nobus', 'The customer', 'Both equally', 'Neither - it\'s automated'],
-            correct: 1,
           },
           {
             q: 'Which Nigerian regulation requires data about citizens to be processed in accordance with data residency guidelines?',
             options: ['PCI-DSS', 'CBN Framework', 'NDPA', 'ISO 27001'],
-            correct: 2,
           },
         ],
       },
@@ -1136,12 +1124,10 @@ Apache Kafka is an open-source distributed **event streaming platform** for high
           {
             q: 'What is the smallest deployable unit in Kubernetes?',
             options: ['Container', 'Pod', 'Node', 'Cluster'],
-            correct: 1,
           },
           {
             q: 'Which managed database is best suited for GIS applications and complex queries?',
             options: ['MySQL', 'PostgreSQL', 'MongoDB', 'MS SQL Server'],
-            correct: 1,
           },
         ],
       },
@@ -1210,12 +1196,10 @@ NCB supports backing up workloads from **any source** to Nobus:
           {
             q: 'Which DR tier provides zero RTO and zero RPO?',
             options: ['Backup & Restore', 'Pilot Light', 'Warm Standby', 'Active-Active'],
-            correct: 3,
           },
           {
             q: 'How often should snapshot recovery be tested?',
             options: ['Daily', 'Weekly', 'Monthly', 'Quarterly'],
-            correct: 3,
           },
         ],
       },
@@ -1380,12 +1364,10 @@ Object storage lifecycle and its pricing story, appliance deployment from the im
           {
             q: 'What command formats a new FBS volume as ext4 on Linux?',
             options: ['sudo format /dev/vdb ext4', 'sudo mkfs -t ext4 /dev/vdb', 'fdisk /dev/vdb', 'sudo mount -t ext4 /dev/vdb'],
-            correct: 1,
           },
           {
             q: 'Which file must be edited to persist a volume mount across reboots?',
             options: ['/etc/hosts', '/etc/fstab', '/etc/mount.conf', '/etc/volumes'],
-            correct: 1,
           },
         ],
       },
@@ -1452,12 +1434,10 @@ Most first engagements are **rehost + replatform**, with refactor as phase two o
           {
             q: 'Which migration strategy involves the LEAST application changes?',
             options: ['Refactor', 'Replatform', 'Rehost (Lift & Shift)', 'Retire'],
-            correct: 2,
           },
           {
             q: 'How long should you monitor after production cutover?',
             options: ['4 hours', '24 hours', '48-72 hours', '1 week'],
-            correct: 2,
           },
         ],
       },
@@ -1524,12 +1504,10 @@ Daily: dashboard sweep of all customer estates. Weekly: backup verification and 
           {
             q: 'What is the recommended CPU utilization threshold for alerting?',
             options: ['50%', '70%', '85%', '95%'],
-            correct: 2,
           },
           {
             q: 'If an instance has no internet access, what should you check first?',
             options: ['FBS volume status', 'Floating IP and Security Group egress rules', 'NMI version', 'Instance flavor'],
-            correct: 1,
           },
         ],
       },
@@ -1590,12 +1568,10 @@ Concede small points quickly and completely ("correct, we do not have that today
           {
             q: 'What percentage of enterprise workloads run on core compute, storage, and networking?',
             options: ['50%', '65%', '80%', '95%'],
-            correct: 2,
           },
           {
             q: 'What uptime guarantee do Nobus Tier III data centres provide?',
             options: ['99.5%', '99.9%', '99.95%', '99.982%'],
-            correct: 3,
           },
         ],
       },
@@ -1666,12 +1642,10 @@ Your certificate is downloadable from the platform and verifiable; add it to Lin
           {
             q: 'What is the passing score for the NCS Associate Technical Assessment?',
             options: ['60%', '70%', '75%', '80%'],
-            correct: 2,
           },
           {
             q: 'How many successful customer deployments are needed for Level 2 Professional certification?',
             options: ['1', '3', '5', '10'],
-            correct: 1,
           },
         ],
       },

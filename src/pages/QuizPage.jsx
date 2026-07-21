@@ -15,7 +15,7 @@ const courseMap = {
 export default function QuizPage() {
   const { courseId, moduleId } = useParams();
   const navigate = useNavigate();
-  const { saveQuizScore, getQuizResult } = useProgress();
+  const { submitQuiz, getQuizResult } = useProgress();
 
   const course = courseMap[courseId] || salesCourse;
   const mod = course.modules.find((m) => m.id === moduleId);
@@ -24,6 +24,9 @@ export default function QuizPage() {
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const existingResult = getQuizResult(quiz?.id);
 
@@ -43,20 +46,29 @@ export default function QuizPage() {
     setAnswers((prev) => ({ ...prev, [qIndex]: optIndex }));
   };
 
-  const handleSubmit = () => {
-    let correct = 0;
-    quiz.questions.forEach((q, i) => {
-      if (answers[i] === q.correct) correct++;
-    });
-    setScore(correct);
-    setSubmitted(true);
-    saveQuizScore(quiz.id, correct, quiz.questions.length);
+  const handleSubmit = async () => {
+    setError('');
+    setSubmitting(true);
+    // Order answers by question index for server grading
+    const ordered = quiz.questions.map((_, i) => (answers[i] === undefined ? -1 : answers[i]));
+    try {
+      const res = await submitQuiz(quiz.id, ordered);
+      setScore(res.score);
+      setCorrectAnswers(res.correctAnswers || []);
+      setSubmitted(true);
+    } catch (err) {
+      setError(err.message || 'Could not submit quiz. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleRetry = () => {
     setAnswers({});
     setSubmitted(false);
     setScore(0);
+    setCorrectAnswers([]);
+    setError('');
   };
 
   const allAnswered = Object.keys(answers).length === quiz.questions.length;
@@ -130,8 +142,9 @@ export default function QuizPage() {
       <div className="space-y-6">
         {quiz.questions.map((q, qi) => {
           const selected = answers[qi];
-          const isCorrect = submitted && selected === q.correct;
-          const isWrong = submitted && selected !== undefined && selected !== q.correct;
+          const correct = correctAnswers[qi];
+          const isCorrect = submitted && selected === correct;
+          const isWrong = submitted && selected !== undefined && selected !== correct;
 
           return (
             <div
@@ -156,8 +169,8 @@ export default function QuizPage() {
               <div className="space-y-2 ml-10">
                 {q.options.map((opt, oi) => {
                   const isSelected = selected === oi;
-                  const isCorrectOpt = submitted && oi === q.correct;
-                  const isWrongOpt = submitted && isSelected && oi !== q.correct;
+                  const isCorrectOpt = submitted && oi === correct;
+                  const isWrongOpt = submitted && isSelected && oi !== correct;
 
                   return (
                     <button
@@ -199,17 +212,22 @@ export default function QuizPage() {
 
       {/* Submit */}
       {!submitted && (
-        <div className="mt-8 flex items-center justify-between">
-          <Link to={`/course/${courseId}/module/${moduleId}`} className="btn-secondary inline-flex items-center gap-2 text-sm">
-            <ArrowLeft className="w-4 h-4" /> Back to Module
-          </Link>
-          <button
-            onClick={handleSubmit}
-            disabled={!allAnswered}
-            className={`btn-primary ${!allAnswered ? 'opacity-50 cursor-not-allowed' : ''}`}
-          >
-            Submit Quiz
-          </button>
+        <div className="mt-8">
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">{error}</div>
+          )}
+          <div className="flex items-center justify-between">
+            <Link to={`/course/${courseId}/module/${moduleId}`} className="btn-secondary inline-flex items-center gap-2 text-sm">
+              <ArrowLeft className="w-4 h-4" /> Back to Module
+            </Link>
+            <button
+              onClick={handleSubmit}
+              disabled={!allAnswered || submitting}
+              className={`btn-primary ${!allAnswered || submitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {submitting ? 'Submitting...' : 'Submit Quiz'}
+            </button>
+          </div>
         </div>
       )}
     </div>

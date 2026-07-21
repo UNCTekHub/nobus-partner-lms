@@ -92,7 +92,7 @@ export const api = {
   // Progress
   getProgress: () => request('/progress'),
   completeLesson: (lessonId) => request(`/progress/lesson/${lessonId}`, { method: 'POST' }),
-  saveQuiz: (quizId, score, total) => request('/progress/quiz', { method: 'POST', body: JSON.stringify({ quizId, score, total }) }),
+  saveQuiz: (quizId, answers) => request('/progress/quiz', { method: 'POST', body: JSON.stringify({ quizId, answers }) }),
   resetProgress: () => request('/progress/reset', { method: 'POST' }),
   getRecommendations: () => request('/progress/recommendations'),
 
@@ -137,9 +137,12 @@ export const api = {
     return request('/admin/audit?' + new URLSearchParams(params).toString());
   },
   adminGetDashboardReport: () => request('/admin/reports/dashboard'),
-  adminExportUsers: () => `${API_BASE}/admin/reports/users`,
-  adminExportOrgs: () => `${API_BASE}/admin/reports/organizations`,
-  adminExportProgress: () => `${API_BASE}/admin/reports/progress`,
+  // CSV exports are fetched as authenticated blobs (Authorization header) so the
+  // session token is never placed in a URL/query string.
+  adminExport: (type) => {
+    const path = type === 'orgs' ? 'organizations' : type; // users | organizations | progress
+    return request(`/admin/reports/${path}`, { responseType: 'blob' });
+  },
   adminBulkImport: (file, orgId) => {
     const formData = new FormData();
     formData.append('file', file);

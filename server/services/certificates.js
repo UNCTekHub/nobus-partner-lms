@@ -27,7 +27,7 @@ export function generateCertificate({ userName, courseName, completionDate, part
       .text('NOBUS CLOUD', 0, 80, { align: 'center' });
 
     doc.fontSize(10).fillColor('#64748b').font('Helvetica')
-      .text('Partner Learning Management System', 0, 100, { align: 'center' });
+      .text('Partner Enablement & Certification', 0, 100, { align: 'center' });
 
     // Main title
     doc.fontSize(36).fillColor('#0f766e').font('Helvetica-Bold')

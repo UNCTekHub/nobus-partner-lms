@@ -4,7 +4,7 @@ import {
   ChevronRight, Loader2, Search, Download, Upload, ChevronLeft,
   Shield, FileText, Trash2, Edit3, KeyRound, BarChart3, Settings,
 } from 'lucide-react';
-import { api, getToken } from '../lib/api';
+import { api } from '../lib/api';
 import { getTierDef, TIER_DEFINITIONS } from '../data/tiers';
 import { AdminDealsQuotes, AdminResources, AdminLabs } from '../components/AdminPortalOps';
 
@@ -104,10 +104,19 @@ export default function SuperAdminDashboard() {
     } catch (err) { alert(err.message); }
   }
 
-  function downloadExport(type) {
-    const token = getToken();
-    const url = type === 'users' ? api.adminExportUsers() : type === 'orgs' ? api.adminExportOrgs() : api.adminExportProgress();
-    window.open(url + `?token=${token}`, '_blank');
+  async function downloadExport(type) {
+    try {
+      const blob = await api.adminExport(type);
+      const filename = `nobus-partnercentral-${type === 'orgs' ? 'organizations' : type}.csv`;
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      alert(err.message || 'Export failed');
+    }
   }
 
   if (loading) return <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-nobus-500" /></div>;

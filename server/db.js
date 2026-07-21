@@ -407,5 +407,10 @@ try { db.exec("ALTER TABLE quotes ADD COLUMN lines TEXT DEFAULT '[]'"); } catch 
 // last_activity_at is refreshed on every value update; last_activity_note stores the latest one.
 try { db.exec('ALTER TABLE deals ADD COLUMN last_activity_at TEXT'); } catch { /* column exists */ }
 try { db.exec('ALTER TABLE deals ADD COLUMN last_activity_note TEXT'); } catch { /* column exists */ }
+// Session invalidation: bumping token_version revokes a user's existing JWTs.
+try { db.exec('ALTER TABLE users ADD COLUMN token_version INTEGER DEFAULT 0'); } catch { /* column exists */ }
+// API keys: fast SHA-256 lookup hash (replaces per-request bcrypt scan)
+try { db.exec('CREATE INDEX IF NOT EXISTS idx_api_keys_hash ON api_keys(key_hash)'); } catch { /* exists */ }
+try { db.exec('CREATE INDEX IF NOT EXISTS idx_login_attempts_ip ON login_attempts(ip_address, attempted_at)'); } catch { /* exists */ }
 
 export default db;

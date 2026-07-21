@@ -1,5 +1,5 @@
 export default function MarkdownRenderer({ content }) {
-  const html = markdownToHtml(content);
+  const html = markdownToHtml(content || '');
   return (
     <div
       className="lesson-content"
@@ -8,12 +8,35 @@ export default function MarkdownRenderer({ content }) {
   );
 }
 
-function markdownToHtml(md) {
-  let html = md;
+// Escape all HTML-significant characters. Applied to the ENTIRE input up front so
+// that no raw HTML from the source can ever reach the DOM; markdown transforms
+// then build a known-safe set of tags on top of the escaped text.
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
-  // Code blocks (``` ... ```)
+// Only permit safe URL schemes in links/images/media. Blocks javascript:, data:,
+// vbscript: and anything with characters that could break out of an attribute.
+function safeUrl(url) {
+  const u = (url || '').trim();
+  const decoded = u.replace(/&amp;/g, '&');
+  if (/[\s"'`<>]/.test(u)) return '#';
+  if (/^(https?:\/\/|mailto:|\/|#|\.\/|\.\.\/)/i.test(decoded)) return u;
+  return '#';
+}
+
+function markdownToHtml(md) {
+  // 1) Neutralize all raw HTML first.
+  let html = escapeHtml(md);
+
+  // Code blocks (``` ... ```) - content is already escaped above
   html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => {
-    return `<pre><code class="language-${lang}">${escapeHtml(code.trim())}</code></pre>`;
+    return `<pre><code class="language-${lang}">${code.trim()}</code></pre>`;
   });
 
   // Inline code
@@ -37,8 +60,8 @@ function markdownToHtml(md) {
   // Horizontal rules
   html = html.replace(/^---$/gm, '<hr />');
 
-  // Blockquotes
-  html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
+  // Blockquotes ('>' has been escaped to '&gt;')
+  html = html.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
   // Merge consecutive blockquotes
   html = html.replace(/<\/blockquote>\n<blockquote>/g, '<br />');
 
@@ -66,21 +89,21 @@ function markdownToHtml(md) {
   html = html.replace(/☐/g, '<input type="checkbox" disabled /> ');
   html = html.replace(/☑/g, '<input type="checkbox" checked disabled /> ');
 
-  // YouTube embeds: ![video](https://youtube.com/watch?v=xxx) or ![video](https://youtu.be/xxx)
-  html = html.replace(/!\[video\]\((?:https?:\/\/(?:www\.)?youtube\.com\/watch\?v=|https?:\/\/youtu\.be\/)([^)&]+)[^)]*\)/g,
+  // YouTube embeds - the id is constrained to a safe charset
+  html = html.replace(/!\[video\]\((?:https?:\/\/(?:www\.)?youtube\.com\/watch\?v=|https?:\/\/youtu\.be\/)([\w-]{6,20})[^)]*\)/g,
     '<div class="aspect-video my-4 rounded-lg overflow-hidden"><iframe src="https://www.youtube.com/embed/$1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full"></iframe></div>');
 
   // Generic video embed: ![video](url.mp4)
   html = html.replace(/!\[video\]\(([^)]+\.(?:mp4|webm|ogg))\)/g,
-    '<div class="my-4"><video controls class="w-full rounded-lg"><source src="$1" /></video></div>');
+    (_, url) => `<div class="my-4"><video controls class="w-full rounded-lg"><source src="${safeUrl(url)}" /></video></div>`);
 
   // Audio embed: ![audio](url.mp3)
   html = html.replace(/!\[audio\]\(([^)]+\.(?:mp3|wav|ogg))\)/g,
-    '<div class="my-4"><audio controls class="w-full"><source src="$1" /></audio></div>');
+    (_, url) => `<div class="my-4"><audio controls class="w-full"><source src="${safeUrl(url)}" /></audio></div>`);
 
   // Images with alt text
   html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g,
-    '<figure class="my-4"><img src="$2" alt="$1" class="w-full rounded-lg" loading="lazy" /><figcaption class="text-center text-sm text-gray-500 mt-2">$1</figcaption></figure>');
+    (_, alt, url) => `<figure class="my-4"><img src="${safeUrl(url)}" alt="${alt}" class="w-full rounded-lg" loading="lazy" /><figcaption class="text-center text-sm text-gray-500 mt-2">${alt}</figcaption></figure>`);
 
   // Callout boxes: :::tip, :::warning, :::info
   html = html.replace(/:::tip\n([\s\S]*?):::/g, '<div class="p-4 bg-green-50 border-l-4 border-green-500 rounded-r-lg my-4"><strong class="text-green-700">Tip:</strong> <span class="text-green-800">$1</span></div>');
@@ -92,15 +115,9 @@ function markdownToHtml(md) {
   if (!html.startsWith('<')) html = '<p>' + html;
   if (!html.endsWith('>')) html = html + '</p>';
 
-  // Links
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer" class="text-nobus-600 underline hover:text-nobus-800">$1</a>');
+  // Links - URL is scheme-validated
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g,
+    (_, text, url) => `<a href="${safeUrl(url)}" target="_blank" rel="noreferrer" class="text-nobus-600 underline hover:text-nobus-800">${text}</a>`);
 
   return html;
-}
-
-function escapeHtml(str) {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
 }

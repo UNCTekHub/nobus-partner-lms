@@ -11,6 +11,21 @@ import { createNotification, notifySuperAdmins } from '../services/notifications
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 2 * 1024 * 1024 } });
 
+// Wrap a value as a CSV cell, neutralizing spreadsheet formula injection.
+// A leading = + - @ (or tab/CR) is prefixed with a single quote so Excel/Sheets
+// treats it as text, and embedded quotes are doubled.
+function csvCell(value) {
+  let s = value === null || value === undefined ? '' : String(value);
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+  return '"' + s.replace(/"/g, '""') + '"';
+}
+
+// Allow-lists for enum fields
+const ROLES = ['user', 'org_admin', 'super_admin'];
+const STATUSES = ['active', 'inactive'];
+const ROLE_CATEGORIES = ['Sales', 'Presales', 'Technical'];
+const TIERS = ['Registered', 'Silver', 'Gold', 'Platinum', 'Elite'];
+
 // ==================== USER MANAGEMENT ====================
 
 // PATCH /api/admin/users/:id - edit user (role, role_category, status, name, email)
@@ -24,14 +39,30 @@ router.patch('/users/:id', authenticate, requireRole('super_admin'), (req, res) 
 
   if (name) { updates.push('name = ?'); params.push(name); }
   if (email) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return res.status(400).json({ error: 'Invalid email address' });
     const existing = db.prepare('SELECT id FROM users WHERE LOWER(email) = LOWER(?) AND id != ?').get(email, user.id);
     if (existing) return res.status(409).json({ error: 'Email already in use' });
     updates.push('email = ?'); params.push(email);
   }
-  if (role) { updates.push('role = ?'); params.push(role); }
-  if (roleCategory !== undefined) { updates.push('role_category = ?'); params.push(roleCategory); }
-  if (status) { updates.push('status = ?'); params.push(status); }
-  if (orgId !== undefined) { updates.push('org_id = ?'); params.push(orgId || null); }
+  if (role) {
+    if (!ROLES.includes(role)) return res.status(400).json({ error: 'Invalid role' });
+    updates.push('role = ?'); params.push(role);
+  }
+  if (roleCategory !== undefined) {
+    if (roleCategory !== null && !ROLE_CATEGORIES.includes(roleCategory)) return res.status(400).json({ error: 'Invalid role category' });
+    updates.push('role_category = ?'); params.push(roleCategory);
+  }
+  if (status) {
+    if (!STATUSES.includes(status)) return res.status(400).json({ error: 'Invalid status' });
+    updates.push('status = ?'); params.push(status);
+  }
+  if (orgId !== undefined) {
+    if (orgId) {
+      const org = db.prepare('SELECT id FROM organizations WHERE id = ?').get(orgId);
+      if (!org) return res.status(400).json({ error: 'Organization not found' });
+    }
+    updates.push('org_id = ?'); params.push(orgId || null);
+  }
 
   if (updates.length === 0) return res.status(400).json({ error: 'No fields to update' });
 
@@ -47,9 +78,10 @@ router.post('/users/:id/reset-password', authenticate, requireRole('super_admin'
   const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.params.id);
   if (!user) return res.status(404).json({ error: 'User not found' });
 
-  const tempPassword = crypto.randomBytes(4).toString('hex');
+  const tempPassword = crypto.randomBytes(12).toString('base64url');
   const passwordHash = bcrypt.hashSync(tempPassword, 10);
-  db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(passwordHash, user.id);
+  // Revoke the target user's existing sessions
+  db.prepare('UPDATE users SET password_hash = ?, token_version = COALESCE(token_version, 0) + 1 WHERE id = ?').run(passwordHash, user.id);
 
   createNotification({ userId: user.id, type: 'security', title: 'Password Reset', message: 'Your password has been reset by an administrator. Please login with your new temporary password and change it immediately.', link: '/profile' });
   logAudit({ userId: req.user.id, action: 'password_reset', entityType: 'user', entityId: user.id, ipAddress: getIP(req) });
@@ -131,8 +163,14 @@ router.patch('/organizations/:id', authenticate, requireRole('super_admin'), (re
   const { tier, status, name } = req.body;
   const updates = [];
   const params = [];
-  if (tier) { updates.push('tier = ?'); params.push(tier); }
-  if (status) { updates.push('status = ?'); params.push(status); }
+  if (tier) {
+    if (!TIERS.includes(tier)) return res.status(400).json({ error: 'Invalid tier' });
+    updates.push('tier = ?'); params.push(tier);
+  }
+  if (status) {
+    if (!['active', 'inactive', 'suspended'].includes(status)) return res.status(400).json({ error: 'Invalid status' });
+    updates.push('status = ?'); params.push(status);
+  }
   if (name) { updates.push('name = ?'); params.push(name); }
   if (updates.length === 0) return res.status(400).json({ error: 'No fields to update' });
 
@@ -211,9 +249,10 @@ router.get('/reports/users', authenticate, requireRole('super_admin'), (req, res
   `).all();
 
   const headers = 'Name,Email,Role,Category,Status,Joined,Last Active,Streak,Organization,Partner ID,Tier\n';
-  const rows = users.map(u =>
-    `"${u.name}","${u.email}","${u.role}","${u.role_category || ''}","${u.status}","${u.joined_date || ''}","${u.last_active || ''}",${u.learning_streak},"${u.organization || 'N/A'}","${u.partner_id || ''}","${u.tier || ''}"`
-  ).join('\n');
+  const rows = users.map(u => [
+    u.name, u.email, u.role, u.role_category || '', u.status, u.joined_date || '',
+    u.last_active || '', u.learning_streak, u.organization || 'N/A', u.partner_id || '', u.tier || '',
+  ].map(csvCell).join(',')).join('\n');
 
   res.setHeader('Content-Type', 'text/csv');
   res.setHeader('Content-Disposition', 'attachment; filename=nobus-partnercentral-users.csv');
@@ -228,9 +267,9 @@ router.get('/reports/organizations', authenticate, requireRole('super_admin'), (
   `).all();
 
   const headers = 'Name,Partner ID,RC Number,Tier,Status,State,Enrolled,Users\n';
-  const rows = orgs.map(o =>
-    `"${o.name}","${o.partner_id}","${o.rc_number}","${o.tier}","${o.status}","${o.state || ''}","${o.enrollment_date || ''}",${o.user_count}`
-  ).join('\n');
+  const rows = orgs.map(o => [
+    o.name, o.partner_id, o.rc_number, o.tier, o.status, o.state || '', o.enrollment_date || '', o.user_count,
+  ].map(csvCell).join(',')).join('\n');
 
   res.setHeader('Content-Type', 'text/csv');
   res.setHeader('Content-Disposition', 'attachment; filename=nobus-partnercentral-organizations.csv');
@@ -251,9 +290,10 @@ router.get('/reports/progress', authenticate, requireRole('super_admin'), (req, 
   `).all();
 
   const headers = 'Name,Email,Organization,Lessons Completed,Quizzes Passed,Paths Completed,Completed Paths,Badges\n';
-  const rows = data.map(d =>
-    `"${d.name}","${d.email}","${d.org_name || 'N/A'}",${d.lessons_completed},${d.quizzes_passed},${d.paths_completed},"${d.completed_paths || ''}","${d.badges || ''}"`
-  ).join('\n');
+  const rows = data.map(d => [
+    d.name, d.email, d.org_name || 'N/A', d.lessons_completed, d.quizzes_passed,
+    d.paths_completed, d.completed_paths || '', d.badges || '',
+  ].map(csvCell).join(',')).join('\n');
 
   res.setHeader('Content-Type', 'text/csv');
   res.setHeader('Content-Disposition', 'attachment; filename=nobus-partnercentral-progress.csv');
@@ -301,17 +341,30 @@ router.post('/users/bulk-import', authenticate, requireRole('super_admin', 'org_
   try {
     const records = parse(req.file.buffer.toString(), { columns: true, skip_empty_lines: true, trim: true });
     const results = { created: 0, skipped: 0, errors: [] };
-    const orgId = req.body.orgId || req.user.org_id;
+    // Org admins can only import into their OWN org; only a super admin may target another org
+    const orgId = req.user.role === 'super_admin' ? (req.body.orgId || req.user.org_id) : req.user.org_id;
 
     if (!orgId) return res.status(400).json({ error: 'Organization ID is required' });
+
+    // Super admin targeting a specific org: verify it exists
+    if (req.body.orgId && req.user.role === 'super_admin') {
+      const org = db.prepare('SELECT id FROM organizations WHERE id = ?').get(req.body.orgId);
+      if (!org) return res.status(400).json({ error: 'Target organization not found' });
+    }
 
     for (const row of records) {
       const name = row.name || row.Name || row.full_name;
       const email = row.email || row.Email;
-      const roleCategory = row.role_category || row.roleCategory || row.Role || 'Sales';
+      let roleCategory = row.role_category || row.roleCategory || row.Role || 'Sales';
+      if (!ROLE_CATEGORIES.includes(roleCategory)) roleCategory = 'Sales';
 
       if (!name || !email) {
         results.errors.push(`Missing name or email in row: ${JSON.stringify(row)}`);
+        results.skipped++;
+        continue;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        results.errors.push(`Invalid email: ${email}`);
         results.skipped++;
         continue;
       }
@@ -324,7 +377,7 @@ router.post('/users/bulk-import', authenticate, requireRole('super_admin', 'org_
       }
 
       const userId = `user-${crypto.randomUUID().slice(0, 8)}`;
-      const tempPassword = crypto.randomBytes(4).toString('hex');
+      const tempPassword = crypto.randomBytes(12).toString('base64url');
       const passwordHash = bcrypt.hashSync(tempPassword, 10);
 
       db.prepare(`

@@ -295,32 +295,26 @@ For mature DevOps teams, position Nobus Cloud Orchestration:
           {
             q: 'Which FBS volume type should you recommend for a mission-critical Oracle database?',
             options: ['GP2', 'IO1', 'ST1', 'SC1'],
-            correct: 1,
           },
           {
             q: 'What is the primary advantage of positioning managed databases over self-managed?',
             options: ['Lower storage costs', 'Operational time savings (no patching, backup management)', 'Faster query performance', 'More database options'],
-            correct: 1,
           },
           {
             q: 'Which connectivity option is recommended for enterprise customers with latency-sensitive applications?',
             options: ['Public Internet', 'Site-to-Site VPN', 'Nobus Fast Transit (NFT)', 'Cloud Router'],
-            correct: 2,
           },
           {
             q: 'A customer says "We need advanced analytics with geospatial data." Which managed database should you recommend?',
             options: ['MySQL', 'MongoDB', 'PostgreSQL (with PostGIS)', 'MS SQL Server'],
-            correct: 2,
           },
           {
             q: 'What makes NCB (Nobus Cloud Backup) a unique competitive differentiator?',
             options: ['It is the cheapest backup solution', 'It supports cross-cloud backup from AWS, Azure, GCP, VMware, and on-prem', 'It only backs up Nobus workloads', 'It uses tape-based backup'],
-            correct: 1,
           },
           {
             q: 'When should you position Nobus Kafka Service to a customer?',
             options: ['When they need file storage', 'When they mention real-time, event-driven, or streaming requirements', 'When they need a traditional relational database', 'When they want to host static websites'],
-            correct: 1,
           },
         ],
       },
@@ -439,12 +433,10 @@ A partner competing for an insurer's migration sent the solution-level diagram w
           {
             q: 'In a three-tier web architecture, which subnet should the database reside in?',
             options: ['Public subnet with Floating IP', 'Private subnet accessible only from app-sg', 'DMZ subnet', 'External subnet'],
-            correct: 1,
           },
           {
             q: 'For an enterprise DR scenario, which connectivity option provides the lowest latency?',
             options: ['Public Internet', 'Site-to-Site VPN', 'Nobus Fast Transit (NFT)', 'FOS replication'],
-            correct: 2,
           },
         ],
       },
@@ -577,12 +569,10 @@ Never bluff an RFP; evaluators compare answers across bidders and bluffs are obv
           {
             q: 'Over what time period should you present TCO comparisons to show the most compelling savings?',
             options: ['1 month', '1 year', '3 years', '5 years'],
-            correct: 2,
           },
           {
             q: 'What is the single most important element that differentiates a winning RFP response?',
             options: ['Lowest price', 'Most pages', 'Reflecting the customer\'s specific language and pain points', 'Most technical detail'],
-            correct: 2,
           },
         ],
       },
@@ -696,17 +686,14 @@ The entire workflow targets **three weeks** for a standard deal. Each artifact i
           {
             q: 'What is the recommended maximum time for a product demo?',
             options: ['15 minutes', '30 minutes', '60 minutes', '90 minutes'],
-            correct: 1,
           },
           {
             q: 'What is the primary output of the Discovery phase?',
             options: ['Architecture diagram', 'TCO model', 'Discovery notes document', 'Formal proposal'],
-            correct: 2,
           },
           {
             q: 'Why should you pre-provision the demo environment instead of building live?',
             options: ['To save time', 'To avoid risk of live failures', 'Company policy', 'To show automation'],
-            correct: 1,
           },
         ],
       },

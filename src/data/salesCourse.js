@@ -303,42 +303,34 @@ As a sales rep, you need to know the full product catalogue so you can identify 
           {
             q: 'What is the primary compliance advantage Nobus offers over AWS/Azure for Nigerian businesses?',
             options: ['Lower pricing', 'Data sovereignty - data stays in Nigeria (NDPA compliance)', 'More services available', 'Faster compute instances'],
-            correct: 1,
           },
           {
             q: 'Which buyer persona is most concerned with TCO, OpEx vs CapEx, and budget certainty?',
             options: ['CIO/CTO', 'IT Manager', 'CFO', 'CEO'],
-            correct: 2,
           },
           {
             q: 'What is the #1 priority target sector for Nobus Cloud sales?',
             options: ['E-commerce', 'Education', 'Banking & Financial Services', 'Manufacturing'],
-            correct: 2,
           },
           {
             q: 'Which of the following is TRUE about Nobus pricing?',
             options: ['Nobus bills in USD', 'Nobus charges egress fees', 'Nobus bills in Naira with no egress fees', 'Nobus is more expensive than AWS'],
-            correct: 2,
           },
           {
             q: 'Where does Nobus Cloud infrastructure run?',
             options: ['US and European data centers', 'Tier III-certified availability zones: two in Lagos (Ikeja and Lekki) and one in Nairobi, Kenya', 'Microsoft Azure facility in Abuja', 'Google Cloud region in Johannesburg'],
-            correct: 1,
           },
           {
             q: 'What is NCB (Nobus Cloud Backup) capable of backing up?',
             options: ['Only Nobus workloads', 'Only on-premise servers', 'Cross-cloud: AWS, Azure, on-prem, and Nobus workloads', 'Only Windows servers'],
-            correct: 2,
           },
           {
             q: 'Which Nobus product provides dedicated enterprise connectivity from 50 Mbps to 10 Gbps?',
             options: ['VPN', 'Floating IP', 'NFT (Nobus Fast Transit)', 'Cloud Router'],
-            correct: 2,
           },
           {
             q: 'What is the cost of Nobus managed DNS for Nobus resources?',
             options: ['NGN 5,000/month', 'NGN 1,500/month', 'NGN 10,000/month', 'Free'],
-            correct: 3,
           },
         ],
       },
@@ -513,22 +505,18 @@ A partner scored a government prospect: Budget 3 (approved project), Need 3 (aud
           {
             q: 'In the SPIN selling framework, what do "I" questions do?',
             options: ['Identify the current situation', 'Amplify the pain of the problem', 'Present the Nobus solution', 'Investigate the budget'],
-            correct: 1,
           },
           {
             q: 'What is the typical timeline for closing a new logo deal?',
             options: ['1-2 weeks', '2-4 months', '6-12 months', '1-2 days'],
-            correct: 1,
           },
           {
             q: 'A prospect scores 28 on the BANT qualifying scorecard. What should you do?',
             options: ['Disqualify them', 'Continue discovery', 'Schedule technical deep-dive immediately', 'Nurture the lead'],
-            correct: 2,
           },
           {
             q: 'What is the goal of Stage 2 (Initial Discovery Call)?',
             options: ['Get a signed contract', 'Schedule a deep-dive technical call', 'Deliver a proposal', 'Begin implementation'],
-            correct: 1,
           },
         ],
       },
@@ -666,22 +654,18 @@ Never fabricate competitor weaknesses. State facts you can defend, acknowledge g
           {
             q: 'What is Nobus\'s BIGGEST competitor in Nigeria?',
             options: ['AWS', 'Azure', 'Google Cloud', 'On-Premise (Status Quo)'],
-            correct: 3,
           },
           {
             q: 'What is a key advantage Nobus has over AWS regarding data transfer?',
             options: ['Faster network speeds', 'No egress fees', 'More data centers', 'Free inbound data'],
-            correct: 1,
           },
           {
             q: 'When a prospect says "AWS is the industry standard," what should you NOT say?',
             options: ['"AWS is excellent for global companies"', '"Many of our customers evaluated AWS and chose Nobus"', '"AWS sucks"', '"For Nigerian businesses, Nobus is often the better fit"'],
-            correct: 2,
           },
           {
             q: 'What Nobus product addresses the on-premise objection "What about when internet goes down?"',
             options: ['VPN', 'Floating IP', 'NFT (Nobus Fast Transit) - dedicated connectivity', 'Cloud Router'],
-            correct: 2,
           },
         ],
       },
@@ -833,22 +817,18 @@ Common flavors you'll use in proposals:
           {
             q: 'What is the recommended maximum length for a proposal?',
             options: ['5 pages', '10-12 pages', '25 pages', '50 pages'],
-            correct: 1,
           },
           {
             q: 'How should you position the price to a customer?',
             options: ['Just state the number plainly', 'Compare it to a relatable cost and highlight value', 'Always offer a discount upfront', 'Avoid discussing price entirely'],
-            correct: 1,
           },
           {
             q: 'What does the Nobus FCS flavor "si.2.4.30.l" represent?',
             options: ['2 servers, 4TB storage, 30 users, Linux', '2 vCPU, 4GB RAM, 30GB disk, Linux', '2GHz CPU, 4 cores, 30GB RAM, Large', 'Series 2, Generation 4, 30-day billing, Linux'],
-            correct: 1,
           },
           {
             q: 'Which of these items should ALWAYS be included in a Nobus proposal at no cost?',
             options: ['Sophos XG Firewall', 'Managed DNS and zero egress fees', 'Acronis Cyber Protect', 'NFT Fast Transit'],
-            correct: 1,
           },
         ],
       },
@@ -972,22 +952,18 @@ Attendees must include the economic buyer; if they cannot attend, move the meeti
           {
             q: 'When should you SKIP a PoC?',
             options: ['Large deal with risk-averse buyer', 'Competitive situation', 'Existing customer expanding with simple use case', 'First cloud project for the company'],
-            correct: 2,
           },
           {
             q: 'What is the most critical thing to do BEFORE starting a PoC?',
             options: ['Set up monitoring', 'Get agreement on success criteria upfront', 'Build the architecture', 'Train the customer team'],
-            correct: 1,
           },
           {
             q: 'A prospect says "The PoC was great, but we want to test AWS too." What is the best response?',
             options: ['Badmouth AWS to discourage them', 'Agree and ask when AWS PoC is scheduled, then propose a comparison commitment', 'Offer a 50% discount immediately', 'Tell them AWS won\'t work for them'],
-            correct: 1,
           },
           {
             q: 'What should you do immediately after the prospect says "What questions remain before we proceed?"',
             options: ['List all features again', 'Offer a discount', 'Stay silent - let them respond first', 'Schedule another meeting'],
-            correct: 2,
           },
         ],
       },
@@ -1120,22 +1096,18 @@ Raise the two objections you expect BEFORE the customer does: "You might be wond
           {
             q: 'What is the FIRST step in the objection handling framework?',
             options: ['Answer immediately', 'Listen without interrupting', 'Question their logic', 'Present counter-evidence'],
-            correct: 1,
           },
           {
             q: 'A prospect keeps raising the same objection in different ways even after you\'ve addressed it. This likely indicates:',
             options: ['They need more technical details', 'A hidden objection', 'They want a discount', 'They need to talk to their team'],
-            correct: 1,
           },
           {
             q: 'A prospect says "AWS quoted us less." What is the best response approach?',
             options: ['Immediately match the AWS price', 'Ask to compare apples to apples - does AWS include egress fees, DNS, firewall?', 'Tell them AWS is lying', 'Walk away from the deal'],
-            correct: 1,
           },
           {
             q: 'Which of the following is a common hidden objection?',
             options: ['The price is genuinely too high', 'They need more storage', 'Fear of change or career risk if migration fails', 'They want Windows instead of Linux'],
-            correct: 2,
           },
         ],
       },

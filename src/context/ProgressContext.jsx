@@ -52,22 +52,17 @@ export function ProgressProvider({ children }) {
     }
   }, []);
 
-  const saveQuizScore = useCallback(async (quizId, score, total) => {
-    const passed = score / total >= 0.75;
-    // Optimistic update
+  // Submit answers to the server, which grades authoritatively and returns the result
+  const submitQuiz = useCallback(async (quizId, answers) => {
+    const res = await api.saveQuiz(quizId, answers);
     setProgress((prev) => ({
       ...prev,
       quizzes: {
         ...prev.quizzes,
-        [quizId]: { score, total, passed, date: new Date().toISOString() },
+        [quizId]: { score: res.score, total: res.total, passed: res.passed, date: new Date().toISOString() },
       },
     }));
-
-    try {
-      await api.saveQuiz(quizId, score, total);
-    } catch {
-      // Keep the optimistic state - quiz was attempted
-    }
+    return res; // { score, total, passed, correctAnswers }
   }, []);
 
   const isLessonComplete = useCallback((lessonId) => {
@@ -125,7 +120,7 @@ export function ProgressProvider({ children }) {
         progress,
         loaded,
         markLessonComplete,
-        saveQuizScore,
+        submitQuiz,
         isLessonComplete,
         getQuizResult,
         getCourseProgress,

@@ -65,7 +65,7 @@ router.post('/approve/:id', authenticate, requireRole('super_admin'), (req, res)
 
   // Create org admin account from the contact
   const userId = `user-${crypto.randomUUID().slice(0, 8)}`;
-  const tempPassword = crypto.randomBytes(4).toString('hex');
+  const tempPassword = crypto.randomBytes(12).toString('base64url');
   const passwordHash = bcrypt.hashSync(tempPassword, 10);
 
   db.prepare(`

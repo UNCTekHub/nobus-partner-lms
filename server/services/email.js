@@ -40,7 +40,7 @@ export async function sendPartnerApprovalEmail({ contactName, contactEmail, comp
       <!-- Header -->
       <div style="background: linear-gradient(135deg, #0f766e, #0d9488); padding: 32px; text-align: center;">
         <h1 style="color: white; margin: 0; font-size: 24px;">Nobus Cloud</h1>
-        <p style="color: #99f6e4; margin: 8px 0 0; font-size: 14px;">Partner Learning Management System</p>
+        <p style="color: #99f6e4; margin: 8px 0 0; font-size: 14px;">Partner Portal</p>
       </div>
 
       <!-- Body -->
@@ -236,6 +236,57 @@ export async function sendPartnerRejectionEmail({ contactName, contactEmail, com
     return { sent: true, messageId: info.messageId };
   } catch (err) {
     console.error('[Email] Failed to send rejection email:', err.message);
+    return { sent: false, reason: err.message };
+  }
+}
+
+// Send a password reset link. The token is contained in resetUrl and is never logged.
+export async function sendPasswordResetEmail({ contactName, contactEmail, resetUrl }) {
+  const subject = 'Reset your Nobus PartnerCentral password';
+
+  const html = `
+    <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
+      <div style="background: linear-gradient(135deg, #0f766e, #0d9488); padding: 32px; text-align: center;">
+        <h1 style="color: white; margin: 0; font-size: 24px;">Nobus Cloud</h1>
+        <p style="color: #99f6e4; margin: 8px 0 0; font-size: 14px;">Partner Portal</p>
+      </div>
+      <div style="padding: 32px;">
+        <h2 style="color: #1e293b; margin-top: 0;">Password reset request</h2>
+        <p style="color: #475569; line-height: 1.6;">
+          Hi ${contactName || 'there'}, we received a request to reset your PartnerCentral password.
+          Click the button below to choose a new one. This link expires in 1 hour.
+        </p>
+        <div style="text-align: center; margin: 32px 0;">
+          <a href="${resetUrl}" style="display: inline-block; background: #0f766e; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px;">
+            Reset Password
+          </a>
+        </div>
+        <p style="color: #94a3b8; font-size: 13px; line-height: 1.6;">
+          If you did not request this, you can safely ignore this email; your password will not change.
+        </p>
+      </div>
+      <div style="background: #f8fafc; padding: 24px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
+        <p style="color: #94a3b8; font-size: 12px; margin: 0;">Nobus PartnerCentral · automated message</p>
+      </div>
+    </div>
+  `;
+
+  const text = `Password reset request\n\nHi ${contactName || 'there'},\n\nReset your Nobus PartnerCentral password using this link (expires in 1 hour):\n${resetUrl}\n\nIf you did not request this, ignore this email.`;
+
+  const mailOptions = { from: `"${FROM_NAME}" <${FROM_EMAIL}>`, to: contactEmail, subject, html, text };
+
+  const transport = getTransporter();
+  if (!transport) {
+    console.log('[Email] Would send password reset email to:', contactEmail);
+    return { sent: false, reason: 'SMTP not configured' };
+  }
+
+  try {
+    const info = await transport.sendMail(mailOptions);
+    console.log('[Email] Password reset email sent to:', contactEmail);
+    return { sent: true, messageId: info.messageId };
+  } catch (err) {
+    console.error('[Email] Failed to send password reset email:', err.message);
     return { sent: false, reason: err.message };
   }
 }

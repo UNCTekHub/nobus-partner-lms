@@ -5,17 +5,27 @@ import db from '../db.js';
 import { generateToken, authenticate } from '../middleware/auth.js';
 import { logAudit, getIP } from '../services/audit.js';
 import { notifySuperAdmins, awardPoints } from '../services/notifications.js';
-import { sendPartnerApprovalEmail } from '../services/email.js';
+import { sendPartnerApprovalEmail, sendPasswordResetEmail } from '../services/email.js';
 
 const router = Router();
 
-// Brute-force protection: check login attempts
-function checkLoginAttempts(email, ip) {
+// A fixed bcrypt hash used to equalize timing when an account does not exist,
+// preventing username enumeration via response-time differences.
+const DUMMY_HASH = bcrypt.hashSync('nobus-timing-equalizer', 10);
+
+// Generate a strong temporary/random password (used for invites and resets)
+function genTempPassword() {
+  return crypto.randomBytes(12).toString('base64url'); // ~16 chars, 96 bits entropy
+}
+
+// Brute-force protection is keyed on IP (not email) so an attacker cannot lock
+// out a victim by spamming failed logins for their address.
+function checkLoginAttempts(ip) {
   const recentFails = db.prepare(`
     SELECT COUNT(*) as count FROM login_attempts
-    WHERE email = ? AND success = 0 AND attempted_at > datetime('now', '-15 minutes')
-  `).get(email).count;
-  return recentFails < 10; // Allow 10 attempts per 15 minutes
+    WHERE ip_address = ? AND success = 0 AND attempted_at > datetime('now', '-15 minutes')
+  `).get(ip).count;
+  return recentFails < 15; // Allow 15 failed attempts per IP per 15 minutes
 }
 
 function recordLoginAttempt(email, ip, success) {
@@ -35,12 +45,17 @@ router.post('/login', (req, res) => {
   const ip = getIP(req);
 
   // Check rate limit
-  if (!checkLoginAttempts(email, ip)) {
+  if (!checkLoginAttempts(ip)) {
     return res.status(429).json({ error: 'Too many login attempts. Please try again in 15 minutes.' });
   }
 
   const user = db.prepare('SELECT * FROM users WHERE LOWER(email) = LOWER(?)').get(email);
-  if (!user) {
+
+  // Always run a bcrypt comparison (against a dummy hash when the user does not
+  // exist) so timing does not reveal whether an account exists.
+  const valid = bcrypt.compareSync(password, user ? user.password_hash : DUMMY_HASH);
+
+  if (!user || !valid) {
     recordLoginAttempt(email, ip, false);
     return res.status(401).json({ error: 'Invalid email or password' });
   }
@@ -49,18 +64,12 @@ router.post('/login', (req, res) => {
     return res.status(403).json({ error: 'Account is inactive' });
   }
 
-  const valid = bcrypt.compareSync(password, user.password_hash);
-  if (!valid) {
-    recordLoginAttempt(email, ip, false);
-    return res.status(401).json({ error: 'Invalid email or password' });
-  }
-
   recordLoginAttempt(email, ip, true);
 
   // Update last_active
   db.prepare("UPDATE users SET last_active = datetime('now') WHERE id = ?").run(user.id);
 
-  const token = generateToken(user.id);
+  const token = generateToken(user.id, user.token_version || 0);
 
   // Award first login points (check if user has any points)
   const hasPoints = db.prepare('SELECT COUNT(*) as c FROM user_points WHERE user_id = ?').get(user.id).c;
@@ -125,6 +134,9 @@ router.post('/register-org', (req, res) => {
   if (!companyName || !rcNumber || !contactName || !contactEmail) {
     return res.status(400).json({ error: 'All required fields must be provided' });
   }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+    return res.status(400).json({ error: 'Please provide a valid contact email address' });
+  }
 
   const existing = db.prepare("SELECT id FROM pending_organizations WHERE rc_number = ? AND status = 'pending'").get(rcNumber);
   if (existing) {
@@ -170,11 +182,14 @@ router.post('/change-password', authenticate, (req, res) => {
   if (!valid) return res.status(401).json({ error: 'Current password is incorrect' });
 
   const hash = bcrypt.hashSync(newPassword, 10);
-  db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(hash, req.user.id);
+  // Bump token_version to revoke all other sessions, then issue a fresh token
+  // for THIS session so the current user is not logged out mid-request.
+  const newVersion = (req.user.token_version || 0) + 1;
+  db.prepare('UPDATE users SET password_hash = ?, token_version = ? WHERE id = ?').run(hash, newVersion, req.user.id);
 
   logAudit({ userId: req.user.id, action: 'password_changed', ipAddress: getIP(req) });
 
-  res.json({ message: 'Password changed successfully' });
+  res.json({ message: 'Password changed successfully', token: generateToken(req.user.id, newVersion) });
 });
 
 // POST /api/auth/forgot-password - request password reset
@@ -199,9 +214,10 @@ router.post('/forgot-password', (req, res) => {
   db.prepare('INSERT INTO password_resets (user_id, token, expires_at) VALUES (?, ?, ?)')
     .run(user.id, token, expiresAt);
 
-  // Build reset link
+  // Build reset link and email it (the token is never logged)
   const resetUrl = `${process.env.PLATFORM_URL || 'http://localhost:3001'}/reset-password?token=${token}`;
-  console.log(`[Password Reset] Token for ${email}: ${resetUrl}`);
+  sendPasswordResetEmail({ contactName: user.name, contactEmail: user.email, resetUrl })
+    .catch((err) => console.error('[Password Reset] Email error:', err.message));
 
   logAudit({ userId: user.id, action: 'password_reset_requested' });
 
@@ -221,7 +237,9 @@ router.post('/reset-password', (req, res) => {
   if (!reset) return res.status(400).json({ error: 'Invalid or expired reset token' });
 
   const hash = bcrypt.hashSync(newPassword, 10);
-  db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(hash, reset.user_id);
+  // Revoke all existing sessions for this user by bumping token_version
+  db.prepare("UPDATE users SET password_hash = ?, token_version = COALESCE(token_version, 0) + 1 WHERE id = ?")
+    .run(hash, reset.user_id);
   db.prepare('UPDATE password_resets SET used = 1 WHERE id = ?').run(reset.id);
 
   logAudit({ userId: reset.user_id, action: 'password_reset_completed' });

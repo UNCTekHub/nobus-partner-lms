@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useProgress } from '../context/ProgressContext';
-import { api } from '../lib/api';
+import { api, setToken } from '../lib/api';
 
 export default function UserProfile() {
   const { currentUser, organization, isSuperAdmin } = useAuth();
@@ -77,7 +77,9 @@ export default function UserProfile() {
     setError('');
     setMessage('');
     try {
-      await api.changePassword(passwords.currentPassword, passwords.newPassword);
+      const res = await api.changePassword(passwords.currentPassword, passwords.newPassword);
+      // Changing the password revokes old tokens; adopt the fresh one for this session
+      if (res.token) setToken(res.token);
       setMessage('Password changed successfully');
       setChangingPassword(false);
       setPasswords({ currentPassword: '', newPassword: '', confirmPassword: '' });

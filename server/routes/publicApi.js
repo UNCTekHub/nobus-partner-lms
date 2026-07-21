@@ -1,19 +1,23 @@
 import { Router } from 'express';
 import crypto from 'crypto';
-import bcrypt from 'bcryptjs';
 import db from '../db.js';
 import { authenticate, requireRole } from '../middleware/auth.js';
 
 const router = Router();
+
+// API keys are high-entropy random tokens, so a fast one-way hash (SHA-256) is
+// the correct primitive: it allows a direct indexed lookup instead of a bcrypt
+// scan over every active key (which was an O(n) per-request DoS surface).
+function hashApiKey(rawKey) {
+  return crypto.createHash('sha256').update(rawKey).digest('hex');
+}
 
 // Middleware: authenticate via API key (x-api-key header)
 function authenticateApiKey(req, res, next) {
   const apiKey = req.headers['x-api-key'];
   if (!apiKey) return res.status(401).json({ error: 'API key required. Pass via x-api-key header.' });
 
-  // Find key by checking hash
-  const keys = db.prepare("SELECT * FROM api_keys WHERE active = 1").all();
-  const matched = keys.find(k => bcrypt.compareSync(apiKey, k.key_hash));
+  const matched = db.prepare("SELECT * FROM api_keys WHERE key_hash = ? AND active = 1").get(hashApiKey(apiKey));
   if (!matched) return res.status(401).json({ error: 'Invalid API key' });
 
   // Check expiry
@@ -34,11 +38,13 @@ function authenticateApiKey(req, res, next) {
 // POST /api/public/keys - generate API key (org admin or super admin)
 router.post('/keys', authenticate, requireRole('super_admin', 'org_admin'), (req, res) => {
   const { name, orgId } = req.body;
-  const targetOrgId = orgId || req.user.org_id;
+  // Org admins can only ever create keys for their OWN organization; only a
+  // super admin may target another org via the body.
+  const targetOrgId = req.user.role === 'super_admin' ? (orgId || req.user.org_id) : req.user.org_id;
   if (!targetOrgId) return res.status(400).json({ error: 'Organization ID required' });
 
   const rawKey = `nbs_${crypto.randomBytes(24).toString('hex')}`;
-  const keyHash = bcrypt.hashSync(rawKey, 10);
+  const keyHash = hashApiKey(rawKey);
 
   const expiresAt = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(); // 1 year
 
@@ -57,7 +63,9 @@ router.post('/keys', authenticate, requireRole('super_admin', 'org_admin'), (req
 
 // GET /api/public/keys - list API keys (without the actual keys)
 router.get('/keys', authenticate, requireRole('super_admin', 'org_admin'), (req, res) => {
-  const orgId = req.query.orgId || req.user.org_id;
+  // Org admins are confined to their own org; super admins may pass ?orgId=
+  const orgId = req.user.role === 'super_admin' ? (req.query.orgId || req.user.org_id) : req.user.org_id;
+  if (!orgId) return res.json([]);
   const keys = db.prepare(`
     SELECT id, org_id, name, permissions, last_used, expires_at, active, created_at
     FROM api_keys WHERE org_id = ? ORDER BY created_at DESC
@@ -65,8 +73,13 @@ router.get('/keys', authenticate, requireRole('super_admin', 'org_admin'), (req,
   res.json(keys);
 });
 
-// DELETE /api/public/keys/:id - revoke an API key
+// DELETE /api/public/keys/:id - revoke an API key (must belong to caller's org)
 router.delete('/keys/:id', authenticate, requireRole('super_admin', 'org_admin'), (req, res) => {
+  const key = db.prepare('SELECT * FROM api_keys WHERE id = ?').get(req.params.id);
+  if (!key) return res.status(404).json({ error: 'API key not found' });
+  if (req.user.role !== 'super_admin' && key.org_id !== req.user.org_id) {
+    return res.status(403).json({ error: 'Not your API key' });
+  }
   db.prepare('UPDATE api_keys SET active = 0 WHERE id = ?').run(req.params.id);
   res.json({ message: 'API key revoked' });
 });
