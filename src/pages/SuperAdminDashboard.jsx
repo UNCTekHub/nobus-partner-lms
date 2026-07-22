@@ -7,6 +7,8 @@ import {
 import { api } from '../lib/api';
 import { getTierDef, TIER_DEFINITIONS } from '../data/tiers';
 import { AdminDealsQuotes, AdminResources, AdminLabs } from '../components/AdminPortalOps';
+import PartnerGrowth from './PartnerGrowth';
+import Support from './Support';
 
 export default function SuperAdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -24,6 +26,7 @@ export default function SuperAdminDashboard() {
   const [bulkFile, setBulkFile] = useState(null);
   const [bulkOrgId, setBulkOrgId] = useState('');
   const [bulkResult, setBulkResult] = useState(null);
+  const [managerForm, setManagerForm] = useState({ name: '', email: '' });
 
   useEffect(() => { loadData(); }, []);
 
@@ -59,7 +62,17 @@ export default function SuperAdminDashboard() {
     try {
       const data = await api.adminGetOrg(orgId);
       setSelectedOrg(data);
+      setManagerForm({ name: data.partner_manager_name || '', email: data.partner_manager_email || '' });
       setActiveTab('orgDetail');
+    } catch (err) { alert(err.message); }
+  }
+
+  async function handleSaveManager() {
+    if (!selectedOrg) return;
+    try {
+      await api.setPartnerManager(selectedOrg.id, managerForm.name.trim(), managerForm.email.trim());
+      alert('Partner manager updated');
+      loadOrgDetail(selectedOrg.id);
     } catch (err) { alert(err.message); }
   }
 
@@ -133,6 +146,8 @@ export default function SuperAdminDashboard() {
     { id: 'approvals', label: `Approvals (${pendingCount})` },
     { id: 'users', label: 'Users' },
     { id: 'dealsQuotes', label: 'Deals & Quotes' },
+    { id: 'mdf', label: 'MDF & Payouts' },
+    { id: 'support', label: 'Support' },
     { id: 'resources', label: 'Resources' },
     { id: 'labs', label: 'Demo Labs' },
     { id: 'reports', label: 'Reports' },
@@ -209,6 +224,8 @@ export default function SuperAdminDashboard() {
 
       {/* Partner portal operations */}
       {activeTab === 'dealsQuotes' && <AdminDealsQuotes />}
+      {activeTab === 'mdf' && <PartnerGrowth embedded />}
+      {activeTab === 'support' && <Support embedded />}
       {activeTab === 'resources' && <AdminResources />}
       {activeTab === 'labs' && <AdminLabs />}
 
@@ -289,6 +306,17 @@ export default function SuperAdminDashboard() {
                 <div className="text-2xl font-bold text-nobus-600">{selectedOrg.trainedCounts?.[cat] || 0}</div>
               </div>
             ))}
+          </div>
+          <div className="card p-5 mb-6">
+            <h3 className="font-semibold text-sm mb-3">Named Partner Manager</h3>
+            <p className="text-xs text-gray-500 mb-3">Surfaced to this partner on their Support page as their Nobus point of contact.</p>
+            <div className="grid sm:grid-cols-[1fr_1fr_auto] gap-3">
+              <input value={managerForm.name} onChange={e => setManagerForm({ ...managerForm, name: e.target.value })}
+                placeholder="Manager name" className="border rounded-lg px-3 py-2 text-sm" />
+              <input value={managerForm.email} onChange={e => setManagerForm({ ...managerForm, email: e.target.value })}
+                placeholder="manager@nobus.io" type="email" className="border rounded-lg px-3 py-2 text-sm" />
+              <button onClick={handleSaveManager} className="btn-primary text-sm">Save</button>
+            </div>
           </div>
           <div className="card overflow-hidden">
             <div className="px-6 py-3 bg-gray-50 border-b flex justify-between items-center">

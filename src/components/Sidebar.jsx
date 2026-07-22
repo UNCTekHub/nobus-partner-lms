@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, BookOpen, Award, Trophy, MessageSquare, Compass, ShieldCheck, Calculator, Megaphone, Library, FlaskConical, Building2, X } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Award, Trophy, MessageSquare, Compass, ShieldCheck, Calculator, Megaphone, Library, FlaskConical, Building2, X, TrendingUp, LifeBuoy } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { tierColor } from '../data/tiers';
 
@@ -24,6 +24,13 @@ export const NAV_GROUPS = [
       { to: '/sales-navigator', label: 'Sales Navigator', icon: Compass },
       { to: '/deals', label: 'Deal Registration', icon: ShieldCheck },
       { to: '/quotes', label: 'Quote Builder', icon: Calculator },
+    ],
+  },
+  {
+    title: 'Growth & Support',
+    links: [
+      { to: '/growth', label: 'Growth & Rewards', icon: TrendingUp },
+      { to: '/support', label: 'Support', icon: LifeBuoy },
     ],
   },
   {

@@ -47,6 +47,8 @@ export default function Dashboard() {
   const [quotes, setQuotes] = useState([]);
   const [bookings, setBookings] = useState([]);
   const [stats, setStats] = useState(null);
+  const [scorecard, setScorecard] = useState(null);
+  const [earnings, setEarnings] = useState(null);
 
   useEffect(() => {
     api.getForecast().then(setForecast).catch(() => {});
@@ -54,6 +56,8 @@ export default function Dashboard() {
     api.getQuotes().then(setQuotes).catch(() => {});
     api.getLabBookings().then(setBookings).catch(() => {});
     api.getMyStats().then(setStats).catch(() => {});
+    api.getScorecard().then(setScorecard).catch(() => {});
+    api.getEarnings().then(setEarnings).catch(() => {});
   }, []);
 
   const progress = TRACKS.map(({ course }) => getCourseProgress(course.id));
@@ -200,8 +204,46 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Right rail: labs + program benefit */}
+          {/* Right rail: tier progress + labs + program benefit */}
           <div className="space-y-6 lg:col-span-1">
+            <div className="card p-5">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="font-bold text-gray-900">Tier Progress</h2>
+                <Link to="/growth" className="text-xs font-medium text-nobus-600 hover:underline flex items-center">
+                  Scorecard <ChevronRight className="w-3 h-3" />
+                </Link>
+              </div>
+              {scorecard ? (
+                scorecard.atTop ? (
+                  <p className="text-sm text-gray-500">You are at <strong style={{ color: tierColor(scorecard.tier) }}>{scorecard.tier}</strong>, the top tier. Keep certifications and deal activity current to retain it.</p>
+                ) : (
+                  <>
+                    <div className="flex items-center justify-between text-sm mb-2">
+                      <span className="font-medium" style={{ color: tierColor(scorecard.tier) }}>{scorecard.tier}</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-gray-300" />
+                      <span className="font-medium" style={{ color: tierColor(scorecard.nextTier) }}>{scorecard.nextTier}</span>
+                    </div>
+                    <div className="w-full bg-gray-100 rounded-full h-2 mb-1.5">
+                      <div className="h-2 rounded-full" style={{
+                        width: `${Math.round((scorecard.dimensions.filter((d) => d.met).length / scorecard.dimensions.length) * 100)}%`,
+                        backgroundColor: tierColor(scorecard.nextTier),
+                      }} />
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      {scorecard.dimensions.filter((d) => d.met).length}/{scorecard.dimensions.length} requirements met for {scorecard.nextTier}
+                    </div>
+                  </>
+                )
+              ) : (
+                <p className="text-sm text-gray-400">Complete certifications and close deals to advance your tier.</p>
+              )}
+              {earnings && (
+                <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-sm text-gray-600"><Wallet className="w-4 h-4 text-nobus-500" /> Accrued NCS credit</div>
+                  <span className="text-sm font-bold text-nobus-600">{naira(earnings.accrued)}</span>
+                </div>
+              )}
+            </div>
             <div className="card p-5">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="font-bold text-gray-900">Upcoming Lab Sessions</h2>

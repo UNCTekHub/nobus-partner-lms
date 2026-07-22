@@ -208,6 +208,30 @@ export const api = {
   deleteQuote: (id) => request(`/quotes/${id}`, { method: 'DELETE' }),
   exportQuote: (id, format) => request(`/quotes/${id}/export?format=${format}`, { responseType: 'blob' }),
 
+  // Partner growth: tier scorecard, earnings, analytics
+  getScorecard: () => request('/partner/scorecard'),
+  getEarnings: () => request('/partner/earnings'),
+  markCreditPaid: (dealId, paid) => request(`/partner/earnings/${dealId}/paid`, { method: 'PATCH', body: JSON.stringify({ paid }) }),
+  getPartnerAnalytics: () => request('/partner/analytics'),
+
+  // MDF (Market Development Funds)
+  getMdf: () => request('/mdf'),
+  getMdfMeta: () => request('/mdf/meta'),
+  createMdf: (data) => request('/mdf', { method: 'POST', body: JSON.stringify(data) }),
+  approveMdf: (id, amountApproved, decisionNotes) => request(`/mdf/${id}/approve`, { method: 'PATCH', body: JSON.stringify({ amountApproved, decisionNotes }) }),
+  rejectMdf: (id, reason) => request(`/mdf/${id}/reject`, { method: 'PATCH', body: JSON.stringify({ reason }) }),
+  submitMdfProof: (id, proofUrl, proofNotes) => request(`/mdf/${id}/proof`, { method: 'PATCH', body: JSON.stringify({ proofUrl, proofNotes }) }),
+  reimburseMdf: (id) => request(`/mdf/${id}/reimburse`, { method: 'PATCH' }),
+
+  // Support / case management
+  getTickets: (status) => request(`/support${status ? '?status=' + status : ''}`),
+  getTicket: (id) => request(`/support/${id}`),
+  getSupportMeta: () => request('/support/meta'),
+  createTicket: (data) => request('/support', { method: 'POST', body: JSON.stringify(data) }),
+  replyTicket: (id, body) => request(`/support/${id}/reply`, { method: 'POST', body: JSON.stringify({ body }) }),
+  setTicketStatus: (id, status) => request(`/support/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+  setPartnerManager: (orgId, name, email) => request(`/support/manager/${orgId}`, { method: 'PATCH', body: JSON.stringify({ name, email }) }),
+
   // Public API key management
   generateApiKey: (data) => request('/public/keys', { method: 'POST', body: JSON.stringify(data) }),
   getApiKeys: (orgId) => request(`/public/keys${orgId ? '?orgId=' + orgId : ''}`),

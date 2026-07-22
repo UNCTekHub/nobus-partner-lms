@@ -30,6 +30,8 @@ import QuoteBuilder from './pages/QuoteBuilder';
 import MarketingHub from './pages/MarketingHub';
 import DemoLabs from './pages/DemoLabs';
 import ContentHub from './pages/ContentHub';
+import PartnerGrowth from './pages/PartnerGrowth';
+import Support from './pages/Support';
 import { Loader2 } from 'lucide-react';
 
 function LoadingScreen() {
@@ -97,6 +99,8 @@ function AppRoutes() {
                 <Route path="/sales-navigator" element={<SalesNavigator />} />
                 <Route path="/deals" element={<DealRegistration />} />
                 <Route path="/quotes" element={<QuoteBuilder />} />
+                <Route path="/growth" element={<PartnerGrowth />} />
+                <Route path="/support" element={<Support />} />
                 <Route path="/marketing" element={<MarketingHub />} />
                 <Route path="/demo-labs" element={<DemoLabs />} />
                 <Route path="/content-hub" element={<ContentHub />} />

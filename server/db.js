@@ -413,4 +413,64 @@ try { db.exec('ALTER TABLE users ADD COLUMN token_version INTEGER DEFAULT 0'); }
 try { db.exec('CREATE INDEX IF NOT EXISTS idx_api_keys_hash ON api_keys(key_hash)'); } catch { /* exists */ }
 try { db.exec('CREATE INDEX IF NOT EXISTS idx_login_attempts_ip ON login_attempts(ip_address, attempted_at)'); } catch { /* exists */ }
 
+// Earnings: admin marks the accrued NCS credit on a won deal as paid out.
+try { db.exec('ALTER TABLE deals ADD COLUMN credit_paid INTEGER DEFAULT 0'); } catch { /* column exists */ }
+// Named partner manager surfaced to the partner org.
+try { db.exec('ALTER TABLE organizations ADD COLUMN partner_manager_name TEXT'); } catch { /* exists */ }
+try { db.exec('ALTER TABLE organizations ADD COLUMN partner_manager_email TEXT'); } catch { /* exists */ }
+
+// Growth modules: MDF and partner support/case management
+db.exec(`
+  CREATE TABLE IF NOT EXISTS mdf_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    org_id TEXT NOT NULL,
+    created_by TEXT NOT NULL,
+    title TEXT NOT NULL,
+    activity_type TEXT,
+    description TEXT,
+    amount_requested INTEGER DEFAULT 0,
+    amount_approved INTEGER,
+    planned_date TEXT,
+    status TEXT DEFAULT 'submitted',
+    proof_url TEXT,
+    proof_notes TEXT,
+    decision_notes TEXT,
+    reviewed_by TEXT,
+    reviewed_at TEXT,
+    reimbursed_at TEXT,
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (org_id) REFERENCES organizations(id),
+    FOREIGN KEY (created_by) REFERENCES users(id)
+  );
+
+  CREATE TABLE IF NOT EXISTS support_tickets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    org_id TEXT,
+    created_by TEXT NOT NULL,
+    subject TEXT NOT NULL,
+    category TEXT DEFAULT 'General',
+    priority TEXT DEFAULT 'Normal',
+    body TEXT NOT NULL,
+    status TEXT DEFAULT 'open',
+    assigned_to TEXT,
+    first_response_at TEXT,
+    resolved_at TEXT,
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (created_by) REFERENCES users(id)
+  );
+
+  CREATE TABLE IF NOT EXISTS ticket_replies (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ticket_id INTEGER NOT NULL,
+    user_id TEXT NOT NULL,
+    body TEXT NOT NULL,
+    is_staff INTEGER DEFAULT 0,
+    created_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (ticket_id) REFERENCES support_tickets(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  );
+`);
+
 export default db;
