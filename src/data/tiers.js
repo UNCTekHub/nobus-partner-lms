@@ -71,3 +71,16 @@ export function getNextTier(currentTier) {
 export function getTierDef(tierName) {
   return TIER_DEFINITIONS.find((t) => t.name === tierName) || TIER_DEFINITIONS[0];
 }
+
+// Representative metal/prestige color per tier, for the tier label and its dot.
+export const TIER_COLORS = {
+  Registered: '#64748B', // slate
+  Silver: '#9AA6B2',     // silver
+  Gold: '#D4AF37',       // gold
+  Platinum: '#4E8CA8',   // platinum blue
+  Elite: '#7C3AED',      // premium violet
+};
+
+export function tierColor(tierName) {
+  return TIER_COLORS[tierName] || TIER_COLORS.Registered;
+}

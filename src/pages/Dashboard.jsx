@@ -8,6 +8,7 @@ import { useProgress } from '../context/ProgressContext';
 import { useAuth } from '../context/AuthContext';
 import ProgressBar from '../components/ProgressBar';
 import { api } from '../lib/api';
+import { tierColor } from '../data/tiers';
 import salesCourse from '../data/salesCourse';
 import technicalCourse from '../data/technicalCourse';
 import presalesCourse from '../data/presalesCourse';
@@ -99,7 +100,10 @@ export default function Dashboard() {
               )}
               <div className="bg-white/10 rounded-lg px-4 py-2 text-center">
                 <div className="text-[10px] uppercase tracking-wider text-nobus-300">Tier</div>
-                <div className="font-bold">{organization?.tier || 'Registered'}</div>
+                <div className="font-bold flex items-center gap-1.5 justify-center">
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: tierColor(organization?.tier || 'Registered') }} />
+                  <span style={{ color: tierColor(organization?.tier || 'Registered') }}>{organization?.tier || 'Registered'}</span>
+                </div>
               </div>
             </div>
           </div>

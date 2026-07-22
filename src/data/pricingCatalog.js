@@ -1,35 +1,33 @@
 // Nobus Cloud Services pricing catalog for the partner Quote Builder.
-// Unit rates from nobus.io published pricing (rounded per Nobus guidance):
-//   FCS vCPU ₦94/unit-day · memory ₦97/GB-day · database vCPU ₦85/unit-day
-//   FBS ₦120/GB-mo · FOS ₦60/GB-mo · bandwidth ₦6,000/GB-mo · Floating IP ₦1,500/mo
-//   Windows licensed instance +₦35,000/mo
-// Monthly formula: (vCPU x vcpuDay + RAM_GB x memDay) x 30 days, matching the
-// published "from ~NGN 9,309/month" entry point (a 1 vCPU / 2 GB instance).
-// The instance root disk is included; managed-database storage bills at the FBS
-// rate. Totals are indicative - confirm at order with the official Nobus Pricing
+// FCS instance monthly formula (confirmed with Nobus):
+//   (vCPU x 94 x 30) + (RAM_GB x 97 x 30) + (disk_GB x 4 x 30)
+//   + ₦35,000/mo for a Windows licensed instance
+//   e.g. 2 vCPU, 2 GB, 30 GB = (94*30*2)+(97*30*2)+(4*30*30) = ₦15,060/mo
+// Other rates: FOS ₦60/GB-mo (2 x GB x 30) · FBS ₦120/GB-mo · Floating IP
+// ₦1,500 each · Internet bandwidth (burstable to 50 Mbps) ₦6,000 flat/mo ·
+// Nobus Cloud Backup = 3 x FOS (Acronis license + FOS) · managed database bills
+// only the FCS compute · Kubernetes bills as FCS compute per node.
+// Totals are indicative - confirm at order with the official Nobus Pricing
 // Calculator (https://nobus.io/nobus-pricing-calculator).
 
 export const RATES = {
   vcpuDay: 94,
   memGbDay: 97,
-  dbVcpuDay: 85,
+  diskGbDay: 4,          // ₦4 per GB per day (= ₦120/GB-month)
   fbsGbMonth: 120,
-  fbsSnapshotGbMonth: 120,
   fosGbMonth: 60,
-  bandwidthGbMonth: 6000,
+  ncbMultiplier: 3,      // Nobus Cloud Backup = 3 x FOS storage cost
+  bandwidthMonth: 6000,  // flat, per environment, burstable to 50 Mbps
   floatingIpMonth: 1500,
   windowsLicenseMonth: 35000,
   daysPerMonth: 30,
 };
 
-// Monthly price for a compute/database node.
-//   opts.vcpuRate  - override the vCPU day-rate (databases use dbVcpuDay)
-//   opts.diskGb    - provisioned storage billed separately (databases); instances
-//                    include their root disk, so this is 0 for FCS flavors
-//   opts.diskRate  - per-GB-month rate for opts.diskGb (FBS rate for databases)
-const computeMonthly = (vcpu, ramGb, os, opts = {}) => {
-  const { vcpuRate = RATES.vcpuDay, diskGb = 0, diskRate = 0 } = opts;
-  let m = (vcpu * vcpuRate + ramGb * RATES.memGbDay) * RATES.daysPerMonth + diskGb * diskRate;
+// Monthly price for an FCS compute node (also used for databases, VPN, NKE nodes
+// and NGFW compute): (vCPU x 94 + RAM_GB x 97 + disk_GB x 4) x 30, plus the
+// Windows license when applicable.
+const computeMonthly = (vcpu, ramGb, diskGb, os = 'linux') => {
+  let m = (vcpu * RATES.vcpuDay + ramGb * RATES.memGbDay + diskGb * RATES.diskGbDay) * RATES.daysPerMonth;
   if (os === 'windows') m += RATES.windowsLicenseMonth;
   return Math.round(m);
 };
@@ -52,16 +50,19 @@ export const FCS_INSTANCES = [
   { id: 'si.8.16.50.w', label: 'si.8.16 - 8 vCPU · 16 GiB · 50 GB (Windows)', vcpu: 8, ram: 16, disk: 50, os: 'windows' },
   { id: 'si.8.32.50.w', label: 'si.8.32 - 8 vCPU · 32 GiB · 50 GB (Windows)', vcpu: 8, ram: 32, disk: 50, os: 'windows' },
   { id: 'si.8.64.50.w', label: 'si.8.64 - 8 vCPU · 64 GiB · 50 GB (Windows, burstable)', vcpu: 8, ram: 64, disk: 50, os: 'windows' },
-].map((i) => ({ ...i, monthly: computeMonthly(i.vcpu, i.ram, i.os) }));
+].map((i) => ({ ...i, monthly: computeMonthly(i.vcpu, i.ram, i.disk, i.os) }));
+
+const VPN_FLAVOR = FCS_INSTANCES.find((i) => i.id === 'si.2.2.30.l');
 
 export const DB_ENGINES = ['PostgreSQL', 'MySQL', 'MSSQL', 'MongoDB'];
 
+// Managed databases bill only the FCS compute (vCPU + RAM + disk at FCS rates).
 export const DB_SIZES = [
   { id: 'db.2.4',  label: 'Small - 2 vCPU · 4 GiB · 50 GB',   vcpu: 2, ram: 4,  disk: 50 },
   { id: 'db.4.8',  label: 'Medium - 4 vCPU · 8 GiB · 100 GB', vcpu: 4, ram: 8,  disk: 100 },
   { id: 'db.4.16', label: 'Large - 4 vCPU · 16 GiB · 200 GB', vcpu: 4, ram: 16, disk: 200 },
   { id: 'db.8.32', label: 'XL - 8 vCPU · 32 GiB · 500 GB',    vcpu: 8, ram: 32, disk: 500 },
-].map((s) => ({ ...s, monthly: computeMonthly(s.vcpu, s.ram, 'linux', { vcpuRate: RATES.dbVcpuDay, diskGb: s.disk, diskRate: RATES.fbsGbMonth }) }));
+].map((s) => ({ ...s, monthly: computeMonthly(s.vcpu, s.ram, s.disk, 'linux') }));
 
 // Quote line-item catalog. Each entry describes how the Quote Builder renders
 // and prices one service. kind:
@@ -74,12 +75,12 @@ export const CATALOG = [
     category: 'Compute',
     services: [
       { id: 'fcs', name: 'FCS Compute Instance', kind: 'instance', options: FCS_INSTANCES,
-        blurb: 'Resizable virtual machines. Windows price includes the managed license (+₦35,000/mo).' },
-      { id: 'k8s-node', name: 'Kubernetes Worker Node', kind: 'instance',
+        blurb: 'Resizable virtual machines: vCPU + RAM + disk billed at FCS rates. Windows adds the managed license (+₦35,000/mo).' },
+      { id: 'k8s-node', name: 'Kubernetes Node (NKE)', kind: 'instance',
         options: FCS_INSTANCES.filter((i) => i.os === 'linux'),
-        blurb: 'Managed Nobus Kubernetes Engine - priced per Linux worker node.' },
-      { id: 'dedicated', name: 'Dedicated Host (BYOL)', kind: 'appliance', defaultPrice: 0,
-        blurb: 'Dedicated physical server for compliance / BYOL licensing. Priced on request - enter the agreed rate.' },
+        blurb: 'Nobus Kubernetes Engine, priced as FCS compute per node. Add one line for master nodes and one for worker nodes, each sized and quantified independently.' },
+      { id: 'dedicated', name: 'Dedicated Hosting', kind: 'appliance', defaultPrice: 0, contact: true,
+        blurb: 'Dedicated physical servers. Contact your Nobus account manager for pricing on this option.' },
     ],
   },
   {
@@ -87,44 +88,41 @@ export const CATALOG = [
     services: [
       { id: 'fbs', name: 'FBS Block Storage', kind: 'perUnit', unit: 'GB', unitPrice: RATES.fbsGbMonth, max: 1024,
         blurb: 'Provisioned block volumes, ₦120 per GB-month. 1 GB - 1 TB per volume.' },
-      { id: 'fbs-snap', name: 'FBS Snapshots (stored in FOS)', kind: 'perUnit', unit: 'GB', unitPrice: RATES.fbsSnapshotGbMonth,
-        blurb: 'Incremental snapshots billed on consumed data, ₦120 per GB-month.' },
       { id: 'fos', name: 'FOS Object Storage', kind: 'perUnit', unit: 'GB', unitPrice: RATES.fosGbMonth,
-        blurb: 'Unlimited object storage, ₦60 per GB-month. Transfer-in free.' },
-      { id: 'ncb', name: 'Nobus Cloud Backup (Acronis)', kind: 'appliance', defaultPrice: 0,
-        blurb: 'Per-workload or consumption licensing. Priced on request - enter the agreed rate.' },
+        blurb: 'Unlimited object storage, ₦60 per GB-month (2 x GB x 30 days). Transfer-in free.' },
+      { id: 'ncb', name: 'Nobus Cloud Backup', kind: 'perUnit', unit: 'GB', unitPrice: RATES.fosGbMonth * RATES.ncbMultiplier,
+        blurb: 'Acronis license + FOS storage. Standard estimate is 3 x FOS = ₦180 per GB-month of protected data.' },
     ],
   },
   {
     category: 'Networking',
     services: [
-      { id: 'bandwidth', name: 'Internet Bandwidth', kind: 'perUnit', unit: 'GB', unitPrice: RATES.bandwidthGbMonth,
-        blurb: 'Shared internet bandwidth, ₦6,000 per GB-month (burstable to 50 Mbps).' },
+      { id: 'bandwidth', name: 'Internet Bandwidth', kind: 'perUnit', unit: 'environment', unitPrice: RATES.bandwidthMonth,
+        blurb: 'Shared internet bandwidth burstable to 50 Mbps: ₦6,000 flat per environment per month.' },
       { id: 'fip', name: 'Floating IP Address', kind: 'perUnit', unit: 'IP', unitPrice: RATES.floatingIpMonth,
         blurb: 'Reserved public IPv4, ₦1,500 per month each.' },
-      { id: 'vpn', name: 'Site-to-Site VPN Gateway', kind: 'instance',
-        options: FCS_INSTANCES.filter((i) => i.os === 'linux' && i.vcpu <= 2),
-        blurb: 'pfSense-based IPsec gateway - billed as the underlying FCS instance.' },
-      { id: 'nft', name: 'Nobus Fast Transit', kind: 'appliance', defaultPrice: 0,
-        blurb: 'Dedicated 1/10 Gbps private connection. Priced on request per location and port speed.' },
+      { id: 'vpn', name: 'Site-to-Site VPN Gateway', kind: 'instance', options: [VPN_FLAVOR],
+        blurb: 'IPsec VPN gateway running on a 2 vCPU / 2 GB / 30 GB FCS instance (₦15,060/mo each).' },
+      { id: 'nft', name: 'Nobus Fast Transit', kind: 'appliance', defaultPrice: 0, contact: true,
+        blurb: 'Dedicated private connection. Contact your Nobus account manager for pricing.' },
     ],
   },
   {
     category: 'Databases',
     services: [
       { id: 'db', name: 'Managed Database', kind: 'database', engines: DB_ENGINES, sizes: DB_SIZES,
-        blurb: 'Managed PostgreSQL, MySQL, MSSQL or MongoDB with HA and automated failover. DB vCPU unit ₦85.' },
+        blurb: 'Managed PostgreSQL, MySQL, MSSQL or MongoDB with HA and automated failover. Only the FCS compute is charged.' },
     ],
   },
   {
     category: 'Security',
     services: [
-      { id: 'sophos', name: 'Sophos XG Firewall', kind: 'appliance', defaultPrice: 0,
-        blurb: 'NGFW appliance (min 2 vCPU / 4 GB / 110 GB). License priced on request.' },
-      { id: 'fortigate', name: 'FortiGate NGFW', kind: 'appliance', defaultPrice: 0,
-        blurb: 'FortiOS NGFW with UTM and SD-WAN. License priced on request.' },
-      { id: 'acronis', name: 'Acronis Cyber Protect', kind: 'appliance', defaultPrice: 0,
-        blurb: 'Backup + cyber protection (min 8 GB RAM / 100 GB). License priced on request.' },
+      { id: 'sophos', name: 'Sophos XG Firewall (compute)', kind: 'appliance', defaultPrice: computeMonthly(2, 4, 110, 'linux'),
+        blurb: 'NGFW compute for the appliance (2 vCPU / 4 GB / 110 GB). Runs BYOL - if you need Nobus to provision the license, contact your account manager.' },
+      { id: 'fortigate', name: 'FortiGate NGFW (compute)', kind: 'appliance', defaultPrice: computeMonthly(2, 4, 30, 'linux'),
+        blurb: 'FortiOS NGFW compute (from 2 vCPU / 4 GB / 30 GB). Runs BYOL - if you need Nobus to provision the license, contact your account manager.' },
+      { id: 'acronis', name: 'Acronis Cyber Protect', kind: 'appliance', defaultPrice: 0, contact: true,
+        blurb: 'Cyber protection licensing. Contact your Nobus account manager for pricing.' },
     ],
   },
 ];
@@ -136,13 +134,14 @@ export const PARTNER_DISCOUNT_PCT = 10; // standard partner credit per the NCS P
 
 // Per the Partner Agreement, the 10% credit applies only to compute and storage
 // resources directly provided by NCS - it excludes external connectivity
-// (internet bandwidth, NFT, IPs), licensed software (Windows, Sophos, FortiGate,
-// Acronis) and other non-NCS services.
+// (internet bandwidth, NFT, floating IPs), licensed software / bundled licenses
+// (Nobus Cloud Backup's Acronis license, Acronis Cyber Protect) and any option
+// priced separately by an account manager. NGFW compute and the VPN/Kubernetes
+// FCS compute ARE compute and therefore discountable.
 const DISCOUNT_ELIGIBLE = {
-  fcs: true, 'k8s-node': true, dedicated: true, vpn: true,
-  fbs: true, 'fbs-snap': true, fos: true, db: true,
-  ncb: false, bandwidth: false, fip: false, nft: false,
-  sophos: false, fortigate: false, acronis: false,
+  fcs: true, 'k8s-node': true, vpn: true, db: true, sophos: true, fortigate: true,
+  fbs: true, fos: true,
+  ncb: false, bandwidth: false, fip: false, nft: false, dedicated: false, acronis: false,
 };
 
 // Compute the monthly price of a single line item
@@ -216,7 +215,7 @@ export function buildQuoteLines(items) {
       const size = DB_SIZES.find((s) => s.id === item.sizeId);
       config = size ? `${item.engine} - ${size.vcpu} vCPU, ${size.ram}GB RAM, ${size.disk}GB Volume` : item.engine;
     } else if (item.kind === 'appliance') {
-      config = item.customPrice > 0 ? 'Agreed rate' : 'Priced on request';
+      config = item.contact ? 'Contact account manager' : (item.customPrice > 0 ? 'Agreed rate' : 'Priced on request');
     }
     return {
       group: groupOf(item.serviceId),

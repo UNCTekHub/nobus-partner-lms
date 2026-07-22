@@ -199,7 +199,9 @@ export default function Landing() {
                     <div className="text-xs text-gray-400">{preview.org}</div>
                     <div className="font-bold text-lg">Partner Dashboard</div>
                   </div>
-                  <span className="badge bg-nobus-50 text-nobus-700 font-bold">Gold Tier</span>
+                  <span className="badge font-bold inline-flex items-center gap-1.5" style={{ backgroundColor: '#FBF3D9', color: '#B8860B' }}>
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#D4AF37' }} /> Gold Tier
+                  </span>
                 </div>
                 <div className="grid grid-cols-3 gap-3 mb-5">
                   {preview.stats.map((s) => (

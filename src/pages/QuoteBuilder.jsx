@@ -10,9 +10,9 @@ let itemSeq = 1;
 function newItem(service) {
   const base = { key: itemSeq++, serviceId: service.id, name: service.name, kind: service.kind, qty: 1 };
   if (service.kind === 'instance') base.flavorId = service.options[0].id;
-  if (service.kind === 'perUnit') { base.unitPrice = service.unitPrice; base.unit = service.unit; base.qty = 10; }
+  if (service.kind === 'perUnit') { base.unitPrice = service.unitPrice; base.unit = service.unit; base.qty = service.unit === 'GB' ? 10 : 1; }
   if (service.kind === 'database') { base.engine = service.engines[0]; base.sizeId = service.sizes[0].id; }
-  if (service.kind === 'appliance') base.customPrice = service.defaultPrice || 0;
+  if (service.kind === 'appliance') { base.customPrice = service.defaultPrice || 0; base.contact = !!service.contact; }
   return base;
 }
 
@@ -136,7 +136,7 @@ export default function QuoteBuilder() {
       const size = DB_SIZES.find((s) => s.id === item.sizeId);
       return `${item.engine} · ${size?.label || item.sizeId}`;
     }
-    if (item.kind === 'appliance') return item.customPrice > 0 ? `Agreed rate ${naira(item.customPrice)}/month` : 'Priced on request';
+    if (item.kind === 'appliance') return item.contact ? 'Contact your account manager' : (item.customPrice > 0 ? `${naira(item.customPrice)}/month` : 'Priced on request');
     return '';
   };
 
@@ -358,7 +358,13 @@ export default function QuoteBuilder() {
                           </div>
                         )}
 
-                        {item.kind === 'appliance' && (
+                        {item.kind === 'appliance' && item.contact && (
+                          <span className="text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-1.5">
+                            Contact your Nobus account manager for pricing
+                          </span>
+                        )}
+
+                        {item.kind === 'appliance' && !item.contact && (
                           <div className="flex items-center gap-2 text-sm text-gray-600">
                             <span>₦/month:</span>
                             <input type="number" min="0" value={item.customPrice}
@@ -368,7 +374,7 @@ export default function QuoteBuilder() {
                           </div>
                         )}
 
-                        {item.kind !== 'perUnit' && (
+                        {item.kind !== 'perUnit' && !(item.kind === 'appliance' && item.contact) && (
                           <div className="flex items-center gap-1.5 text-sm text-gray-600">
                             <span>Qty</span>
                             <input type="number" min="1" value={item.qty}

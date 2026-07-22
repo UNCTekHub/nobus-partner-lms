@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { LayoutDashboard, BookOpen, Award, Trophy, MessageSquare, Compass, ShieldCheck, Calculator, Megaphone, Library, FlaskConical, Building2, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { tierColor } from '../data/tiers';
 
 // Grouped navigation - the information architecture of the partner portal.
 export const NAV_GROUPS = [
@@ -93,8 +94,8 @@ export default function Sidebar({ mobileOpen, onClose }) {
         <div className="px-5 py-4 border-t border-nobus-800/60">
           <div className="text-xs text-nobus-400 uppercase tracking-wider mb-0.5">Partner Tier</div>
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-accent-400" />
-            <span className="text-sm font-semibold text-white">{organization.tier || 'Registered'}</span>
+            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: tierColor(organization.tier || 'Registered') }} />
+            <span className="text-sm font-bold" style={{ color: tierColor(organization.tier || 'Registered') }}>{organization.tier || 'Registered'}</span>
           </div>
           <div className="text-xs text-nobus-300 truncate mt-0.5">{organization.name}</div>
         </div>
