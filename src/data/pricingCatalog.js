@@ -76,9 +76,11 @@ export const CATALOG = [
     services: [
       { id: 'fcs', name: 'FCS Compute Instance', kind: 'instance', options: FCS_INSTANCES,
         blurb: 'Resizable virtual machines: vCPU + RAM + disk billed at FCS rates. Windows adds the managed license (+₦35,000/mo).' },
-      { id: 'k8s-node', name: 'Kubernetes Node (NKE)', kind: 'instance',
-        options: FCS_INSTANCES.filter((i) => i.os === 'linux'),
-        blurb: 'Nobus Kubernetes Engine, priced as FCS compute per node. Add one line for master nodes and one for worker nodes, each sized and quantified independently.' },
+      { id: 'nke', name: 'Nobus Kubernetes Engine (NKE)', kind: 'kubernetes',
+        masterOptions: FCS_INSTANCES.filter((i) => i.os === 'linux'),
+        workerOptions: FCS_INSTANCES.filter((i) => i.os === 'linux'),
+        masterCounts: [1, 2, 3],
+        blurb: 'Priced as FCS compute. Choose the master node size and count (1, 2 or 3), then the worker node size and the number of workers.' },
       { id: 'dedicated', name: 'Dedicated Hosting', kind: 'appliance', defaultPrice: 0, contact: true,
         blurb: 'Dedicated physical servers. Contact your Nobus account manager for pricing on this option.' },
     ],
@@ -139,7 +141,7 @@ export const PARTNER_DISCOUNT_PCT = 10; // standard partner credit per the NCS P
 // priced separately by an account manager. NGFW compute and the VPN/Kubernetes
 // FCS compute ARE compute and therefore discountable.
 const DISCOUNT_ELIGIBLE = {
-  fcs: true, 'k8s-node': true, vpn: true, db: true, sophos: true, fortigate: true,
+  fcs: true, nke: true, vpn: true, db: true, sophos: true, fortigate: true,
   fbs: true, fos: true,
   ncb: false, bandwidth: false, fip: false, nft: false, dedicated: false, acronis: false,
 };
@@ -156,6 +158,11 @@ export function itemMonthly(item) {
     case 'database': {
       const size = DB_SIZES.find((s) => s.id === item.sizeId);
       return (size?.monthly || 0) * (item.qty || 1);
+    }
+    case 'kubernetes': {
+      const m = FCS_INSTANCES.find((f) => f.id === item.masterFlavorId);
+      const w = FCS_INSTANCES.find((f) => f.id === item.workerFlavorId);
+      return (m?.monthly || 0) * (item.masterCount || 1) + (w?.monthly || 0) * (item.workerCount || 0);
     }
     case 'appliance':
       return (item.customPrice || 0) * (item.qty || 1);
@@ -214,6 +221,10 @@ export function buildQuoteLines(items) {
     } else if (item.kind === 'database') {
       const size = DB_SIZES.find((s) => s.id === item.sizeId);
       config = size ? `${item.engine} - ${size.vcpu} vCPU, ${size.ram}GB RAM, ${size.disk}GB Volume` : item.engine;
+    } else if (item.kind === 'kubernetes') {
+      const m = FCS_INSTANCES.find((f) => f.id === item.masterFlavorId);
+      const w = FCS_INSTANCES.find((f) => f.id === item.workerFlavorId);
+      config = `${item.masterCount} master x ${m ? `${m.vcpu} vCPU/${m.ram}GB` : ''}, ${item.workerCount} worker x ${w ? `${w.vcpu} vCPU/${w.ram}GB` : ''}`;
     } else if (item.kind === 'appliance') {
       config = item.contact ? 'Contact account manager' : (item.customPrice > 0 ? 'Agreed rate' : 'Priced on request');
     }

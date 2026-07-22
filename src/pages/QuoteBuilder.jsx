@@ -3,7 +3,7 @@ import { Calculator, Plus, X, Trash2, Loader2, Printer, Save, ArrowLeft, FileTex
 import { Link } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
-import { CATALOG, DB_SIZES, itemMonthly, quoteBreakdown, buildQuoteLines, naira, PARTNER_DISCOUNT_PCT } from '../data/pricingCatalog';
+import { CATALOG, DB_SIZES, FCS_INSTANCES, itemMonthly, quoteBreakdown, buildQuoteLines, naira, PARTNER_DISCOUNT_PCT } from '../data/pricingCatalog';
 
 let itemSeq = 1;
 
@@ -12,6 +12,12 @@ function newItem(service) {
   if (service.kind === 'instance') base.flavorId = service.options[0].id;
   if (service.kind === 'perUnit') { base.unitPrice = service.unitPrice; base.unit = service.unit; base.qty = service.unit === 'GB' ? 10 : 1; }
   if (service.kind === 'database') { base.engine = service.engines[0]; base.sizeId = service.sizes[0].id; }
+  if (service.kind === 'kubernetes') {
+    base.masterFlavorId = service.masterOptions[0].id;
+    base.masterCount = 1;
+    base.workerFlavorId = (service.workerOptions[3] || service.workerOptions[0]).id;
+    base.workerCount = 2;
+  }
   if (service.kind === 'appliance') { base.customPrice = service.defaultPrice || 0; base.contact = !!service.contact; }
   return base;
 }
@@ -135,6 +141,11 @@ export default function QuoteBuilder() {
     if (item.kind === 'database') {
       const size = DB_SIZES.find((s) => s.id === item.sizeId);
       return `${item.engine} · ${size?.label || item.sizeId}`;
+    }
+    if (item.kind === 'kubernetes') {
+      const m = FCS_INSTANCES.find((f) => f.id === item.masterFlavorId);
+      const w = FCS_INSTANCES.find((f) => f.id === item.workerFlavorId);
+      return `${item.masterCount} master × ${m ? `${m.vcpu} vCPU/${m.ram}GB` : ''} · ${item.workerCount} worker × ${w ? `${w.vcpu} vCPU/${w.ram}GB` : ''}`;
     }
     if (item.kind === 'appliance') return item.contact ? 'Contact your account manager' : (item.customPrice > 0 ? `${naira(item.customPrice)}/month` : 'Priced on request');
     return '';
@@ -358,6 +369,34 @@ export default function QuoteBuilder() {
                           </div>
                         )}
 
+                        {item.kind === 'kubernetes' && (
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-600 w-full">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-semibold text-gray-500 uppercase">Master</span>
+                              <select value={item.masterFlavorId} onChange={(e) => updateItem(item.key, { masterFlavorId: e.target.value })}
+                                className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm max-w-[300px] focus:outline-none focus:ring-2 focus:ring-nobus-400">
+                                {service.masterOptions.map((f) => <option key={f.id} value={f.id}>{f.label} - {naira(f.monthly)}/mo</option>)}
+                              </select>
+                              <select value={item.masterCount} onChange={(e) => updateItem(item.key, { masterCount: Number(e.target.value) })}
+                                className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-nobus-400">
+                                {service.masterCounts.map((n) => <option key={n} value={n}>{n} node{n > 1 ? 's' : ''}</option>)}
+                              </select>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-semibold text-gray-500 uppercase">Worker</span>
+                              <select value={item.workerFlavorId} onChange={(e) => updateItem(item.key, { workerFlavorId: e.target.value })}
+                                className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm max-w-[300px] focus:outline-none focus:ring-2 focus:ring-nobus-400">
+                                {service.workerOptions.map((f) => <option key={f.id} value={f.id}>{f.label} - {naira(f.monthly)}/mo</option>)}
+                              </select>
+                              <input type="number" min="1" value={item.workerCount}
+                                onChange={(e) => updateItem(item.key, { workerCount: Math.max(1, Number(e.target.value)) })}
+                                className="w-20 border border-gray-300 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-nobus-400"
+                                title="Number of worker nodes" />
+                              <span className="text-xs text-gray-400">workers</span>
+                            </div>
+                          </div>
+                        )}
+
                         {item.kind === 'appliance' && item.contact && (
                           <span className="text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-1.5">
                             Contact your Nobus account manager for pricing
@@ -374,7 +413,7 @@ export default function QuoteBuilder() {
                           </div>
                         )}
 
-                        {item.kind !== 'perUnit' && !(item.kind === 'appliance' && item.contact) && (
+                        {item.kind !== 'perUnit' && item.kind !== 'kubernetes' && !(item.kind === 'appliance' && item.contact) && (
                           <div className="flex items-center gap-1.5 text-sm text-gray-600">
                             <span>Qty</span>
                             <input type="number" min="1" value={item.qty}
