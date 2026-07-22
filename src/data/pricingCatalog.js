@@ -1,16 +1,18 @@
 // Nobus Cloud Services pricing catalog for the partner Quote Builder.
-// Unit rates extracted from nobus.io published pricing (July 2026):
-//   FCS vCPU ₦93.50/unit·day · memory ₦96.80/GB·day · entry instance from ₦9,309/mo
+// Unit rates from nobus.io published pricing (rounded per Nobus guidance):
+//   FCS vCPU ₦94/unit-day · memory ₦97/GB-day · database vCPU ₦85/unit-day
 //   FBS ₦120/GB-mo · FOS ₦60/GB-mo · bandwidth ₦6,000/GB-mo · Floating IP ₦1,500/mo
-//   Windows licensed instance +₦35,000/mo · database vCPU unit ₦85.00
-// Totals are indicative - final pricing must be validated with the official
-// Nobus Pricing Calculator (https://nobus.io/nobus-pricing-calculator).
+//   Windows licensed instance +₦35,000/mo
+// Monthly formula: (vCPU x vcpuDay + RAM_GB x memDay) x 30 days, matching the
+// published "from ~NGN 9,309/month" entry point (a 1 vCPU / 2 GB instance).
+// The instance root disk is included; managed-database storage bills at the FBS
+// rate. Totals are indicative - confirm at order with the official Nobus Pricing
+// Calculator (https://nobus.io/nobus-pricing-calculator).
 
 export const RATES = {
-  vcpuDay: 93.5,
-  memGbDay: 96.8,
-  dbVcpuDay: 85.0,
-  rootDiskGbMonth: 23.2, // derived: si.1.2.30.l lands on the published ₦9,309/mo entry price
+  vcpuDay: 94,
+  memGbDay: 97,
+  dbVcpuDay: 85,
   fbsGbMonth: 120,
   fbsSnapshotGbMonth: 120,
   fosGbMonth: 60,
@@ -20,8 +22,14 @@ export const RATES = {
   daysPerMonth: 30,
 };
 
-const computeMonthly = (vcpu, ramGb, diskGb, os, vcpuRate = RATES.vcpuDay) => {
-  let m = (vcpu * vcpuRate + ramGb * RATES.memGbDay) * RATES.daysPerMonth + diskGb * RATES.rootDiskGbMonth;
+// Monthly price for a compute/database node.
+//   opts.vcpuRate  - override the vCPU day-rate (databases use dbVcpuDay)
+//   opts.diskGb    - provisioned storage billed separately (databases); instances
+//                    include their root disk, so this is 0 for FCS flavors
+//   opts.diskRate  - per-GB-month rate for opts.diskGb (FBS rate for databases)
+const computeMonthly = (vcpu, ramGb, os, opts = {}) => {
+  const { vcpuRate = RATES.vcpuDay, diskGb = 0, diskRate = 0 } = opts;
+  let m = (vcpu * vcpuRate + ramGb * RATES.memGbDay) * RATES.daysPerMonth + diskGb * diskRate;
   if (os === 'windows') m += RATES.windowsLicenseMonth;
   return Math.round(m);
 };
@@ -44,7 +52,7 @@ export const FCS_INSTANCES = [
   { id: 'si.8.16.50.w', label: 'si.8.16 - 8 vCPU · 16 GiB · 50 GB (Windows)', vcpu: 8, ram: 16, disk: 50, os: 'windows' },
   { id: 'si.8.32.50.w', label: 'si.8.32 - 8 vCPU · 32 GiB · 50 GB (Windows)', vcpu: 8, ram: 32, disk: 50, os: 'windows' },
   { id: 'si.8.64.50.w', label: 'si.8.64 - 8 vCPU · 64 GiB · 50 GB (Windows, burstable)', vcpu: 8, ram: 64, disk: 50, os: 'windows' },
-].map((i) => ({ ...i, monthly: computeMonthly(i.vcpu, i.ram, i.disk, i.os) }));
+].map((i) => ({ ...i, monthly: computeMonthly(i.vcpu, i.ram, i.os) }));
 
 export const DB_ENGINES = ['PostgreSQL', 'MySQL', 'MSSQL', 'MongoDB'];
 
@@ -53,7 +61,7 @@ export const DB_SIZES = [
   { id: 'db.4.8',  label: 'Medium - 4 vCPU · 8 GiB · 100 GB', vcpu: 4, ram: 8,  disk: 100 },
   { id: 'db.4.16', label: 'Large - 4 vCPU · 16 GiB · 200 GB', vcpu: 4, ram: 16, disk: 200 },
   { id: 'db.8.32', label: 'XL - 8 vCPU · 32 GiB · 500 GB',    vcpu: 8, ram: 32, disk: 500 },
-].map((s) => ({ ...s, monthly: computeMonthly(s.vcpu, s.ram, s.disk, 'linux', RATES.dbVcpuDay) }));
+].map((s) => ({ ...s, monthly: computeMonthly(s.vcpu, s.ram, 'linux', { vcpuRate: RATES.dbVcpuDay, diskGb: s.disk, diskRate: RATES.fbsGbMonth }) }));
 
 // Quote line-item catalog. Each entry describes how the Quote Builder renders
 // and prices one service. kind:
