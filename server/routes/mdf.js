@@ -21,12 +21,16 @@ router.get('/', authenticate, (req, res) => {
   res.json(db.prepare(base + ' WHERE m.org_id = ? ORDER BY m.created_at DESC').all(req.user.org_id));
 });
 
-// GET /api/mdf/meta - activity types + summary balances for the org
+// GET /api/mdf/meta - activity types + summary balances for the org.
+// Super admins with no org context get program-wide balances across all partners.
 router.get('/meta', authenticate, (req, res) => {
   const orgId = req.user.role === 'super_admin' ? (req.query.orgId || req.user.org_id) : req.user.org_id;
+  const globalView = !orgId && req.user.role === 'super_admin';
   let approved = 0, reimbursed = 0, pending = 0;
-  if (orgId) {
-    const rows = db.prepare('SELECT status, COALESCE(SUM(amount_approved),0) AS a, COALESCE(SUM(amount_requested),0) AS r FROM mdf_requests WHERE org_id = ? GROUP BY status').all(orgId);
+  if (orgId || globalView) {
+    const sql = 'SELECT status, COALESCE(SUM(amount_approved),0) AS a, COALESCE(SUM(amount_requested),0) AS r FROM mdf_requests'
+      + (globalView ? '' : ' WHERE org_id = ?') + ' GROUP BY status';
+    const rows = globalView ? db.prepare(sql).all() : db.prepare(sql).all(orgId);
     for (const row of rows) {
       if (row.status === 'reimbursed') reimbursed += row.a;
       else if (['approved', 'proof_submitted'].includes(row.status)) approved += row.a;
@@ -40,13 +44,16 @@ router.get('/meta', authenticate, (req, res) => {
 router.post('/', authenticate, (req, res) => {
   if (!req.user.org_id) return res.status(403).json({ error: 'Only partner users can request MDF' });
   const { title, activityType, description, amountRequested, plannedDate } = req.body;
-  if (!title || !amountRequested) return res.status(400).json({ error: 'Title and requested amount are required' });
+  const amount = Math.round(Number(amountRequested));
+  if (!title || !Number.isFinite(amount) || amount <= 0) {
+    return res.status(400).json({ error: 'Title and a positive requested amount are required' });
+  }
 
   const result = db.prepare(`
     INSERT INTO mdf_requests (org_id, created_by, title, activity_type, description, amount_requested, planned_date, status)
     VALUES (?, ?, ?, ?, ?, ?, ?, 'submitted')
   `).run(req.user.org_id, req.user.id, title, activityType || 'Other', description || null,
-    Math.max(0, Math.round(Number(amountRequested) || 0)), plannedDate || null);
+    amount, plannedDate || null);
 
   notifySuperAdmins({ type: 'mdf', title: 'New MDF request', message: `${req.user.name} requested MDF: ${title}`, link: '/ncs-console' });
   logAudit({ userId: req.user.id, action: 'mdf_requested', entityType: 'mdf', entityId: String(result.lastInsertRowid), details: title, ipAddress: getIP(req) });

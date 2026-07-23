@@ -15,7 +15,7 @@ const STATUS_CLS = {
 
 const EMPTY = { subject: '', category: 'General', priority: 'Normal', body: '' };
 
-export default function Support() {
+export default function Support({ embedded = false }) {
   const { isSuperAdmin } = useAuth();
   const [tickets, setTickets] = useState([]);
   const [meta, setMeta] = useState(null);
@@ -60,7 +60,7 @@ export default function Support() {
   // ---------- Detail ----------
   if (selected) {
     return (
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className={embedded ? 'max-w-4xl' : 'max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10'}>
         <button onClick={() => setSelected(null)} className="flex items-center gap-1.5 text-sm font-medium text-nobus-600 hover:text-nobus-700 mb-6">
           <ArrowLeft className="w-4 h-4" /> Back to tickets
         </button>
@@ -115,15 +115,19 @@ export default function Support() {
   // ---------- List ----------
   const shown = filter === 'all' ? tickets : tickets.filter((t) => t.status === filter);
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className={embedded ? '' : 'max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10'}>
       <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-1 flex items-center gap-2">
-            <LifeBuoy className="w-7 h-7 text-nobus-500" /> Partner Support
-          </h1>
-          <p className="text-gray-600">Raise a case with the Nobus partner team and track it to resolution.</p>
-        </div>
-        <button onClick={() => setShowForm(true)} className="btn-primary flex items-center gap-2"><Plus className="w-4 h-4" /> New Ticket</button>
+        {!embedded && (
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-1 flex items-center gap-2">
+              <LifeBuoy className="w-7 h-7 text-nobus-500" /> Partner Support
+            </h1>
+            <p className="text-gray-600">Raise a case with the Nobus partner team and track it to resolution.</p>
+          </div>
+        )}
+        {!isSuperAdmin && (
+          <button onClick={() => setShowForm(true)} className="btn-primary flex items-center gap-2"><Plus className="w-4 h-4" /> New Ticket</button>
+        )}
       </div>
 
       {error && <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">{error}</div>}
