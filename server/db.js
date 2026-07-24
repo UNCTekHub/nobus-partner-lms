@@ -506,6 +506,20 @@ db.exec(`
 
   CREATE INDEX IF NOT EXISTS idx_assign_org ON training_assignments(org_id);
   CREATE INDEX IF NOT EXISTS idx_nudge_to ON training_nudges(to_user, created_at);
+
+  -- Per-user email notification preferences (opt-out for optional categories).
+  CREATE TABLE IF NOT EXISTS notification_preferences (
+    user_id TEXT NOT NULL,
+    category TEXT NOT NULL,
+    email_enabled INTEGER DEFAULT 1,
+    updated_at TEXT DEFAULT (datetime('now')),
+    PRIMARY KEY (user_id, category)
+  );
 `);
+
+// Proactive-notification bookkeeping (fired once per event by the sweeps).
+try { db.exec('ALTER TABLE deals ADD COLUMN dormancy_warned_at TEXT'); } catch { /* exists */ }
+try { db.exec('ALTER TABLE support_tickets ADD COLUMN sla_alerted_at TEXT'); } catch { /* exists */ }
+try { db.exec('ALTER TABLE lab_bookings ADD COLUMN reminded_at TEXT'); } catch { /* exists */ }
 
 export default db;

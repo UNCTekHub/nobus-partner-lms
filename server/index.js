@@ -27,6 +27,8 @@ import supportRoutes from './routes/support.js';
 import teamRoutes from './routes/team.js';
 import db from './db.js';
 import { runTrainingReminders } from './services/trainingReminders.js';
+import { runProactiveSweeps } from './services/proactiveSweeps.js';
+import { runOpsDigest, runManagerDigest } from './services/digests.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -113,14 +115,20 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Nobus PartnerCentral server v2.0 running on http://localhost:${PORT}`);
 
-  // Training reminder + escalation sweep: once shortly after boot, then every 12h.
-  // Each run is idempotent (per-assignment cooldown), so overlap is harmless.
-  const sweep = () => {
-    try {
-      const r = runTrainingReminders(db);
-      if (r.reminded || r.escalated) console.log(`[Training] reminders: ${r.reminded} sent, ${r.escalated} escalated (of ${r.scanned})`);
-    } catch (err) { console.error('[Training] reminder sweep failed:', err.message); }
+  // Background notification jobs. All are idempotent (per-event guards), so the
+  // exact cadence and any overlap are harmless. Intervals reset on each deploy.
+  const HOUR = 60 * 60 * 1000;
+  const safe = (label, fn) => { try { return fn(); } catch (err) { console.error(`[Jobs] ${label} failed:`, err.message); } };
+
+  const sweeps = () => {
+    const t = safe('training-reminders', () => runTrainingReminders(db));
+    if (t && (t.reminded || t.escalated)) console.log(`[Jobs] training: ${t.reminded} reminded, ${t.escalated} escalated`);
+    const p = safe('proactive-sweeps', () => runProactiveSweeps(db));
+    if (p && (p.dormancy || p.sla || p.labs)) console.log(`[Jobs] proactive: ${p.dormancy} dormancy, ${p.sla} SLA, ${p.labs} lab reminders`);
   };
-  setTimeout(sweep, 30 * 1000).unref();
-  setInterval(sweep, 12 * 60 * 60 * 1000).unref();
+  setTimeout(sweeps, 30 * 1000).unref();       // shortly after boot
+  setInterval(sweeps, 6 * HOUR).unref();        // reminders + dormancy/SLA/lab every 6h
+
+  setInterval(() => safe('ops-digest', () => runOpsDigest(db)), 24 * HOUR).unref();       // daily ops summary
+  setInterval(() => safe('manager-digest', () => runManagerDigest(db)), 7 * 24 * HOUR).unref(); // weekly team summary
 });

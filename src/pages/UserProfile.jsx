@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import {
   User, Mail, Building2, BookOpen, Award, Calendar,
   Flame, CheckCircle, Shield, TrendingUp, BarChart3,
-  Edit3, Save, X, Phone, Briefcase, Globe, Lock,
+  Edit3, Save, X, Phone, Briefcase, Globe, Lock, Bell,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useProgress } from '../context/ProgressContext';
@@ -347,6 +347,55 @@ export default function UserProfile() {
             </div>
           )}
         </div>
+      </div>
+
+      <NotificationPreferences />
+    </div>
+  );
+}
+
+// Email notification preferences. Security, money and appointment emails are
+// always sent and intentionally not listed here.
+function NotificationPreferences() {
+  const [data, setData] = useState(null);
+  const [saving, setSaving] = useState('');
+
+  useEffect(() => { api.getNotificationPreferences().then(setData).catch(() => {}); }, []);
+
+  const toggle = async (cat) => {
+    setSaving(cat.key);
+    const next = !cat.enabled;
+    setData((d) => ({ ...d, categories: d.categories.map((c) => c.key === cat.key ? { ...c, enabled: next } : c) }));
+    try { await api.setNotificationPreference(cat.key, next); }
+    catch { setData((d) => ({ ...d, categories: d.categories.map((c) => c.key === cat.key ? { ...c, enabled: !next } : c) })); }
+    finally { setSaving(''); }
+  };
+
+  if (!data) return null;
+  return (
+    <div className="card p-6 mt-6">
+      <h2 className="text-lg font-bold text-gray-900 mb-1 flex items-center gap-2">
+        <Bell className="w-5 h-5 text-nobus-500" /> Email Notifications
+      </h2>
+      <p className="text-sm text-gray-500 mb-4">
+        Choose which optional emails you receive. Security, account, deal, payment and appointment
+        emails are always sent and can't be turned off.
+      </p>
+      {!data.emailConfigured && (
+        <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-700 text-xs">
+          Email delivery isn't configured on the platform yet - these preferences will take effect once it is.
+        </div>
+      )}
+      <div className="divide-y">
+        {data.categories.map((c) => (
+          <div key={c.key} className="flex items-center justify-between py-3">
+            <span className="text-sm text-gray-700">{c.label}</span>
+            <button onClick={() => toggle(c)} disabled={saving === c.key}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${c.enabled ? 'bg-nobus-500' : 'bg-gray-300'}`}>
+              <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${c.enabled ? 'translate-x-6' : 'translate-x-1'}`} />
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );

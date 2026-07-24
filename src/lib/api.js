@@ -115,6 +115,8 @@ export const api = {
   getNotifications: () => request('/notifications'),
   markNotificationRead: (id) => request(`/notifications/${id}/read`, { method: 'PATCH' }),
   markAllNotificationsRead: () => request('/notifications/read-all', { method: 'POST' }),
+  getNotificationPreferences: () => request('/notifications/preferences'),
+  setNotificationPreference: (category, enabled) => request('/notifications/preferences', { method: 'PUT', body: JSON.stringify({ category, enabled }) }),
 
   // Discussions
   getDiscussions: (params) => {

@@ -138,7 +138,7 @@ router.patch('/:id/reaffirm', authenticate, (req, res) => {
 
   db.prepare(`
     UPDATE deals SET last_activity_at = datetime('now'),
-      last_activity_note = ?, updated_at = datetime('now') WHERE id = ?
+      last_activity_note = ?, dormancy_warned_at = NULL, updated_at = datetime('now') WHERE id = ?
   `).run((note || 'Engagement reaffirmed').slice(0, 300), req.params.id);
 
   awardPoints(req.user.id, 'deal_reaffirmed', 3, `Reaffirmed protection: ${deal.opportunity_name}`);
