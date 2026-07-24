@@ -6,6 +6,7 @@ const AuthContext = createContext();
 const ROLES = {
   SUPER_ADMIN: 'super_admin',
   ORG_ADMIN: 'org_admin',
+  TEAM_MANAGER: 'team_manager',
   USER: 'user',
 };
 
@@ -62,7 +63,10 @@ export function AuthProvider({ children }) {
 
   const isSuperAdmin = currentUser?.role === ROLES.SUPER_ADMIN;
   const isOrgAdmin = currentUser?.role === ROLES.ORG_ADMIN;
+  const isTeamManager = currentUser?.role === ROLES.TEAM_MANAGER;
   const isUser = currentUser?.role === ROLES.USER;
+  // Anyone who can manage a team/training within their tenant.
+  const canManageTeam = isOrgAdmin || isTeamManager;
 
   return (
     <AuthContext.Provider
@@ -74,6 +78,8 @@ export function AuthProvider({ children }) {
         refreshUser,
         isSuperAdmin,
         isOrgAdmin,
+        isTeamManager,
+        canManageTeam,
         isUser,
         isAuthenticated: !!currentUser,
         loading,

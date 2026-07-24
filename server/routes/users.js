@@ -98,6 +98,11 @@ router.patch('/:id/status', authenticate, requireRole('org_admin'), (req, res) =
   const user = db.prepare('SELECT * FROM users WHERE id = ? AND org_id = ?').get(req.params.id, req.user.org_id);
   if (!user) return res.status(404).json({ error: 'User not found in your organization' });
   if (user.id === req.user.id) return res.status(400).json({ error: 'Cannot change your own status' });
+  // Never strand the organization without an active admin.
+  if (status === 'inactive' && user.role === 'org_admin') {
+    const activeAdmins = db.prepare("SELECT COUNT(*) AS c FROM users WHERE org_id = ? AND role = 'org_admin' AND status = 'active'").get(req.user.org_id).c;
+    if (activeAdmins <= 1) return res.status(400).json({ error: 'Your organization must keep at least one active admin' });
+  }
 
   db.prepare('UPDATE users SET status = ? WHERE id = ?').run(status, req.params.id);
   res.json({ message: `User ${status === 'active' ? 'activated' : 'deactivated'}` });

@@ -473,4 +473,39 @@ db.exec(`
   );
 `);
 
+// Delegated tenant administration: training assignments + nudges.
+// (The 'team_manager' role is just a value in users.role - no schema change.)
+db.exec(`
+  CREATE TABLE IF NOT EXISTS training_assignments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    org_id TEXT NOT NULL,
+    user_id TEXT NOT NULL,
+    path_id TEXT NOT NULL,
+    assigned_by TEXT NOT NULL,
+    due_date TEXT,
+    note TEXT,
+    cancelled_at TEXT,
+    last_reminded_at TEXT,
+    escalated_at TEXT,
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now')),
+    UNIQUE(user_id, path_id),
+    FOREIGN KEY (org_id) REFERENCES organizations(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  );
+
+  CREATE TABLE IF NOT EXISTS training_nudges (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    org_id TEXT NOT NULL,
+    from_user TEXT NOT NULL,
+    to_user TEXT NOT NULL,
+    path_id TEXT,
+    created_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (org_id) REFERENCES organizations(id)
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_assign_org ON training_assignments(org_id);
+  CREATE INDEX IF NOT EXISTS idx_nudge_to ON training_nudges(to_user, created_at);
+`);
+
 export default db;

@@ -24,7 +24,7 @@ router.get('/', authenticate, requireRole('super_admin'), (req, res) => {
 });
 
 // GET /api/organizations/mine - org admin: get own org
-router.get('/mine', authenticate, requireRole('org_admin'), (req, res) => {
+router.get('/mine', authenticate, requireRole('org_admin', 'team_manager'), (req, res) => {
   if (!req.user.org_id) return res.status(404).json({ error: 'No organization found' });
 
   const org = db.prepare('SELECT * FROM organizations WHERE id = ?').get(req.user.org_id);

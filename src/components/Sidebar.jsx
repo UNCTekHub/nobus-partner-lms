@@ -45,13 +45,13 @@ export const NAV_GROUPS = [
 
 export default function Sidebar({ mobileOpen, onClose }) {
   const location = useLocation();
-  const { organization, isOrgAdmin } = useAuth();
+  const { organization, isOrgAdmin, isTeamManager } = useAuth();
 
   const groups = [...NAV_GROUPS];
-  if (isOrgAdmin) {
+  if (isOrgAdmin || isTeamManager) {
     groups.push({
       title: 'Organization',
-      links: [{ to: '/org-admin', label: 'My Organization', icon: Building2 }],
+      links: [{ to: '/org-admin', label: isOrgAdmin ? 'My Organization' : 'My Team', icon: Building2 }],
     });
   }
 

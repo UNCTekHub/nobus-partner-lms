@@ -24,6 +24,9 @@ import quoteRoutes from './routes/quotes.js';
 import partnerRoutes from './routes/partner.js';
 import mdfRoutes from './routes/mdf.js';
 import supportRoutes from './routes/support.js';
+import teamRoutes from './routes/team.js';
+import db from './db.js';
+import { runTrainingReminders } from './services/trainingReminders.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -81,6 +84,7 @@ app.use('/api/quotes', quoteRoutes);
 app.use('/api/partner', partnerRoutes);
 app.use('/api/mdf', mdfRoutes);
 app.use('/api/support', supportRoutes);
+app.use('/api/team', teamRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -108,4 +112,15 @@ app.get('*', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Nobus PartnerCentral server v2.0 running on http://localhost:${PORT}`);
+
+  // Training reminder + escalation sweep: once shortly after boot, then every 12h.
+  // Each run is idempotent (per-assignment cooldown), so overlap is harmless.
+  const sweep = () => {
+    try {
+      const r = runTrainingReminders(db);
+      if (r.reminded || r.escalated) console.log(`[Training] reminders: ${r.reminded} sent, ${r.escalated} escalated (of ${r.scanned})`);
+    } catch (err) { console.error('[Training] reminder sweep failed:', err.message); }
+  };
+  setTimeout(sweep, 30 * 1000).unref();
+  setInterval(sweep, 12 * 60 * 60 * 1000).unref();
 });

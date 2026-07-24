@@ -86,6 +86,17 @@ export const api = {
   },
   inviteUser: (data) => request('/users/invite', { method: 'POST', body: JSON.stringify(data) }),
   updateUserStatus: (id, status) => request(`/users/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+
+  // Delegated tenant administration (org admin + team manager)
+  getTeamMeta: () => request('/team/meta'),
+  getTeamMembers: () => request('/team/members'),
+  assignTraining: (userId, pathId, dueDate, note) => request('/team/assign', { method: 'POST', body: JSON.stringify({ userId, pathId, dueDate, note }) }),
+  cancelAssignment: (id) => request(`/team/assign/${id}/cancel`, { method: 'PATCH' }),
+  nudgeMember: (userId, pathId) => request('/team/nudge', { method: 'POST', body: JSON.stringify({ userId, pathId }) }),
+  changeMemberRole: (id, role, roleCategory) => request(`/team/members/${id}/role`, { method: 'PATCH', body: JSON.stringify({ role, roleCategory }) }),
+  resetMemberPassword: (id) => request(`/team/members/${id}/reset-password`, { method: 'POST' }),
+  setMemberStatus: (id, status) => request(`/team/members/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }),
+  getTeamAudit: () => request('/team/audit'),
   getProfile: () => request('/users/profile'),
   updateProfile: (data) => request('/users/profile', { method: 'PUT', body: JSON.stringify(data) }),
 

@@ -110,7 +110,7 @@ function AppRoutes() {
                 <Route
                   path="/org-admin"
                   element={
-                    <ProtectedRoute allowedRoles={[ROLES.ORG_ADMIN]}>
+                    <ProtectedRoute allowedRoles={[ROLES.ORG_ADMIN, ROLES.TEAM_MANAGER]}>
                       <OrgAdminDashboard />
                     </ProtectedRoute>
                   }
