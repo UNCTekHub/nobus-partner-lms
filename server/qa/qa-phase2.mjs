@@ -27,17 +27,33 @@ const main = async () => {
   const chinedu = await login('chinedu@acmetech.ng', 'demo');
   const fatima = await login('fatima@datastream.ng', 'demo');
 
-  // --- Quote-basis credit: discountable 150k/mo -> credit = 150000*12*0.10 = 180,000
+  // --- Quote-basis credit, server-recomputed from raw items (client figures are
+  // TAMPERED on purpose - the server must ignore them):
+  //   fcs si.2.2.30.l x1 -> 15,060/mo discountable
+  //   fbs 100 GB        -> 12,000/mo discountable
+  //   bandwidth x1      ->  6,000/mo NOT discountable
+  // total 33,060/mo; discountable 27,060/mo -> credit = 27,060*12*10% = 32,472
   const q = await req('POST', '/quotes', chinedu.token, {
     title: 'QA Quote - Zenith Migration', customerName: 'QA Zenith Bank',
-    items: [], monthlyTotal: 200000,
-    lines: [
-      { name: 'FCS instance', discountable: 100000, monthly: 120000 },
-      { name: 'FBS storage', discountable: 50000, monthly: 60000 },
-      { name: 'Bandwidth', discountable: 0, monthly: 20000 },
+    monthlyTotal: 99999999, // tampered - must be ignored
+    items: [
+      { serviceId: 'fcs', name: 'FCS Compute Instance', kind: 'instance', flavorId: 'si.2.2.30.l', qty: 1 },
+      { serviceId: 'fbs', name: 'FBS Block Storage', kind: 'perUnit', qty: 100, unitPrice: 999999 }, // tampered unitPrice - ignored
+      { serviceId: 'bandwidth', name: 'Internet Bandwidth', kind: 'perUnit', qty: 1 },
+    ],
+    lines: [ // tampered discountables - must be recomputed server-side
+      { label: 'FCS Compute Instance', config: '2 vCPU, 2GB RAM, 30GB Volume (Linux Server)', discountable: 999999, monthly: 1 },
+      { label: 'FBS Block Storage', config: '100 GB', discountable: 999999, monthly: 1 },
+      { label: 'Internet Bandwidth', config: '1 environment', discountable: 999999, monthly: 1 },
     ],
   });
   check('P01', 'quote created', q.status === 201);
+  const qStored = await req('GET', `/quotes/${q.data.id}`, chinedu.token);
+  const storedLines = JSON.parse(qStored.data?.lines || '[]');
+  check('P01b', `tamper defeated: monthly_total recomputed to 33,060 (got ${qStored.data?.monthly_total})`, qStored.data?.monthly_total === 33060);
+  check('P01c', `tamper defeated: stored discountables are 15060/12000/0 (got ${storedLines.map((l) => l.discountable).join('/')})`,
+    storedLines.length === 3 && storedLines[0].discountable === 15060 && storedLines[1].discountable === 12000 && storedLines[2].discountable === 0);
+  check('P01d', 'display strings preserved from client', storedLines[0].config.includes('2 vCPU'));
 
   const d1 = await req('POST', '/deals', chinedu.token, {
     customerName: 'QA Zenith Bank', opportunityName: 'QA Zenith Cloud Migration',
@@ -64,16 +80,16 @@ const main = async () => {
   const earn = await req('GET', '/partner/earnings', chinedu.token);
   const r1 = earn.data.deals.find(d => d.id === d1.data.id);
   const r2 = earn.data.deals.find(d => d.id === d2.data.id);
-  check('P06', `quote-basis credit = 180,000 (got ${r1?.credit}, basis ${r1?.basis})`, r1?.basis === 'quote' && r1?.credit === 180000);
+  check('P06', `quote-basis credit = 32,472 from server-priced lines (got ${r1?.credit}, basis ${r1?.basis})`, r1?.basis === 'quote' && r1?.credit === 32472);
   check('P07', `estimate-basis credit = 350,000 (got ${r2?.credit}, basis ${r2?.basis})`, r2?.basis === 'estimate' && r2?.credit === 350000);
-  check('P08', `accrued = 530,000 (got ${earn.data.accrued})`, earn.data.accrued === 530000);
+  check('P08', `accrued = 382,472 (got ${earn.data.accrued})`, earn.data.accrued === 382472);
   check('P09', `influenced revenue = 15.5M (got ${earn.data.influencedRevenue})`, earn.data.influencedRevenue === 15500000);
 
   // --- mark paid moves totals
   await req('PATCH', `/partner/earnings/${d1.data.id}/paid`, admin.token, { paid: true });
   const earn2 = await req('GET', '/partner/earnings', chinedu.token);
-  check('P10', `paid=180k pending=350k (got paid ${earn2.data.paid}, pending ${earn2.data.pending})`,
-    earn2.data.paid === 180000 && earn2.data.pending === 350000);
+  check('P10', `paid=32,472 pending=350k (got paid ${earn2.data.paid}, pending ${earn2.data.pending})`,
+    earn2.data.paid === 32472 && earn2.data.pending === 350000);
 
   // --- Tier gate: performance now Silver-level+, but zero certs -> must STAY Registered
   const sc = await req('GET', '/partner/scorecard', chinedu.token);
@@ -120,6 +136,18 @@ const main = async () => {
   const tl2 = await req('GET', '/support', amaka.token);
   const row2 = tl2.data.find(x => x.id === t2.data.id);
   check('P18', 'Normal ticket 5h old NOT breached (24h target)', row2?.sla?.breached === false && row2?.sla?.targetHours === 24);
+
+  // --- Replies to resolved tickets reopen them
+  await req('PATCH', `/support/${t2.data.id}/status`, amaka.token, { status: 'resolved' });
+  const partnerReply = await req('POST', `/support/${t2.data.id}/reply`, amaka.token, { body: 'Actually, this came back.' });
+  const afterPartner = await req('GET', `/support/${t2.data.id}`, amaka.token);
+  check('P19', `partner reply reopens resolved ticket (reopened=${partnerReply.data?.reopened}, status=${afterPartner.data?.status})`,
+    partnerReply.data?.reopened === true && afterPartner.data?.status === 'open' && afterPartner.data?.resolved_at == null);
+  await req('PATCH', `/support/${t2.data.id}/status`, admin.token, { status: 'resolved' });
+  const staffReply = await req('POST', `/support/${t2.data.id}/reply`, admin.token, { body: 'Following up with a permanent fix.' });
+  const afterStaff2 = await req('GET', `/support/${t2.data.id}`, amaka.token);
+  check('P20', `staff reply reopens resolved ticket to pending (status=${afterStaff2.data?.status})`,
+    staffReply.status === 201 && afterStaff2.data?.status === 'pending' && afterStaff2.data?.resolved_at == null);
 
   db.close();
   console.log(`\n===== PHASE 2 RESULT: ${pass} passed, ${fail} failed =====`);

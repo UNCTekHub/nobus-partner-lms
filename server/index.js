@@ -84,7 +84,7 @@ app.use('/api/support', supportRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', version: '2.0.0', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', version: '2.0.0', node: process.version, timestamp: new Date().toISOString() });
 });
 
 // Catch-all for unknown API routes

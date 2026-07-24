@@ -2,6 +2,9 @@
   "name": "nobus-partnercentral-server",
   "version": "2.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
@@ -9,7 +12,7 @@
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "better-sqlite3": "^11.3.0",
+    "better-sqlite3": "^12.11.1",
     "cors": "^2.8.5",
     "csv-parse": "^5.5.6",
     "dotenv": "^16.4.5",

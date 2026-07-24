@@ -101,13 +101,17 @@ export default function Support({ embedded = false }) {
           ))}
         </div>
 
-        {selected.status !== 'resolved' && (
+        <div>
+          {selected.status === 'resolved' && (
+            <div className="text-xs text-amber-600 mb-1.5">This ticket is resolved - sending a reply will reopen it.</div>
+          )}
           <div className="flex gap-2">
             <input value={reply} onChange={(e) => setReply(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && sendReply()}
-              placeholder="Write a reply..." className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-nobus-400" />
+              placeholder={selected.status === 'resolved' ? 'Reply to reopen this ticket...' : 'Write a reply...'}
+              className="flex-1 border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-nobus-400" />
             <button onClick={sendReply} className="btn-primary !px-4"><Send className="w-4 h-4" /></button>
           </div>
-        )}
+        </div>
       </div>
     );
   }

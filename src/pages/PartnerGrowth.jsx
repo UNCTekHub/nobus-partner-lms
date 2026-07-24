@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
   TrendingUp, Award, Wallet, Gift, Loader2, CheckCircle, Clock, XCircle, Plus, X,
-  ArrowUpRight, BadgeCheck, Coins, Target,
+  ArrowUpRight, BadgeCheck, Coins, Target, BarChart3, Users, Percent,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../lib/api';
@@ -33,6 +33,7 @@ export default function PartnerGrowth({ embedded = false }) {
   const tabs = [
     ...(isSuperAdmin ? [] : [{ id: 'tier', label: 'Tier Progress', icon: Award }]),
     { id: 'earnings', label: isSuperAdmin ? 'Payouts' : 'Earnings', icon: Wallet },
+    ...(isSuperAdmin ? [] : [{ id: 'analytics', label: 'Analytics', icon: BarChart3 }]),
     { id: 'mdf', label: 'Market Development Funds', icon: Gift },
   ];
 
@@ -60,6 +61,7 @@ export default function PartnerGrowth({ embedded = false }) {
 
       {tab === 'tier' && <TierScorecard />}
       {tab === 'earnings' && <Earnings isSuperAdmin={isSuperAdmin} />}
+      {tab === 'analytics' && <Analytics />}
       {tab === 'mdf' && <Mdf isSuperAdmin={isSuperAdmin} />}
     </div>
   );
@@ -219,6 +221,97 @@ function Earnings({ isSuperAdmin }) {
             {data.deals.length === 0 && <tr><td colSpan={(isSuperAdmin ? 6 : 5) + (data.global ? 1 : 0)} className="px-4 py-10 text-center text-gray-400">No won deals yet. Close a registered deal to start earning NCS credit.</td></tr>}
           </tbody>
         </table>
+      </div>
+    </div>
+  );
+}
+
+// ================= Analytics =================
+const STAGE_META = [
+  { key: 'pending', label: 'Pending review', cls: 'bg-amber-400' },
+  { key: 'approved', label: 'Protected', cls: 'bg-nobus-500' },
+  { key: 'won', label: 'Won', cls: 'bg-green-500' },
+  { key: 'lost', label: 'Lost', cls: 'bg-gray-300' },
+  { key: 'rejected', label: 'Rejected', cls: 'bg-red-300' },
+  { key: 'expired', label: 'Expired', cls: 'bg-gray-200' },
+];
+
+function monthLabel(ym) {
+  const [y, m] = (ym || '').split('-').map(Number);
+  if (!y || !m) return ym;
+  return new Date(y, m - 1, 1).toLocaleString('en', { month: 'short' });
+}
+
+function Analytics() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => { api.getPartnerAnalytics().then(setData).catch(() => {}).finally(() => setLoading(false)); }, []);
+
+  if (loading) return <Spinner />;
+  if (!data) return <Empty text="No analytics yet. Register deals to build your pipeline picture." />;
+
+  const totalDeals = Object.values(data.statusCounts).reduce((s, c) => s + c, 0);
+  const decided = (data.statusCounts.won || 0) + (data.statusCounts.lost || 0);
+  const maxTrend = Math.max(...data.trend.map((t) => t.value), 1);
+
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Stat icon={Percent} label="Win rate" value={`${data.winRate}%`} sub={decided ? `${data.statusCounts.won || 0} won of ${decided} decided` : 'no closed deals yet'} accent />
+        <Stat icon={Wallet} label="Open pipeline" value={compact(data.openPipeline)} sub="pending + protected deals" />
+        <Stat icon={TrendingUp} label="Influenced revenue" value={compact(data.influencedRevenue)} sub="won, last 12 months" />
+        <Stat icon={Users} label="Team enablement" value={`${data.enablementPct}%`} sub={`${data.certifiedUsers}/${data.activeUsers} staff certified`} />
+      </div>
+
+      {/* Registration trend, last 6 months */}
+      <div className="card p-6">
+        <h3 className="font-bold text-gray-900 mb-1">Deal Registration Trend</h3>
+        <p className="text-xs text-gray-400 mb-5">Deals registered and their value, last 6 months</p>
+        {data.trend.length === 0 ? (
+          <div className="text-sm text-gray-400 py-8 text-center">No deals registered in the last 6 months.</div>
+        ) : (
+          <div className="flex items-end gap-3 h-44">
+            {data.trend.map((t) => (
+              <div key={t.month} className="flex-1 flex flex-col items-center justify-end h-full min-w-0">
+                <div className="text-[11px] font-semibold text-nobus-600 mb-1">{compact(t.value)}</div>
+                <div className="w-full max-w-[56px] bg-nobus-500/90 rounded-t-md transition-all"
+                  style={{ height: `${Math.max((t.value / maxTrend) * 100, 4)}%` }} />
+                <div className="text-[11px] text-gray-500 mt-1.5 font-medium">{monthLabel(t.month)}</div>
+                <div className="text-[10px] text-gray-400">{t.deals} deal{t.deals === 1 ? '' : 's'}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Pipeline status breakdown */}
+      <div className="card p-6">
+        <h3 className="font-bold text-gray-900 mb-4">Pipeline by Status</h3>
+        {totalDeals === 0 ? (
+          <div className="text-sm text-gray-400 py-4 text-center">No registered deals yet.</div>
+        ) : (
+          <>
+            <div className="flex w-full h-3 rounded-full overflow-hidden mb-4">
+              {STAGE_META.filter((s) => data.statusCounts[s.key]).map((s) => (
+                <div key={s.key} className={s.cls} style={{ width: `${(data.statusCounts[s.key] / totalDeals) * 100}%` }} />
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-x-5 gap-y-2">
+              {STAGE_META.filter((s) => data.statusCounts[s.key]).map((s) => (
+                <div key={s.key} className="flex items-center gap-1.5 text-sm text-gray-600">
+                  <span className={`w-2.5 h-2.5 rounded-full ${s.cls}`} />
+                  {s.label} <strong className="text-gray-900">{data.statusCounts[s.key]}</strong>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className="card p-4 text-xs text-gray-500">
+        Win rate counts only decided deals (won vs lost). Team enablement is the share of your active
+        staff certified in at least one track - it also gates your partner tier.
       </div>
     </div>
   );

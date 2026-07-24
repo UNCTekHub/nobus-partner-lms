@@ -3,6 +3,7 @@ import db from '../db.js';
 import { authenticate } from '../middleware/auth.js';
 import { awardPoints } from '../services/notifications.js';
 import { streamQuotePdf, streamQuoteXlsx } from '../services/quoteExport.js';
+import { buildQuoteLines, quoteTotal } from '../pricing.js';
 
 const router = Router();
 
@@ -52,16 +53,23 @@ router.get('/:id', authenticate, (req, res) => {
 // POST /api/quotes - create
 router.post('/', authenticate, (req, res) => {
   if (!req.user.org_id) return res.status(403).json({ error: 'Only partner users can create quotes' });
-  const { title, customerName, items, monthlyTotal, notes, status, discountPct, lines } = req.body;
+  const { title, customerName, items, notes, status, discountPct, lines } = req.body;
   if (!title) return res.status(400).json({ error: 'Title is required' });
+
+  // Never trust client-sent figures: lines and the monthly total are recomputed
+  // from the raw item configs against the server's pricing catalog. Client lines
+  // are used only for their display strings.
+  const safeItems = Array.isArray(items) ? items : [];
+  const safeLines = buildQuoteLines(safeItems, Array.isArray(lines) ? lines : []);
+  const total = quoteTotal(safeItems);
 
   const result = db.prepare(`
     INSERT INTO quotes (org_id, created_by, title, customer_name, items, monthly_total, notes, status, discount_pct, lines)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).run(
     req.user.org_id, req.user.id, title, customerName || null,
-    JSON.stringify(items || []), Math.round(monthlyTotal || 0), notes || null, status || 'draft',
-    discountPct === 10 ? 10 : 0, JSON.stringify(lines || [])
+    JSON.stringify(safeItems), total, notes || null, status || 'draft',
+    discountPct === 10 ? 10 : 0, JSON.stringify(safeLines)
   );
   awardPoints(req.user.id, 'quote_created', 5, `Built quote: ${title}`);
   res.status(201).json({ id: result.lastInsertRowid, message: 'Quote saved' });
@@ -73,7 +81,10 @@ router.put('/:id', authenticate, (req, res) => {
   if (!quote) return res.status(404).json({ error: 'Quote not found' });
   if (!canAccess(req, quote)) return res.status(403).json({ error: 'Not your quote' });
 
-  const { title, customerName, items, monthlyTotal, notes, status, discountPct, lines } = req.body;
+  const { title, customerName, items, notes, status, discountPct, lines } = req.body;
+  // When items change, lines and the total are recomputed server-side (see POST).
+  const safeItems = Array.isArray(items) ? items : null;
+  const safeLines = safeItems ? buildQuoteLines(safeItems, Array.isArray(lines) ? lines : []) : null;
   db.prepare(`
     UPDATE quotes SET
       title = COALESCE(?, title), customer_name = COALESCE(?, customer_name),
@@ -83,9 +94,9 @@ router.put('/:id', authenticate, (req, res) => {
       updated_at = datetime('now')
     WHERE id = ?
   `).run(
-    title ?? null, customerName ?? null, items ? JSON.stringify(items) : null,
-    monthlyTotal != null ? Math.round(monthlyTotal) : null, notes ?? null, status ?? null,
-    discountPct != null ? (discountPct === 10 ? 10 : 0) : null, lines ? JSON.stringify(lines) : null,
+    title ?? null, customerName ?? null, safeItems ? JSON.stringify(safeItems) : null,
+    safeItems ? quoteTotal(safeItems) : null, notes ?? null, status ?? null,
+    discountPct != null ? (discountPct === 10 ? 10 : 0) : null, safeLines ? JSON.stringify(safeLines) : null,
     req.params.id
   );
   res.json({ message: 'Quote updated' });

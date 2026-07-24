@@ -96,17 +96,30 @@ router.post('/:id/reply', authenticate, (req, res) => {
   db.prepare('INSERT INTO ticket_replies (ticket_id, user_id, body, is_staff) VALUES (?, ?, ?, ?)')
     .run(req.params.id, req.user.id, body, isStaff ? 1 : 0);
 
-  const patch = { updated_at: true };
-  // Record first staff response for SLA; reopen/track status
+  // Status transitions on reply:
+  // - first staff reply stamps first_response_at (stops the SLA clock) -> pending
+  // - any reply to a RESOLVED ticket reopens it (partner reply -> open, staff -> pending)
+  let newStatus = t.status;
+  if (t.status === 'resolved') newStatus = isStaff ? 'pending' : 'open';
+  else if (isStaff) newStatus = 'pending';
+  const reopened = t.status === 'resolved';
   if (isStaff && !t.first_response_at) {
-    db.prepare("UPDATE support_tickets SET first_response_at = datetime('now'), status = 'pending', updated_at = datetime('now') WHERE id = ?").run(req.params.id);
+    db.prepare("UPDATE support_tickets SET first_response_at = datetime('now'), status = ?, resolved_at = NULL, updated_at = datetime('now') WHERE id = ?").run(newStatus, req.params.id);
+  } else {
+    db.prepare(`UPDATE support_tickets SET status = ?, ${reopened ? 'resolved_at = NULL,' : ''} updated_at = datetime('now') WHERE id = ?`).run(newStatus, req.params.id);
+  }
+
+  if (isStaff) {
     createNotification({ userId: t.created_by, type: 'support', title: 'Support replied', message: `Nobus support replied to "${t.subject}"`, link: '/support' });
   } else {
-    db.prepare("UPDATE support_tickets SET updated_at = datetime('now') WHERE id = ?").run(req.params.id);
-    if (isStaff) createNotification({ userId: t.created_by, type: 'support', title: 'Support replied', message: `Nobus support replied to "${t.subject}"`, link: '/support' });
+    notifySuperAdmins({
+      type: 'support',
+      title: reopened ? 'Ticket reopened by reply' : 'Ticket reply',
+      message: `${req.user.name} replied to "${t.subject}"${reopened ? ' (was resolved)' : ''}`,
+      link: '/ncs-console',
+    });
   }
-  void patch;
-  res.status(201).json({ message: 'Reply posted' });
+  res.status(201).json({ message: reopened ? 'Reply posted - ticket reopened' : 'Reply posted', reopened });
 });
 
 // PATCH /api/support/:id/status - open | pending | resolved

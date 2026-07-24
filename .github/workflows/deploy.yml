@@ -29,6 +29,8 @@ jobs:
               echo "JWT_SECRET=$(openssl rand -hex 32)" >> server/.env
               echo "DB_PATH=./data/lms.db" >> server/.env
             fi
+            echo "=== Runtime versions ==="
+            node --version && npm --version
             echo "=== Installing server dependencies ==="
             cd server && npm install
             echo "=== Seeding database ==="
