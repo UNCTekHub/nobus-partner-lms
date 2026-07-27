@@ -43,28 +43,28 @@ Nobus Cloud Services (NCS) is a public cloud provider purpose-built for Africa's
 | Fact | Detail | Why the customer cares |
 |---|---|---|
 | Data centers | Nobus Cloud infrastructure is **hosted in** Tier III data centers across three availability zones: nobus-wa-az1 (Rack Centre, Ikeja Lagos), nobus-wa-az2 (OADC, Lekki Lagos), nobus-ea-az1 (Nairobi, Kenya) | Same facility class trusted by banks and telcos |
-| Anchor region | Lagos, Nigeria (including Rack Centre) | In-country data residency for Nigerian customers |
+| Anchor region | Lagos, Nigeria (including Rack Centre) | In-country data residency for local customers |
 | East Africa | nobus-ea-az1 in Nairobi, Kenya | In-region service for East African customers |
 | Uptime | 99.982% guarantee with N+1 redundancy | Beats most on-premise setups by a wide margin |
 | Platform | Hyperscale cloud infrastructure | Standard tooling (Terraform, CLI, REST APIs) works as engineers expect |
 | Console | dashboard.nobus.io | One console for every service; easy to demo |
 
 ### The billing model (your strongest opener)
-- **Naira billing.** Every invoice in NGN. The customer's budget and their bill live in the same currency, so exchange-rate swings never touch them.
+- **local billing.** Every invoice in local currency. The customer's budget and their bill live in the same currency, so exchange-rate swings never touch them.
 - **Pre-billing system.** Customers fund a wallet; resources bill from the start of each cycle while running. Auto-billing tops up from a saved card 3 days before the cycle if the wallet is low, so services never stop unexpectedly.
-- **Pay-as-you-use.** Entry compute starts around **NGN 9,309 per month**. No long-term commitment required.
+- **Pay-as-you-use.** Entry compute starts around **9,309 per month**. No long-term commitment required.
 - **No egress fees.** Data leaving Nobus is free. On AWS, egress alone can be 15-20% of the monthly bill.
 
 ### Compliance posture
-For the **Nigerian market**, Nobus is **ISO 27001 certified**, **PCI DSS certified** and **NDPA compliant** (Nigeria Data Protection Act) - the exact credentials banks, government and healthcare buyers demand. For **Kenya**, Nobus is **ODPC compliant** (Office of the Data Protection Commissioner), covering workloads in the Nairobi zone.
+For the **local market**, Nobus is **ISO 27001 certified**, **PCI DSS certified** and **NDPA compliant** (Nigeria Data Protection Act) - the exact credentials banks, government and healthcare buyers demand. For **Kenya**, Nobus is **ODPC compliant** (Office of the Data Protection Commissioner), covering workloads in the Nairobi zone.
 
 ### Tell the story in 60 seconds (memorize this)
-> "Nobus is Africa's cloud. Nobus Cloud infrastructure is hosted in Tier III data centers across African availability zones, two in Lagos (Ikeja and Lekki) and one in Nairobi, Kenya. You get the same building blocks as AWS: virtual machines, block and object storage, Kubernetes, managed databases, firewalls. The difference is that your data stays in Africa, your bill is in Naira, your support engineer is in your time zone, and there are no egress fees. That is why banks, fintechs and government agencies are moving here."
+> "Nobus is Africa's cloud. Nobus Cloud infrastructure is hosted in Tier III data centers across African availability zones, two in Lagos (Ikeja and Lekki) and one in Nairobi, Kenya. You get the same building blocks as AWS: virtual machines, block and object storage, Kubernetes, managed databases, firewalls. The difference is that your data stays in Africa, your bill is in local currency, your support engineer is in your time zone, and there are no egress fees. That is why banks, fintechs and government agencies are moving here."
 
 ### Key takeaways
 - Nobus does not own the buildings: its infrastructure is **hosted in** Tier III data centers across three zones, Ikeja and Lekki in Lagos plus Nairobi in Kenya
-- Lead with Naira billing and zero egress fees in every first conversation
-- For the Nigerian market, **ISO 27001, PCI DSS and NDPA compliance** are your credibility anchors with technical and compliance buyers; uptime and data residency reinforce them`
+- Lead with local billing and zero egress fees in every first conversation
+- For the local market, **ISO 27001, PCI DSS and NDPA compliance** are your credibility anchors with technical and compliance buyers; uptime and data residency reinforce them`
         },
         {
           id: 'sales-m1-l2',
@@ -72,29 +72,29 @@ For the **Nigerian market**, Nobus is **ISO 27001 certified**, **PCI DSS certifi
           content: `## Competitive Advantages (Your Selling Points)
 
 ### 1. Data Sovereignty
-- Nigerian customer data stays in-country, in **two Tier III-certified Nigerian availability zones**: nobus-wa-az1 (Rack Centre, Ikeja) and nobus-wa-az2 (OADC, Lekki)
+- local customer data stays in-country, in **two Tier III-certified Nigerian availability zones**: nobus-wa-az1 (Rack Centre, Ikeja) and nobus-wa-az2 (OADC, Lekki)
 - Full **NDPA (Nigeria Data Protection Act)** compliance
 - No foreign government access to customer data
 - Critical for banks, government agencies, healthcare providers
 
 > **Sales Pitch:** *"Unlike AWS or Azure where your data sits in Europe or the US, Nobus keeps your data in Nigeria, in Tier III certified local data centers. For banks and government agencies, this isn't just convenient; it's often a legal requirement under NDPA. Can you afford the regulatory risk of offshore data?"*
 
-### 2. Naira Pricing - No Exchange Rate Risk
-- All billing in Nigerian Naira (NGN)
+### 2. Local Pricing - No Exchange Rate Risk
+- All billing in local currency
 - No foreign exchange exposure whatsoever
 - Budget certainty month over month
 
-> **Sales Pitch:** *"Your CFO budgets in Naira. AWS bills in dollars. When the exchange rate moves, your AWS bill changes overnight - even if you used the same resources. With Nobus, your bill is in Naira. Period. No surprises."*
+> **Sales Pitch:** *"Your CFO budgets in local currency. AWS bills in dollars. When the exchange rate moves, your AWS bill changes overnight - even if you used the same resources. With Nobus, your bill is in local currency. Period. No surprises."*
 
 ### 3. Local Support - Same City, Same Timezone
 - Support team based in Lagos
 - Phone, email, and on-site support available
-- Understand Nigerian business context and infrastructure challenges
+- Understand local business context and infrastructure challenges
 - Can visit customer offices for enterprise accounts
 
 > **Sales Pitch:** *"When your system goes down at 9 PM Lagos time, who answers? AWS support might take hours across time zones. Nobus support is HERE - same city, same timezone, speaking your language."*
 
-### 4. Compliance First (Nigerian market)
+### 4. Compliance First (local market)
 - **ISO 27001** certified information security
 - **PCI DSS** certified for payment card environments
 - **NDPA** compliant for data protection in Nigeria
@@ -128,7 +128,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
           title: '1.3 The Market Opportunity',
           content: `## Cloud Adoption in Nigeria
 
-- Massive untapped opportunity - the majority of Nigerian businesses are still on-premise
+- Massive untapped opportunity - the majority of local businesses are still on-premise
 - Fast-growing cloud adoption driven by digital transformation, fintech boom, and regulatory pressure
 - Nobus is uniquely positioned as the **only African-native hyperscale cloud** with Tier III availability zones in Lagos (Ikeja and Lekki) and Nairobi, Kenya
 
@@ -137,7 +137,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 #### 1. Banking & Financial Services (Highest Value)
 - **Why Nobus:** NDPA compliance, in-country data sovereignty, CBN regulatory alignment
 - **Key Services:** Sophos XG Firewall for network security, FBS encrypted storage (AES-256), managed databases
-- **Deal Size:** One bank deal = NGN 50M+/year
+- **Deal Size:** One bank deal = 50M+/year
 - **Entry Point:** Disaster recovery, dev/test environments, then production migration
 
 #### 2. Fintech (Fast-Growing, Cloud-Native)
@@ -152,7 +152,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 - **Entry Point:** Electronic medical records, diagnostic imaging storage (FOS)
 
 #### 4. Government (Mandate for Local)
-- **Why Nobus:** Data sovereignty is a hard requirement, not a preference. Local support team, Naira billing simplifies procurement
+- **Why Nobus:** Data sovereignty is a hard requirement, not a preference. Local support team, local billing simplifies procurement
 - **Key Services:** VPC for network isolation, Security Groups, encrypted storage
 - **Entry Point:** Agency websites, citizen-facing portals, email systems
 
@@ -166,7 +166,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 - **Entry Point:** Peak traffic handling, media storage
 
 #### 7. Education (Digital Transformation)
-- **Why Nobus:** Affordable compute for learning management systems, Naira pricing fits education budgets
+- **Why Nobus:** Affordable compute for learning management systems, local pricing fits education budgets
 
 #### 8. Manufacturing (ERP Migration)
 - **Why Nobus:** Migrate SAP/Oracle ERP to cloud, reduce CapEx on servers
@@ -181,16 +181,16 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 > **Why this matters:** The same Nobus platform is bought for four completely different reasons. Sell FX savings to a CTO and you lose. Sell Kubernetes to a CFO and you lose. Matching the message to the persona is the single highest-leverage sales skill in this course.
 
 ### What you will learn
-- The four buying personas in a typical Nigerian enterprise deal
+- The four buying personas in a typical local enterprise deal
 - What each persona cares about, fears, and needs to hear
 - The opening question that unlocks each persona
 
 ### Persona 1: The CFO / Finance Director (the economic buyer)
 - **Cares about:** Budget certainty, cash flow, audit trail, avoiding surprise costs
 - **Fears:** Dollar-billed cloud invoices that swing 20-30% with the exchange rate; hidden fees
-- **Your message:** "Your cloud bill in Naira, fixed to usage, zero egress fees, VAT-transparent quotes."
-- **Proof points:** Naira invoicing, the Nobus Pricing Calculator, a side-by-side TCO from the Quote Builder
-- **Opening question:** *"When the Naira moved last year, what happened to your infrastructure budget?"*
+- **Your message:** "Your cloud bill in local currency, fixed to usage, zero egress fees, VAT-transparent quotes."
+- **Proof points:** local invoicing, the Nobus Pricing Calculator, a side-by-side TCO from the Quote Builder
+- **Opening question:** *"When the local currency moved last year, what happened to your infrastructure budget?"*
 
 ### Persona 2: The CTO / Head of Engineering (the technical buyer)
 - **Cares about:** Reliability, scalability, standard tooling, not being locked into a dead-end platform
@@ -217,7 +217,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 Deals stall when you are single-threaded. In every opportunity, map all four personas by name within the first two meetings, and give each one their own version of the value proposition. Log them as contacts on the lead in Sales Navigator so your whole team sees the map.
 
 ### Field example
-A partner selling to a mid-size insurer led with Kubernetes to the IT manager and stalled for a month. They re-opened with the CFO using one line: "Your DR site renews in dollars in March; we can cut that 30% and bill it in Naira." The CFO pulled the CTO in, and the deal closed in five weeks. Same platform, different persona, different outcome.
+A partner selling to a mid-size insurer led with Kubernetes to the IT manager and stalled for a month. They re-opened with the CFO using one line: "Your DR site renews in dollars in March; we can cut that 30% and bill it in local currency." The CFO pulled the CTO in, and the deal closed in five weeks. Same platform, different persona, different outcome.
 
 ### Key takeaways
 - Four personas: CFO (money), CTO (architecture), IT Ops (day-2), Compliance (risk)
@@ -253,7 +253,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 | Product | What It Does | Sales Talking Point |
 |---------|-------------|-------------------|
 | **VPC / DaaS** | Private cloud networks - your own isolated virtual data center | "Your own private network in the cloud. Fully isolated." |
-| **Floating IPs** | Static public IP addresses. NGN 1,500/month when reserved. | "Dedicated public IP for your application. Stays the same." |
+| **Floating IPs** | Static public IP addresses. 1,500/month when reserved. | "Dedicated public IP for your application. Stays the same." |
 | **NFT (Nobus Fast Transit)** | Dedicated connectivity from 50 Mbps to 10 Gbps. Enterprise-grade. | "Direct, dedicated connection to Nobus - not over public internet. Enterprise speed." |
 | **VPN** | Site-to-site VPN via pfSense, IPSec | "Secure tunnel between your office and your Nobus cloud." |
 | **DNS** | Managed DNS service - FREE for Nobus resources | "DNS is included at no extra cost." |
@@ -299,7 +299,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
         title: 'Session 1 Quiz: Nobus Cloud Overview',
         questions: [
           {
-            q: 'What is the primary compliance advantage Nobus offers over AWS/Azure for Nigerian businesses?',
+            q: 'What is the primary compliance advantage Nobus offers over AWS/Azure for local businesses?',
             options: ['Lower pricing', 'Data sovereignty - data stays in Nigeria (NDPA compliance)', 'More services available', 'Faster compute instances'],
           },
           {
@@ -312,7 +312,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
           },
           {
             q: 'Which of the following is TRUE about Nobus pricing?',
-            options: ['Nobus bills in USD', 'Nobus charges egress fees', 'Nobus bills in Naira with no egress fees', 'Nobus is more expensive than AWS'],
+            options: ['Nobus bills in USD', 'Nobus charges egress fees', 'Nobus bills in local currency with no egress fees', 'Nobus is more expensive than AWS'],
           },
           {
             q: 'Where does Nobus Cloud infrastructure run?',
@@ -328,7 +328,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
           },
           {
             q: 'What is the cost of Nobus managed DNS for Nobus resources?',
-            options: ['NGN 5,000/month', 'NGN 1,500/month', 'NGN 10,000/month', 'Free'],
+            options: ['5,000/month', '1,500/month', '10,000/month', 'Free'],
           },
         ],
       },
@@ -365,7 +365,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 
 ### Triggers that start deals (stage 1 fuel)
 - Dollar-billed cloud renewal approaching (FX pain)
-- Hardware refresh quote landed (NGN 20M+ capex shock)
+- Hardware refresh quote landed (20M+ capex shock)
 - NDPA or CBN audit finding on offshore data
 - Outage or ransomware scare
 - New CTO or CFO (new brooms review infrastructure)
@@ -380,7 +380,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 - Weighted forecast (the dashboard does this for you): Lead 10%, Qualified 30%, Proposal 60%, Won 100%.
 
 ### Field example
-A Lagos partner ran this process on a logistics company: trigger was a $4,200/month AWS bill. Discovery took two calls, qualification one. They registered the deal on day 9, quoted NGN 2.1M/month with exclusive partner pricing applied, ran a two-week PoC on FCS with a managed PostgreSQL database, and closed in 47 days. The deal now renews annually and has expanded twice.
+A Lagos partner ran this process on a logistics company: trigger was a $4,200/month AWS bill. Discovery took two calls, qualification one. They registered the deal on day 9, quoted 2.1M/month with exclusive partner pricing applied, ran a two-week PoC on FCS with a managed PostgreSQL database, and closed in 47 days. The deal now renews annually and has expanded twice.
 
 ### Key takeaways
 - Seven stages, each with hard exit criteria; the stage is not done until the criteria are
@@ -419,19 +419,19 @@ Surface dissatisfaction. Listen more than you speak.
 
 ### Implication questions (10 minutes, where deals are made)
 Make the cost of the problem explicit. This is what separates SPIN from a survey.
-- "If the Naira moves another 20%, what does that do to this year's IT budget?"
+- "If the local currency moves another 20%, what does that do to this year's IT budget?"
 - "When provisioning takes three weeks, what does that delay cost the business teams waiting on it?"
 - "If the regulator ruled your offshore data non-compliant, what would remediation cost?"
 - "What would eight hours of downtime cost you in revenue and reputation?"
 
 ### Need-payoff questions (5 minutes, let them sell themselves)
-- "If your bill were in Naira and fixed to usage, how would that change budgeting?"
+- "If your bill were in local currency and fixed to usage, how would that change budgeting?"
 - "If you could spin up environments in minutes instead of weeks, what would your team ship sooner?"
 - "If data residency were solved outright, what does that free your compliance team to approve?"
 
 ### The close of the discovery call
 Summarize what you heard in THEIR words, confirm it, and book the next step before hanging up:
-> "So today you spend about $5,000 monthly, billed in dollars, provisioning takes weeks, and compliance is uneasy about data location. If we can fix all three, you said that changes your year. I would like to bring back a Naira quote and a proposed architecture next Thursday. Who else should be in that meeting?"
+> "So today you spend about $5,000 monthly, billed in dollars, provisioning takes weeks, and compliance is uneasy about data location. If we can fix all three, you said that changes your year. I would like to bring back a local-currency quote and a proposed architecture next Thursday. Who else should be in that meeting?"
 
 ### Key takeaways
 - SPIN order is non-negotiable: facts, pain, cost of pain, desire for the fix
@@ -488,7 +488,7 @@ Walking away well creates future deals. Script:
 > "Based on what you have shared, I do not think the timing is right for this to succeed, and I will not waste your time. Let me send you our NDPA data-residency whitepaper, and I will check back in when your renewal window opens in Q3."
 
 ### Field example
-A partner scored a government prospect: Budget 3 (approved project), Need 3 (audit finding), Timeline 3 (fiscal-year deadline), Authority 1 (talking to a webmaster). Instead of proposing, they spent two weeks getting introduced to the Director of ICT, moved Authority to 3, then registered and won a NGN 12M/year deal. The score told them exactly which lever to pull.
+A partner scored a government prospect: Budget 3 (approved project), Need 3 (audit finding), Timeline 3 (fiscal-year deadline), Authority 1 (talking to a webmaster). Instead of proposing, they spent two weeks getting introduced to the Director of ICT, moved Authority to 3, then registered and won a 12M/year deal. The score told them exactly which lever to pull.
 
 ### Key takeaways
 - Score every deal 1-3 on Budget, Authority, Need, Timeline; be honest
@@ -540,7 +540,7 @@ A partner scored a government prospect: Budget 3 (approved project), Need 3 (aud
 ### Category 1: Global hyperscalers (AWS, Azure, GCP)
 - **Their strengths:** Enormous service catalogs, brand safety ("nobody gets fired for buying AWS"), mature tooling
 - **Their weaknesses in this market:** Dollar billing with FX exposure, egress fees, data offshore (NDPA friction), support in distant time zones, complexity that demands expensive skills
-- **Your line:** "Same core building blocks: compute, storage, Kubernetes, managed databases. Your data in Africa, your bill in Naira, your support in your time zone, and zero egress fees."
+- **Your line:** "Same core building blocks: compute, storage, Kubernetes, managed databases. Your data in Africa, your bill in local currency, your support in your time zone, and zero egress fees."
 - Detailed battlecards for AWS and Azure follow in the next lessons.
 
 ### Category 2: Local hosting providers and small VPS shops
@@ -550,8 +550,8 @@ A partner scored a government prospect: Budget 3 (approved project), Need 3 (aud
 
 ### Category 3: On-premise (the hardware refresh)
 - **Their strengths:** Full control, sunk-cost familiarity, "we already own the server room"
-- **Their weaknesses:** NGN 20M+ capex cycles every 4-5 years, diesel and cooling costs, single point of failure, key-person risk in the IT team
-- **Your line:** "Compare the full five-year cost: hardware, power, cooling, staff, and the outage you have not had yet. Pay-as-you-use from NGN 9,309/month, with Tier III redundancy you could never build in-house."
+- **Their weaknesses:** 20M+ capex cycles every 4-5 years, diesel and cooling costs, single point of failure, key-person risk in the IT team
+- **Your line:** "Compare the full five-year cost: hardware, power, cooling, staff, and the outage you have not had yet. Pay-as-you-use from 9,309/month, with Tier III redundancy you could never build in-house."
 
 ### Category 4: Doing nothing (the silent killer)
 - **Reality:** More deals die to inertia than to any competitor. No decision feels safe.
@@ -578,21 +578,21 @@ Never fabricate competitor weaknesses. State facts you can defend, acknowledge g
 | Factor | Nobus | AWS | Your Talking Point |
 |--------|-------|-----|-------------------|
 | **Data Location** | Nigeria, Tier III multi-AZ | Nearest region: Cape Town or Europe | "Your data stays in Nigeria. NDPA compliant by design." |
-| **Currency** | Bill in Naira (NGN) | Bill in USD | "No exchange rate risk. Your bill is in Naira - period." |
+| **Currency** | Bill in local currency  | Bill in USD | "No exchange rate risk. Your bill is in local currency - period." |
 | **Support** | Lagos-based, same timezone, phone | Different timezone, mostly online tickets | "When your system crashes at 9 PM, we answer in Lagos." |
 | **Pricing** | 15-30% cheaper for equivalent workloads | Premium pricing + hidden egress fees | "Same quality, better price. Plus zero egress fees." |
 | **Egress Fees** | NONE - completely free | $0.09/GB (can be 15-20% of bill) | "Data transfer out is FREE on Nobus. AWS charges per GB." |
 | **Compliance** | ISO 27001, PCI-DSS supported, NDPA | ISO 27001, PCI-DSS | "Equally certified, but data stays in Nigeria." |
-| **Complexity** | Focused catalogue of essential services | 200+ services, overwhelming complexity | "We focus on what Nigerian businesses actually need." |
+| **Complexity** | Focused catalogue of essential services | 200+ services, overwhelming complexity | "We focus on what local businesses actually need." |
 | **Onboarding** | White-glove migration support | Self-service, figure it out yourself | "We train your team. Walk you through migration step by step." |
 | **Tooling** | OpenStack CLI, Terraform, REST APIs | AWS CLI, Terraform, SDKs | "Your team can use Terraform, CLI, APIs - same DevOps tools they know." |
-| **Compute** | FCS - 15+ flavors, launch in minutes | EC2 - hundreds of instance types | "Right-sized for Nigerian workloads. No analysis paralysis." |
+| **Compute** | FCS - 15+ flavors, launch in minutes | EC2 - hundreds of instance types | "Right-sized for local workloads. No analysis paralysis." |
 | **Storage** | FBS (encrypted, SSD) + FOS (unlimited) | EBS + S3 | "SSD-backed, AES-256 encrypted storage. Object storage unlimited." |
 | **Security** | Sophos XG, FortiGate, Acronis included in catalogue | Marketplace add-ons at extra cost | "Enterprise firewalls and backup built into our platform." |
 
 ### What TO Say
-- "AWS is excellent for global companies with multi-region needs. For Nigerian businesses prioritizing data sovereignty, local support, and cost predictability, Nobus is the better fit."
-- "Many of our customers evaluated AWS and chose Nobus because of Naira billing, zero egress fees, and having support in the same city."
+- "AWS is excellent for global companies with multi-region needs. For local businesses prioritizing data sovereignty, local support, and cost predictability, Nobus is the better fit."
+- "Many of our customers evaluated AWS and chose Nobus because of local billing, zero egress fees, and having support in the same city."
 - "Your team can use the same tools - Terraform, CLI - so there's no retraining cost."
 
 ### What NOT to Say
@@ -606,9 +606,9 @@ Never fabricate competitor weaknesses. State facts you can defend, acknowledge g
 
 | Factor | Nobus | Azure | Talking Point |
 |--------|-------|-------|---------------|
-| **Focus** | Nigerian SMBs to Enterprise | Microsoft-centric shops | "If you're 100% Microsoft everywhere, Azure has integration advantages. If not, Nobus is simpler and cheaper." |
+| **Focus** | local SMBs to Enterprise | Microsoft-centric shops | "If you're 100% Microsoft everywhere, Azure has integration advantages. If not, Nobus is simpler and cheaper." |
 | **Integration** | Cloud-agnostic - Linux, Windows, any stack | Deep Microsoft integration (AD, 365) | "Nobus supports Linux, Windows, any stack. No vendor lock-in." |
-| **Pricing** | Transparent, in Naira | Complex licensing, USD billing | "Nobus pricing is simple: NGN X per hour, no surprise licensing fees." |
+| **Pricing** | Transparent, in local currency | Complex licensing, USD billing | "Nobus pricing is simple: X per hour, no surprise licensing fees." |
 | **Data Location** | Nigeria, Tier III multi-AZ | Nearest: South Africa | "Your data stays in Nigeria, not South Africa." |
 | **Managed DBs** | MySQL, PostgreSQL, MongoDB, MS SQL Server | Azure SQL, Cosmos DB, etc. | "We support MS SQL Server too - managed, in Nigeria." |
 
@@ -616,17 +616,17 @@ Never fabricate competitor weaknesses. State facts you can defend, acknowledge g
 
 ## Nobus vs. On-Premise (Status Quo)
 
-**This is your REAL competition.** Most Nigerian businesses are still on-premise!
+**This is your REAL competition.** Most local businesses are still on-premise!
 
 | Factor | On-Premise | Nobus | Talking Point |
 |--------|-----------|-------|---------------|
-| **CapEx** | NGN 50M+ upfront for servers | NGN 0 upfront, pay-as-you-go | "No need to write a NGN 50M cheque. Pay monthly from NGN 50K." |
-| **OpEx** | NGN 10-20M/year (power, staff, cooling) | NGN 5-15M/year | "No power costs, no cooling, no hardware staff." |
+| **CapEx** | 50M+ upfront for servers | 0 upfront, pay-as-you-go | "No need to write a 50M cheque. Pay monthly from 50K." |
+| **OpEx** | 10-20M/year (power, staff, cooling) | 5-15M/year | "No power costs, no cooling, no hardware staff." |
 | **Scalability** | Buy ahead, wait weeks | Instant - launch FCS in minutes | "Black Friday traffic? Scale in 5 minutes, not 5 weeks." |
 | **Downtime** | Your problem entirely | Nobus manages infrastructure | "Server fails? We replace it in minutes. You don't even know." |
 | **Compliance** | Build it yourself (expensive) | ISO 27001 certified, PCI-DSS supported | "You need ISO 27001? We already have it. You inherit compliance." |
 | **Power / NEPA** | Generator dependency, diesel costs | Nobus data centers have redundant power systems | "Power goes out in Lagos? Our Tier III data centers have redundant power: UPS, generators, dual utility feeds. Zero impact on your workloads." |
-| **Security** | Buy firewalls, hire security staff | Sophos XG, FortiGate, Acronis available | "Enterprise security built in - not a NGN 20M+ add-on project." |
+| **Security** | Buy firewalls, hire security staff | Sophos XG, FortiGate, Acronis available | "Enterprise security built in - not a 20M+ add-on project." |
 | **Backup** | Tapes, external drives, hope | NCB cross-cloud backup, Acronis Cyber Protect | "Automated backups with ransomware protection. Not a tape in a drawer." |
 | **Connectivity** | Your ISP | NFT (Fast Transit) - dedicated 50Mbps to 10Gbps | "Direct, dedicated connection to your cloud. Not dependent on public internet." |
 
@@ -639,7 +639,7 @@ Never fabricate competitor weaknesses. State facts you can defend, acknowledge g
 > "Your data would sit in a Tier III certified facility, the same class of data center where banks host. AES-256 encrypted storage. Sophos XG firewall. More secure than most on-prem setups."
 
 **"Cloud is expensive."**
-> "Let's do the math. Your server: NGN 2M purchase + NGN 500K/year power/cooling/staff. Nobus equivalent: NGN 100K/month. In 3 years, we're cheaper - PLUS you get redundancy, backup, and 24/7 support."
+> "Let's do the math. Your server: 2M purchase + 500K/year power/cooling/staff. Nobus equivalent: 100K/month. In 3 years, we're cheaper - PLUS you get redundancy, backup, and 24/7 support."
 
 **"What about when internet goes down?"**
 > "That's exactly what NFT (Fast Transit) solves - a dedicated connection from 50 Mbps to 10 Gbps, bypassing the public internet entirely. Enterprise-grade connectivity."`
@@ -659,7 +659,7 @@ Never fabricate competitor weaknesses. State facts you can defend, acknowledge g
           },
           {
             q: 'When a prospect says "AWS is the industry standard," what should you NOT say?',
-            options: ['"AWS is excellent for global companies"', '"Many of our customers evaluated AWS and chose Nobus"', '"AWS sucks"', '"For Nigerian businesses, Nobus is often the better fit"'],
+            options: ['"AWS is excellent for global companies"', '"Many of our customers evaluated AWS and chose Nobus"', '"AWS sucks"', '"For local businesses, Nobus is often the better fit"'],
           },
           {
             q: 'What Nobus product addresses the on-premise objection "What about when internet goes down?"',
@@ -690,7 +690,7 @@ Never fabricate competitor weaknesses. State facts you can defend, acknowledge g
 
 **1. Executive summary (one page, written last, read first)**
 The formula: *their situation, their cost of inaction, your solution in one sentence, the outcome with numbers, the ask.*
-> "Acme processes 40,000 orders monthly on infrastructure that renews in dollars this March. At current FX rates that renewal costs 31% more than last year. We propose migrating to Nobus Cloud: equivalent capacity, billed in Naira, with zero egress fees, cutting projected annual infrastructure cost from NGN 48M to NGN 33M while moving customer data onshore for NDPA compliance. We ask for approval to begin a two-week proof of concept on 1 May."
+> "Acme processes 40,000 orders monthly on infrastructure that renews in dollars this March. At current FX rates that renewal costs 31% more than last year. We propose migrating to Nobus Cloud: equivalent capacity, billed in local currency, with zero egress fees, cutting projected annual infrastructure cost from 48M to 33M while moving customer data onshore for NDPA compliance. We ask for approval to begin a two-week proof of concept on 1 May."
 
 **2. Understanding of your requirements**
 Replay discovery in their words. This section proves you listened; it is why discovery quality decides proposal quality. List their stated problems as bullets, each with the business impact they told you.
@@ -756,26 +756,26 @@ Common flavors you'll use in proposals:
 **Current State (On-Prem):**
 - 2 web servers, 1 database server, 1 backup server
 - 2TB storage, unreliable power, no disaster recovery
-- Cost: NGN 15M/year (CapEx + OpEx including diesel, staff, cooling)
+- Cost: 15M/year (CapEx + OpEx including diesel, staff, cooling)
 
 **Nobus Proposed Solution:**
 
 | Item | Nobus Product | Spec | Monthly Cost |
 |------|--------------|------|-------------|
-| Web Server 1 | FCS | si.2.4.30.l (2 vCPU, 4GB, 30GB) | NGN 50,000 |
-| Web Server 2 | FCS | si.2.4.30.l (2 vCPU, 4GB, 30GB) | NGN 50,000 |
-| Database Server | FCS | si.4.8.60.l (4 vCPU, 8GB, 60GB) | NGN 120,000 |
-| Database Storage | FBS | 500GB SSD, AES-256 encrypted | NGN 25,000 |
-| Backup Storage | FBS | 1TB SSD for snapshots | NGN 40,000 |
-| Cloud Backup | NCB | Automated daily backup, 30-day retention | NGN 30,000 |
-| Load Balancer | LB | Distributes traffic across web servers | NGN 25,000 |
-| Floating IP (Web) | Floating IP | 1x static public IP | NGN 1,500 |
-| Floating IP (DB Admin) | Floating IP | 1x static public IP | NGN 1,500 |
+| Web Server 1 | FCS | si.2.4.30.l (2 vCPU, 4GB, 30GB) | 50,000 |
+| Web Server 2 | FCS | si.2.4.30.l (2 vCPU, 4GB, 30GB) | 50,000 |
+| Database Server | FCS | si.4.8.60.l (4 vCPU, 8GB, 60GB) | 120,000 |
+| Database Storage | FBS | 500GB SSD, AES-256 encrypted | 25,000 |
+| Backup Storage | FBS | 1TB SSD for snapshots | 40,000 |
+| Cloud Backup | NCB | Automated daily backup, 30-day retention | 30,000 |
+| Load Balancer | LB | Distributes traffic across web servers | 25,000 |
+| Floating IP (Web) | Floating IP | 1x static public IP | 1,500 |
+| Floating IP (DB Admin) | Floating IP | 1x static public IP | 1,500 |
 | DNS | Nobus DNS | Managed DNS for domain | **FREE** |
-| **TOTAL** | | | **NGN 343,000/month** |
+| **TOTAL** | | | **343,000/month** |
 
-**Annual Cost: NGN 4,116,000/year**
-**Savings vs On-Prem: NGN 15M - NGN 4.1M = NGN 10.9M/year (73% reduction!)**
+**Annual Cost: 4,116,000/year**
+**Savings vs On-Prem: 15M - 4.1M = 10.9M/year (73% reduction!)**
 
 ---
 
@@ -783,27 +783,27 @@ Common flavors you'll use in proposals:
 
 | Item | Nobus Product | Spec | Monthly Cost |
 |------|--------------|------|-------------|
-| App Servers (x3) | FCS | si.4.8.60.l | NGN 360,000 |
-| Database (Primary) | Managed PostgreSQL | 4 vCPU, 16GB | NGN 200,000 |
-| Database (Replica) | Managed PostgreSQL | 4 vCPU, 16GB | NGN 200,000 |
-| Block Storage | FBS | 2TB SSD, encrypted | NGN 80,000 |
-| Object Storage | FOS | 5TB for logs/media | NGN 50,000 |
-| Firewall | Sophos XG | Enterprise IPS + ATP | NGN 150,000 |
-| Backup | Acronis Cyber Protect | All servers + ransomware protection | NGN 100,000 |
-| Floating IPs (x3) | Floating IP | Static public IPs | NGN 4,500 |
+| App Servers (x3) | FCS | si.4.8.60.l | 360,000 |
+| Database (Primary) | Managed PostgreSQL | 4 vCPU, 16GB | 200,000 |
+| Database (Replica) | Managed PostgreSQL | 4 vCPU, 16GB | 200,000 |
+| Block Storage | FBS | 2TB SSD, encrypted | 80,000 |
+| Object Storage | FOS | 5TB for logs/media | 50,000 |
+| Firewall | Sophos XG | Enterprise IPS + ATP | 150,000 |
+| Backup | Acronis Cyber Protect | All servers + ransomware protection | 100,000 |
+| Floating IPs (x3) | Floating IP | Static public IPs | 4,500 |
 | DNS | Nobus DNS | | **FREE** |
-| **TOTAL** | | | **NGN 1,144,500/month** |
+| **TOTAL** | | | **1,144,500/month** |
 
 ### Step 3: Add Contingency
 - Development/Test environment: +50% of production cost
-- Training: NGN 500K one-time
-- Migration support: NGN 1-2M one-time
+- Training: 500K one-time
+- Migration support: 1-2M one-time
 - Safety buffer: +10%
 
 ### Step 4: Position the Price
-**Good:** "For NGN 343,000 per month, less than the cost of one junior developer, you get enterprise-grade infrastructure hosted in Tier III data centers in Nigeria with a 99.982% uptime guarantee, automated backups, managed DNS at no extra cost, and local support."
+**Good:** "For 343,000 per month, less than the cost of one junior developer, you get enterprise-grade infrastructure hosted in Tier III data centers in Nigeria with a 99.982% uptime guarantee, automated backups, managed DNS at no extra cost, and local support."
 
-**Bad:** "It costs NGN 343,000 per month." (Just a number, no context)
+**Bad:** "It costs 343,000 per month." (Just a number, no context)
 
 > **Always highlight free items:** DNS is free. Egress is free. These are real savings vs AWS/Azure.`
         },
@@ -885,7 +885,7 @@ Do NOT run a PoC when:
 Use Demo Labs in PartnerCentral to rehearse the exact scenario before running it live with the customer.
 
 ### Who pays
-Standard: customer pays for consumed resources at list (it is small: a two-week PoC on two si.2.4 instances is a few thousand Naira per day), you invest the engineering time. Skin in the game on both sides keeps the PoC honest. Free PoCs attract free-loaders.
+Standard: customer pays for consumed resources at list (it is small: a two-week PoC on two si.2.4 instances is a few thousand local currency per day), you invest the engineering time. Skin in the game on both sides keeps the PoC honest. Free PoCs attract free-loaders.
 
 ### Key takeaways
 - PoC only after qualification, registration, and written success criteria
@@ -929,7 +929,7 @@ Attendees must include the economic buyer; if they cannot attend, move the meeti
 
 ### Handling the three classic stalls
 - **"We need more time to evaluate."** "Of course. Which criterion do you feel is unproven? Happy to re-test that one this week." (Re-anchors to the agreement; usually there is none.)
-- **"Budget has shifted."** "Understood. Since the technical case is proven, shall we present the scorecard and the Naira savings to [CFO] together?" (Escalate with evidence.)
+- **"Budget has shifted."** "Understood. Since the technical case is proven, shall we present the scorecard and the local-currency savings to [CFO] together?" (Escalate with evidence.)
 - **"Let's extend the PoC."** "The environment stays available under a paid pilot, at the production rate. The 14-day evaluation is complete." (Never extend for free; it devalues everything.)
 
 ### After the win
@@ -1032,7 +1032,7 @@ Every objection you hear in the field goes into your team's shared playbook with
           title: '6.2-6.3 Top Objections & Hidden Objections',
           content: `## The Objection Playbook: Top Objections and the Hidden Ones
 
-> **Why this matters:** You already know the framework (LACE). This lesson is the ammunition: the objections you will hear most in Nigerian and African enterprise deals, with clarifying questions and evidence that work. Internalize these; do not read them off a card in the meeting.
+> **Why this matters:** You already know the framework (LACE). This lesson is the ammunition: the objections you will hear most in African enterprise deals, with clarifying questions and evidence that work. Internalize these; do not read them off a card in the meeting.
 
 ### What you will learn
 - Field-tested responses to the eight most common objections
@@ -1051,7 +1051,7 @@ Every objection you hear in the field goes into your team's shared playbook with
 
 **3. "It is too expensive."**
 - Clarify: "Compared to your current spend, or another proposal?"
-- Evidence: Rebuild the comparison in the Quote Builder including what they forget: egress fees (Nobus: zero), FX drift (Nobus: Naira), and the 7.5% VAT shown transparently. Apply exclusive partner pricing. Nobus typically lands 15-30% under hyperscalers on like-for-like.
+- Evidence: Rebuild the comparison in the Quote Builder including what they forget: egress fees (Nobus: zero), FX drift (Nobus: local currency), and the 7.5% VAT shown transparently. Apply exclusive partner pricing. Nobus typically lands 15-30% under hyperscalers on like-for-like.
 
 **4. "We are worried about migration disruption."**
 - Clarify: "What is the maximum downtime window the business can absorb?"

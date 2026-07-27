@@ -1,12 +1,8 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   LogIn, ArrowRight, Server, HardDrive, Network, ShieldCheck, Container, Database,
   GraduationCap, Compass, Calculator, Megaphone, FlaskConical, BadgePercent, Award, CheckCircle,
-  Globe, Clock,
 } from 'lucide-react';
-import { useCountry } from '../context/CountryContext';
-import CountrySelect from '../components/CountrySelect';
 
 const MODULES = [
   { icon: GraduationCap, name: 'Training Academy', desc: 'Role-based enablement for Sales, Presales and Technical engineers, with quizzes and certifications.' },
@@ -24,85 +20,32 @@ const BENEFITS = [
   { icon: Calculator, title: 'Your Own Fees', desc: 'Charge setup and recurring managed-services fees on top - your pricing, your margin.' },
 ];
 
-function BecomePartnerButton({ country, className, children }) {
-  if (country?.partnerProgram) {
-    return (
-      <Link to="/register" className={className}>
-        {children || <>Become a Partner <ArrowRight className="w-4 h-4" /></>}
-      </Link>
-    );
-  }
-  return (
-    <span className={`${className} !bg-white/10 !text-nobus-200 cursor-default inline-flex items-center gap-2`}>
-      <Clock className="w-4 h-4" /> Partnership Coming Soon
-    </span>
-  );
-}
+const SERVICES = [
+  { icon: Server, name: 'Compute', desc: 'FCS instances, dedicated hosting, autoscaling and CloudOrchestration, with local pay-as-you-use pricing.' },
+  { icon: HardDrive, name: 'Storage & Backup', desc: 'FBS block volumes, unlimited FOS object storage and Acronis-powered Cloud Backup.' },
+  { icon: Network, name: 'Networking', desc: 'Virtual data centers, Fast Transit, floating IPs, VPN, DNS, firewalls and load balancing.' },
+  { icon: ShieldCheck, name: 'Security', desc: 'Sophos XG, FortiGate NGFW and Acronis Cyber Protect on ISO 27001 / PCI DSS certified infrastructure.' },
+  { icon: Container, name: 'Containers', desc: 'Managed Kubernetes, cloud containers and Kafka event streaming.' },
+  { icon: Database, name: 'Databases', desc: 'Managed PostgreSQL, MySQL, MSSQL and MongoDB with HA and automated failover.' },
+];
+
+const PREVIEW = {
+  org: 'Acme Technologies Ltd · NBS-2026-001',
+  stats: [
+    { label: 'Open Pipeline', value: '₦7.6M' },
+    { label: 'Forecast', value: '₦10.2M' },
+    { label: 'Protected Deals', value: '4' },
+  ],
+  deals: [
+    { name: 'Core banking migration', status: 'Protected', cls: 'badge-green', val: '₦4.5M' },
+    { name: 'Health records platform', status: 'Pending', cls: 'badge-amber', val: '₦12M' },
+    { name: 'Retail e-commerce stack', status: 'Won', cls: 'badge-green', val: '₦6.8M' },
+  ],
+};
 
 export default function Landing() {
-  const { country, needsSelection } = useCountry();
-  const [pickerOpen, setPickerOpen] = useState(false);
-  const showPicker = needsSelection || pickerOpen;
-
-  const c = country || { name: '', complianceChip: 'NDPA · ODPC · ISO 27001 · PCI DSS', computePrice: 'with transparent pricing', partnerProgram: false, flag: '🌍', currencyShort: 'local currency' };
-
-  // Localized mock data for the hero dashboard preview
-  const PREVIEW = {
-    NG: {
-      org: 'Acme Technologies Ltd · NBS-NG-2026-001',
-      stats: [
-        { label: 'Open Pipeline', value: '₦7.6M' },
-        { label: 'Forecast', value: '₦10.2M' },
-        { label: 'Protected Deals', value: '4' },
-      ],
-      deals: [
-        { name: 'Core banking migration', status: 'Protected', cls: 'badge-green', val: '₦4.5M' },
-        { name: 'Health records platform', status: 'Pending', cls: 'badge-amber', val: '₦12M' },
-        { name: 'Retail e-commerce stack', status: 'Won', cls: 'badge-green', val: '₦6.8M' },
-      ],
-    },
-    KE: {
-      org: 'Savanna Cloud Ltd · NBS-KE-2026-001',
-      stats: [
-        { label: 'Open Pipeline', value: 'KSh 9.8M' },
-        { label: 'Forecast', value: 'KSh 13.1M' },
-        { label: 'Protected Deals', value: '4' },
-      ],
-      deals: [
-        { name: 'Core banking migration', status: 'Protected', cls: 'badge-green', val: 'KSh 5.8M' },
-        { name: 'Health records platform', status: 'Pending', cls: 'badge-amber', val: 'KSh 15M' },
-        { name: 'Retail e-commerce stack', status: 'Won', cls: 'badge-green', val: 'KSh 8.7M' },
-      ],
-    },
-    OTHER: {
-      org: 'Global Cloud Partners · NBS-INT-2026-001',
-      stats: [
-        { label: 'Open Pipeline', value: '$75K' },
-        { label: 'Forecast', value: '$102K' },
-        { label: 'Protected Deals', value: '4' },
-      ],
-      deals: [
-        { name: 'Core banking migration', status: 'Protected', cls: 'badge-green', val: '$45K' },
-        { name: 'Health records platform', status: 'Pending', cls: 'badge-amber', val: '$120K' },
-        { name: 'Retail e-commerce stack', status: 'Won', cls: 'badge-green', val: '$68K' },
-      ],
-    },
-  };
-  const preview = PREVIEW[c.code] || PREVIEW.NG;
-
-  const SERVICES = [
-    { icon: Server, name: 'Compute', desc: `FCS instances, dedicated hosting, autoscaling and CloudOrchestration, ${c.computePrice}.` },
-    { icon: HardDrive, name: 'Storage & Backup', desc: 'FBS block volumes, unlimited FOS object storage and Acronis-powered Cloud Backup.' },
-    { icon: Network, name: 'Networking', desc: 'Virtual data centers, Fast Transit, floating IPs, VPN, DNS, firewalls and load balancing.' },
-    { icon: ShieldCheck, name: 'Security', desc: 'Sophos XG, FortiGate NGFW and Acronis Cyber Protect on ISO 27001 / PCI DSS certified infrastructure.' },
-    { icon: Container, name: 'Containers', desc: 'Managed Kubernetes, cloud containers and Kafka event streaming.' },
-    { icon: Database, name: 'Databases', desc: 'Managed PostgreSQL, MySQL, MSSQL and MongoDB with HA and automated failover.' },
-  ];
-
   return (
     <div className="min-h-screen bg-white">
-      <CountrySelect open={showPicker} onClose={() => setPickerOpen(false)} />
-
       {/* Nav */}
       <header className="bg-nobus-950 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -113,34 +56,23 @@ export default function Landing() {
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={() => setPickerOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-nobus-200 hover:bg-nobus-800 transition-colors"
-              title="Change country">
-              <Globe className="w-4 h-4" /> {c.flag} <span className="hidden md:inline">{c.name}</span>
-            </button>
-            {c.partnerProgram && (
-              <>
-                <Link to="/login" className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white hover:bg-nobus-800 transition-colors">
-                  <LogIn className="w-4 h-4" /> Login
-                </Link>
-                <Link to="/register" className="btn-primary !py-2 text-sm">
-                  Become a Partner
-                </Link>
-              </>
-            )}
+            <Link to="/login" className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold text-white hover:bg-nobus-800 transition-colors">
+              <LogIn className="w-4 h-4" /> Login
+            </Link>
+            <Link to="/register" className="btn-primary !py-2 text-sm">
+              Become a Partner
+            </Link>
           </div>
         </div>
       </header>
 
       {/* Hero */}
       <section className="bg-nobus-950 text-white relative overflow-hidden">
-        {/* Ambient glow */}
         <div className="absolute -top-40 -right-40 w-[560px] h-[560px] bg-nobus-500/20 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-56 left-1/3 w-[480px] h-[480px] bg-accent-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Copy */}
             <div>
               <div className="badge bg-nobus-800 text-nobus-200 mb-5">Nobus Cloud Services Partner Network</div>
               <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-6">
@@ -152,18 +84,18 @@ export default function Landing() {
                 management, demo labs and campaign-ready marketing content.
               </p>
               <div className="flex flex-wrap gap-3">
-                <BecomePartnerButton country={c} className="btn-primary inline-flex items-center gap-2 text-base !px-7 !py-3" />
-                {c.partnerProgram && (
-                  <Link to="/login" className="inline-flex items-center gap-2 px-7 py-3 rounded-lg font-semibold text-white bg-white/10 hover:bg-white/20 transition-colors">
-                    <LogIn className="w-4 h-4" /> Partner Login
-                  </Link>
-                )}
+                <Link to="/register" className="btn-primary inline-flex items-center gap-2 text-base !px-7 !py-3">
+                  Become a Partner <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link to="/login" className="inline-flex items-center gap-2 px-7 py-3 rounded-lg font-semibold text-white bg-white/10 hover:bg-white/20 transition-colors">
+                  <LogIn className="w-4 h-4" /> Partner Login
+                </Link>
               </div>
               <div className="flex flex-wrap gap-x-6 gap-y-2 mt-10 text-sm text-nobus-300">
                 {[
                   'Local billing, zero FX risk',
                   'West & East Africa availability zones: Lagos · Nairobi',
-                  c.complianceChip,
+                  'ISO 27001 · PCI DSS · NDPA · ODPC',
                 ].map((t) => (
                   <span key={t} className="flex items-center gap-1.5"><CheckCircle className="w-4 h-4 text-nobus-400" /> {t}</span>
                 ))}
@@ -172,7 +104,6 @@ export default function Landing() {
 
             {/* Portal preview composition */}
             <div className="hidden lg:block relative pt-20 pb-20">
-              {/* Floating benefit cards: overlap the dashboard card edges slightly, never its content */}
               <div className="absolute top-8 right-0 z-20 bg-nobus-500 text-white rounded-xl shadow-xl px-5 py-4">
                 <div className="flex items-center gap-2">
                   <BadgePercent className="w-5 h-5" />
@@ -192,11 +123,10 @@ export default function Landing() {
                 </div>
               </div>
 
-              {/* Main dashboard card */}
               <div className="bg-white rounded-2xl shadow-2xl p-6 text-gray-900 relative z-10">
                 <div className="flex items-center justify-between mb-5">
                   <div>
-                    <div className="text-xs text-gray-400">{preview.org}</div>
+                    <div className="text-xs text-gray-400">{PREVIEW.org}</div>
                     <div className="font-bold text-lg">Partner Dashboard</div>
                   </div>
                   <span className="badge font-bold inline-flex items-center gap-1.5" style={{ backgroundColor: '#FBF3D9', color: '#B8860B' }}>
@@ -204,7 +134,7 @@ export default function Landing() {
                   </span>
                 </div>
                 <div className="grid grid-cols-3 gap-3 mb-5">
-                  {preview.stats.map((s) => (
+                  {PREVIEW.stats.map((s) => (
                     <div key={s.label} className="bg-gray-50 rounded-xl p-3">
                       <div className="text-lg font-bold text-gray-900">{s.value}</div>
                       <div className="text-[10px] text-gray-400 font-medium">{s.label}</div>
@@ -212,7 +142,7 @@ export default function Landing() {
                   ))}
                 </div>
                 <div className="space-y-2.5">
-                  {preview.deals.map((d) => (
+                  {PREVIEW.deals.map((d) => (
                     <div key={d.name} className="flex items-center justify-between py-2 px-3 rounded-lg bg-gray-50">
                       <div className="text-sm font-medium text-gray-800">{d.name}</div>
                       <div className="flex items-center gap-2">
@@ -278,8 +208,8 @@ export default function Landing() {
         <div className="text-center max-w-2xl mx-auto mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-3">The catalog you'll sell</h2>
           <p className="text-gray-500">
-            A complete cloud platform across West and East Africa availability zones in Lagos, Nigeria
-            (Ikeja and Lekki) and Nairobi, Kenya, with local, pay-as-you-use billing.
+            A complete cloud platform across West and East Africa availability zones in Lagos (Ikeja and Lekki)
+            and Nairobi, with local, pay-as-you-use billing.
           </p>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -300,42 +230,19 @@ export default function Landing() {
       {/* CTA */}
       <section className="bg-nobus-950 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-          {c.partnerProgram ? (
-            <>
-              <h2 className="text-3xl font-bold mb-4">Ready to build with Nobus?</h2>
-              <p className="text-nobus-200 mb-8 max-w-xl mx-auto">
-                Apply in minutes. Once approved, your team gets full access to training, deal registration,
-                quoting and every partner resource.
-              </p>
-              <div className="flex flex-wrap justify-center gap-3">
-                <Link to="/register" className="btn-primary inline-flex items-center gap-2 text-base !px-7 !py-3">
-                  Become a Partner <ArrowRight className="w-4 h-4" />
-                </Link>
-                <Link to="/login" className="inline-flex items-center gap-2 px-7 py-3 rounded-lg font-semibold text-white bg-white/10 hover:bg-white/20 transition-colors">
-                  Partner Login
-                </Link>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="inline-flex items-center gap-2 badge bg-amber-500/20 text-amber-300 mb-5">
-                <Clock className="w-3.5 h-3.5" /> Coming Soon
-              </div>
-              <h2 className="text-3xl font-bold mb-4">
-                The partner program is coming to {c.name === 'Other Countries' ? 'your region' : c.name}
-              </h2>
-              <p className="text-nobus-200 mb-8 max-w-xl mx-auto">
-                Our partner program is currently live in Nigeria while we prepare the {c.name === 'Kenya' ? 'Kenyan' : 'international'} launch.
-                Operating in Nigeria? Switch your country to apply today.
-              </p>
-              <div className="flex flex-wrap justify-center gap-3">
-                <button onClick={() => setPickerOpen(true)}
-                  className="btn-primary inline-flex items-center gap-2 text-base !px-7 !py-3">
-                  <Globe className="w-4 h-4" /> Change Country
-                </button>
-              </div>
-            </>
-          )}
+          <h2 className="text-3xl font-bold mb-4">Ready to build with Nobus?</h2>
+          <p className="text-nobus-200 mb-8 max-w-xl mx-auto">
+            Apply in minutes. Once approved, your team gets full access to training, deal registration,
+            quoting and every partner resource.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link to="/register" className="btn-primary inline-flex items-center gap-2 text-base !px-7 !py-3">
+              Become a Partner <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link to="/login" className="inline-flex items-center gap-2 px-7 py-3 rounded-lg font-semibold text-white bg-white/10 hover:bg-white/20 transition-colors">
+              Partner Login
+            </Link>
+          </div>
         </div>
       </section>
 

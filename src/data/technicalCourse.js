@@ -71,7 +71,7 @@ Nobus Cloud Services (NCS) is Nigeria's first native hyperscale public cloud pla
 | CloudOrchestration stack | CloudFormation stack | ARM template |
 
 ### Billing model (engineers get asked this constantly)
-Pre-billing: resources charge from the start of each cycle while in **running or paused** states; build, shutting-down and deleted states do not bill. Auto-billing tops up from a saved card 3 days before the cycle if the wallet is short. All billing in Naira, entry compute from NGN 9,309/month, and **zero egress fees**.
+Pre-billing: resources charge from the start of each cycle while in **running or paused** states; build, shutting-down and deleted states do not bill. Auto-billing tops up from a saved card 3 days before the cycle if the wallet is short. All billing in local currency, entry compute from 9,309/month, and **zero egress fees**.
 
 ### Key takeaways
 - Hyperscale, Tier III multi-AZ across Africa, 99.982% uptime, one console
@@ -143,7 +143,7 @@ The primary interface: full lifecycle control of every service (Project > Comput
 - **Standard:** one key pair per administrator, never shared; lost private keys cannot be re-downloaded, only replaced
 
 ### Access method 3: Windows instances
-Launch with a key pair, then retrieve the auto-generated administrator password from the console (decrypted with your private key), and connect over RDP (open TCP 3389 in the security group **to the admin's IP only**, never 0.0.0.0/0). Windows instances carry the managed license (+NGN 35,000/month) unless BYOL on a Dedicated Host.
+Launch with a key pair, then retrieve the auto-generated administrator password from the console (decrypted with your private key), and connect over RDP (open TCP 3389 in the security group **to the admin's IP only**, never 0.0.0.0/0). Windows instances carry the managed license (+35,000/month) unless BYOL on a Dedicated Host.
 
 ### Access method 4: API and CLI (automation)
 - OpenStack-compatible REST APIs and CLI for scripting and CI/CD pipelines
@@ -835,7 +835,7 @@ Managed DNS service for mapping domain names to IP addresses. **Free for all Nob
 - Physical security of Tier III data centres (24/7 facility control)
 - Infrastructure: hypervisors, storage fabric, core network
 - Platform encryption machinery, IDS/IPS, SIEM monitoring, incident response process
-- Compliance certifications (Nigerian market): ISO 27001 certified, PCI DSS certified, NDPA compliant; GDPR posture; ODPC compliant (Kenya)
+- Compliance certifications (local market): ISO 27001 certified, PCI DSS certified, NDPA compliant; GDPR posture; ODPC compliant (Kenya)
 
 **The customer (with you) secures what runs IN the cloud:**
 - Data classification and encryption choices
@@ -1289,7 +1289,7 @@ For permanence across reboots, add it to /etc/fstab (in production, always by UU
 ### Part C: Snapshot (10 min)
 1. Best practice: quiesce writes first: sudo sync
 2. Console: Volumes > data-lab2 > Create Snapshot: name snap-lab2-v1
-3. While it completes, understand the economics: snapshots are **incremental** (only changed blocks after the first) and are stored in FOS at NGN 120 per GB-month of actual consumed data, not provisioned size
+3. While it completes, understand the economics: snapshots are **incremental** (only changed blocks after the first) and are stored in FOS at 120 per GB-month of actual consumed data, not provisioned size
 4. Now simulate the disaster: sudo rm /data/critical.txt (gone)
 
 ### Part D: Restore (10 min)
@@ -1324,7 +1324,7 @@ The complete volume lifecycle: create, attach, format, mount, snapshot, destroy,
 **Concept check:** FOS is flat (containers hold objects; no real directories), distributed across data zones, and effectively unlimited. Objects are file + metadata.
 
 ### Part B: The economics conversation
-Know these cold: storage **NGN 60/GB-month** at every tier, transfer-in free, requests NGN 2 per 1,000, DELETE free, and zero egress fees on the platform. Run the numbers aloud: 500 GB of backup archives = NGN 30,000/month. This is why FOS is the default backup target in your designs.
+Know these cold: storage **60/GB-month** at every tier, transfer-in free, requests 2 per 1,000, DELETE free, and zero egress fees on the platform. Run the numbers aloud: 500 GB of backup archives = 30,000/month. This is why FOS is the default backup target in your designs.
 
 ### Part C: Teardown
 Delete objects, then containers (containers must be empty to delete).
@@ -1618,7 +1618,7 @@ Certifications map directly to partner-tier progression: certified staff counts 
 
 ### The two-week preparation plan
 **Week 1: Content.** One module per sitting, in order; keep your own one-page summary per module (writing it is the revision). Flag anything you cannot explain aloud to a colleague.
-**Week 2: Practice.** Re-run Labs 1-4 without the instructions; whiteboard the reference architectures from memory; drill the numbers that recur (instance naming, 99.982%, NGN 120/GB FBS, NGN 60/GB FOS, entry NGN 9,309, pass mark 75%); then take the quizzes.
+**Week 2: Practice.** Re-run Labs 1-4 without the instructions; whiteboard the reference architectures from memory; drill the numbers that recur (instance naming, 99.982%, 120/GB FBS, 60/GB FOS, entry 9,309, pass mark 75%); then take the quizzes.
 
 ### Exam technique (yes, it matters)
 - Read every option; distractors are built from common misconceptions you have now been warned about

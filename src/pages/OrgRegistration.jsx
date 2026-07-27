@@ -1,15 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CheckCircle, ArrowLeft, AlertCircle, X, Clock, Globe } from 'lucide-react';
+import { CheckCircle, ArrowLeft, AlertCircle, X } from 'lucide-react';
 import { api } from '../lib/api';
 import MarkdownRenderer from '../components/MarkdownRenderer';
 import partnerTerms from '../data/partnerTerms';
-import { useCountry } from '../context/CountryContext';
-import CountrySelect from '../components/CountrySelect';
 
 export default function OrgRegistration() {
-  const { country, needsSelection } = useCountry();
-  const [pickerOpen, setPickerOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -47,38 +43,6 @@ export default function OrgRegistration() {
       setSubmitting(false);
     }
   };
-
-  // The partner program is currently live in Nigeria only
-  if (needsSelection || !country?.partnerProgram) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-nobus-900 via-nobus-800 to-nobus-950 flex items-center justify-center px-4">
-        <CountrySelect open={needsSelection || pickerOpen} onClose={() => setPickerOpen(false)} />
-        {!needsSelection && (
-          <div className="w-full max-w-md text-center">
-            <div className="card p-8">
-              <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Clock className="w-8 h-8 text-amber-600" />
-              </div>
-              <h2 className="text-xl font-bold text-gray-900 mb-2">
-                Coming soon to {country?.name === 'Other Countries' ? 'your region' : country?.name}
-              </h2>
-              <p className="text-gray-600 mb-6">
-                The Nobus partner program is currently live in <strong>Nigeria</strong> while we prepare
-                the launch in {country?.name === 'Kenya' ? 'Kenya' : 'other regions'}. If your organization
-                operates in Nigeria, switch your country to apply today.
-              </p>
-              <div className="flex flex-col gap-2">
-                <button onClick={() => setPickerOpen(true)} className="btn-primary w-full flex items-center justify-center gap-2">
-                  <Globe className="w-4 h-4" /> Change Country
-                </button>
-                <Link to="/" className="btn-secondary w-full text-center">Back to PartnerCentral</Link>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
 
   if (submitted) {
     return (
@@ -162,7 +126,7 @@ export default function OrgRegistration() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">State *</label>
-                <input name="state" value={form.state} onChange={handleChange} required placeholder="e.g. Lagos"
+                <input name="state" value={form.state} onChange={handleChange} required placeholder="e.g. your state or region"
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nobus-500 focus:border-nobus-500 outline-none" />
               </div>
             </div>

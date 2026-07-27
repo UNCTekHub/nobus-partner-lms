@@ -131,7 +131,7 @@ export const CATALOG = [
 
 export const naira = (n) => '₦' + Math.round(Number(n) || 0).toLocaleString('en-NG');
 
-export const VAT_RATE = 0.075; // Nigerian VAT 7.5%
+export const VAT_RATE = 0.075; // Local VAT 7.5%
 export const PARTNER_DISCOUNT_PCT = 10; // standard partner credit per the NCS Partner Agreement
 
 // Per the Partner Agreement, the 10% credit applies only to compute and storage

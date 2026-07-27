@@ -259,7 +259,7 @@ export default function QuoteBuilder() {
           )}
 
           <div className="text-xs text-gray-400 leading-relaxed border-t border-gray-100 pt-4">
-            All prices in Nigerian Naira (NGN), exclusive of VAT and applicable taxes. Billed in Naira with no
+            All prices in local currency, exclusive of VAT and applicable taxes. Local billing with no
             foreign-exchange exposure. This is an indicative estimate based on published Nobus rates - final
             pricing is confirmed at order via the Nobus Pricing Calculator (nobus.io/nobus-pricing-calculator).
             Items marked "priced on request" require a Nobus sales quotation. Valid for 30 days.
@@ -509,7 +509,7 @@ export default function QuoteBuilder() {
             <Calculator className="w-7 h-7 text-nobus-500" /> Quote Builder
           </h1>
           <p className="text-gray-600">
-            Build customer-ready Naira estimates from the Nobus service catalog - compute, storage, networking, databases and security.
+            Build customer-ready local-currency estimates from the Nobus service catalog - compute, storage, networking, databases and security.
           </p>
         </div>
         <button className="btn-primary flex items-center gap-2" onClick={startNew}>

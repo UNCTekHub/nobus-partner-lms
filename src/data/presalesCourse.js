@@ -46,12 +46,12 @@ Nobus Flexible Compute Service provides resizable virtual machines from the cons
 | Burstable (si.8.64/si.16.64) | High RAM, bursty CPU | Staging, variable batch workloads |
 | Specialized | Compute-optimized, storage-optimized, GPU | Named workloads only; validate with Nobus |
 
-**OS coverage:** Ubuntu, CentOS and other open-source Linux distributions license-free; Windows Server with managed licensing (+NGN 35,000 per instance-month) or BYOL on Dedicated Hosts.
+**OS coverage:** Ubuntu, CentOS and other open-source Linux distributions license-free; Windows Server with managed licensing (+35,000 per instance-month) or BYOL on Dedicated Hosts.
 
 ### Pricing mechanics (whiteboard-ready)
-- Published units: vCPU NGN 93.50 and memory NGN 96.80 per unit-day; entry instances from **NGN 9,309/month**; billing is pre-paid per cycle and accrues while instances are running or paused
-- Rule of thumb: a Linux si.2.4 lands in the low-NGN-20k/month range, an si.4.8 roughly double; always confirm final figures in the Quote Builder or the official Pricing Calculator, which apply exact rates, exclusive partner pricing and 7.5% VAT
-- The differentiators to state every time: **billed in Naira** and **zero egress fees**
+- Published units: vCPU 93.50 and memory 96.80 per unit-day; entry instances from **9,309/month**; billing is pre-paid per cycle and accrues while instances are running or paused
+- Rule of thumb: a Linux si.2.4 lands in the low-20k/month range, an si.4.8 roughly double; always confirm final figures in the Quote Builder or the official Pricing Calculator, which apply exact rates, exclusive partner pricing and 7.5% VAT
+- The differentiators to state every time: **billed in local currency** and **zero egress fees**
 
 ### Right-sizing: your credibility lever
 Never mirror the old server's spec. Most on-premise machines run at 15-25% utilization; measure (or ask for) actual peak CPU and RAM, size to peak plus 30% headroom, and let vertical resize or autoscaling absorb growth. A right-sized quote routinely comes in 30-40% under a spec-mirrored one, and it is the single fastest way to beat a competitor's lazy proposal.
@@ -71,7 +71,7 @@ A retailer's RFQ listed 12 servers copied from their 2019 hardware sheet. The lo
 
 ### Key takeaways
 - Decode si.[vCPU].[RAM].[disk].[os] instantly; size from measured peaks plus 30%, never from old spec sheets
-- Know the units (93.50 / 96.80 per unit-day, entry NGN 9,309) but finalize numbers in the Quote Builder
+- Know the units (93.50 / 96.80 per unit-day, entry 9,309) but finalize numbers in the Quote Builder
 - Auto Scaling costs nothing extra and self-heals; Dedicated Hosts + BYOL is the licensing rescue card`
         },
         {
@@ -274,7 +274,7 @@ NCB is powered by **Acronis Cyber Protect** and is a unique differentiator - it 
 
 **Free Backup Offer:** Nobus provides a free backup allocation for qualifying customers - use this as a deal sweetener during negotiations.
 
-> **Presales Tip:** NCB is your secret weapon for competitive deals. When a customer says "We already use AWS but need backup," position NCB: "Back up your AWS, Azure, AND on-prem workloads to Nobus. One backup solution, one invoice, in Naira. And if you ever want to migrate, your data is already here."
+> **Presales Tip:** NCB is your secret weapon for competitive deals. When a customer says "We already use AWS but need backup," position NCB: "Back up your AWS, Azure, AND on-prem workloads to Nobus. One backup solution, one invoice, in local currency. And if you ever want to migrate, your data is already here."
 
 ---
 
@@ -351,12 +351,12 @@ For mature DevOps teams, position Nobus Cloud Orchestration:
 - **Signals:** Ransomware fear, audit finding, a recent outage, cautious buyer
 - **Architecture:** Nobus Cloud Backup (Acronis) protecting on-prem and even AWS/Azure workloads, FOS as the backup target, a pilot-light FCS environment for critical-system failover, quarterly restore drills
 - **Why it wins:** Lowest-risk first step; the customer keeps production where it is and still gets protected. DR customers convert to full migration within 12-18 months.
-- **Key numbers:** FOS at NGN 60/GB-month makes retention affordable; snapshots bill only on consumed data
+- **Key numbers:** FOS at 60/GB-month makes retention affordable; snapshots bill only on consumed data
 
 ### Scenario 4: Cloud-native fintech / SaaS startup
 - **Signals:** Microservices talk, Kubernetes on the CV, transaction spikes, investor pressure on burn rate
 - **Architecture:** Managed Nobus Kubernetes Engine (Linux worker nodes), managed Kafka for event streaming, managed PostgreSQL or MongoDB, load balancing, security groups per service tier
-- **Why it wins:** Naira billing extends runway; local latency beats eu-west-1 by 100ms+; PCI DSS certification unlocks payments work
+- **Why it wins:** local billing extends runway; local latency beats eu-west-1 by 100ms+; PCI DSS certification unlocks payments work
 - **Watch out:** Floating IPs do not attach to Kubernetes worker nodes; expose services through the load balancer
 
 ### Scenario 5: Regulated enterprise (bank, insurer, government)
@@ -468,13 +468,13 @@ A credible TCO compares ALL of these for the current state versus Nobus, over 3 
 ### Nobus rates to know cold (from nobus.io published pricing)
 | Item | Rate |
 |---|---|
-| FCS entry instance | from NGN 9,309/month |
-| FCS vCPU / memory units | NGN 93.50 and NGN 96.80 per unit-day |
-| FBS block storage | NGN 120 per GB-month |
-| FOS object storage | NGN 60 per GB-month |
-| Internet bandwidth | NGN 6,000 per GB-month (burstable to 50 Mbps) |
-| Floating IP | NGN 1,500 per month |
-| Windows license | +NGN 35,000 per instance-month |
+| FCS entry instance | from 9,309/month |
+| FCS vCPU / memory units | 93.50 and 96.80 per unit-day |
+| FBS block storage | 120 per GB-month |
+| FOS object storage | 60 per GB-month |
+| Internet bandwidth | 6,000 per GB-month (burstable to 50 Mbps) |
+| Floating IP | 1,500 per month |
+| Windows license | +35,000 per instance-month |
 | Egress fees | zero |
 | VAT | 7.5%, always shown explicitly |
 
@@ -484,18 +484,18 @@ Build the actual line items in the Quote Builder; it applies these rates, exclus
 Current state: 6 aging servers due for refresh, one rack, generator-backed office server room.
 
 **On-premise path (3 years)**
-- Hardware refresh: NGN 28M (year 1)
-- Power, diesel, cooling: NGN 350k/month = NGN 12.6M
-- One engineer's time at 40%: NGN 2.4M/year = NGN 7.2M
-- UPS/generator maintenance: NGN 1.8M
-- Downtime (their history: ~3 incidents/year, 6 hrs avg, NGN 400k/hr): NGN 21.6M
-- **Total: ~NGN 71M, plus another refresh looming in year 4**
+- Hardware refresh: 28M (year 1)
+- Power, diesel, cooling: 350k/month = 12.6M
+- One engineer's time at 40%: 2.4M/year = 7.2M
+- UPS/generator maintenance: 1.8M
+- Downtime (their history: ~3 incidents/year, 6 hrs avg, 400k/hr): 21.6M
+- **Total: ~71M, plus another refresh looming in year 4**
 
 **Nobus path (3 years)**
-- 6x FCS equivalents (mix of si.4.8 and si.2.4) + FBS + backups: ~NGN 1.15M/month = NGN 41.4M
-- Migration project (one-time, partner services): NGN 3.5M
-- Downtime at 99.982%: under NGN 1M expected
-- **Total: ~NGN 46M, capex-free, in Naira, with Tier III redundancy**
+- 6x FCS equivalents (mix of si.4.8 and si.2.4) + FBS + backups: ~1.15M/month = 41.4M
+- Migration project (one-time, partner services): 3.5M
+- Downtime at 99.982%: under 1M expected
+- **Total: ~46M, capex-free, in local currency, with Tier III redundancy**
 
 Headline for the executive summary: **"~35% lower three-year cost, zero capex, and 20x less expected downtime."**
 

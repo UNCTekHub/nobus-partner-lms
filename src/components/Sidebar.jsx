@@ -10,20 +10,20 @@ export const NAV_GROUPS = [
     links: [{ to: '/', label: 'Dashboard', icon: LayoutDashboard }],
   },
   {
+    title: 'Sales',
+    links: [
+      { to: '/sales-navigator', label: 'Sales Navigator', icon: Compass },
+      { to: '/deals', label: 'Deal Registration', icon: ShieldCheck },
+      { to: '/quotes', label: 'Quote Builder', icon: Calculator },
+    ],
+  },
+  {
     title: 'Enablement',
     links: [
       { to: '/catalog', label: 'Training Academy', icon: BookOpen },
       { to: '/certification', label: 'Certifications', icon: Award },
       { to: '/leaderboard', label: 'Leaderboard', icon: Trophy },
       { to: '/discussions', label: 'Community Forum', icon: MessageSquare },
-    ],
-  },
-  {
-    title: 'Sales',
-    links: [
-      { to: '/sales-navigator', label: 'Sales Navigator', icon: Compass },
-      { to: '/deals', label: 'Deal Registration', icon: ShieldCheck },
-      { to: '/quotes', label: 'Quote Builder', icon: Calculator },
     ],
   },
   {

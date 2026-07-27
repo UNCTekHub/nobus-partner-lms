@@ -33,7 +33,7 @@ router.get('/', authenticate, (req, res) => {
   res.json(db.prepare(base + ' WHERE l.org_id = ? ORDER BY l.updated_at DESC').all(req.user.org_id));
 });
 
-// GET /api/pipeline/forecast - Naira revenue forecast summary for my org
+// GET /api/pipeline/forecast - local-currency revenue forecast summary for my org
 router.get('/forecast', authenticate, (req, res) => {
   const orgId = req.user.role === 'super_admin' ? req.query.orgId : req.user.org_id;
   let sql = 'SELECT stage, COUNT(*) as count, COALESCE(SUM(est_value), 0) as total FROM leads';
