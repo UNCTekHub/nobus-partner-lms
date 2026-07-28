@@ -91,6 +91,11 @@ function TierScorecard() {
               <span className="w-4 h-4 rounded-full" style={{ backgroundColor: tierColor(card.tier) }} />
               <span className="text-2xl font-extrabold" style={{ color: tierColor(card.tier) }}>{card.tier}</span>
             </div>
+            {card.discount != null && (
+              <div className="text-sm text-gray-600 mt-1">
+                <span className="font-semibold text-nobus-600">{card.discount}%</span> partner discount on your quotes
+              </div>
+            )}
           </div>
           <div className="flex items-center gap-2">
             {card.tiers.map((name, i) => (
@@ -110,12 +115,15 @@ function TierScorecard() {
         <div className="card p-8 text-center">
           <BadgeCheck className="w-10 h-10 text-nobus-500 mx-auto mb-3" />
           <h3 className="text-lg font-bold text-gray-900">You are at the top tier</h3>
-          <p className="text-gray-500 mt-1">Maintain your certifications and deal activity to retain Elite status.</p>
+          <p className="text-gray-500 mt-1">Gold unlocks your <span className="font-semibold text-nobus-600">{card.discount}%</span> partner discount. Maintain your certifications and revenue to retain Gold status.</p>
         </div>
       ) : (
         <div className="card p-6">
           <div className="flex items-center justify-between mb-5">
-            <h3 className="font-bold text-gray-900">Progress to <span style={{ color: tierColor(card.nextTier) }}>{card.nextTier}</span></h3>
+            <h3 className="font-bold text-gray-900">
+              Progress to <span style={{ color: tierColor(card.nextTier) }}>{card.nextTier}</span>
+              {card.nextDiscount != null && <span className="text-sm font-normal text-gray-500"> · unlocks {card.nextDiscount}% discount</span>}
+            </h3>
             <span className="text-sm text-gray-500">{card.dimensions.filter((d) => d.met).length}/{card.dimensions.length} requirements met</span>
           </div>
           <div className="grid sm:grid-cols-2 gap-4">

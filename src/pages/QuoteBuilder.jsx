@@ -3,7 +3,8 @@ import { Calculator, Plus, X, Trash2, Loader2, Printer, Save, ArrowLeft, FileTex
 import { Link } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
-import { CATALOG, DB_SIZES, FCS_INSTANCES, itemMonthly, quoteBreakdown, buildQuoteLines, naira, PARTNER_DISCOUNT_PCT } from '../data/pricingCatalog';
+import { CATALOG, DB_SIZES, FCS_INSTANCES, itemMonthly, quoteBreakdown, buildQuoteLines, naira } from '../data/pricingCatalog';
+import { tierDiscount } from '../data/tiers';
 
 let itemSeq = 1;
 
@@ -87,7 +88,9 @@ export default function QuoteBuilder() {
   const updateItem = (key, patch) => setItems((prev) => prev.map((it) => (it.key === key ? { ...it, ...patch } : it)));
   const removeItem = (key) => setItems((prev) => prev.filter((it) => it.key !== key));
 
-  const discountPct = discount ? PARTNER_DISCOUNT_PCT : 0;
+  // Partner discount follows the org's tier (Registered 10% / Silver 15% / Gold 20%).
+  const partnerRate = tierDiscount(organization?.tier);
+  const discountPct = discount ? partnerRate : 0;
   const fin = quoteBreakdown(items, discountPct);
   const monthly = fin.netMonthly;
 
@@ -450,10 +453,10 @@ export default function QuoteBuilder() {
                   className="w-4 h-4 rounded border-gray-300 text-nobus-500 focus:ring-nobus-400" />
                 <div>
                   <div className="text-sm font-semibold text-gray-900 flex items-center gap-1.5">
-                    <BadgePercent className="w-4 h-4 text-nobus-500" /> Apply exclusive partner pricing
+                    <BadgePercent className="w-4 h-4 text-nobus-500" /> Apply exclusive partner pricing ({partnerRate}% · {organization?.tier || 'Registered'})
                   </div>
                   <div className="text-xs text-gray-400">
-                    Preferential partner rates per the NCS Partner Agreement - applies to compute &amp; storage only (excludes connectivity, licensed software).
+                    Your {organization?.tier || 'Registered'}-tier discount per the NCS Partner Agreement - applies to compute &amp; storage only (excludes connectivity, licensed software).
                   </div>
                 </div>
               </label>

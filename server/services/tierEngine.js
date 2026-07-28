@@ -1,35 +1,27 @@
 import db from '../db.js';
 
-// Nobus partner tiers are earned across THREE dimensions, calibrated for the
-// African cloud channel (Naira figures reflect the market: a single bank deal is
-// often ₦50M+/year). Certifications are the entry GATE; performance (revenue and
-// closed business) dominates from Gold up; engagement keeps a tier from going
-// stale. All thresholds are illustrative defaults - tune to your program.
+// Nobus partner tiers are earned on TWO gates: annual revenue booked through
+// Nobus (trailing-12-month won deals) AND a role-matched certification minimum.
+// A partner reaches a tier only when BOTH are satisfied. Each tier carries the
+// partner discount applied to their quotes.
+//   Registered: revenue 0 - 500M      -> 10% discount
+//   Silver:     revenue over 500M      -> 15% discount
+//   Gold:       revenue 1.5B and above -> 20% discount
 export const TIERS = [
   {
     name: 'Registered', order: 0,
     certs: { Sales: 0, Presales: 0, Technical: 0 },
-    wonDeals: 0, revenue: 0, activeCustomers: 0, requiresRecency: false,
+    revenue: 0, discount: 10,
   },
   {
     name: 'Silver', order: 1,
     certs: { Sales: 2, Presales: 1, Technical: 1 },
-    wonDeals: 1, revenue: 2_000_000, activeCustomers: 1, requiresRecency: true,
+    revenue: 500_000_001, discount: 15,
   },
   {
     name: 'Gold', order: 2,
     certs: { Sales: 5, Presales: 3, Technical: 3 },
-    wonDeals: 3, revenue: 15_000_000, activeCustomers: 2, requiresRecency: true,
-  },
-  {
-    name: 'Platinum', order: 3,
-    certs: { Sales: 10, Presales: 5, Technical: 6 },
-    wonDeals: 6, revenue: 50_000_000, activeCustomers: 6, requiresRecency: true,
-  },
-  {
-    name: 'Elite', order: 4,
-    certs: { Sales: 15, Presales: 8, Technical: 10 },
-    wonDeals: 10, revenue: 150_000_000, activeCustomers: 10, requiresRecency: true,
+    revenue: 1_500_000_000, discount: 20,
   },
 ];
 
@@ -81,12 +73,12 @@ export function orgMetrics(orgId) {
 
 function meetsTier(m, tier) {
   const certsOk = ['Sales', 'Presales', 'Technical'].every((r) => m.certified[r] >= tier.certs[r]);
-  const recencyOk = !tier.requiresRecency || m.hasRecentActivity;
-  return certsOk
-    && m.wonDeals >= tier.wonDeals
-    && m.revenue >= tier.revenue
-    && m.activeCustomers >= tier.activeCustomers
-    && recencyOk;
+  return certsOk && m.revenue >= tier.revenue;
+}
+
+// The partner discount for an org's current tier (used to price quotes).
+export function orgDiscountPct(orgId) {
+  return determineTier(orgMetrics(orgId)).discount;
 }
 
 // Highest tier whose every requirement is satisfied.
@@ -108,12 +100,10 @@ export function computeScorecard(orgId) {
   const dimsFor = (tier) => {
     if (!tier) return [];
     return [
+      { key: 'revenue', label: 'Annual revenue via Nobus (12 mo)', current: m.revenue, required: tier.revenue, kind: 'currency' },
       { key: 'sales', label: 'Certified Sales', current: m.certified.Sales, required: tier.certs.Sales, kind: 'count' },
       { key: 'presales', label: 'Certified Presales', current: m.certified.Presales, required: tier.certs.Presales, kind: 'count' },
       { key: 'technical', label: 'Certified Technical', current: m.certified.Technical, required: tier.certs.Technical, kind: 'count' },
-      { key: 'wonDeals', label: 'Won deals', current: m.wonDeals, required: tier.wonDeals, kind: 'count' },
-      { key: 'revenue', label: 'Influenced revenue (12 mo)', current: m.revenue, required: tier.revenue, kind: 'currency' },
-      { key: 'activeCustomers', label: 'Active customers', current: m.activeCustomers, required: tier.activeCustomers, kind: 'count' },
     ].map((d) => ({ ...d, met: d.current >= d.required }));
   };
 
@@ -124,8 +114,11 @@ export function computeScorecard(orgId) {
     metrics: m,
     currentTier: current.name,
     nextTier: next ? next.name : null,
-    engagementOk: m.hasRecentActivity,
-    requiresRecency: next ? next.requiresRecency : false,
+    discount: current.discount,
+    nextDiscount: next ? next.discount : null,
+    // retained for UI compatibility; recency no longer gates tier
+    engagementOk: true,
+    requiresRecency: false,
     dimensions: nextDims,
     missing,
     atTop: !next,

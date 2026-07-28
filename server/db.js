@@ -522,4 +522,8 @@ try { db.exec('ALTER TABLE deals ADD COLUMN dormancy_warned_at TEXT'); } catch {
 try { db.exec('ALTER TABLE support_tickets ADD COLUMN sla_alerted_at TEXT'); } catch { /* exists */ }
 try { db.exec('ALTER TABLE lab_bookings ADD COLUMN reminded_at TEXT'); } catch { /* exists */ }
 
+// Community forum: per-topic rooms + guidelines acceptance.
+try { db.exec("ALTER TABLE discussions ADD COLUMN room TEXT DEFAULT 'general'"); } catch { /* exists */ }
+try { db.exec('ALTER TABLE users ADD COLUMN community_accepted_at TEXT'); } catch { /* exists */ }
+
 export default db;

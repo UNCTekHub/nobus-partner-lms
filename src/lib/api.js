@@ -119,6 +119,8 @@ export const api = {
   setNotificationPreference: (category, enabled) => request('/notifications/preferences', { method: 'PUT', body: JSON.stringify({ category, enabled }) }),
 
   // Discussions
+  getForumMeta: () => request('/discussions/meta'),
+  acceptGuidelines: () => request('/discussions/accept', { method: 'POST' }),
   getDiscussions: (params) => {
     const qs = params ? '?' + new URLSearchParams(params).toString() : '';
     return request(`/discussions${qs}`);

@@ -91,20 +91,29 @@ const main = async () => {
   check('P10', `paid=32,472 pending=350k (got paid ${earn2.data.paid}, pending ${earn2.data.pending})`,
     earn2.data.paid === 32472 && earn2.data.pending === 350000);
 
-  // --- Tier gate: performance now Silver-level+, but zero certs -> must STAY Registered
+  // --- Push revenue over the ₦500M Silver band with a large won deal (15.5M + 600M = 615.5M)
+  const dBig = await req('POST', '/deals', chinedu.token, { customerName: 'QA MegaCorp', opportunityName: 'QA Enterprise Cloud', estValue: 600000000 });
+  await req('PATCH', `/deals/${dBig.data.id}/approve`, admin.token);
+  await req('PATCH', `/deals/${dBig.data.id}/close`, chinedu.token, { outcome: 'won' });
+
+  // --- Tier gate: revenue now in the Silver band, but certs insufficient -> STAY Registered
   const sc = await req('GET', '/partner/scorecard', chinedu.token);
   const m = sc.data.metrics;
-  check('P11', `metrics updated (won=${m.wonDeals}, rev=${m.revenue}, cust=${m.activeCustomers}, recent=${m.hasRecentActivity})`,
-    m.wonDeals === 2 && m.revenue === 15500000 && m.activeCustomers >= 2 && m.hasRecentActivity === true);
-  check('P12', `certification GATE holds: tier stays Registered despite Gold-level revenue (got ${sc.data.tier})`, sc.data.tier === 'Registered');
+  check('P11', `revenue crosses ₦500M (got ${m.revenue})`, m.revenue === 615500000);
+  check('P12', `certification GATE holds: stays Registered despite Silver-band revenue (got ${sc.data.tier})`, sc.data.tier === 'Registered');
   const revDim = sc.data.dimensions.find(d => d.key === 'revenue');
   const salesDim = sc.data.dimensions.find(d => d.key === 'sales');
-  check('P13', 'scorecard shows revenue met but sales certs missing for Silver', revDim?.met === true && salesDim?.met === false);
+  check('P13', 'revenue met but sales certs missing for Silver', revDim?.met === true && salesDim?.met === false);
+  check('P13b', `Registered tier discount is 10% (got ${sc.data.discount})`, sc.data.discount === 10);
+
+  // --- Quote discount follows tier + is clamped server-side (client claim ignored)
+  const qReg = await req('POST', '/quotes', chinedu.token, { title: 'QA Reg Quote', items: [{ serviceId: 'fcs', kind: 'instance', flavorId: 'si.2.2.30.l', qty: 1 }], discountPct: 20 });
+  const qRegRow = await req('GET', `/quotes/${qReg.data.id}`, chinedu.token);
+  check('P13c', `Registered quote discount forced to tier 10% despite client claiming 20 (got ${qRegRow.data.discount_pct})`, qRegRow.data.discount_pct === 10);
 
   // --- Tier promotion once certs granted (fixture: complete paths directly in DB)
   const db = new Database(DB);
   // Silver needs: Sales 2, Presales 1, Technical 1 certified (role-matched)
-  // Acme actives: chinedu (Technical), amaka (Sales), emeka (Presales) -> add one more Sales user
   db.prepare(`INSERT OR IGNORE INTO users (id, org_id, name, email, password_hash, role, role_category, status)
     VALUES ('qa-user-sales2','org-001','QA Sales Two','qa.sales2@acmetech.ng','x','user','Sales','active')`).run();
   const grants = [
@@ -116,10 +125,13 @@ const main = async () => {
   for (const [u, p] of grants) db.prepare('INSERT OR IGNORE INTO completed_paths (user_id, path_id) VALUES (?,?)').run(u, p);
 
   const sc2 = await req('GET', '/partner/scorecard', chinedu.token);
-  check('P14', `tier promotes to Silver once certs + performance met (got ${sc2.data.tier})`, sc2.data.tier === 'Silver');
+  check('P14', `tier promotes to Silver once revenue + certs met (got ${sc2.data.tier})`, sc2.data.tier === 'Silver');
   const orgTier = db.prepare("SELECT tier FROM organizations WHERE id='org-001'").get().tier;
   check('P15', `tier persisted to organizations table (got ${orgTier})`, orgTier === 'Silver');
-  check('P16', 'scorecard now targets Gold', sc2.data.nextTier === 'Gold');
+  check('P16', `scorecard targets Gold and shows 15% discount (got tier discount ${sc2.data.discount}, next ${sc2.data.nextTier})`, sc2.data.nextTier === 'Gold' && sc2.data.discount === 15);
+  const qSil = await req('POST', '/quotes', chinedu.token, { title: 'QA Silver Quote', items: [{ serviceId: 'fcs', kind: 'instance', flavorId: 'si.2.2.30.l', qty: 1 }], discountPct: 20 });
+  const qSilRow = await req('GET', `/quotes/${qSil.data.id}`, chinedu.token);
+  check('P16b', `Silver quote applies tier 15% discount (client sent 20, got ${qSilRow.data.discount_pct})`, qSilRow.data.discount_pct === 15);
 
   // --- SLA breach fixture: backdate the Urgent QA ticket by 5 hours
   const t = db.prepare("SELECT id FROM support_tickets WHERE subject LIKE 'QA: VPC peering%' ORDER BY id DESC").get();

@@ -4,6 +4,7 @@ import { authenticate } from '../middleware/auth.js';
 import { awardPoints } from '../services/notifications.js';
 import { streamQuotePdf, streamQuoteXlsx } from '../services/quoteExport.js';
 import { buildQuoteLines, quoteTotal } from '../pricing.js';
+import { orgDiscountPct } from '../services/tierEngine.js';
 
 const router = Router();
 
@@ -62,6 +63,9 @@ router.post('/', authenticate, (req, res) => {
   const safeItems = Array.isArray(items) ? items : [];
   const safeLines = buildQuoteLines(safeItems, Array.isArray(lines) ? lines : []);
   const total = quoteTotal(safeItems);
+  // The partner discount is authoritative to the org's tier: if the quote opts
+  // into partner pricing, apply the org's tier rate (10/15/20), never a client claim.
+  const discount = Number(discountPct) > 0 ? orgDiscountPct(req.user.org_id) : 0;
 
   const result = db.prepare(`
     INSERT INTO quotes (org_id, created_by, title, customer_name, items, monthly_total, notes, status, discount_pct, lines)
@@ -69,7 +73,7 @@ router.post('/', authenticate, (req, res) => {
   `).run(
     req.user.org_id, req.user.id, title, customerName || null,
     JSON.stringify(safeItems), total, notes || null, status || 'draft',
-    discountPct === 10 ? 10 : 0, JSON.stringify(safeLines)
+    discount, JSON.stringify(safeLines)
   );
   awardPoints(req.user.id, 'quote_created', 5, `Built quote: ${title}`);
   res.status(201).json({ id: result.lastInsertRowid, message: 'Quote saved' });
@@ -85,6 +89,8 @@ router.put('/:id', authenticate, (req, res) => {
   // When items change, lines and the total are recomputed server-side (see POST).
   const safeItems = Array.isArray(items) ? items : null;
   const safeLines = safeItems ? buildQuoteLines(safeItems, Array.isArray(lines) ? lines : []) : null;
+  // Discount follows the quote's own org tier when partner pricing is opted into.
+  const discount = discountPct != null ? (Number(discountPct) > 0 ? orgDiscountPct(quote.org_id) : 0) : null;
   db.prepare(`
     UPDATE quotes SET
       title = COALESCE(?, title), customer_name = COALESCE(?, customer_name),
@@ -96,7 +102,7 @@ router.put('/:id', authenticate, (req, res) => {
   `).run(
     title ?? null, customerName ?? null, safeItems ? JSON.stringify(safeItems) : null,
     safeItems ? quoteTotal(safeItems) : null, notes ?? null, status ?? null,
-    discountPct != null ? (discountPct === 10 ? 10 : 0) : null, safeLines ? JSON.stringify(safeLines) : null,
+    discount, safeLines ? JSON.stringify(safeLines) : null,
     req.params.id
   );
   res.json({ message: 'Quote updated' });

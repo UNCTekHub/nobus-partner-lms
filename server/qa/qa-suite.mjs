@@ -22,20 +22,18 @@ async function login(email, password) {
   return { status: r.status, token: r.data?.token, user: r.data?.user, org: r.data?.organization };
 }
 
-// Tier thresholds mirrored from server/services/tierEngine.js for independent verification
+// Tier thresholds mirrored from server/services/tierEngine.js for independent
+// verification: revenue band AND role-matched certification minimum.
 const TIERS = [
-  { name: 'Registered', certs: { Sales: 0, Presales: 0, Technical: 0 }, wonDeals: 0, revenue: 0, activeCustomers: 0, requiresRecency: false },
-  { name: 'Silver', certs: { Sales: 2, Presales: 1, Technical: 1 }, wonDeals: 1, revenue: 2_000_000, activeCustomers: 1, requiresRecency: true },
-  { name: 'Gold', certs: { Sales: 5, Presales: 3, Technical: 3 }, wonDeals: 3, revenue: 15_000_000, activeCustomers: 2, requiresRecency: true },
-  { name: 'Platinum', certs: { Sales: 10, Presales: 5, Technical: 6 }, wonDeals: 6, revenue: 50_000_000, activeCustomers: 6, requiresRecency: true },
-  { name: 'Elite', certs: { Sales: 15, Presales: 8, Technical: 10 }, wonDeals: 10, revenue: 150_000_000, activeCustomers: 10, requiresRecency: true },
+  { name: 'Registered', certs: { Sales: 0, Presales: 0, Technical: 0 }, revenue: 0, discount: 10 },
+  { name: 'Silver', certs: { Sales: 2, Presales: 1, Technical: 1 }, revenue: 500_000_001, discount: 15 },
+  { name: 'Gold', certs: { Sales: 5, Presales: 3, Technical: 3 }, revenue: 1_500_000_000, discount: 20 },
 ];
 function expectedTier(m) {
   let earned = 'Registered';
   for (const t of TIERS) {
     const certsOk = ['Sales', 'Presales', 'Technical'].every(r => m.certified[r] >= t.certs[r]);
-    const rec = !t.requiresRecency || m.hasRecentActivity;
-    if (certsOk && m.wonDeals >= t.wonDeals && m.revenue >= t.revenue && m.activeCustomers >= t.activeCustomers && rec) earned = t.name;
+    if (certsOk && m.revenue >= t.revenue) earned = t.name;
   }
   return earned;
 }
@@ -57,7 +55,7 @@ const main = async () => {
 
   // ===== SCORECARD =====
   const sc = await req('GET', '/partner/scorecard', chinedu.token);
-  check('T10', 'chinedu scorecard 200 + shape', sc.status === 200 && Array.isArray(sc.data?.tiers) && sc.data.tiers.length === 5 && Array.isArray(sc.data?.dimensions));
+  check('T10', 'chinedu scorecard 200 + shape', sc.status === 200 && Array.isArray(sc.data?.tiers) && sc.data.tiers.length === 3 && Array.isArray(sc.data?.dimensions));
   if (sc.status === 200) {
     check('T11', 'dimension met flags consistent', sc.data.dimensions.every(d => d.met === (d.current >= d.required)));
     const exp = expectedTier(sc.data.metrics);
@@ -201,6 +199,30 @@ const main = async () => {
   const bogusCat = await req('POST', '/support', amaka.token, { subject: 'QA bogus cat', category: 'HAXX', priority: 'MEGA', body: 'x' });
   const bogusRow = (await req('GET', '/support', amaka.token)).data?.find(t => t.id === bogusCat.data?.id);
   check('T74', 'bogus category/priority coerced to General/Normal', bogusRow?.category === 'General' && bogusRow?.priority === 'Normal');
+
+  // ===== COMMUNITY FORUM: rooms + guidelines acceptance =====
+  const fmeta = await req('GET', '/discussions/meta', amaka.token);
+  check('F01', 'forum meta returns rooms + guidelines', fmeta.status === 200 && fmeta.data.rooms.length >= 8 && fmeta.data.guidelines.length >= 5);
+  // A fresh demo user has not accepted yet -> cannot post
+  const preAccept = await req('POST', '/discussions', amaka.token, { title: 'QA before accept', body: 'x', room: 'compute' });
+  check('F02', 'cannot post before accepting guidelines -> 403', preAccept.status === 403 || fmeta.data.accepted === true);
+  await req('POST', '/discussions/accept', amaka.token);
+  const fmetaAfter = await req('GET', '/discussions/meta', amaka.token);
+  check('F03', 'acceptance recorded', fmetaAfter.data.accepted === true);
+  const post = await req('POST', '/discussions', amaka.token, { title: 'QA Compute sizing', body: 'How to size FCS?', room: 'compute' });
+  check('F04', 'can post after accepting, into a room', post.status === 201);
+  const inRoom = await req('GET', '/discussions?room=compute', amaka.token);
+  check('F05', 'room filter returns the thread with room=compute', inRoom.status === 200 && inRoom.data.some(d => d.id === post.data.id && d.room === 'compute'));
+  const otherRoom = await req('GET', '/discussions?room=security', amaka.token);
+  check('F06', 'room filter excludes other rooms', !otherRoom.data.some(d => d.id === post.data.id));
+  const annByMember = await req('POST', '/discussions', amaka.token, { title: 'QA announce', body: 'x', room: 'announcements' });
+  check('F07', 'member cannot post in Announcements -> 403', annByMember.status === 403);
+  await req('POST', '/discussions/accept', admin.token);
+  const annByStaff = await req('POST', '/discussions', admin.token, { title: 'QA official notice', body: 'x', room: 'announcements' });
+  check('F08', 'staff can post in Announcements', annByStaff.status === 201);
+  const badRoom = await req('POST', '/discussions', amaka.token, { title: 'QA bad room', body: 'x', room: 'nonsense' });
+  const badRoomRow = badRoom.status === 201 ? (await req('GET', `/discussions/${badRoom.data.id}`, amaka.token)).data : null;
+  check('F09', 'unknown room coerced to general', badRoomRow?.room === 'general');
 
   console.log(`\n===== RESULT: ${pass} passed, ${fail} failed =====`);
   if (failures.length) { console.log('FAILURES:'); failures.forEach(f => console.log('  - ' + f)); }
