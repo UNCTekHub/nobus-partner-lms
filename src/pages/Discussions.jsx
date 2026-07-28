@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { MessageSquare, Plus, Send, CheckCircle2, Loader2, ChevronLeft } from 'lucide-react';
+import { MessageSquare, Plus, Send, CheckCircle2, Loader2, ChevronLeft, Pin, Lock, Unlock, Trash2 } from 'lucide-react';
 import { api } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
 
 export default function Discussions() {
-  const { currentUser } = useAuth();
+  const { currentUser, isSuperAdmin } = useAuth();
   const [discussions, setDiscussions] = useState([]);
   const [selected, setSelected] = useState(null);
   const [showNew, setShowNew] = useState(false);
@@ -56,6 +56,17 @@ export default function Discussions() {
     } catch {}
   }
 
+  async function togglePin() {
+    try { await api.pinDiscussion(selected.id, !selected.pinned); loadDiscussion(selected.id); loadDiscussions(); } catch {}
+  }
+  async function toggleClose() {
+    try { await api.closeDiscussion(selected.id, !selected.closed); loadDiscussion(selected.id); loadDiscussions(); } catch {}
+  }
+  async function handleDelete() {
+    if (!confirm('Delete this discussion and all its replies? This cannot be undone.')) return;
+    try { await api.deleteDiscussion(selected.id); setSelected(null); loadDiscussions(); } catch {}
+  }
+
   if (loading) return <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-nobus-500" /></div>;
 
   return (
@@ -92,12 +103,31 @@ export default function Discussions() {
             <ChevronLeft className="w-4 h-4" /> Back to discussions
           </button>
           <div className="card p-6 mb-4">
-            <h2 className="text-xl font-bold text-gray-900">{selected.title}</h2>
-            <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
-              <span className="font-medium text-gray-700">{selected.author_name}</span>
-              <span>&middot;</span>
-              <span>{new Date(selected.created_at).toLocaleDateString()}</span>
-              {selected.author_role === 'super_admin' && <span className="px-2 py-0.5 bg-nobus-100 text-nobus-700 rounded-full text-xs font-medium">Admin</span>}
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  {selected.pinned ? <span className="badge bg-amber-50 text-amber-700 flex items-center gap-1"><Pin className="w-3 h-3" /> Pinned</span> : null}
+                  {selected.closed ? <span className="badge bg-gray-100 text-gray-600 flex items-center gap-1"><Lock className="w-3 h-3" /> Closed</span> : null}
+                  <h2 className="text-xl font-bold text-gray-900">{selected.title}</h2>
+                </div>
+                <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
+                  <span className="font-medium text-gray-700">{selected.author_name}</span>
+                  <span>&middot;</span>
+                  <span>{new Date(selected.created_at).toLocaleDateString()}</span>
+                  {selected.author_role === 'super_admin' && <span className="px-2 py-0.5 bg-nobus-100 text-nobus-700 rounded-full text-xs font-medium">Admin</span>}
+                </div>
+              </div>
+              {isSuperAdmin && (
+                <div className="flex items-center gap-1 shrink-0">
+                  <button onClick={togglePin} title={selected.pinned ? 'Unpin' : 'Pin to top'}
+                    className={`p-2 rounded-lg hover:bg-gray-100 ${selected.pinned ? 'text-amber-600' : 'text-gray-400'}`}><Pin className="w-4 h-4" /></button>
+                  <button onClick={toggleClose} title={selected.closed ? 'Reopen' : 'Close to replies'}
+                    className="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-700">
+                    {selected.closed ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}</button>
+                  <button onClick={handleDelete} title="Delete discussion"
+                    className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-600"><Trash2 className="w-4 h-4" /></button>
+                </div>
+              )}
             </div>
             <div className="mt-4 text-gray-700 whitespace-pre-wrap">{selected.body}</div>
           </div>
@@ -123,11 +153,22 @@ export default function Discussions() {
             ))}
           </div>
 
-          <form onSubmit={handleReply} className="flex gap-2">
-            <input value={replyBody} onChange={(e) => setReplyBody(e.target.value)} placeholder="Write a reply..."
-              className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-nobus-500 outline-none" />
-            <button type="submit" disabled={submitting} className="btn-primary px-4"><Send className="w-4 h-4" /></button>
-          </form>
+          {selected.closed && !isSuperAdmin ? (
+            <div className="card p-4 text-center text-sm text-gray-500 flex items-center justify-center gap-2">
+              <Lock className="w-4 h-4" /> This discussion is closed to new replies.
+            </div>
+          ) : (
+            <div>
+              {selected.closed && isSuperAdmin && (
+                <div className="text-xs text-amber-600 mb-1.5">This discussion is closed - only Nobus staff can still reply.</div>
+              )}
+              <form onSubmit={handleReply} className="flex gap-2">
+                <input value={replyBody} onChange={(e) => setReplyBody(e.target.value)} placeholder="Write a reply..."
+                  className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-nobus-500 outline-none" />
+                <button type="submit" disabled={submitting} className="btn-primary px-4"><Send className="w-4 h-4" /></button>
+              </form>
+            </div>
+          )}
         </div>
       ) : (
         <div className="space-y-3">
@@ -137,13 +178,17 @@ export default function Discussions() {
             <button key={d.id} onClick={() => loadDiscussion(d.id)}
               className="w-full text-left card p-4 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="font-semibold text-gray-900">{d.title}</h3>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    {d.pinned ? <Pin className="w-3.5 h-3.5 text-amber-500 shrink-0" /> : null}
+                    {d.closed ? <Lock className="w-3.5 h-3.5 text-gray-400 shrink-0" /> : null}
+                    <h3 className="font-semibold text-gray-900">{d.title}</h3>
+                  </div>
                   <div className="text-xs text-gray-500 mt-1">
                     {d.author_name} &middot; {new Date(d.created_at).toLocaleDateString()}
                   </div>
                 </div>
-                <div className="flex items-center gap-1 text-gray-400 text-sm">
+                <div className="flex items-center gap-1 text-gray-400 text-sm shrink-0">
                   <MessageSquare className="w-4 h-4" /> {d.reply_count}
                 </div>
               </div>

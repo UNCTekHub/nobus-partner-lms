@@ -127,6 +127,9 @@ export const api = {
   createDiscussion: (data) => request('/discussions', { method: 'POST', body: JSON.stringify(data) }),
   postReply: (discussionId, body) => request(`/discussions/${discussionId}/reply`, { method: 'POST', body: JSON.stringify({ body }) }),
   markAnswer: (discussionId, replyId) => request(`/discussions/${discussionId}/reply/${replyId}/answer`, { method: 'PATCH' }),
+  pinDiscussion: (id, pinned) => request(`/discussions/${id}/pin`, { method: 'PATCH', body: JSON.stringify({ pinned }) }),
+  closeDiscussion: (id, closed) => request(`/discussions/${id}/close`, { method: 'PATCH', body: JSON.stringify({ closed }) }),
+  deleteDiscussion: (id) => request(`/discussions/${id}`, { method: 'DELETE' }),
 
   // Gamification
   getMyStats: () => request('/gamification/my-stats'),

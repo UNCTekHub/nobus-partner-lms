@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import db from '../db.js';
-import { authenticate } from '../middleware/auth.js';
+import { authenticate, requireRole } from '../middleware/auth.js';
 import { awardPoints } from '../services/notifications.js';
+import { logAudit, getIP } from '../services/audit.js';
 
 const router = Router();
 
@@ -59,8 +60,12 @@ router.post('/:id/reply', authenticate, (req, res) => {
   const { body } = req.body;
   if (!body) return res.status(400).json({ error: 'Reply body is required' });
 
-  const discussion = db.prepare('SELECT id FROM discussions WHERE id = ?').get(req.params.id);
+  const discussion = db.prepare('SELECT id, closed FROM discussions WHERE id = ?').get(req.params.id);
   if (!discussion) return res.status(404).json({ error: 'Discussion not found' });
+  // A closed thread is read-only for members; only Nobus staff may still post.
+  if (discussion.closed && req.user.role !== 'super_admin') {
+    return res.status(403).json({ error: 'This discussion is closed to new replies' });
+  }
 
   const result = db.prepare(`
     INSERT INTO discussion_replies (discussion_id, user_id, body)
@@ -84,6 +89,38 @@ router.patch('/:id/reply/:replyId/answer', authenticate, (req, res) => {
     .run(req.params.replyId, req.params.id);
 
   res.json({ message: 'Reply marked as answer' });
+});
+
+// ---- Moderation (Nobus staff only): the forum is a shared cross-org space ----
+
+// PATCH /api/discussions/:id/pin - pin/unpin a discussion to the top
+router.patch('/:id/pin', authenticate, requireRole('super_admin'), (req, res) => {
+  const d = db.prepare('SELECT id FROM discussions WHERE id = ?').get(req.params.id);
+  if (!d) return res.status(404).json({ error: 'Discussion not found' });
+  const pinned = req.body.pinned ? 1 : 0;
+  db.prepare("UPDATE discussions SET pinned = ?, updated_at = datetime('now') WHERE id = ?").run(pinned, req.params.id);
+  logAudit({ userId: req.user.id, action: pinned ? 'discussion_pinned' : 'discussion_unpinned', entityType: 'discussion', entityId: String(req.params.id), ipAddress: getIP(req) });
+  res.json({ message: pinned ? 'Discussion pinned' : 'Discussion unpinned', pinned });
+});
+
+// PATCH /api/discussions/:id/close - close/reopen a discussion for replies
+router.patch('/:id/close', authenticate, requireRole('super_admin'), (req, res) => {
+  const d = db.prepare('SELECT id FROM discussions WHERE id = ?').get(req.params.id);
+  if (!d) return res.status(404).json({ error: 'Discussion not found' });
+  const closed = req.body.closed ? 1 : 0;
+  db.prepare("UPDATE discussions SET closed = ?, updated_at = datetime('now') WHERE id = ?").run(closed, req.params.id);
+  logAudit({ userId: req.user.id, action: closed ? 'discussion_closed' : 'discussion_reopened', entityType: 'discussion', entityId: String(req.params.id), ipAddress: getIP(req) });
+  res.json({ message: closed ? 'Discussion closed' : 'Discussion reopened', closed });
+});
+
+// DELETE /api/discussions/:id - remove a discussion and its replies (spam/abuse)
+router.delete('/:id', authenticate, requireRole('super_admin'), (req, res) => {
+  const d = db.prepare('SELECT id, title FROM discussions WHERE id = ?').get(req.params.id);
+  if (!d) return res.status(404).json({ error: 'Discussion not found' });
+  db.prepare('DELETE FROM discussion_replies WHERE discussion_id = ?').run(req.params.id);
+  db.prepare('DELETE FROM discussions WHERE id = ?').run(req.params.id);
+  logAudit({ userId: req.user.id, action: 'discussion_deleted', entityType: 'discussion', entityId: String(req.params.id), details: d.title, ipAddress: getIP(req) });
+  res.json({ message: 'Discussion deleted' });
 });
 
 export default router;
