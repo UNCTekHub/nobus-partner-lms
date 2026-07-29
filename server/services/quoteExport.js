@@ -175,17 +175,26 @@ export function streamQuotePdf(quote, res) {
   doc.fillColor('#374151').fontSize(8.5).font('Helvetica')
     .list(SERVICE_TERMS, left, doc.y + 8, { width, bulletRadius: 1.4, textIndent: 12, bulletIndent: 2, lineGap: 2.5, paragraphGap: 5 });
 
-  // Keep the whole Commercial Acceptance block together on one page.
-  ty = doc.y + 26;
-  const acceptanceHeight = 18 + ACCEPTANCE_FIELDS.length * 34;
+  // Commercial Acceptance - compact two-column signature block, kept together.
+  const rowGap = 26;
+  const rows = [[ACCEPTANCE_FIELDS[0], ACCEPTANCE_FIELDS[2]], [ACCEPTANCE_FIELDS[1], ACCEPTANCE_FIELDS[3]]]; // Name|Signature, Position|Date
+  ty = doc.y + 22;
+  const acceptanceHeight = 16 + rows.length * rowGap;
   if (ty + acceptanceHeight > doc.page.height - doc.page.margins.bottom) { doc.addPage(); ty = doc.page.margins.top; }
   doc.fillColor(NAVY).fontSize(13).font('Helvetica-Bold').text('Commercial Acceptance', left, ty);
-  ty = doc.y + 18;
-  doc.fontSize(10).font('Helvetica').fillColor('#111827');
-  for (const field of ACCEPTANCE_FIELDS) {
-    doc.text(`${field}:`, left, ty);
-    doc.moveTo(left + 80, ty + 11).lineTo(right - 30, ty + 11).strokeColor('#9ca3af').lineWidth(0.7).stroke();
-    ty += 34;
+  ty = doc.y + 12;
+
+  const colGap = 26;
+  const colW = (width - colGap) / 2;
+  const labelW = 62;
+  doc.fontSize(9.5).font('Helvetica').fillColor('#111827');
+  for (const [l1, l2] of rows) {
+    doc.text(`${l1}:`, left, ty);
+    doc.moveTo(left + labelW, ty + 10).lineTo(left + colW, ty + 10).strokeColor('#9ca3af').lineWidth(0.7).stroke();
+    const rx = left + colW + colGap;
+    doc.text(`${l2}:`, rx, ty);
+    doc.moveTo(rx + labelW, ty + 10).lineTo(right, ty + 10).strokeColor('#9ca3af').lineWidth(0.7).stroke();
+    ty += rowGap;
   }
 
   doc.end();
