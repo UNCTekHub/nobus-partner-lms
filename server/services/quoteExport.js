@@ -11,6 +11,23 @@ const VAT_RATE = 0.075;
 const BLUE = '#2e6bff';
 const NAVY = '#0a1229';
 
+// Formal order-form terms printed on every quotation/invoice.
+const SERVICE_TERMS = [
+  'Operating System Licenses were not included.',
+  'All pricing shown in local currency, and is exclusive of any other required levies/taxes such as WHT.',
+  'Services are billed 100% in advance for the contract period.',
+  'The "Grand Total" represents the value that should be paid and would be loaded on the customer\'s wallet for resource usage; VAT is automatically deducted by the system.',
+  'The pricing herein is subject to the Nobus standard terms of use (https://nobus.io/service-terms/) and the Nobus Cloud customer agreement (https://nobus.io/agreement/).',
+  'We provide standard security controls for our services. Details can be found at https://nobus.io/documentation/cloud-security.',
+  'Minimum contract period for Cloud Services in this Order Form shall be twelve (12) months.',
+  'The Service shall be for an initial term of twelve (12) months and may be renewed for successive terms unless the Customer sends written notice of termination at least thirty (30) days prior to the end of the then-current term.',
+  'Partner discounts only apply to a minimum of a twelve (12) month contract.',
+  'POC ONLY includes compute and storage resources directly under the control of the Nobus platform; and excludes services such as external connectivity (e.g. NFT, Internet), licensed software (e.g. Microsoft, Sophos licenses), and any other services not directly provided by Nobus.',
+  'Customer data on Nobus Cloud Services (NCS) is protected by the NCS data protection agreement (https://nobus.io/agreement/dpa/).',
+  'Services billing will commence immediately a resource is activated, in accordance with our standard terms and conditions.',
+];
+const ACCEPTANCE_FIELDS = ['Name', 'Position', 'Signature', 'Date'];
+
 const fmt = (n) => Number(Math.round(n) || 0).toLocaleString('en-NG', { minimumFractionDigits: 2 });
 
 // Shared financial math from stored quote fields
@@ -132,7 +149,7 @@ export function streamQuotePdf(quote, res) {
   }
   totalRow('Sub Total Annual Cost', fmt(fin.netAnnual));
   totalRow('VAT (7.5%)', fmt(fin.vatAnnual));
-  totalRow('Total', fmt(fin.totalAnnual), { strong: true });
+  totalRow('Grand Total', fmt(fin.totalAnnual), { strong: true });
 
   // Notes + terms
   y += 12;
@@ -148,6 +165,25 @@ export function streamQuotePdf(quote, res) {
     'the NCS Partner Agreement. Items marked "priced on request" require a Nobus sales quotation. Valid for 30 days.',
     left, y, { width }
   );
+
+  // Formal service terms + commercial acceptance, on a fresh page.
+  doc.addPage();
+  let ty = doc.page.margins.top;
+  doc.fillColor(NAVY).fontSize(13).font('Helvetica-Bold').text('Service Terms & Conditions', left, ty);
+  ty = doc.y + 8;
+  doc.fillColor('#374151').fontSize(8.5).font('Helvetica')
+    .list(SERVICE_TERMS, left, ty, { width, bulletRadius: 1.4, textIndent: 12, bulletIndent: 2, lineGap: 2.5, paragraphGap: 5 });
+  ty = doc.y + 26;
+
+  if (ty > doc.page.height - 190) { doc.addPage(); ty = doc.page.margins.top; }
+  doc.fillColor(NAVY).fontSize(13).font('Helvetica-Bold').text('Commercial Acceptance', left, ty);
+  ty = doc.y + 18;
+  doc.fontSize(10).font('Helvetica').fillColor('#111827');
+  for (const field of ACCEPTANCE_FIELDS) {
+    doc.text(`${field}:`, left, ty);
+    doc.moveTo(left + 80, ty + 11).lineTo(right - 30, ty + 11).strokeColor('#9ca3af').lineWidth(0.7).stroke();
+    ty += 34;
+  }
 
   doc.end();
 }
@@ -226,11 +262,30 @@ export async function streamQuoteXlsx(quote, res) {
   }
   totalRow('Sub Total Annual Cost', fin.netAnnual);
   totalRow('VAT (7.5%)', fin.vatAnnual);
-  totalRow('Total', fin.totalAnnual, true);
+  totalRow('Grand Total', fin.totalAnnual, true);
 
   ws.addRow([]);
   const note = ws.addRow(['', 'All prices in local currency. Indicative estimate per published Nobus rates; exclusive partner pricing applies to compute & storage only per the NCS Partner Agreement. Valid 30 days.']);
   note.getCell(2).font = { size: 8, color: { argb: 'FF9CA3AF' } };
+
+  // Service terms & conditions
+  ws.addRow([]);
+  const termsHead = ws.addRow(['', 'Service Terms & Conditions']);
+  termsHead.getCell(2).font = { bold: true, size: 11, color: { argb: 'FF0A1229' } };
+  for (const t of SERVICE_TERMS) {
+    const r = ws.addRow(['', '•  ' + t]);
+    r.getCell(2).font = { size: 8, color: { argb: 'FF374151' } };
+    r.getCell(2).alignment = { wrapText: true, vertical: 'top' };
+  }
+
+  // Commercial acceptance
+  ws.addRow([]);
+  const accHead = ws.addRow(['', 'Commercial Acceptance']);
+  accHead.getCell(2).font = { bold: true, size: 11, color: { argb: 'FF0A1229' } };
+  for (const f of ACCEPTANCE_FIELDS) {
+    const r = ws.addRow(['', `${f}: ______________________________`]);
+    r.getCell(2).font = { size: 10 };
+  }
 
   res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   res.setHeader('Content-Disposition', `attachment; filename="${ref}.xlsx"`);
