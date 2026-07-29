@@ -3,14 +3,14 @@ import { Calculator, Plus, X, Trash2, Loader2, Printer, Save, ArrowLeft, FileTex
 import { Link } from 'react-router-dom';
 import { api } from '../lib/api';
 import { useAuth } from '../context/AuthContext';
-import { CATALOG, DB_SIZES, FCS_INSTANCES, itemMonthly, quoteBreakdown, buildQuoteLines, naira } from '../data/pricingCatalog';
+import { CATALOG, DB_SIZES, FCS_INSTANCES, itemMonthly, quoteBreakdown, buildQuoteLines, naira, osImagesForFlavor, defaultOsImage } from '../data/pricingCatalog';
 import { tierDiscount } from '../data/tiers';
 
 let itemSeq = 1;
 
 function newItem(service) {
   const base = { key: itemSeq++, serviceId: service.id, name: service.name, kind: service.kind, qty: 1 };
-  if (service.kind === 'instance') base.flavorId = service.options[0].id;
+  if (service.kind === 'instance') { base.flavorId = service.options[0].id; base.osImage = defaultOsImage(base.flavorId); }
   if (service.kind === 'perUnit') { base.unitPrice = service.unitPrice; base.unit = service.unit; base.qty = service.unit === 'GB' ? 10 : 1; }
   if (service.kind === 'database') { base.engine = service.engines[0]; base.sizeId = service.sizes[0].id; }
   if (service.kind === 'kubernetes') {
@@ -138,7 +138,8 @@ export default function QuoteBuilder() {
     if (item.kind === 'instance') {
       const flavor = CATALOG.flatMap((c) => c.services).find((s) => s.id === item.serviceId)
         ?.options?.find((f) => f.id === item.flavorId);
-      return flavor?.label || item.flavorId;
+      const label = flavor?.label || item.flavorId;
+      return item.serviceId === 'fcs' ? `${label} · ${item.osImage || defaultOsImage(item.flavorId)}` : label;
     }
     if (item.kind === 'perUnit') return `${item.qty} ${item.unit} × ${naira(item.unitPrice)}/${item.unit}-month`;
     if (item.kind === 'database') {
@@ -342,11 +343,24 @@ export default function QuoteBuilder() {
                         <div className="font-medium text-gray-900 flex-1 min-w-[140px]">{item.name}</div>
 
                         {item.kind === 'instance' && (
-                          <select value={item.flavorId} onChange={(e) => updateItem(item.key, { flavorId: e.target.value })}
+                          <select value={item.flavorId} onChange={(e) => {
+                            const fid = e.target.value;
+                            const oldOs = FCS_INSTANCES.find((f) => f.id === item.flavorId)?.os;
+                            const newOs = FCS_INSTANCES.find((f) => f.id === fid)?.os;
+                            updateItem(item.key, { flavorId: fid, ...(oldOs !== newOs ? { osImage: defaultOsImage(fid) } : {}) });
+                          }}
                             className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm max-w-[340px] focus:outline-none focus:ring-2 focus:ring-nobus-400">
                             {service.options.map((f) => (
                               <option key={f.id} value={f.id}>{f.label} - {naira(f.monthly)}/mo</option>
                             ))}
+                          </select>
+                        )}
+
+                        {item.kind === 'instance' && item.serviceId === 'fcs' && (
+                          <select value={item.osImage || defaultOsImage(item.flavorId)} onChange={(e) => updateItem(item.key, { osImage: e.target.value })}
+                            title="Operating system image"
+                            className="border border-gray-300 rounded-lg px-2 py-1.5 text-sm max-w-[200px] focus:outline-none focus:ring-2 focus:ring-nobus-400">
+                            {osImagesForFlavor(item.flavorId).map((img) => <option key={img} value={img}>{img}</option>)}
                           </select>
                         )}
 

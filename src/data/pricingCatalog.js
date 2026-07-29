@@ -52,6 +52,24 @@ export const FCS_INSTANCES = [
   { id: 'si.8.64.50.w', label: 'si.8.64 - 8 vCPU · 64 GiB · 50 GB (Windows, burstable)', vcpu: 8, ram: 64, disk: 50, os: 'windows' },
 ].map((i) => ({ ...i, monthly: computeMonthly(i.vcpu, i.ram, i.disk, i.os) }));
 
+// Operating-system images selectable per FCS instance. Linux distributions are
+// license-free (no price impact); the Windows images carry the managed license
+// that is already priced into the Windows flavors.
+export const LINUX_IMAGES = [
+  'Ubuntu 24.04 LTS', 'Ubuntu 22.04 LTS', 'Ubuntu 20.04 LTS',
+  'Debian 12', 'Rocky Linux 9', 'AlmaLinux 9', 'CentOS Stream 9',
+];
+export const WINDOWS_IMAGES = ['Windows Server 2022', 'Windows Server 2025'];
+
+// The OS images valid for a flavor (Windows flavors -> Windows images, else Linux).
+export function osImagesForFlavor(flavorId) {
+  const f = FCS_INSTANCES.find((x) => x.id === flavorId);
+  return f?.os === 'windows' ? WINDOWS_IMAGES : LINUX_IMAGES;
+}
+export function defaultOsImage(flavorId) {
+  return osImagesForFlavor(flavorId)[0];
+}
+
 const VPN_FLAVOR = FCS_INSTANCES.find((i) => i.id === 'si.2.2.30.l');
 
 export const DB_ENGINES = ['PostgreSQL', 'MySQL', 'MSSQL', 'MongoDB'];
@@ -215,7 +233,12 @@ export function buildQuoteLines(items) {
     let config = '';
     if (item.kind === 'instance') {
       const flavor = FCS_INSTANCES.find((f) => f.id === item.flavorId);
-      config = flavor ? `${flavor.vcpu} vCPU, ${flavor.ram}GB RAM, ${flavor.disk}GB Volume (${flavor.os === 'windows' ? 'Windows' : 'Linux'} Server)` : item.flavorId;
+      if (!flavor) config = item.flavorId;
+      else if (item.serviceId === 'fcs') {
+        config = `${flavor.vcpu} vCPU, ${flavor.ram}GB RAM, ${flavor.disk}GB Volume · ${item.osImage || defaultOsImage(item.flavorId)}`;
+      } else {
+        config = `${flavor.vcpu} vCPU, ${flavor.ram}GB RAM, ${flavor.disk}GB Volume (${flavor.os === 'windows' ? 'Windows' : 'Linux'} Server)`;
+      }
     } else if (item.kind === 'perUnit') {
       config = `${item.qty} ${item.unit} @ ${naira(item.unitPrice)}/${item.unit}-month`;
     } else if (item.kind === 'database') {
