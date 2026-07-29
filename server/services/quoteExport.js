@@ -166,16 +166,19 @@ export function streamQuotePdf(quote, res) {
     left, y, { width }
   );
 
-  // Formal service terms + commercial acceptance, on a fresh page.
-  doc.addPage();
-  let ty = doc.page.margins.top;
+  // Formal service terms + commercial acceptance. These flow directly under the
+  // totals and paginate naturally; only the heading (so it isn't orphaned) and
+  // the signature block (so it never splits) are protected from bad breaks.
+  let ty = doc.y + 18;
+  if (ty > doc.page.height - 130) { doc.addPage(); ty = doc.page.margins.top; }
   doc.fillColor(NAVY).fontSize(13).font('Helvetica-Bold').text('Service Terms & Conditions', left, ty);
-  ty = doc.y + 8;
   doc.fillColor('#374151').fontSize(8.5).font('Helvetica')
-    .list(SERVICE_TERMS, left, ty, { width, bulletRadius: 1.4, textIndent: 12, bulletIndent: 2, lineGap: 2.5, paragraphGap: 5 });
-  ty = doc.y + 26;
+    .list(SERVICE_TERMS, left, doc.y + 8, { width, bulletRadius: 1.4, textIndent: 12, bulletIndent: 2, lineGap: 2.5, paragraphGap: 5 });
 
-  if (ty > doc.page.height - 190) { doc.addPage(); ty = doc.page.margins.top; }
+  // Keep the whole Commercial Acceptance block together on one page.
+  ty = doc.y + 26;
+  const acceptanceHeight = 18 + ACCEPTANCE_FIELDS.length * 34;
+  if (ty + acceptanceHeight > doc.page.height - doc.page.margins.bottom) { doc.addPage(); ty = doc.page.margins.top; }
   doc.fillColor(NAVY).fontSize(13).font('Helvetica-Bold').text('Commercial Acceptance', left, ty);
   ty = doc.y + 18;
   doc.fontSize(10).font('Helvetica').fillColor('#111827');
