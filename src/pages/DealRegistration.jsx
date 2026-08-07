@@ -130,7 +130,7 @@ export default function DealRegistration() {
           </p>
         </div>
         {!isSuperAdmin && (
-          <button className="btn-primary flex items-center gap-2" onClick={() => setShowForm(true)}>
+          <button data-tour="tour-deals" className="btn-primary flex items-center gap-2" onClick={() => setShowForm(true)}>
             <Plus className="w-4 h-4" /> Register Deal
           </button>
         )}

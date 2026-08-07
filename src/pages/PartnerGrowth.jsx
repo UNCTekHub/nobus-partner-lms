@@ -48,7 +48,7 @@ export default function PartnerGrowth({ embedded = false }) {
         </div>
       )}
 
-      <div className="flex gap-2 mb-6 border-b border-gray-200">
+      <div data-tour="tour-growth" className="flex gap-2 mb-6 border-b border-gray-200">
         {tabs.map((t) => (
           <button key={t.id} onClick={() => setTab(t.id)}
             className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px transition-colors ${

@@ -130,7 +130,7 @@ export default function Support({ embedded = false }) {
           </div>
         )}
         {!isSuperAdmin && (
-          <button onClick={() => setShowForm(true)} className="btn-primary flex items-center gap-2"><Plus className="w-4 h-4" /> New Ticket</button>
+          <button data-tour="tour-support" onClick={() => setShowForm(true)} className="btn-primary flex items-center gap-2"><Plus className="w-4 h-4" /> New Ticket</button>
         )}
       </div>
 

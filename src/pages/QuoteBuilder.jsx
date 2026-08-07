@@ -529,7 +529,7 @@ export default function QuoteBuilder() {
             Build customer-ready local-currency estimates from the Nobus service catalog - compute, storage, networking, databases and security.
           </p>
         </div>
-        <button className="btn-primary flex items-center gap-2" onClick={startNew}>
+        <button data-tour="tour-quotes" className="btn-primary flex items-center gap-2" onClick={startNew}>
           <Plus className="w-4 h-4" /> New Quote
         </button>
       </div>

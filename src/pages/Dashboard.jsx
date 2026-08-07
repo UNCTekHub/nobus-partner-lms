@@ -116,7 +116,7 @@ export default function Dashboard() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* KPI row */}
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 mb-8 -mt-14">
+        <div data-tour="tour-dashboard" className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 mb-8 -mt-14">
           {kpis.map((kpi) => (
             <Link key={kpi.label} to={kpi.to} className="card p-4 hover:border-nobus-300 border border-transparent">
               <div className="flex items-center justify-between mb-1.5">

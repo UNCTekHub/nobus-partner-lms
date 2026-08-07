@@ -102,7 +102,7 @@ export default function Discussions() {
           <h1 className="text-2xl font-bold text-gray-900">Community Forum</h1>
           <p className="text-gray-500 text-sm mt-1">Ask questions, share knowledge, help each other - across the whole partner network.</p>
         </div>
-        <button onClick={openNew} className="btn-primary flex items-center gap-2">
+        <button data-tour="tour-forum" onClick={openNew} className="btn-primary flex items-center gap-2">
           <Plus className="w-4 h-4" /> New Discussion
         </button>
       </div>
