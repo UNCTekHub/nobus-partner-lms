@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import Footer from './Footer';
+import ProductTour from './ProductTour';
 
 export default function Layout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -14,6 +15,7 @@ export default function Layout({ children }) {
         <main className="flex-1">{children}</main>
         <Footer />
       </div>
+      <ProductTour />
     </div>
   );
 }

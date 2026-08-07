@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, LogOut, ExternalLink, Shield } from 'lucide-react';
+import { Menu, LogOut, ExternalLink, Shield, HelpCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import NotificationBell from './NotificationBell';
 
@@ -39,6 +39,10 @@ export default function Topbar({ onMenuClick }) {
             className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">
             <ExternalLink className="w-3.5 h-3.5" /> Cloud Console
           </a>
+          <button onClick={() => window.dispatchEvent(new Event('open-tour'))} title="Take a tour"
+            className="p-2 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-nobus-600 transition-colors">
+            <HelpCircle className="w-5 h-5" />
+          </button>
           <NotificationBell />
           <Link to="/profile"
             className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">
