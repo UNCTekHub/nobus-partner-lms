@@ -4,7 +4,6 @@ import { ArrowLeft, ArrowRight, CheckCircle, BookOpen, ClipboardList, ChevronDow
 import { useProgress } from '../context/ProgressContext';
 import MarkdownRenderer from '../components/MarkdownRenderer';
 import ProgressBar from '../components/ProgressBar';
-import LessonListen from '../components/LessonListen';
 import salesCourse from '../data/salesCourse';
 import technicalCourse from '../data/technicalCourse';
 import presalesCourse from '../data/presalesCourse';
@@ -169,16 +168,13 @@ export default function LessonPage() {
             <div className="flex items-center gap-2 text-nobus-300 text-xs uppercase tracking-wider font-semibold mb-1.5">
               <BookOpen className="w-4 h-4" /> {course.title}
             </div>
-            <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <h1 className="text-xl md:text-2xl font-bold">{lesson.title}</h1>
-              <div className="flex items-center gap-2 shrink-0">
-                <LessonListen text={`${lesson.title}. ${lesson.content}`} />
-                {done && (
-                  <span className="badge-green flex items-center gap-1">
-                    <CheckCircle className="w-3 h-3" /> Completed
-                  </span>
-                )}
-              </div>
+              {done && (
+                <span className="badge-green flex items-center gap-1 shrink-0">
+                  <CheckCircle className="w-3 h-3" /> Completed
+                </span>
+              )}
             </div>
           </div>
           <div className="p-6 md:p-10">
