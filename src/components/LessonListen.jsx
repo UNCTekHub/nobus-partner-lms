@@ -39,7 +39,20 @@ function toPlainText(md) {
     if (!/[.!?:;]$/.test(line)) line += '.';        // give every line a pause
     out.push(line);
   }
-  return out.join(' ').replace(/\s+([,.])/g, '$1').replace(/\s{2,}/g, ' ').trim();
+  // Turn symbols the voice would otherwise read aloud (colons, arrows, dashes,
+  // bullets) into silent pauses, so it observes them instead of speaking them.
+  return out.join(' ')
+    .replace(/[→⇒➔➜»›]/g, ', ')
+    .replace(/[←⇐«‹↔]/g, ', ')
+    .replace(/[•·‣▪◦]/g, ' ')
+    .replace(/[—–]/g, ', ')
+    .replace(/[:：]/g, ',')
+    .replace(/…/g, ' ')
+    .replace(/\s+([,.;])/g, '$1')
+    .replace(/([,;])(?:\s*[,;])+/g, '$1')
+    .replace(/,\s*\./g, '.')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
 }
 
 // Group whole sentences into larger chunks so the engine keeps natural prosody
