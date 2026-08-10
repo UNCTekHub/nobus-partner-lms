@@ -16,34 +16,40 @@ function bestVoice() {
   return pool[0] || null;
 }
 
-// Strip markdown to readable prose so the narration doesn't read syntax aloud.
+// Strip markdown to readable prose, line by line. Crucially, headings, list
+// items and table rows have no terminal punctuation, so we add a full stop to
+// any line that lacks one - otherwise the voice runs each line into the next
+// with no pause and sounds like it ignores punctuation.
 function toPlainText(md) {
-  return (md || '')
-    .replace(/```[\s\S]*?```/g, ' ')            // fenced code blocks
-    .replace(/`([^`]+)`/g, '$1')                // inline code
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')      // images
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')    // links -> link text
-    .replace(/^\s{0,3}#{1,6}\s*/gm, '')         // headings
-    .replace(/^\s*>\s?/gm, '')                  // blockquotes
-    .replace(/^\s*[-*+]\s+/gm, '')              // bullets
-    .replace(/^\s*[:|\s-]+\s*$/gm, '')          // table separator rows
-    .replace(/\|/g, ', ')                       // table cells -> pauses
-    .replace(/[*_~]/g, '')                      // emphasis marks
-    .replace(/\r/g, '')
-    .replace(/\n{2,}/g, '. ')                   // paragraph breaks -> sentence pause
-    .replace(/\n/g, ' ')
-    .replace(/\s{2,}/g, ' ')
-    .trim();
+  const src = (md || '').replace(/```[\s\S]*?```/g, '\n').replace(/\r/g, '');
+  const out = [];
+  for (const raw of src.split('\n')) {
+    let line = raw
+      .replace(/`([^`]+)`/g, '$1')             // inline code
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')   // images
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1') // links -> link text
+      .replace(/^\s{0,3}#{1,6}\s*/, '')        // headings
+      .replace(/^\s*>\s?/, '')                 // blockquotes
+      .replace(/^\s*[-*+]\s+/, '')             // bullets
+      .replace(/\|/g, ', ')                    // table cells -> comma pauses
+      .replace(/[*_~]/g, '')                   // emphasis marks
+      .replace(/^[,\s]+|[,\s]+$/g, '')         // trim stray commas/space (table edges)
+      .trim();
+    if (!line || /^[-:,\s]+$/.test(line)) continue; // blank or table separator row
+    if (!/[.!?:;]$/.test(line)) line += '.';        // give every line a pause
+    out.push(line);
+  }
+  return out.join(' ').replace(/\s+([,.])/g, '$1').replace(/\s{2,}/g, ' ').trim();
 }
 
-// Break into short chunks (per sentence, capped) so long lessons speak reliably
-// and pause/resume stays responsive.
-function chunk(text, size = 220) {
-  const sentences = text.match(/[^.!?]+[.!?]+|\S[^.!?]*$/g) || [text];
+// Group whole sentences into larger chunks so the engine keeps natural prosody
+// across commas within each chunk, while staying short enough to speak reliably.
+function chunk(text, size = 500) {
+  const sentences = text.match(/[^.!?]+[.!?]+(\s|$)|\S[^.!?]*$/g) || [text];
   const out = []; let cur = '';
   for (const s of sentences) {
     if ((cur + s).length > size && cur) { out.push(cur.trim()); cur = ''; }
-    cur += s + ' ';
+    cur += s;
   }
   if (cur.trim()) out.push(cur.trim());
   return out;
