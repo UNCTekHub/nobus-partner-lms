@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CheckCircle, Circle, FileQuestion } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle, Circle, FileQuestion, Lock } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
 import ProgressBar from '../components/ProgressBar';
 import salesCourse from '../data/salesCourse';
@@ -14,7 +14,7 @@ const courseMap = {
 
 export default function ModulePage() {
   const { courseId, moduleId } = useParams();
-  const { isLessonComplete, getQuizResult, getModuleProgress } = useProgress();
+  const { isLessonComplete, getQuizResult, getModuleProgress, isModuleUnlocked, isQuizUnlocked } = useProgress();
 
   const course = courseMap[courseId] || salesCourse;
   const accent = courseId === 'technical-enablement' ? 'accent' : 'nobus';
@@ -32,8 +32,23 @@ export default function ModulePage() {
     );
   }
 
+  if (!isModuleUnlocked(course, moduleId)) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-16 text-center">
+        <Lock className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+        <p className="text-gray-700 font-semibold">This session is locked</p>
+        <p className="text-gray-500 text-sm mt-1">Finish the previous session - all its lessons and its quiz - to unlock it.</p>
+        <Link to={`/course/${courseId}`} className="btn-primary mt-5 inline-flex items-center gap-2 !py-2 text-sm">
+          <ArrowLeft className="w-4 h-4" /> Back to course
+        </Link>
+      </div>
+    );
+  }
+
   const modProg = getModuleProgress(moduleId, course);
   const quizResult = mod.quiz ? getQuizResult(mod.quiz.id) : null;
+  const quizUnlocked = mod.quiz && isQuizUnlocked(course, moduleId);
+  const nextUnlocked = nextMod && isModuleUnlocked(course, nextMod.id);
 
   // Find first incomplete lesson
   const firstIncomplete = mod.lessons.find((l) => !isLessonComplete(l.id));
@@ -96,7 +111,7 @@ export default function ModulePage() {
           })}
         </div>
 
-        {mod.quiz && (
+        {mod.quiz && (quizUnlocked ? (
           <Link
             to={`/course/${courseId}/module/${moduleId}/quiz`}
             className="flex items-center gap-4 p-4 bg-gray-50 border-t border-gray-200 hover:bg-gray-100 transition-colors group"
@@ -114,7 +129,15 @@ export default function ModulePage() {
               <span className="text-xs text-gray-400">Not attempted</span>
             )}
           </Link>
-        )}
+        ) : (
+          <div className="flex items-center gap-4 p-4 bg-gray-50 border-t border-gray-200 cursor-not-allowed">
+            <Lock className="w-5 h-5 flex-shrink-0 text-gray-300" />
+            <div className="flex-1">
+              <div className="text-sm font-medium text-gray-400">{mod.quiz.title}</div>
+              <div className="text-xs text-gray-400">Finish all lessons to unlock the quiz</div>
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Module navigation */}
@@ -124,10 +147,14 @@ export default function ModulePage() {
             <ArrowLeft className="w-4 h-4" /> Previous Module
           </Link>
         ) : <div />}
-        {nextMod ? (
+        {nextMod && nextUnlocked ? (
           <Link to={`/course/${courseId}/module/${nextMod.id}`} className="btn-secondary text-sm inline-flex items-center gap-1">
             Next Module <ArrowRight className="w-4 h-4" />
           </Link>
+        ) : nextMod ? (
+          <span className="text-sm text-gray-400 inline-flex items-center gap-1.5 cursor-not-allowed" title="Complete this session to unlock the next one">
+            <Lock className="w-4 h-4" /> Next Module
+          </span>
         ) : <div />}
       </div>
     </div>

@@ -105,6 +105,32 @@ export function ProgressProvider({ children }) {
     return { total, completed };
   }, [progress]);
 
+  // A session/module is complete when every lesson is done AND its quiz (if any) is passed.
+  const isModuleComplete = useCallback((mod) => {
+    if (!mod) return false;
+    const lessonsDone = mod.lessons.every((l) => !!progress.lessons?.[l.id]);
+    const quizDone = !mod.quiz || !!progress.quizzes?.[mod.quiz.id]?.passed;
+    return lessonsDone && quizDone;
+  }, [progress]);
+
+  // Progressive unlock: a module opens only once the PREVIOUS module is complete.
+  // The first module is always open. (Completing a module implies the whole
+  // chain before it, so checking the immediate predecessor is sufficient.)
+  const isModuleUnlocked = useCallback((course, moduleId) => {
+    if (!course) return false;
+    const idx = course.modules.findIndex((m) => m.id === moduleId);
+    if (idx <= 0) return true;
+    return isModuleComplete(course.modules[idx - 1]);
+  }, [isModuleComplete]);
+
+  // A module's quiz opens once all its lessons are complete (and the module is open).
+  const isQuizUnlocked = useCallback((course, moduleId) => {
+    const mod = course?.modules.find((m) => m.id === moduleId);
+    if (!mod?.quiz) return false;
+    if (!isModuleUnlocked(course, moduleId)) return false;
+    return mod.lessons.every((l) => !!progress.lessons?.[l.id]);
+  }, [progress, isModuleUnlocked]);
+
   const resetProgress = useCallback(async () => {
     setProgress({ lessons: {}, quizzes: {} });
     try {
@@ -125,6 +151,9 @@ export function ProgressProvider({ children }) {
         getQuizResult,
         getCourseProgress,
         getModuleProgress,
+        isModuleComplete,
+        isModuleUnlocked,
+        isQuizUnlocked,
         resetProgress,
       }}
     >

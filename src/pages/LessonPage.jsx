@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, CheckCircle, BookOpen, ClipboardList, ChevronDown, List, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CheckCircle, BookOpen, ClipboardList, ChevronDown, List, X, Lock } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
 import MarkdownRenderer from '../components/MarkdownRenderer';
 import ProgressBar from '../components/ProgressBar';
@@ -17,7 +17,7 @@ const courseMap = {
 export default function LessonPage() {
   const { courseId, moduleId, lessonId } = useParams();
   const navigate = useNavigate();
-  const { markLessonComplete, isLessonComplete, getCourseProgress, getQuizResult } = useProgress();
+  const { markLessonComplete, isLessonComplete, getCourseProgress, getQuizResult, isModuleUnlocked, isQuizUnlocked } = useProgress();
   const [outlineOpen, setOutlineOpen] = useState(false);
   const [expanded, setExpanded] = useState({});
 
@@ -52,8 +52,23 @@ export default function LessonPage() {
     );
   }
 
+  // Progressive gate: block direct access to a session that isn't unlocked yet.
+  if (!isModuleUnlocked(course, moduleId)) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-16 text-center">
+        <Lock className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+        <p className="text-gray-700 font-semibold">This session is locked</p>
+        <p className="text-gray-500 text-sm mt-1">Finish the previous session - all its lessons and its quiz - to unlock it.</p>
+        <Link to={`/course/${courseId}`} className="btn-primary mt-5 inline-flex items-center gap-2 !py-2 text-sm">
+          <ArrowLeft className="w-4 h-4" /> Back to course
+        </Link>
+      </div>
+    );
+  }
+
   const done = isLessonComplete(lessonId);
   const prog = getCourseProgress(course.id);
+  const nextUnlocked = next ? isModuleUnlocked(course, next.moduleId) : false;
 
   const handleComplete = () => {
     markLessonComplete(lessonId);
@@ -76,7 +91,19 @@ export default function LessonPage() {
       </div>
       {course.modules.map((m, mi) => {
         const moduleDone = m.lessons.every((l) => isLessonComplete(l.id));
+        const mUnlocked = isModuleUnlocked(course, m.id);
         const isOpen = expanded[m.id] ?? m.id === moduleId;
+        const cleanTitle = m.title.replace(/^(Session|Module) \d+: /, '');
+
+        if (!mUnlocked) {
+          return (
+            <div key={m.id} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-gray-400" title="Locked until the previous session is complete">
+              <span className="w-5 h-5 rounded-full flex items-center justify-center bg-gray-100 shrink-0"><Lock className="w-3 h-3" /></span>
+              <span className="flex-1 truncate">{cleanTitle}</span>
+            </div>
+          );
+        }
+
         return (
           <div key={m.id}>
             <button onClick={() => setExpanded((e) => ({ ...e, [m.id]: !isOpen }))}
@@ -88,7 +115,7 @@ export default function LessonPage() {
               }`}>
                 {moduleDone ? <CheckCircle className="w-3.5 h-3.5" /> : mi + 1}
               </span>
-              <span className="flex-1 truncate">{m.title.replace(/^(Session|Module) \d+: /, '')}</span>
+              <span className="flex-1 truncate">{cleanTitle}</span>
               <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
             </button>
             {isOpen && (
@@ -107,7 +134,7 @@ export default function LessonPage() {
                     <span className="truncate">{l.title}</span>
                   </Link>
                 ))}
-                {m.quiz && (
+                {m.quiz && (isQuizUnlocked(course, m.id) ? (
                   <Link to={`/course/${courseId}/module/${m.id}/quiz`} onClick={() => setOutlineOpen(false)}
                     className="flex items-center gap-2 py-1.5 px-2 rounded-md text-[13px] text-gray-600 hover:bg-gray-50">
                     {getQuizResult(m.quiz.id)?.passed ? (
@@ -117,7 +144,11 @@ export default function LessonPage() {
                     )}
                     Module quiz
                   </Link>
-                )}
+                ) : (
+                  <div className="flex items-center gap-2 py-1.5 px-2 rounded-md text-[13px] text-gray-300" title="Finish all lessons in this session to unlock the quiz">
+                    <Lock className="w-3.5 h-3.5 shrink-0" /> Module quiz
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -201,11 +232,15 @@ export default function LessonPage() {
                 className="btn-primary !py-2 inline-flex items-center gap-2 text-sm">
                 <ClipboardList className="w-4 h-4" /> Take Module Quiz
               </Link>
-            ) : next ? (
+            ) : next && nextUnlocked ? (
               <Link to={`/course/${courseId}/module/${next.moduleId}/lesson/${next.lesson.id}`}
                 className="btn-primary !py-2 inline-flex items-center gap-2 text-sm">
                 Next Lesson <ArrowRight className="w-4 h-4" />
               </Link>
+            ) : next ? (
+              <span className="inline-flex items-center gap-1.5 text-sm text-gray-400">
+                <Lock className="w-4 h-4" /> Pass this session's quiz to continue
+              </span>
             ) : (
               <Link to={`/course/${courseId}`} className="btn-primary !py-2 inline-flex items-center gap-2 text-sm">
                 <CheckCircle className="w-4 h-4" /> Course Complete

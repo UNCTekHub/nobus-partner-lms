@@ -1,6 +1,6 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { ArrowLeft, CheckCircle, XCircle, RotateCcw, Trophy, ArrowRight } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, RotateCcw, Trophy, ArrowRight, Lock } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
 import salesCourse from '../data/salesCourse';
 import technicalCourse from '../data/technicalCourse';
@@ -15,7 +15,7 @@ const courseMap = {
 export default function QuizPage() {
   const { courseId, moduleId } = useParams();
   const navigate = useNavigate();
-  const { submitQuiz, getQuizResult } = useProgress();
+  const { submitQuiz, getQuizResult, isQuizUnlocked } = useProgress();
 
   const course = courseMap[courseId] || salesCourse;
   const mod = course.modules.find((m) => m.id === moduleId);
@@ -36,6 +36,21 @@ export default function QuizPage() {
         <p className="text-gray-500">Quiz not found.</p>
         <Link to={`/course/${courseId}`} className="text-nobus-600 hover:underline mt-4 inline-block">
           Back to course
+        </Link>
+      </div>
+    );
+  }
+
+  // Progressive gate: the quiz opens only once its session is unlocked and all
+  // its lessons are complete. (A passed quiz stays accessible for review.)
+  if (!existingResult?.passed && !isQuizUnlocked(course, moduleId)) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-16 text-center">
+        <Lock className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+        <p className="text-gray-700 font-semibold">This quiz is locked</p>
+        <p className="text-gray-500 text-sm mt-1">Complete all lessons in this session to unlock its quiz.</p>
+        <Link to={`/course/${courseId}`} className="btn-primary mt-5 inline-flex items-center gap-2 !py-2 text-sm">
+          <ArrowLeft className="w-4 h-4" /> Back to course
         </Link>
       </div>
     );
