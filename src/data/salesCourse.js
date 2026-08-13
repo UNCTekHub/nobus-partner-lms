@@ -42,9 +42,9 @@ Nobus Cloud Services (NCS) is a public cloud provider purpose-built for Africa's
 
 | Fact | Detail | Why the customer cares |
 |---|---|---|
-| Data centers | Nobus Cloud infrastructure is **hosted in** Tier III data centers across three availability zones: nobus-wa-az1 (Rack Centre, Ikeja Lagos), nobus-wa-az2 (OADC, Lekki Lagos), nobus-ea-az1 (Nairobi, Kenya) | Same facility class trusted by banks and telcos |
+| Data centers | Nobus Cloud infrastructure is **hosted in** Tier III data centers across three availability zones: nobus-wa-az1 (Rack Centre, Ikeja Lagos), nobus-wa-az2 (OADC, Lekki Lagos), nobus-ea-az1 (ADC, Nairobi, Kenya) | Same facility class trusted by banks and telcos |
 | Anchor region | Lagos, Nigeria (including Rack Centre) | In-country data residency for local customers |
-| East Africa | nobus-ea-az1 in Nairobi, Kenya | In-region service for East African customers |
+| East Africa | nobus-ea-az1 (ADC) in Nairobi, Kenya | In-region service for East African customers |
 | Uptime | 99.982% guarantee with N+1 redundancy | Beats most on-premise setups by a wide margin |
 | Platform | Hyperscale cloud infrastructure | Standard tooling (Terraform, CLI, REST APIs) works as engineers expect |
 | Console | dashboard.nobus.io | One console for every service; easy to demo |
@@ -102,7 +102,7 @@ For the **local market**, Nobus is **ISO 27001 certified**, **PCI DSS certified*
 - Built for regulated industries (banking, insurance, healthcare)
 
 ### 5. Cost Competitive - No Hidden Fees
-- 15-30% cheaper than global hyperscalers for equivalent workloads
+- 30-40% cheaper than global hyperscalers for equivalent workloads
 - **No egress fees** - data transfer out is completely FREE (AWS charges $0.09/GB!)
 - Transparent pricing - what you see is what you pay
 
@@ -110,16 +110,16 @@ For the **local market**, Nobus is **ISO 27001 certified**, **PCI DSS certified*
 
 ### 6. Full Service Catalogue - Everything They Need
 As a sales rep, know that Nobus offers a complete cloud platform:
-- **FCS (Flexible Cloud Server)** - Virtual machines, launch in minutes, 15+ instance sizes
-- **FBS (Flexible Block Storage)** - SSD-backed block storage, 1GB to 1TB, AES-256 encrypted
+- **FCS (Flexible Compute Service)** - Virtual machines, launch in minutes, 15+ instance sizes
+- **FBS (Flexible Block Storage)** - SSD-backed block storage, AES-256 encrypted
 - **FOS (Flexible Object Storage)** - Unlimited file/media/backup storage
 - **Networking:** VPC, Floating IPs, VPN, NFT (Fast Transit) for dedicated enterprise connectivity
-- **Security:** Sophos XG Firewall, FortiGate Firewall, Acronis Cyber Protect
+- **Security:** Sophos XG Firewall, FortiGate Firewall, Fortinet FortiSIEM, Acronis Cyber Protect
 - **Managed Databases:** MySQL, PostgreSQL, MongoDB, MS SQL Server
 - **Containers:** Managed Kubernetes (NKE) for container orchestration
 - **Kafka:** Managed event streaming
 - **DNS:** Free managed DNS for Nobus resources
-- **Cloud Backup (NCB):** Cross-cloud backup - backs up AWS, Azure, on-prem, and Nobus workloads
+- **Nobus Cloud Backup (NCB):** Multi-cloud backup - protects AWS, Azure, Google Cloud, on-prem and Nobus workloads, plus Microsoft 365 (Exchange, OneDrive, SharePoint) and Google Workspace
 
 > **Key Point:** You don't need to know how to configure these services - but you DO need to know they exist so you can have informed conversations and identify upsell opportunities.`
         },
@@ -135,8 +135,8 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 ### Target Sectors (Priority Order) - With Specific Value Props
 
 #### 1. Banking & Financial Services (Highest Value)
-- **Why Nobus:** NDPA compliance, in-country data sovereignty, CBN regulatory alignment
-- **Key Services:** Sophos XG Firewall for network security, FBS encrypted storage (AES-256), managed databases
+- **Why Nobus:** PCI DSS certification (a must for the financial sector's payment-card data), NDPA compliance, in-country data sovereignty, CBN regulatory alignment
+- **Key Services:** Next-generation cloud firewall services for network security, FBS encrypted storage (AES-256), managed databases
 - **Deal Size:** One bank deal = 50M+/year
 - **Entry Point:** Disaster recovery, dev/test environments, then production migration
 
@@ -148,7 +148,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 
 #### 3. Healthcare (Data Sensitivity)
 - **Why Nobus:** Patient data must stay in Nigeria (NDPA), Acronis Cyber Protect for ransomware protection, AES-256 encrypted storage
-- **Key Services:** FBS encrypted volumes, Acronis backup, Sophos XG firewall
+- **Key Services:** FBS encrypted volumes, Nobus Cloud Backup, next-generation cloud firewall services
 - **Entry Point:** Electronic medical records, diagnostic imaging storage (FOS)
 
 #### 4. Government (Mandate for Local)
@@ -237,7 +237,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 
 | Product | What It Does | Sales Talking Point |
 |---------|-------------|-------------------|
-| **FCS (Flexible Cloud Server)** | Virtual machines - Linux & Windows. 15+ instance flavors from 1 to 16 vCPU. Launch in minutes. | "Need a server? It's running in 5 minutes, not 5 weeks." |
+| **FCS (Flexible Compute Service)** | Virtual machines - Linux & Windows. 15+ instance flavors from 1 to 16 vCPU. Launch in minutes. | "Need a server? It's running in 5 minutes, not 5 weeks." |
 | **Auto Scaling** | Automatically adds/removes instances based on demand | "Black Friday traffic spike? Your app scales automatically." |
 | **Load Balancing** | Distributes traffic across multiple instances | "No single point of failure. Traffic balanced automatically." |
 
@@ -245,8 +245,8 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 
 | Product | What It Does | Sales Talking Point |
 |---------|-------------|-------------------|
-| **FBS (Flexible Block Storage)** | Block storage from 1GB to 1TB. SSD-backed. AES-256 encrypted. Supports snapshots. | "Your data is encrypted at rest. Snapshots for instant rollback." |
-| **FOS (Flexible Object Storage)** | Unlimited object storage for files, backups, media. Console: fos-az1.nobus.io | "Store unlimited files - backups, videos, documents. Pay only for what you use." |
+| **FBS (Flexible Block Storage)** | SSD-backed block storage. AES-256 encrypted. Supports snapshots. | "Your data is encrypted at rest. Snapshots for instant rollback." |
+| **FOS (Flexible Object Storage)** | Unlimited object storage for files, backups, media. | "Store unlimited files - backups, videos, documents. Pay only for what you use." |
 
 ### Networking
 
@@ -267,6 +267,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 |---------|-------------|-------------------|
 | **Sophos XG Firewall** | Enterprise firewall with IPS, ATP (Advanced Threat Protection), sandboxing | "Enterprise-grade security - intrusion prevention, threat detection, sandboxing. Same product banks use." |
 | **FortiGate Firewall** | Next-gen firewall with SD-WAN capabilities | "Next-generation firewall with built-in SD-WAN. One appliance, multiple functions." |
+| **Fortinet FortiSIEM** | Security information & event management - real-time threat detection, correlation and compliance reporting | "See threats across your whole environment in one place, with the audit trail compliance teams need." |
 | **Acronis Cyber Protect** | Backup + ransomware protection + antivirus in one | "Backup, anti-ransomware, and antivirus in a single solution. Protects against the threats keeping CISOs up at night." |
 | **Security Groups** | Per-instance firewall rules | "Fine-grained access control on every single server." |
 
@@ -280,7 +281,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 | **Managed MS SQL Server** | Fully managed Microsoft SQL Server | "Running .NET/Windows apps? SQL Server is available managed." |
 | **Kubernetes (NKE)** | Managed container orchestration | "Run containers at scale. We manage the control plane." |
 | **Kafka** | Managed event streaming | "Real-time data pipelines and event streaming - managed by us." |
-| **Cloud Backup (NCB)** | Cross-cloud backup - backs up AWS, Azure, on-prem, AND Nobus | "Back up everything - even your AWS and Azure workloads - to Nobus. One backup solution for all clouds." |
+| **Nobus Cloud Backup (NCB)** | Multi-cloud backup across AWS, Azure, Google Cloud, on-prem and Nobus, plus Microsoft 365 (Exchange, OneDrive, SharePoint) and Google Workspace | "Back up everything - even AWS, Azure and Microsoft 365 - to Nobus. One backup for all your clouds and SaaS." |
 
 ### Platform Tools
 
@@ -291,7 +292,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 
 ---
 
-> **Pro Tip for Sales:** When you hear a customer describe ANY infrastructure need, mentally map it to a Nobus product. "We need a database" = Managed Database. "We need backups" = NCB or Acronis. "We need security" = Sophos XG + Security Groups. Every need is an opportunity.`
+> **Pro Tip for Sales:** When you hear a customer describe ANY infrastructure need, mentally map it to a Nobus product. "We need a database" = Managed Database. "We need backups" = Nobus Cloud Backup (NCB). "We need security" = Cloud next-generation firewall with Sophos XG or FortiGate + Nobus Cloud Native Firewall. Every need is an opportunity.`
         },
       ],
       quiz: {
@@ -320,7 +321,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
           },
           {
             q: 'What is NCB (Nobus Cloud Backup) capable of backing up?',
-            options: ['Only Nobus workloads', 'Only on-premise servers', 'Cross-cloud: AWS, Azure, on-prem, and Nobus workloads', 'Only Windows servers'],
+            options: ['Only Nobus workloads', 'Only on-premise servers', 'Multi-cloud and SaaS: AWS, Azure, Google Cloud, on-prem and Nobus, plus Microsoft 365 and Google Workspace', 'Only Windows servers'],
           },
           {
             q: 'Which Nobus product provides dedicated enterprise connectivity from 50 Mbps to 10 Gbps?',
@@ -580,7 +581,7 @@ Never fabricate competitor weaknesses. State facts you can defend, acknowledge g
 | **Data Location** | Nigeria, Tier III multi-AZ | Nearest region: Cape Town or Europe | "Your data stays in Nigeria. NDPA compliant by design." |
 | **Currency** | Bill in local currency  | Bill in USD | "No exchange rate risk. Your bill is in local currency - period." |
 | **Support** | Lagos-based, same timezone, phone | Different timezone, mostly online tickets | "When your system crashes at 9 PM, we answer in Lagos." |
-| **Pricing** | 15-30% cheaper for equivalent workloads | Premium pricing + hidden egress fees | "Same quality, better price. Plus zero egress fees." |
+| **Pricing** | 30-40% cheaper for equivalent workloads | Premium pricing + hidden egress fees | "Same quality, better price. Plus zero egress fees." |
 | **Egress Fees** | NONE - completely free | $0.09/GB (can be 15-20% of bill) | "Data transfer out is FREE on Nobus. AWS charges per GB." |
 | **Compliance** | ISO 27001, PCI-DSS supported, NDPA | ISO 27001, PCI-DSS | "Equally certified, but data stays in Nigeria." |
 | **Complexity** | Focused catalogue of essential services | 200+ services, overwhelming complexity | "We focus on what local businesses actually need." |
@@ -1051,7 +1052,7 @@ Every objection you hear in the field goes into your team's shared playbook with
 
 **3. "It is too expensive."**
 - Clarify: "Compared to your current spend, or another proposal?"
-- Evidence: Rebuild the comparison in the Quote Builder including what they forget: egress fees (Nobus: zero), FX drift (Nobus: local currency), and the 7.5% VAT shown transparently. Apply exclusive partner pricing. Nobus typically lands 15-30% under hyperscalers on like-for-like.
+- Evidence: Rebuild the comparison in the Quote Builder including what they forget: egress fees (Nobus: zero), FX drift (Nobus: local currency), and the 7.5% VAT shown transparently. Apply exclusive partner pricing. Nobus typically lands 30-40% under hyperscalers on like-for-like.
 
 **4. "We are worried about migration disruption."**
 - Clarify: "What is the maximum downtime window the business can absorb?"
