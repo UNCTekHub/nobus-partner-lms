@@ -41,7 +41,7 @@ Nobus Cloud Services (NCS) is Nigeria's first native hyperscale public cloud pla
 ### Where it runs
 - **West Africa AZ 1 (nobus-wa-az1):** Rack Centre, Ikeja, Lagos, Nigeria
 - **West Africa AZ 2 (nobus-wa-az2):** OADC, Lekki, Lagos, Nigeria
-- **East Africa AZ 1 (nobus-ea-az1):** Nairobi, Kenya
+- **East Africa AZ 1 (nobus-ea-az1):** ADC, Nairobi, Kenya
 - **99.982% uptime guarantee** with N+1 redundancy on power, cooling and network
 - Managed entirely from one console: **dashboard.nobus.io**
 
@@ -50,9 +50,9 @@ Nobus Cloud Services (NCS) is Nigeria's first native hyperscale public cloud pla
 | Domain | Services |
 |---|---|
 | Compute | FCS instances (si.1 to si.16 families, Linux and Windows), Dedicated Hosting (BYOL), Auto Scaling, Load Balancing |
-| Storage | FBS block volumes (1 GB - 1 TB, AES-256), FOS object storage (unlimited), snapshots |
+| Storage | FBS block volumes (AES-256), FOS object storage (unlimited), snapshots |
 | Networking | Virtual data centers (DaaS), Floating IPs, Site-to-Site VPN, Nobus Fast Transit, Cloud Router (BGP), Cloud Trunks, DNS |
-| Security | Security Groups, Cloud Firewalls, Sophos XG, FortiGate NGFW, Acronis Cyber Protect |
+| Security | Security Groups, Cloud Firewalls, Sophos XG, FortiGate NGFW, Fortinet FortiSIEM, Nobus Cloud Backup |
 | Containers | Nobus Kubernetes Engine, Cloud Containers, Managed Kafka |
 | Databases | Managed MSSQL, MySQL, PostgreSQL, MongoDB |
 | Operations | CloudOrchestration (Heat + CloudFormation-compatible IaC), Cloud Backup, monitoring |
@@ -91,7 +91,7 @@ Pre-billing: resources charge from the start of each cycle while in **running or
 - How the OpenStack foundation shapes what is possible
 
 ### The physical layer
-- **Regions and availability zones (AZs):** Nobus runs three Tier III-certified zones: **nobus-wa-az1** (Rack Centre, Ikeja Lagos), **nobus-wa-az2** (OADC, Lekki Lagos) and **nobus-ea-az1** (Nairobi, Kenya). An AZ is a physically isolated facility with independent power, cooling and network; zone names appear in the console when you place resources.
+- **Regions and availability zones (AZs):** Nobus runs three Tier III-certified zones: **nobus-wa-az1** (Rack Centre, Ikeja Lagos), **nobus-wa-az2** (OADC, Lekki Lagos) and **nobus-ea-az1** (ADC, Nairobi, Kenya). An AZ is a physically isolated facility with independent power, cooling and network; zone names appear in the console when you place resources.
 - **Tier III means:** concurrent maintainability, N+1 redundancy on every critical system, 99.982% uptime design. You can honestly tell customers this exceeds what any office server room achieves.
 - **Design rule:** production workloads that need high availability should spread across AZs; FBS snapshots can be copied cross-zone for disaster recovery.
 
@@ -204,7 +204,7 @@ Nobus Flexible Compute Service (FCS) is a web service that provides **resizable 
 - Virtual computing environments (instances) with configurable CPU, memory, storage, and networking
 - Preconfigured templates called **Nobus Machine Images (NMIs)**
 - Secure login using **key pairs** (SSH)
-- **FBS volumes** for persistent block storage (1 GB to 1 TB)
+- **FBS volumes** for persistent block storage
 - **Instance Snapshots** to preserve disk state
 - **Security Groups** to control inbound/outbound traffic
 - **Floating IP** addresses for static public access
@@ -398,7 +398,7 @@ Internet -> Floating IP -> Load balancer (HAProxy) -> Autoscaling web tier (2-10
           title: '3.1-3.2 FBS Overview & Operations',
           content: `## Flexible Block Storage (FBS)
 
-Nobus FBS provides **durable, block-level storage devices** that you can attach to FCS instances. FBS volumes behave like raw, unformatted block devices - you can create a file system on top or use them as raw block devices. Volumes range from **1 GB to 1 TB** and persist independently from the life of an instance.
+Nobus FBS provides **durable, block-level storage devices** that you can attach to FCS instances. FBS volumes behave like raw, unformatted block devices - you can create a file system on top or use them as raw block devices. Volumes persist independently from the life of an instance.
 
 ### Key Characteristics
 - **Persistence:** FBS volumes persist independently from the running life of an FCS instance
@@ -491,7 +491,7 @@ Nobus FOS is an extensive distributed storage platform for **any type or amount 
 - **Containers:** Top-level storage namespaces (similar to S3 buckets). Containers are **not nested** - you cannot create a container inside another container, but you can have multiple containers.
 - **Objects:** Files + associated metadata stored within containers
 - **Access Control:** Per-container permissions - who can create, delete, and list objects
-- **Console URL:** Manage FOS at **https://fos-az1.nobus.io/**
+- **Console URL:** Manage FOS from the Nobus console
 
 ### FOS Operations - Step by Step
 
@@ -854,8 +854,9 @@ The one-line version for meetings: **"Nobus secures the building and the platfor
 | Network edge | Cloud Firewalls | Policy-based, ordered rules (first match wins), allow/deny/reject, IPv4 and IPv6 |
 | Deep inspection | Sophos XG Firewall | NGFW appliance: synchronized security, AI threat detection, web/app control, email protection (min 2 vCPU / 4 GB, 30+80 GB disks) |
 | Deep inspection (alt) | FortiGate NGFW | FortiOS: IPS, application control, DPI, UTM, SD-WAN, FortiGuard intelligence |
+| SIEM & compliance | Fortinet FortiSIEM | Security information & event management: real-time threat detection, event correlation, and compliance reporting |
 | Data at rest | FBS encryption | AES-256 on volumes and snapshots, encrypted in transit between instance and storage |
-| Workload protection | Acronis Cyber Protect | Backup + anti-ransomware + vulnerability scanning + forensic backup (min 8 GB RAM / 100 GB) |
+| Workload protection | Nobus Cloud Backup (powered by Acronis Cyber Protect) | Multi-cloud & SaaS backup + anti-ransomware + vulnerability scanning + forensic backup (min 8 GB RAM / 100 GB) |
 | Connectivity | Site-to-Site VPN | IPsec, AES128/256, DH groups with PFS, SHA1/SHA2 |
 
 ### Design defaults you should apply on every engagement
@@ -863,7 +864,7 @@ The one-line version for meetings: **"Nobus secures the building and the platfor
 2. Management ports (22, 3389) restricted to named admin IPs or reached via VPN; never 0.0.0.0/0
 3. FBS encryption on for all volumes carrying customer data (it is standard; say so)
 4. One NGFW appliance (Sophos or FortiGate) at the perimeter of any regulated-industry design
-5. Acronis on anything the customer cannot afford to lose, with a tested restore, not just a backup
+5. Nobus Cloud Backup on anything the customer cannot afford to lose, with a tested restore, not just a backup
 
 ### Running the enterprise security conversation
 1. Open with the shared responsibility split (whiteboard it; two columns)
@@ -929,11 +930,11 @@ Alternative enterprise firewall for Fortinet-standardized environments:
 
 **Deployment:** Select **Security-Fortigate-FortiOS** from image list during instance creation. Contact cloud support for license activation.
 
-## Acronis Cyber Protect (Nobus Cloud Backup)
+## Nobus Cloud Backup (NCB) - powered by Acronis Cyber Protect
 
 Protect mission-critical systems from servers to desktops/laptops:
 
-- **Advanced Backup & Recovery** for various workloads (Nobus cloud, on-prem, AWS, Azure, GCP, VMware)
+- **Advanced Backup & Recovery** for various workloads (Nobus cloud, on-prem, AWS, Azure, Google Cloud, VMware, plus Microsoft 365 (Exchange, OneDrive, SharePoint) and Google Workspace)
 - **Ransomware Protection** for all systems
 - **Forensic Backup** - capture and preserve evidence
 - **Vulnerability Scan** across your infrastructure
@@ -1144,7 +1145,7 @@ Apache Kafka is an open-source distributed **event streaming platform** for high
 Protect mission-critical systems from servers to desktops/laptops. Powered by **Acronis Cyber Protect**:
 
 ### NCB Features
-1. **Advanced Backup & Recovery** for various workloads - cloud, on-premise, or third-party cloud (AWS, Azure, GCP, VMware)
+1. **Advanced Backup & Recovery** for various workloads - cloud, on-premise, third-party cloud (AWS, Azure, Google Cloud, VMware), plus SaaS: Microsoft 365 (Exchange, OneDrive, SharePoint) and Google Workspace
 2. **Ransomware Protection** for all systems
 3. **Forensic Backup** - preserve evidence for investigation
 4. **Vulnerability Scan** across your entire infrastructure
@@ -1156,11 +1157,12 @@ Protect mission-critical systems from servers to desktops/laptops. Powered by **
 - **Consumption-based:** Pay per GB stored
 - **Per-workload:** Fixed price per protected system
 
-### Cross-Cloud Backup
+### Multi-Cloud & SaaS Backup
 NCB supports backing up workloads from **any source** to Nobus:
 - On-premise servers and desktops
-- AWS, Azure, GCP hosted applications
+- AWS, Azure and Google Cloud hosted applications
 - VMware-based hypervisor environments
+- Microsoft 365 (Exchange, OneDrive, SharePoint) and Google Workspace
 - Other third-party cloud providers
 
 > **Key Sales Point:** Nobus offers **free backup of your entire infrastructure** - subject to terms and conditions of the customer agreement. This is a unique differentiator.

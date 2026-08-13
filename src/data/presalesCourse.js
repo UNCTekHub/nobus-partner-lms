@@ -80,7 +80,7 @@ A retailer's RFQ listed 12 servers copied from their 2019 hardware sheet. The lo
           content: `## Storage Portfolio
 
 ### FBS (Block Storage) - "The Hard Drive in the Cloud"
-- Volume sizes: **1 GB to 1 TB**, persist independently from instances
+- SSD-backed volumes that persist independently from the instance lifecycle
 - **AES-256 encryption** for data at rest, in transit, and snapshots
 - **Extendable volumes** - resize without detaching or restarting the instance
 - **Delete on Termination:** Root volumes delete by default; additional volumes persist by default
@@ -99,7 +99,6 @@ A retailer's RFQ listed 12 servers copied from their 2019 hardware sheet. The lo
 - Share snapshots with other accounts
 
 ### FOS (Object Storage) - "Unlimited File Storage"
-- Console: **https://fos-az1.nobus.io/**
 - Containers (not nested) hold objects - like directories holding files
 - Per-container access control and permissions
 - Backup destination for all workloads
@@ -156,8 +155,9 @@ Position as **operational savings** - "Your DBA manages queries, not patching an
 - **Sophos XG Firewall:** Enterprise IPS, ATP with AI/ML, cloud sandboxing, dual AV, synchronized security
   - Deployment: 2 vCPU, 4 GB RAM, 2 vNIC (MTU 1458), two FBS volumes (30 GB + 80 GB)
 - **FortiGate NGFW:** Deep packet inspection, UTM, SD-WAN, FortiGuard threat intelligence
-- **Acronis Cyber Protect:** Backup + ransomware protection + vulnerability scanning + antivirus
-  - Supports cross-cloud backup from AWS, Azure, GCP, VMware, on-prem
+- **Fortinet FortiSIEM:** Security information & event management - real-time threat detection, event correlation and compliance reporting
+- **Nobus Cloud Backup (NCB)** (powered by Acronis Cyber Protect): Backup + ransomware protection + vulnerability scanning + antivirus
+  - Multi-cloud and SaaS backup from AWS, Azure, Google Cloud, VMware, on-prem, plus Microsoft 365 (Exchange, OneDrive, SharePoint) and Google Workspace
   - Deployment: 100 GB min disk, 8192 MB min RAM
 
 ### Defense-in-Depth Architecture (for Financial Services RFPs)
@@ -167,12 +167,12 @@ Internet → Cloud Firewall (FaaS) → Sophos XG / FortiGate
       → Web Tier (web-sg: 80,443)
       → App Tier (app-sg: 8080 from web-sg only)
       → DB Tier (db-sg: 3306 from app-sg only)
-   → Acronis Cyber Protect (backup + anti-ransomware)
+   → Nobus Cloud Backup (backup + anti-ransomware)
    → FBS Encryption (AES-256 at rest)
    → TLS (data in transit)
 \`\`\`
 
-> **Presales Tip:** For financial services prospects, map this stack to CBN framework requirements. Show: Security Groups + Cloud Firewall + Sophos XG + Acronis + AES-256 encryption = full compliance-ready architecture. Add NDPA data residency (Lagos DC) as the compliance cherry on top.`
+> **Presales Tip:** For financial services prospects, PCI DSS is a must - map this stack to CBN framework requirements. Show: Security Groups + Nobus Cloud Native Firewall + next-generation cloud firewall (Sophos XG or FortiGate) + Nobus Cloud Backup + AES-256 encryption = full, PCI-DSS-ready architecture. Add NDPA data residency (Lagos DC) as the compliance cherry on top.`
         },
         {
           id: 'pre-m1-l4',
@@ -256,13 +256,13 @@ Position Kafka for customers with **real-time data needs** - payment processing,
 
 ### Nobus Cloud Backup (NCB) - Cross-Cloud Protection
 
-NCB is powered by **Acronis Cyber Protect** and is a unique differentiator - it backs up not just Nobus workloads but also **AWS, Azure, GCP, VMware, and on-premises** environments.
+NCB (powered by **Acronis Cyber Protect**) is a unique differentiator - it backs up not just Nobus workloads but also **AWS, Azure, Google Cloud, VMware and on-premises** environments, plus SaaS: **Microsoft 365 (Exchange, OneDrive, SharePoint) and Google Workspace**.
 
 **7 Key NCB Features:**
 1. Full-image and file-level backup
 2. Ransomware protection (AI-based detection)
 3. Vulnerability scanning and patching
-4. Cross-cloud backup (AWS → Nobus, Azure → Nobus, on-prem → Nobus)
+4. Multi-cloud and SaaS backup (AWS, Azure, Google Cloud, on-prem, Microsoft 365 and Google Workspace → Nobus)
 5. Disaster recovery with automated failover
 6. Centralised management console
 7. Compliance reporting
@@ -274,7 +274,7 @@ NCB is powered by **Acronis Cyber Protect** and is a unique differentiator - it 
 
 **Free Backup Offer:** Nobus provides a free backup allocation for qualifying customers - use this as a deal sweetener during negotiations.
 
-> **Presales Tip:** NCB is your secret weapon for competitive deals. When a customer says "We already use AWS but need backup," position NCB: "Back up your AWS, Azure, AND on-prem workloads to Nobus. One backup solution, one invoice, in local currency. And if you ever want to migrate, your data is already here."
+> **Presales Tip:** NCB is your secret weapon for competitive deals. When a customer says "We already use AWS but need backup," position NCB: "Back up your AWS, Azure, on-prem AND Microsoft 365 / Google Workspace to Nobus. One backup solution, one invoice, in local currency. And if you ever want to migrate, your data is already here."
 
 ---
 
@@ -310,7 +310,7 @@ For mature DevOps teams, position Nobus Cloud Orchestration:
           },
           {
             q: 'What makes NCB (Nobus Cloud Backup) a unique competitive differentiator?',
-            options: ['It is the cheapest backup solution', 'It supports cross-cloud backup from AWS, Azure, GCP, VMware, and on-prem', 'It only backs up Nobus workloads', 'It uses tape-based backup'],
+            options: ['It is the cheapest backup solution', 'It supports multi-cloud and SaaS backup from AWS, Azure, Google Cloud, VMware, on-prem, Microsoft 365 and Google Workspace', 'It only backs up Nobus workloads', 'It uses tape-based backup'],
           },
           {
             q: 'When should you position Nobus Kafka Service to a customer?',
