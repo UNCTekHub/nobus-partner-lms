@@ -57,10 +57,11 @@ function build(outFile, title, subtitle, body) {
         for (const w of widths) { xs.push(cx); cx += w; }
         const drawHeader = () => {
           const hh = 18;
-          doc.rect(left, doc.y, width, hh).fill(BLUE);
+          const y0 = doc.y; // capture once - text() advances doc.y, so never read it mid-loop
+          doc.rect(left, y0, width, hh).fill(BLUE);
           doc.fillColor('white').font('Helvetica-Bold').fontSize(8.5);
-          headers.forEach((t, i) => doc.text(t, xs[i] + pad, doc.y + 5, { width: widths[i] - 2 * pad }));
-          doc.y += hh;
+          headers.forEach((t, i) => doc.text(t, xs[i] + pad, y0 + 5.5, { width: widths[i] - 2 * pad, lineBreak: false }));
+          doc.y = y0 + hh; // first data row sits flush under the header
         };
         drawHeader();
         rows.forEach((r, ri) => {
@@ -81,8 +82,9 @@ function build(outFile, title, subtitle, body) {
           });
           doc.x = left; doc.y = y + rowH;
         });
-        doc.x = left; doc.moveDown(0.5);
+        doc.x = left; doc.y += 12; // clean, consistent gap before the next section
       },
+      pageBreak() { doc.addPage(); },
       cta(headline, sub) {
         if (doc.y + 50 > bottom) doc.addPage();
         const y = doc.y;
@@ -196,6 +198,8 @@ function securityStack(h) {
     'Attach discipline: every FCS deal gets a firewall + backup; every regulated deal adds FortiSIEM. Bigger deal, stickier customer.',
   ]);
 
+  // Keep the closing block together on page 2 (avoids an orphaned CTA on a blank page).
+  h.pageBreak();
   h.heading('Discovery questions');
   h.bullets([
     'What is your current perimeter - and when was its firmware last updated?',
