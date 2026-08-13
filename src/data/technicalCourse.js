@@ -49,7 +49,7 @@ Nobus Cloud Services (NCS) is Nigeria's first native hyperscale public cloud pla
 
 | Domain | Services |
 |---|---|
-| Compute | FCS instances (si.1 to si.16 families, Linux and Windows), Dedicated Hosting (BYOL), Auto Scaling, Load Balancing |
+| Compute | FCS instances (si.1 to si.16 families, Linux and Windows), Dedicated Hosting (BYOL), Load Balancing, monitoring & alerting |
 | Storage | FBS block volumes (AES-256), FOS object storage (unlimited), snapshots |
 | Networking | Virtual data centers (DaaS), Floating IPs, Site-to-Site VPN, Nobus Fast Transit, Cloud Router (BGP), Cloud Trunks, DNS |
 | Security | Security Groups, Cloud Firewalls, Sophos XG, FortiGate NGFW, Fortinet FortiSIEM, Nobus Cloud Backup |
@@ -321,36 +321,38 @@ The instance state transitions: **Build → Active (Running)**. You can then ass
         },
         {
           id: 'tech-m2-l3',
-          title: '2.5-2.6 Auto Scaling & Load Balancing',
-          content: `## Auto Scaling and Load Balancing
+          title: '2.5-2.6 Monitoring-Driven Scaling & Load Balancing',
+          content: `## Scaling and Load Balancing
 
-> **Why this matters:** These two services are the difference between "a server in the cloud" and cloud architecture. They deliver the elasticity customers are actually buying, and they are among the most demo-effective features on the platform. No extra charge for autoscaling itself; you pay only for the instances it runs.
+> **Why this matters:** How you talk about scaling separates a credible engineer from a hand-waver. Nobus does **not** silently auto-scale infrastructure behind the customer's back. We right-size, then watch, then help the customer make a deliberate scaling decision. Get this right and you sell control and predictable cost, not "magic elasticity" you cannot actually deliver.
+
+> **Say it correctly:** "We do not auto-scale the backend infrastructure dynamically. We provision a right-sized instance and pair it with proactive monitoring and alerting. When utilization approaches a defined threshold, the system raises an alert so your team can make an informed decision to scale up (vertical resize) or scale out as needed. You stay in control of capacity and cost, with no surprise scaling events."
 
 ### What you will learn
-- The three scaling strategies and when each applies
-- How health monitoring and AZ rebalancing protect availability
+- The Nobus scaling model: right-size, monitor, alert, decide
+- The two scaling responses - scale up (vertical resize) and scale out - and when each applies
 - Load balancer architecture with HAProxy, including the config concepts
 
-### Auto Scaling: the concepts
-An autoscaling setup has three parts:
-1. **Launch configuration:** the template for new instances: NMI image, flavor (for example si.2.4.30.l), key pair, security groups, network
-2. **Scaling group:** the fleet definition: minimum, maximum and desired instance counts, spread across availability zones
-3. **Scaling policies:** the rules that change the desired count
+### The Nobus scaling model
+There is no hidden scaling engine adding and removing instances on its own. Instead:
+1. **Right-size at provisioning:** size to measured peak plus ~30% headroom, so day-to-day demand is comfortably covered
+2. **Proactive monitoring:** track CPU, memory, disk and custom application metrics continuously
+3. **Threshold alerting:** when utilization approaches a defined threshold, the system raises an alert to the customer's team
+4. **Informed decision:** the team decides how to respond - nothing changes automatically, so there are no surprise scaling events and no bill shocks
 
-### The three scaling strategies
-| Strategy | Trigger | Best for |
+### The two scaling responses
+| Response | What happens | Best for |
 |---|---|---|
-| Dynamic | Live metrics (CPU, memory, custom) cross a threshold | Unpredictable traffic: news, e-commerce, APIs |
-| Predictive | Machine-learned traffic forecasting | Regular daily/weekly patterns: banking hours, payroll runs |
-| Scheduled | A calendar you define | Known events: month-end, campaign launches, exam registration windows |
+| Scale up (vertical resize) | Add vCPU / RAM to the existing instance (brief reboot) | A single workload outgrowing its box: databases, monoliths, app servers |
+| Scale out (horizontal) | Add another instance behind the load balancer | Stateless web/API tiers where traffic can be spread across nodes |
 
-Beyond scaling, the service continuously **monitors instance health, replaces impaired instances automatically, and rebalances capacity across AZs**: self-healing you should demonstrate in every technical evaluation.
+Vertical resize is the simplest lever and covers most cases. Scale-out is for stateless tiers already fronted by a load balancer - sessions in the database or cache, files in FOS, never on local disk.
 
 ### Design guidance
-- Set minimum 2 across two AZs for anything production-facing; minimum 1 saves pennies and forfeits availability
-- Scale on the constraint metric (usually CPU for web tiers; queue depth for workers)
-- Set the maximum deliberately: it is your cost ceiling and the customer's budget guardrail
-- Instances must be stateless to scale: sessions in the database or cache, files in FOS, never on local disk
+- Right-size from measured peaks, not from the old server's spec sheet; headroom is how you avoid constant threshold alerts
+- Put anything production-facing behind a load balancer across two AZs so scale-out is a capacity decision, not a rebuild
+- Set alert thresholds where the team has time to act (for example CPU sustained above 70-75%), not at the point of exhaustion
+- Agree the escalation path up front: who receives the alert, and who is authorised to approve a resize or an added instance
 
 ### Load Balancing: the front door
 The platform load-balancing pattern uses **HAProxy** (commonly on pfSense) as a high-availability proxy for TCP and HTTP applications:
@@ -360,24 +362,24 @@ The platform load-balancing pattern uses **HAProxy** (commonly on pfSense) as a 
 - **Default backend:** catches unmatched traffic
 - **Statistics dashboard:** live session and backend health view (commonly on port 2200), your operations demo
 
-Security group for a typical LB: 80/443 open to the internet, 22 and the stats port restricted to admin IPs.
+Security group for a typical LB: 80/443 open to the internet, 22 and the stats port restricted to admin IPs. The load balancer makes scale-out a clean operation: add a new instance to the backend pool and it starts receiving traffic once it passes health checks.
 
 ### The reference pattern (memorize this diagram)
-Internet -> Floating IP -> Load balancer (HAProxy) -> Autoscaling web tier (2-10x si.2.4, multi-AZ) -> Managed database (FBS-backed)
+Internet -> Floating IP -> Load balancer (HAProxy) -> Load-balanced web tier (multi-AZ, monitored) -> Managed database (FBS-backed)
 - Floating IP survives LB replacement (remap, no DNS change)
-- Web tier scales with demand; database scales vertically
+- Web tier scales out by a deliberate decision when alerts fire; database scales up (vertical resize)
 - Every tier's security group admits only the tier above it
 
 ### Field demo script (8 minutes)
-1. Show the scaling group at 2 instances; show the policy (CPU > 70% adds one)
-2. Generate load; watch a third instance launch and enter the backend automatically
-3. Terminate an instance manually; watch the group replace it without intervention
-4. Close: "Nobody was paged. That is the operational difference we are selling."
+1. Show the monitoring dashboard: CPU, memory and disk on a running instance, with the alert thresholds set
+2. Generate load; watch utilization climb and the threshold alert fire
+3. Show the two responses: a vertical resize of the instance, or adding a node to the load balancer's backend pool
+4. Close: "Nothing moved without you approving it. You get the heads-up early and you stay in control of the spend. That is the operational difference we are selling."
 
 ### Key takeaways
-- Launch configuration + scaling group + policies; dynamic, predictive, or scheduled
-- Self-healing (health checks, replacement, AZ rebalancing) is included and demo gold
-- HAProxy frontends with ACL-based routing let one load balancer serve many applications`
+- Nobus does not auto-scale silently: we right-size, monitor, alert, and the customer decides
+- Two responses - scale up (vertical resize) and scale out (add a node behind the LB); no surprise scaling events
+- HAProxy frontends with ACL-based routing let one load balancer serve many applications and make scale-out clean`
         },
       ],
       quiz: {
@@ -389,8 +391,8 @@ Internet -> Floating IP -> Load balancer (HAProxy) -> Autoscaling web tier (2-10
             options: ['Data is persisted to FBS', 'Data is lost', 'Data is backed up to FOS', 'Data is moved to another AZ'],
           },
           {
-            q: 'What should always be combined with Auto Scaling for production workloads?',
-            options: ['Cloud Firewall', 'Flexible Load Balancing', 'Nobus Fast Transit', 'Cloud Backup'],
+            q: 'How does Nobus handle scaling for FCS workloads?',
+            options: ['Right-sized instances with monitoring and threshold alerts; the customer decides to resize or add nodes', 'Infrastructure auto-scales dynamically with no customer involvement', 'Instances are automatically added and removed by machine-learned forecasts', 'Scaling only happens on a fixed monthly schedule'],
           },
         ],
       },
@@ -568,7 +570,7 @@ Nobus DaaS allows connection to public or private network infrastructure with en
 
 ### Available Network Services
 - Security Groups, Firewall as a Service (FaaS), Network ACLs
-- Load Balancer, Auto-Scaling
+- Load Balancer, monitoring & threshold alerting
 - Software-defined network infrastructure (switches, routers)
 
 > **Important:** Nobus currently supports **IPv4 only**. IPv6 is not supported. You must specify an IPv4 CIDR block when creating a network.
@@ -1116,7 +1118,7 @@ Apache Kafka is an open-source distributed **event streaming platform** for high
 - **IoT data ingestion:** Handle high-throughput telemetry from devices
 
 ### Benefits of Managed Kafka on Nobus
-- **Dynamic scaling:** Auto-scale Kafka cluster based on demand
+- **Managed scaling:** grow the Kafka cluster on request as throughput demands, with broker and lag monitoring to signal when
 - **Managed maintenance:** Nobus handles upgrades, patching, and monitoring
 - **High availability:** Built-in redundancy across Availability Zones
 - **Pay-as-you-go:** Only pay for resources consumed
@@ -1402,7 +1404,7 @@ Object storage lifecycle and its pricing story, appliance deployment from the im
 | Rehost | Lift-and-shift as-is | FCS via image import/export |
 | Replatform | Small upgrades in transit | FCS + swap self-managed DB for managed PostgreSQL/MySQL/MSSQL/MongoDB |
 | Repurchase | Move to SaaS | Out of scope; be honest when it is the right answer |
-| Refactor | Re-architect | Kubernetes Engine, Kafka, autoscaling groups |
+| Refactor | Re-architect | Kubernetes Engine, Kafka, load-balanced tiers with monitoring & alerting |
 | Retire | Kill it | Every estate has 10-20% of these; finding them funds the project |
 | Retain | Leave (for now) | Keep on-prem, connect via VPN/Fast Transit, protect with NCB |
 
@@ -1416,7 +1418,7 @@ Most first engagements are **rehost + replatform**, with refactor as phase two o
 
 **Phase 3: Migrate (in waves).** Wave size 3-8 workloads, ordered: dev/test first, internal apps second, customer-facing last. Per workload: image import (or fresh build + data restore), parallel run, validation against pre-agreed checks, DNS/traffic cutover in a maintenance window. *Gate per wave: validation checklist green before the next wave starts.*
 
-**Phase 4: Optimize (weeks 2-6 after).** Right-size from observed utilization (most rehosted instances are oversized 30-50%: pass the savings to the customer and bank the goodwill), enable autoscaling where patterns justify it, snapshot schedules verified, handover runbook delivered, managed-services cadence begun.
+**Phase 4: Optimize (weeks 2-6 after).** Right-size from observed utilization (most rehosted instances are oversized 30-50%: pass the savings to the customer and bank the goodwill), set monitoring thresholds and alerts so capacity decisions are made early, snapshot schedules verified, handover runbook delivered, managed-services cadence begun.
 
 ### The cutover checklist (laminate this)
 1. Rollback plan written and TESTED before the window opens
@@ -1546,7 +1548,7 @@ Answer: True, and deliberate. The si.1 to si.16 families plus compute-optimized,
 Answer: Honestly: if the architecture requires a niche managed service Nobus lacks, we will say so; and NCB even protects workloads that stay on AWS or Azure. For the core enterprise estate (compute, storage, Kubernetes, Kafka, four database engines, firewalls, DNS), the catalogue is complete. Never bluff a missing service; name the workaround or concede.
 
 **4. "Can it really handle our scale?"**
-Answer: Autoscaling groups with dynamic, predictive and scheduled policies; multi-AZ placement; load balancing; and burstable instance classes. Then make it concrete: "Your peak is X concurrent users; that is an autoscaling group of N si.4.8 instances; let us prove it in a 14-day PoC with your load profile." Scale objections die in PoCs, not in meetings.
+Answer: Right-size from measured peaks, then run proactive monitoring with threshold alerts so capacity decisions are made early and deliberately - scale up (vertical resize) or scale out behind a load balancer, across multiple AZs. We do not auto-scale silently, so there are no surprise scaling events or bill shocks; you stay in control. Then make it concrete: "Your peak is X concurrent users; that is N si.4.8 instances behind a load balancer, with alerts at 70% so you add capacity before it hurts; let us prove it in a 14-day PoC with your load profile." Scale objections die in PoCs, not in meetings.
 
 **5. "How is 99.982% credible for a local provider?"**
 Answer: It is the Tier III design standard: concurrent maintainability, N+1 power and cooling, multi-AZ. Offer the honest comparison: "Measure your current environment's real availability first; most on-prem rooms cannot document 99.5%." Then put the SLA in the contract.
@@ -1608,7 +1610,7 @@ Concede small points quickly and completely ("correct, we do not have that today
 - **Assessment:** module quizzes across this course (75% pass mark each) plus the final knowledge check
 
 **Level 2: NCS Professional**
-- **Scope:** Architecture and migration: multi-tier designs, autoscaling, VPN/Fast Transit connectivity, the 6R migration framework executed end-to-end, DR design with tested restores
+- **Scope:** Architecture and migration: multi-tier designs, monitoring-driven scaling, VPN/Fast Transit connectivity, the 6R migration framework executed end-to-end, DR design with tested restores
 - **Qualifies you to:** lead customer implementations and own technical delivery on registered deals
 - **Assessment:** scenario-based exam plus a documented real or lab migration
 

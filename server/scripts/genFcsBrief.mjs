@@ -85,8 +85,12 @@ bullets([
   'AES-256 FBS block storage with snapshots and FOS object storage attach to any instance; resize vCPU / RAM / disk without rebuilding.',
 ]);
 
-heading('Autoscaling & load balancing');
-para('Handle traffic spikes without over-provisioning. Auto Scaling adds or removes FCS instances automatically against demand, while the managed Load Balancer spreads traffic across healthy instances for resilience and zero-downtime deploys - ideal for e-commerce peaks, campaigns and fintech transaction surges.');
+heading('Scaling: monitoring & alerting');
+para('Nobus does not auto-scale the backend infrastructure dynamically. We provision a right-sized instance and pair it with proactive monitoring and alerting. When utilization approaches a defined threshold, the system raises an alert so your team makes an informed decision to scale up (vertical resize) or scale out (add an instance behind the load balancer). You stay in control of capacity and cost, with no surprise scaling events.');
+bullets([
+  'Scale up (vertical resize): add vCPU / RAM to the existing instance - simplest lever, covers most workloads.',
+  'Scale out (horizontal): add an instance to the managed Load Balancer, which spreads traffic across healthy nodes for resilience and zero-downtime deploys.',
+]);
 
 heading('Dedicated Hosting');
 para('When a workload needs single-tenant isolation - for strict compliance, licensing or performance - Dedicated Hosting reserves dedicated physical servers for one customer: the control of bare metal with the operational simplicity of the Nobus platform.');

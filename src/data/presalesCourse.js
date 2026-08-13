@@ -31,7 +31,7 @@ const presalesCourse = {
 ### What you will learn
 - The FCS instance families and how to size from real utilization
 - The pricing mechanics you must be able to compute on a whiteboard
-- How to position Auto Scaling, Load Balancing and Dedicated Hosts in designs
+- How to position monitoring-driven scaling, Load Balancing and Dedicated Hosts in designs
 
 ### FCS: the compute foundation
 Nobus Flexible Compute Service provides resizable virtual machines from the console (dashboard.nobus.io), CLI or API.
@@ -62,25 +62,25 @@ Each type spans a wide range of sizes (the table below shows size bands, not the
 - The differentiators to state every time: **billed in local currency** and **zero egress fees**
 
 ### Right-sizing: your credibility lever
-Never mirror the old server's spec. Most on-premise machines run at 15-25% utilization; measure (or ask for) actual peak CPU and RAM, size to peak plus 30% headroom, and let vertical resize or autoscaling absorb growth. A right-sized quote routinely comes in 30-40% under a spec-mirrored one, and it is the single fastest way to beat a competitor's lazy proposal.
+Never mirror the old server's spec. Most on-premise machines run at 15-25% utilization; measure (or ask for) actual peak CPU and RAM, size to peak plus 30% headroom, and let vertical resize or added load-balanced instances absorb growth as monitoring flags it. A right-sized quote routinely comes in 30-40% under a spec-mirrored one, and it is the single fastest way to beat a competitor's lazy proposal.
 
-### Auto Scaling (position it, always)
-Scaling groups add or remove instances by policy: **dynamic** (live metrics), **predictive** (learned patterns) or **scheduled** (calendar). The service also health-checks and replaces failed instances and balances across availability zones, at **no extra charge** beyond the instances themselves.
-> Positioning line: "During your Black Friday, the web tier grows from 2 to 10 instances by itself, then shrinks back. You pay for the surge only while it exists."
+### Scaling: monitoring and alerting, not silent autopilot (position it correctly)
+Be precise here - overselling "automatic elasticity" gets exposed in technical evaluation. Nobus does **not** auto-scale the backend infrastructure dynamically. We right-size the instance, then pair it with **proactive monitoring and alerting**. When utilization approaches a defined threshold, the system raises an alert so the customer's team makes an informed decision to **scale up** (vertical resize) or **scale out** (add an instance behind the load balancer). The customer stays in control of capacity and cost, with no surprise scaling events.
+> Positioning line: "Before your Black Friday, we size for the peak with headroom. If you approach the ceiling, you get an alert early enough to add capacity on purpose - no runaway bills, no surprise scaling, you decide."
 
 ### Load Balancing (the front door of every web design)
-HAProxy-pattern load balancing spreads TCP/HTTP traffic across instance backends with health checks and hostname-based routing (one LB can front several applications). Draw it into every multi-instance design: Floating IP into LB, LB into the autoscaling tier.
+HAProxy-pattern load balancing spreads TCP/HTTP traffic across instance backends with health checks and hostname-based routing (one LB can front several applications). Draw it into every multi-instance design: Floating IP into LB, LB into the load-balanced tier (add nodes when monitoring alerts warrant it).
 
 ### Dedicated Hosting (the compliance and licensing card)
 Entire physical servers reserved for one customer: maximum isolation for regulated workloads, and the home of **BYOL** (per-socket/per-core Microsoft and Oracle licenses, governed via the License Manager). When a customer mentions existing enterprise agreements, this is your answer; it regularly rescues deals that stall on licensing cost.
 
 ### Field example
-A retailer's RFQ listed 12 servers copied from their 2019 hardware sheet. The losing bidder quoted 12 mirrored instances. The winning partner requested one month of utilization data, proposed 7 right-sized instances plus an autoscaling web tier, and came in 38% cheaper with better peak capacity. Same platform; the sizing discipline won.
+A retailer's RFQ listed 12 servers copied from their 2019 hardware sheet. The losing bidder quoted 12 mirrored instances. The winning partner requested one month of utilization data, proposed 7 right-sized instances plus a load-balanced web tier with monitoring and alerting, and came in 38% cheaper with better peak capacity. Same platform; the sizing discipline won.
 
 ### Key takeaways
 - Decode si.[vCPU].[RAM].[disk].[os] instantly; size from measured peaks plus 30%, never from old spec sheets
 - Know the units (93.50 / 96.80 per unit-day, entry 9,309) but finalize numbers in the Quote Builder
-- Auto Scaling costs nothing extra and self-heals; Dedicated Hosts + BYOL is the licensing rescue card`
+- Position scaling honestly - right-size, monitor, alert, customer decides (scale up or scale out); Dedicated Hosts + BYOL is the licensing rescue card`
         },
         {
           id: 'pre-m1-l2',
@@ -198,7 +198,7 @@ Nobus supports **self-managed Kubernetes** on FCS instances. Position this for c
 **Key Presales Points:**
 - Deploy Kubernetes using **kubeadm, kubelet, and kubectl** on FCS instances
 - Customer manages their own control plane and worker nodes - full flexibility
-- Use FCS Auto Scaling to scale worker nodes based on demand
+- Add or resize FCS worker nodes as demand grows, guided by monitoring and alerts (or Kubernetes' own cluster/pod autoscalers within a managed NKE cluster)
 - Pair with Managed PostgreSQL or MongoDB for stateful backend services
 
 **8 Container Use Cases to Position:**
@@ -345,8 +345,8 @@ For mature DevOps teams, position Nobus Cloud Orchestration:
 
 ### Scenario 1: Corporate website / e-commerce platform
 - **Signals:** Public web traffic, seasonal spikes, marketing pressure for uptime
-- **Architecture:** Floating IP into a load balancer, autoscaling web tier (2-10x FCS si.2.4.30.l), managed MySQL or PostgreSQL on FBS, FOS for media and static assets, daily FBS snapshots
-- **Why it wins:** Autoscaling handles Black Friday without paying for peak capacity year-round; zero egress fees matter enormously for media-heavy sites
+- **Architecture:** Floating IP into a load balancer, load-balanced web tier (sized for peak, monitored with threshold alerts; add nodes when alerts fire), managed MySQL or PostgreSQL on FBS, FOS for media and static assets, daily FBS snapshots
+- **Why it wins:** Sized for the Black Friday peak with monitoring so the team adds capacity deliberately - no surprise scaling, no runaway bills; zero egress fees matter enormously for media-heavy sites
 - **Sizing starter:** si.2.4 per web node, si.4.8 for the database; validate in the Pricing Calculator
 
 ### Scenario 2: Enterprise application migration (ERP, core systems)
@@ -400,7 +400,7 @@ Three questions place almost any customer:
 Build every diagram in four horizontal layers, top to bottom, matching the path of a user request:
 1. **Users and locations:** customers on the internet, staff at head office and branches
 2. **Edge and security:** Floating IPs, load balancer, Sophos XG or FortiGate, VPN/Fast Transit terminations
-3. **Compute:** FCS instances grouped in boxes per tier (web, app), autoscaling groups drawn as a stack with "2-10 instances" notation, Kubernetes clusters as one box with node count
+3. **Compute:** FCS instances grouped in boxes per tier (web, app), load-balanced tiers drawn as a stack with "2-10 instances, monitored" notation, Kubernetes clusters as one box with node count
 4. **Data:** managed databases, FBS volumes, FOS buckets, backup flows (dashed arrows to Nobus Cloud Backup)
 
 Group everything inside one labeled boundary: "Nobus Cloud - Lagos AZ (Tier III)". If DR spans zones, show the second zone as a lighter box.
@@ -612,7 +612,7 @@ Never bluff an RFP; evaluators compare answers across bidders and bluffs are obv
 ### The standard 25-minute Nobus demo arc
 1. **Console orientation (3 min):** one dashboard for everything; calm, uncluttered, in English they already speak
 2. **Provisioning proof (5 min):** launch a Linux si.2.4 live; show it booted; attach an FBS volume
-3. **The customer's core pain (8 min):** the segment built specifically for THIS customer: a database restore, an autoscaling event, a VPN status page, a firewall rule
+3. **The customer's core pain (8 min):** the segment built specifically for THIS customer: a database restore, a threshold alert and a scale-out decision, a VPN status page, a firewall rule
 4. **Cost transparency (5 min):** the Pricing Calculator with their approximate workload; watch the CFO-type lean in
 5. **Close (4 min):** recap each confirmation they gave you, then propose the PoC with dates
 

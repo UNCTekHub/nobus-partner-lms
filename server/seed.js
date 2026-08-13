@@ -20,7 +20,7 @@ function seedPortalContent() {
       { title: 'Nobus Cloud Logo Pack', description: 'Official Nobus logos in PNG and SVG for co-branded material (light and dark variants).', category: 'Logos & Brand', file_url: 'https://nobus.io/', file_type: 'ZIP', tags: JSON.stringify(['brand', 'logo', 'co-branding']) },
       { title: 'Nobus Partner Brand Guidelines', description: 'How to use the Nobus brand in partner marketing: colors, typography, logo clearance.', category: 'Logos & Brand', file_url: 'https://nobus.io/', file_type: 'PDF', tags: JSON.stringify(['brand', 'guidelines']) },
       { title: 'Nobus Cloud Corporate Brochure', description: 'Customer-facing overview of the full Nobus service catalogue with Naira pricing story.', category: 'Brochures', file_url: 'https://nobus.io/documentation/fcs', file_type: 'PDF', tags: JSON.stringify(['overview', 'catalogue']) },
-      { title: 'FCS Compute Solution Brief', description: 'Two-pager on Flexible Compute Service: instance families, autoscaling, dedicated hosting, BYOL.', category: 'Brochures', file_url: '/marketing/fcs-compute-solution-brief.pdf', file_type: 'PDF', tags: JSON.stringify(['fcs', 'compute']) },
+      { title: 'FCS Compute Solution Brief', description: 'Two-pager on Flexible Compute Service: instance families, monitoring-driven scaling, dedicated hosting, BYOL.', category: 'Brochures', file_url: '/marketing/fcs-compute-solution-brief.pdf', file_type: 'PDF', tags: JSON.stringify(['fcs', 'compute']) },
       { title: 'AWS/Azure vs Nobus Battle Card', description: 'Competitive positioning: Naira billing, zero egress fees, local support, NDPA data residency.', category: 'Battle Cards', file_url: 'https://nobus.io/nobus-pricing-calculator', file_type: 'PDF', tags: JSON.stringify(['competitive', 'aws', 'azure']) },
       { title: 'Security Stack Battle Card', description: 'Selling Sophos XG, FortiGate NGFW and Acronis Cyber Protect on Nobus.', category: 'Battle Cards', file_url: 'https://nobus.io/documentation/cloud-security', file_type: 'PDF', tags: JSON.stringify(['security', 'sophos', 'fortigate', 'acronis']) },
       { title: 'Cloud Migration Email Sequence', description: '5-email nurture campaign template for on-premise to Nobus migration prospects.', category: 'Email Templates', file_url: 'https://nobus.io/', file_type: 'DOCX', tags: JSON.stringify(['email', 'migration', 'nurture']) },
@@ -35,6 +35,8 @@ function seedPortalContent() {
   // Repoint the FCS brief to the generated branded PDF (idempotent; fixes existing DBs).
   const FCS_BRIEF = '/marketing/fcs-compute-solution-brief.pdf';
   db.prepare("UPDATE marketing_assets SET file_url = ?, file_type = 'PDF', updated_at = datetime('now') WHERE title = 'FCS Compute Solution Brief' AND file_url != ?").run(FCS_BRIEF, FCS_BRIEF);
+  const FCS_BRIEF_DESC = 'Two-pager on Flexible Compute Service: instance families, monitoring-driven scaling, dedicated hosting, BYOL.';
+  db.prepare("UPDATE marketing_assets SET description = ?, updated_at = datetime('now') WHERE title = 'FCS Compute Solution Brief' AND description != ?").run(FCS_BRIEF_DESC, FCS_BRIEF_DESC);
 
   const contentCount = db.prepare('SELECT COUNT(*) as count FROM content_items').get().count;
   if (contentCount === 0) {
@@ -54,8 +56,8 @@ function seedPortalContent() {
       {
         title: 'Nobus FCS Datasheet - Flexible Compute Service',
         type: 'datasheet',
-        summary: 'Instance families, specifications, autoscaling and pricing for the Nobus Flexible Compute Service.',
-        body: `## Nobus Flexible Compute Service (FCS)\n\nResizable compute capacity in the cloud, from ₦9,309/month.\n\n### Instance Families\n\n| Family | vCPU | Memory | Typical Use |\n|---|---|---|---|\n| si.2.x | 2 | 2-8 GiB | Web servers, dev/test |\n| si.4.x | 4 | 4-32 GiB | Enterprise apps, databases |\n| si.8.x | 8 | 16-64 GiB | High performance workloads |\n\nNaming: \`si.<vCPU>.<RAM>.<disk>.<l|w>\` - .30.l = Linux 30 GB, .50.w = Windows 50 GB.\n\n### Key Features\n- Dynamic, predictive and scheduled autoscaling (no extra charge)\n- Nobus Machine Images (Windows managed licensing or BYOL, open-source Linux)\n- FBS block volumes 1 GB - 1 TB, AES-256 encrypted\n- Security groups, floating IPs, availability zones\n- PCI DSS compliant environments supported\n\n### Pricing\n- vCPU unit: ₦93.50 · Memory unit: ₦96.80\n- Pre-billing: charges start at running, stop at shutdown`,
+        summary: 'Instance families, specifications, monitoring-driven scaling and pricing for the Nobus Flexible Compute Service.',
+        body: `## Nobus Flexible Compute Service (FCS)\n\nResizable compute capacity in the cloud, from ₦9,309/month.\n\n### Instance Families\n\n| Family | vCPU | Memory | Typical Use |\n|---|---|---|---|\n| si.2.x | 2 | 2-8 GiB | Web servers, dev/test |\n| si.4.x | 4 | 4-32 GiB | Enterprise apps, databases |\n| si.8.x | 8 | 16-64 GiB | High performance workloads |\n\nNaming: \`si.<vCPU>.<RAM>.<disk>.<l|w>\` - .30.l = Linux 30 GB, .50.w = Windows 50 GB.\n\n### Key Features\n- Right-sized instances with proactive monitoring and threshold alerts; scale up (vertical resize) or scale out (add nodes) on your decision - no surprise scaling\n- Nobus Machine Images (Windows managed licensing or BYOL, open-source Linux)\n- FBS block volumes, AES-256 encrypted\n- Security groups, floating IPs, availability zones\n- PCI DSS compliant environments supported\n\n### Pricing\n- vCPU unit: ₦93.50 · Memory unit: ₦96.80\n- Pre-billing: charges start at running, stop at shutdown`,
         file_url: 'https://nobus.io/documentation/fcs',
         tags: JSON.stringify(['FCS', 'compute', 'datasheet']),
       },
@@ -79,21 +81,51 @@ function seedPortalContent() {
         title: 'FAQ: Answering the 12 Most Common Customer Objections',
         type: 'faq',
         summary: 'Ready answers for partners: reliability, security, pricing, migration and comparison questions customers ask.',
-        body: `## "Is a local cloud as reliable as AWS?"\nNobus runs on OpenStack at Rack Centre, a Tier III certified facility - the same standard trusted by banks and telcos, with redundant power, cooling and network.\n\n## "What if I need to scale suddenly?"\nFCS Autoscaling adds instances automatically (dynamic, predictive or scheduled) at no extra charge.\n\n## "How is my data secured?"\nAES-256 encryption at rest, encrypted transit, security groups, cloud firewalls, plus optional Sophos XG / FortiGate NGFW and Acronis Cyber Protect. ISO 27001 and PCI DSS supported.\n\n## "Can we keep our Microsoft licenses?"\nYes - Dedicated Hosting supports BYOL for Microsoft and Oracle per-socket, per-core and per-VM licenses.\n\n## "What does migration involve?"\nThe FCS Image Import/Export service migrates existing VMs into Nobus Machine Images; certified partners run structured migration engagements.\n\n## "Why not just stay on-premise?"\nCompare a ₦25M hardware refresh plus power, cooling and staff against pay-as-you-use FCS from ₦9,309/month with no upfront commitment.`,
+        body: `## "Is a local cloud as reliable as AWS?"\nNobus runs on OpenStack at Rack Centre, a Tier III certified facility - the same standard trusted by banks and telcos, with redundant power, cooling and network.\n\n## "What if I need to scale suddenly?"\nWe do not auto-scale the backend infrastructure silently. We right-size your instance and monitor it proactively; when utilization nears a defined threshold you get an alert and decide to scale up (vertical resize) or scale out (add an instance behind the load balancer) - you stay in control of capacity and cost, with no surprise scaling events.\n\n## "How is my data secured?"\nAES-256 encryption at rest, encrypted transit, security groups, cloud firewalls, plus optional Sophos XG / FortiGate NGFW and Acronis Cyber Protect. ISO 27001 and PCI DSS supported.\n\n## "Can we keep our Microsoft licenses?"\nYes - Dedicated Hosting supports BYOL for Microsoft and Oracle per-socket, per-core and per-VM licenses.\n\n## "What does migration involve?"\nThe FCS Image Import/Export service migrates existing VMs into Nobus Machine Images; certified partners run structured migration engagements.\n\n## "Why not just stay on-premise?"\nCompare a ₦25M hardware refresh plus power, cooling and staff against pay-as-you-use FCS from ₦9,309/month with no upfront commitment.`,
         file_url: null,
         tags: JSON.stringify(['faq', 'objection handling', 'sales']),
       },
       {
         title: 'Reference Architecture: HA Web Application on Nobus',
         type: 'whitepaper',
-        summary: 'Blueprint for a highly available web tier: load balancing, autoscaling, FBS-backed databases and floating IPs.',
-        body: `## Architecture Overview\n\n\`\`\`\nInternet -> Floating IP -> Load Balancer (HAProxy)\n  -> Autoscaling web tier (FCS si.2.x, 2-10 instances)\n  -> Managed PostgreSQL (FBS-backed, snapshots to FOS)\n\`\`\`\n\n## Components\n\n1. **Floating IP** on the load balancer for failover without DNS changes\n2. **HAProxy** front end with health checks and sticky sessions\n3. **Autoscaling group** across availability zones\n4. **Security groups**: 80/443 public on LB; web tier accepts only LB traffic; DB accepts only web tier\n5. **FBS snapshots** on schedule, stored in FOS, copied cross-zone for DR\n6. **Cloud Firewall** policy in front of the whole data center\n\n## Sizing Guidance\n\nStart si.2.4.30.l per web node, si.4.8.30.l for the database; validate with the Nobus Pricing Calculator.`,
+        summary: 'Blueprint for a highly available web tier: load balancing, monitoring-driven scaling, FBS-backed databases and floating IPs.',
+        body: `## Architecture Overview\n\n\`\`\`\nInternet -> Floating IP -> Load Balancer (HAProxy)\n  -> Load-balanced web tier (FCS si.2.x, 2-10 instances, monitored)\n  -> Managed PostgreSQL (FBS-backed, snapshots to FOS)\n\`\`\`\n\n## Components\n\n1. **Floating IP** on the load balancer for failover without DNS changes\n2. **HAProxy** front end with health checks and sticky sessions\n3. **Load-balanced web tier** across availability zones; add nodes when monitoring alerts fire (no silent auto-scaling)\n4. **Security groups**: 80/443 public on LB; web tier accepts only LB traffic; DB accepts only web tier\n5. **FBS snapshots** on schedule, stored in FOS, copied cross-zone for DR\n6. **Cloud Firewall** policy in front of the whole data center\n\n## Sizing Guidance\n\nStart si.2.4.30.l per web node, si.4.8.30.l for the database; validate with the Nobus Pricing Calculator.`,
         file_url: 'https://nobus.io/documentation/networking',
         tags: JSON.stringify(['reference architecture', 'HA', 'presales']),
       },
     ];
     for (const c of items) insertContent.run(c);
     console.log(`  Seeded ${items.length} content hub items`);
+  }
+
+  // Idempotent content-hub corrections (runs every deploy): Nobus scales via
+  // right-sizing + proactive monitoring & threshold alerting, not silent auto-scaling.
+  const contentFixes = [
+    { title: 'Nobus FCS Datasheet - Flexible Compute Service', col: 'summary',
+      from: 'Instance families, specifications, autoscaling and pricing for the Nobus Flexible Compute Service.',
+      to: 'Instance families, specifications, monitoring-driven scaling and pricing for the Nobus Flexible Compute Service.' },
+    { title: 'Nobus FCS Datasheet - Flexible Compute Service', col: 'body',
+      from: '- Dynamic, predictive and scheduled autoscaling (no extra charge)',
+      to: '- Right-sized instances with proactive monitoring and threshold alerts; scale up (vertical resize) or scale out (add nodes) on your decision - no surprise scaling' },
+    { title: 'Nobus FCS Datasheet - Flexible Compute Service', col: 'body',
+      from: '- FBS block volumes 1 GB - 1 TB, AES-256 encrypted',
+      to: '- FBS block volumes, AES-256 encrypted' },
+    { title: 'FAQ: Answering the 12 Most Common Customer Objections', col: 'body',
+      from: 'FCS Autoscaling adds instances automatically (dynamic, predictive or scheduled) at no extra charge.',
+      to: 'We do not auto-scale the backend infrastructure silently. We right-size your instance and monitor it proactively; when utilization nears a defined threshold you get an alert and decide to scale up (vertical resize) or scale out (add an instance behind the load balancer) - you stay in control of capacity and cost, with no surprise scaling events.' },
+    { title: 'Reference Architecture: HA Web Application on Nobus', col: 'summary',
+      from: 'Blueprint for a highly available web tier: load balancing, autoscaling, FBS-backed databases and floating IPs.',
+      to: 'Blueprint for a highly available web tier: load balancing, monitoring-driven scaling, FBS-backed databases and floating IPs.' },
+    { title: 'Reference Architecture: HA Web Application on Nobus', col: 'body',
+      from: '-> Autoscaling web tier (FCS si.2.x, 2-10 instances)',
+      to: '-> Load-balanced web tier (FCS si.2.x, 2-10 instances, monitored)' },
+    { title: 'Reference Architecture: HA Web Application on Nobus', col: 'body',
+      from: '3. **Autoscaling group** across availability zones',
+      to: '3. **Load-balanced web tier** across availability zones; add nodes when monitoring alerts fire (no silent auto-scaling)' },
+  ];
+  for (const f of contentFixes) {
+    db.prepare(`UPDATE content_items SET ${f.col} = REPLACE(${f.col}, ?, ?) WHERE title = ? AND ${f.col} LIKE ?`)
+      .run(f.from, f.to, f.title, '%' + f.from + '%');
   }
 
   const labCount = db.prepare('SELECT COUNT(*) as count FROM demo_labs').get().count;
@@ -324,7 +356,7 @@ const insertLead = db.prepare(`
 `);
 const demoLeads = [
   { org_id: 'org-001', created_by: 'user-002', company: 'Zenith Microfinance', contact_name: 'Tunde Adewale', contact_email: 'tunde@zenithmfb.ng', industry: 'Financial Services', stage: 'proposal', est_value: 4500000, services: JSON.stringify(['FCS', 'FBS', 'Sophos XG']), next_action: 'Present TCO comparison vs AWS on Friday' },
-  { org_id: 'org-001', created_by: 'user-002', company: 'Lagos Retail Group', contact_name: 'Bisi Ojo', contact_email: 'bisi@lagosretail.com', industry: 'Retail', stage: 'qualified', est_value: 2200000, services: JSON.stringify(['FCS', 'Autoscaling', 'Load Balancing']), next_action: 'Schedule discovery call with IT manager' },
+  { org_id: 'org-001', created_by: 'user-002', company: 'Lagos Retail Group', contact_name: 'Bisi Ojo', contact_email: 'bisi@lagosretail.com', industry: 'Retail', stage: 'qualified', est_value: 2200000, services: JSON.stringify(['FCS', 'Monitoring & Alerting', 'Load Balancing']), next_action: 'Schedule discovery call with IT manager' },
   { org_id: 'org-001', created_by: 'user-003', company: 'EduTech Nigeria', contact_name: 'Kemi Balogun', contact_email: 'kemi@edutech.ng', industry: 'Education', stage: 'lead', est_value: 900000, services: JSON.stringify(['FOS', 'Cloud Backup']), next_action: 'Send FOS datasheet' },
   { org_id: 'org-001', created_by: 'user-002', company: 'SwiftPay Solutions', contact_name: 'Ibrahim Musa', contact_email: 'ibrahim@swiftpay.ng', industry: 'Fintech', stage: 'won', est_value: 6800000, services: JSON.stringify(['FCS', 'Managed PostgreSQL', 'VPN']), next_action: null },
 ];

@@ -141,7 +141,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 - **Entry Point:** Disaster recovery, dev/test environments, then production migration
 
 #### 2. Fintech (Fast-Growing, Cloud-Native)
-- **Why Nobus:** Nobus Kubernetes Engine (NKE) for microservices architecture, Kafka for event streaming, auto-scaling for transaction spikes
+- **Why Nobus:** Nobus Kubernetes Engine (NKE) for microservices architecture, Kafka for event streaming, monitoring and alerting so the team scales ahead of transaction spikes
 - **Migration driver:** Many fintechs sit on a foreign hyperscaler (AWS/Azure/GCP) and now face a **data localization mandate** - customer and transaction data must reside in-country. That mandate is the single biggest trigger to migrate to Nobus, which keeps the data in Nigeria while preserving the cloud-native tooling they already use.
 - **Key Services:** NKE, Kafka, Load Balancers, managed PostgreSQL
 - **Entry Point:** New application deployments, payment processing infrastructure, or a compliance-driven migration off a foreign hyperscaler
@@ -161,8 +161,8 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 - **Key Services:** NFT, FCS high-compute flavors, managed databases
 
 #### 6. E-commerce (Scalability Needs)
-- **Why Nobus:** Auto-scaling for traffic spikes (Black Friday, sales events), load balancing across instances
-- **Key Services:** Auto Scaling, Load Balancers, FOS for product images/media
+- **Why Nobus:** Right-sized instances with monitoring and threshold alerts so you add capacity ahead of traffic spikes (Black Friday, sales events), load balancing across instances
+- **Key Services:** Load Balancers, monitoring & alerting, FOS for product images/media
 - **Entry Point:** Peak traffic handling, media storage
 
 #### 7. Education (Digital Transformation)
@@ -195,7 +195,7 @@ As a sales rep, know that Nobus offers a complete cloud platform:
 ### Persona 2: The CTO / Head of Engineering (the technical buyer)
 - **Cares about:** Reliability, scalability, standard tooling, not being locked into a dead-end platform
 - **Fears:** A "local" cloud that is really one rack in a closet; losing engineering credibility
-- **Your message:** "Hyperscale infrastructure: Terraform, APIs and CLI work as expected. Tier III multi-AZ, 99.982% uptime, autoscaling and managed Kubernetes included."
+- **Your message:** "Hyperscale infrastructure: Terraform, APIs and CLI work as expected. Tier III multi-AZ, 99.982% uptime, proactive monitoring and alerting, and managed Kubernetes included."
 - **Proof points:** Live console demo (dashboard.nobus.io), instance catalog (si.1 to si.16 families), a demo-lab session
 - **Opening question:** *"If you could re-architect today, what would you keep and what would you drop?"*
 
@@ -238,7 +238,7 @@ As a sales rep, you need to know the full product catalogue so you can identify 
 | Product | What It Does | Sales Talking Point |
 |---------|-------------|-------------------|
 | **FCS (Flexible Compute Service)** | Virtual machines - Linux & Windows. 15+ instance flavors from 1 to 16 vCPU. Launch in minutes. | "Need a server? It's running in 5 minutes, not 5 weeks." |
-| **Auto Scaling** | Automatically adds/removes instances based on demand | "Black Friday traffic spike? Your app scales automatically." |
+| **Monitoring & Scaling** | Right-sized instances with proactive monitoring and threshold alerts; your team scales up (resize) or out (add nodes) on an informed decision | "Black Friday coming? We size for the peak and alert you early - you add capacity on purpose, no surprise scaling, no runaway bill." |
 | **Load Balancing** | Distributes traffic across multiple instances | "No single point of failure. Traffic balanced automatically." |
 
 ### Storage
@@ -546,8 +546,8 @@ A partner scored a government prospect: Budget 3 (approved project), Need 3 (aud
 
 ### Category 2: Local hosting providers and small VPS shops
 - **Their strengths:** Cheap headline prices, local billing
-- **Their weaknesses:** Single-site infrastructure, no real cloud services (no autoscaling, no managed Kubernetes, no object storage), weak SLAs, no compliance posture
-- **Your line:** "Hosting gives you a server. Nobus gives you a platform: Tier III multi-AZ, 99.982% uptime, autoscaling, managed databases, enterprise firewalls. When you grow, hosting runs out of road."
+- **Their weaknesses:** Single-site infrastructure, no real cloud services (no load balancing, no managed Kubernetes, no object storage), weak SLAs, no compliance posture
+- **Your line:** "Hosting gives you a server. Nobus gives you a platform: Tier III multi-AZ, 99.982% uptime, monitoring and alerting with easy scale-up/scale-out, managed databases, enterprise firewalls. When you grow, hosting runs out of road."
 
 ### Category 3: On-premise (the hardware refresh)
 - **Their strengths:** Full control, sunk-cost familiarity, "we already own the server room"
@@ -878,7 +878,7 @@ Do NOT run a PoC when:
 - "VPN tunnel to head office sustains 100 Mbps with packet loss under 0.5%"
 
 ### Standard PoC patterns
-- **Web workload:** 2x FCS si.2.4 Linux behind a load balancer, autoscaling to 4, FBS-backed managed PostgreSQL. Proves performance and scaling.
+- **Web workload:** 2x FCS si.2.4 Linux behind a load balancer, with monitoring and alerts to add nodes (scale out to 4), FBS-backed managed PostgreSQL. Proves performance and scaling.
 - **Migration proof:** Lift one non-critical VM via image import, run it in parallel for a week, compare. Proves the migration path.
 - **DR/backup proof:** Nobus Cloud Backup protecting one production on-prem server, one restore drill. Proves recoverability, sells the whole DR story.
 - **Connectivity proof:** Site-to-Site VPN with pfSense, latency and throughput measured. Proves hybrid operation.

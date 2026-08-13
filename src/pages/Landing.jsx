@@ -21,7 +21,7 @@ const BENEFITS = [
 ];
 
 const SERVICES = [
-  { icon: Server, name: 'Compute', desc: 'FCS instances, dedicated hosting, autoscaling and CloudOrchestration, with local pay-as-you-use pricing.' },
+  { icon: Server, name: 'Compute', desc: 'FCS instances, dedicated hosting, monitoring-driven scaling and CloudOrchestration, with local pay-as-you-use pricing.' },
   { icon: HardDrive, name: 'Storage & Backup', desc: 'FBS block volumes, unlimited FOS object storage and Acronis-powered Cloud Backup.' },
   { icon: Network, name: 'Networking', desc: 'Virtual data centers, Fast Transit, floating IPs, VPN, DNS, firewalls and load balancing.' },
   { icon: ShieldCheck, name: 'Security', desc: 'Sophos XG, FortiGate NGFW and Acronis Cyber Protect on ISO 27001 / PCI DSS certified infrastructure.' },

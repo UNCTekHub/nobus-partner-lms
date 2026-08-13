@@ -10,7 +10,7 @@ const STAGES = [
   { id: 'lost', label: 'Lost', color: 'bg-red-50 text-red-700' },
 ];
 
-const SERVICE_OPTIONS = ['FCS', 'Dedicated Hosting', 'Autoscaling', 'FBS', 'FOS', 'Cloud Backup', 'Networking', 'VPN', 'Fast Transit', 'Sophos XG', 'FortiGate', 'Acronis', 'Kubernetes', 'Kafka', 'MSSQL', 'MySQL', 'PostgreSQL', 'MongoDB'];
+const SERVICE_OPTIONS = ['FCS', 'Dedicated Hosting', 'Load Balancing', 'Monitoring & Alerting', 'FBS', 'FOS', 'Cloud Backup', 'Networking', 'VPN', 'Fast Transit', 'Sophos XG', 'FortiGate', 'Acronis', 'Kubernetes', 'Kafka', 'MSSQL', 'MySQL', 'PostgreSQL', 'MongoDB'];
 
 const naira = (n) => '₦' + Number(n || 0).toLocaleString('en-NG');
 

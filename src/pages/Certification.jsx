@@ -61,7 +61,7 @@ const levels = [
 ];
 
 const assessmentDomains = [
-  { domain: 'FCS - Instances, NMIs, flavors, Auto Scaling', weight: '25%' },
+  { domain: 'FCS - Instances, NMIs, flavors, monitoring & scaling', weight: '25%' },
   { domain: 'Storage - FBS volumes, snapshots, FOS containers', weight: '20%' },
   { domain: 'Networking - VPC, Security Groups, Floating IPs, VPN', weight: '20%' },
   { domain: 'Security - Shared responsibility, firewalls, compliance', weight: '15%' },

@@ -14,7 +14,7 @@ export const QUIZ_KEYS = {
   'quiz-pre-m3': [2, 2],
   'quiz-pre-m4': [1, 2, 1],
   'quiz-tech-m1': [1, 1, 1],
-  'quiz-tech-m2': [1, 1],
+  'quiz-tech-m2': [1, 0],
   'quiz-tech-m3': [1, 2, 2],
   'quiz-tech-m4': [1, 2],
   'quiz-tech-m5': [1, 2],
