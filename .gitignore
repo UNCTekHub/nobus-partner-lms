@@ -14,3 +14,6 @@ Thumbs.db
 # Server database files
 server/data/
 server/node_modules/
+
+# Local working docs (never publish to this public repo)
+*.docx
