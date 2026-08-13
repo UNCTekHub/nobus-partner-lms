@@ -178,13 +178,22 @@ export default function MarketingHub() {
             </div>
 
             <div className="flex-1 min-h-[420px] bg-gray-100">
-              {['PNG', 'SVG', 'JPG'].includes(preview.file_type) ? (
+              {['PNG', 'SVG', 'JPG', 'JPEG', 'GIF'].includes(preview.file_type) ? (
                 <div className="h-full flex items-center justify-center p-6">
-                  <img src={preview.file_url} alt={preview.title} className="max-w-full max-h-[60vh] object-contain rounded-lg shadow" />
+                  <img src={preview.file_url} alt={preview.title} className="max-w-full max-h-[70vh] object-contain rounded-lg shadow" />
                 </div>
+              ) : preview.file_url?.startsWith('/') ? (
+                // Locally-hosted file (e.g. a PDF we serve): the browser renders it inline.
+                <iframe title={preview.title} src={preview.file_url} className="w-full h-[70vh] border-0" />
               ) : (
-                <iframe title={preview.title} src={preview.file_url} className="w-full h-[60vh] border-0"
-                  sandbox="allow-scripts allow-same-origin" />
+                // Externally-hosted files usually can't be embedded (X-Frame-Options).
+                <div className="h-full flex flex-col items-center justify-center gap-3 text-center p-8 text-gray-500">
+                  <ExternalLink className="w-8 h-8 text-gray-300" />
+                  <p className="text-sm max-w-sm">This file is hosted externally and can't be previewed inline. Open it in a new tab to view it.</p>
+                  <a href={preview.file_url} target="_blank" rel="noopener noreferrer" className="btn-primary !py-2 text-sm inline-flex items-center gap-1.5">
+                    <ExternalLink className="w-4 h-4" /> Open in new tab
+                  </a>
+                </div>
               )}
             </div>
 
