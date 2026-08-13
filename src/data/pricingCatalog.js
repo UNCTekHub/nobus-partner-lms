@@ -57,7 +57,7 @@ export const FCS_INSTANCES = [
 // that is already priced into the Windows flavors.
 export const LINUX_IMAGES = [
   'Ubuntu 24.04 LTS', 'Ubuntu 22.04 LTS', 'Ubuntu 20.04 LTS',
-  'Debian 12', 'Rocky Linux 9', 'AlmaLinux 9', 'CentOS Stream 9',
+  'Debian 12', 'Rocky Linux 9', 'AlmaLinux 9',
 ];
 export const WINDOWS_IMAGES = ['Windows Server 2022', 'Windows Server 2025'];
 

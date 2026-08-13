@@ -38,15 +38,23 @@ Nobus Flexible Compute Service provides resizable virtual machines from the cons
 
 **Instance naming decodes as si.[vCPU].[RAM].[disk].[l|w]:** si.4.8.30.l = 4 vCPU, 8 GiB RAM, 30 GB root disk, Linux. Windows images use 50 GB roots (.50.w) and include the managed license.
 
-| Family | Profile | Typical placement |
+**FCS instance types - pick the shape first, then the size:**
+- **Standard (General Purpose):** balanced vCPU-to-memory - web/app servers and most general workloads
+- **Compute Optimized:** more vCPU per GiB - batch processing, media transcoding, HPC, high-traffic front-ends
+- **Memory Optimized:** more memory per vCPU - in-memory databases, real-time analytics, large caches
+- **GPU Optimized:** GPU-accelerated - AI/ML training and inference, rendering, scientific compute
+
+Each type spans a wide range of sizes (the table below shows size bands, not the full list - confirm exact flavors in the Quote Builder or console):
+
+| Size band | Profile | Typical placement |
 |---|---|---|
 | si.1.x / si.2.x | 1-2 vCPU, 2-8 GiB | Web nodes, microservices, dev/test, VPN gateways |
 | si.4.x | 4 vCPU, 4-32 GiB | Application servers, mid-size databases, ERP tiers |
 | si.8.x | 8 vCPU, 16-64 GiB | Heavy databases, analytics, consolidation hosts |
 | Burstable (si.8.64/si.16.64) | High RAM, bursty CPU | Staging, variable batch workloads |
-| Specialized | Compute-optimized, storage-optimized, GPU | Named workloads only; validate with Nobus |
+| GPU / larger | Memory-, compute- and GPU-optimized shapes | AI/ML, HPC, analytics - available on request |
 
-**OS coverage:** Ubuntu, CentOS and other open-source Linux distributions license-free; Windows Server with managed licensing (+35,000 per instance-month) or BYOL on Dedicated Hosts.
+**OS coverage:** Ubuntu, Debian, Rocky Linux, AlmaLinux and other open-source Linux distributions license-free; Windows Server with managed licensing (+35,000 per instance-month) or BYOL on Dedicated Hosts.
 
 ### Pricing mechanics (whiteboard-ready)
 - Published units: vCPU 93.50 and memory 96.80 per unit-day; entry instances from **9,309/month**; billing is pre-paid per cycle and accrues while instances are running or paused

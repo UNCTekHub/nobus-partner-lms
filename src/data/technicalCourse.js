@@ -102,7 +102,7 @@ Pre-billing: resources charge from the start of each cycle while in **running or
 - **Security layering:** security groups filter at the instance NIC (stateful), cloud firewalls filter at the network edge (policy-based, first-match), and appliance firewalls (Sophos XG, FortiGate) add deep inspection where required.
 
 ### The compute fabric
-- Hypervisor-virtualized compute pools serve **FCS instances** in standard families (si.1 through si.16), plus compute-optimized, storage-optimized, GPU and burstable classes
+- Hypervisor-virtualized compute pools serve **FCS instances** in four types - Standard (general purpose), Compute-Optimized, Memory-Optimized and GPU-Optimized - across size families si.1 through si.16, plus burstable classes
 - **Dedicated Hosts** carve out entire physical servers for compliance isolation and BYOL licensing (per-socket/per-core Microsoft and Oracle licenses), integrated with the Nobus License Manager
 - **Instance naming decodes as** si.[vCPU].[RAM].[disk].[l|w]: si.4.8.30.l is 4 vCPU, 8 GiB RAM, 30 GB disk, Linux
 
@@ -151,7 +151,7 @@ Launch with a key pair, then retrieve the auto-generated administrator password 
 - Terraform's OpenStack provider works for teams standardizing on it
 
 ### The image catalogue (what you can launch)
-- **Open-source Linux:** Ubuntu (e.g. Ubuntu-22.04-64bit), CentOS and other distributions, license-free
+- **Open-source Linux:** Ubuntu (e.g. Ubuntu-22.04-64bit), Rocky Linux, AlmaLinux, Debian and other distributions, license-free
 - **Windows Server:** managed licensing included, or BYOL on Dedicated Hosts
 - **Nobus Machine Images (NMIs):** preconfigured templates; build golden images from a configured instance for standardized fleet deployments
 - **Appliance images:** pfsense-64bit (VPN/routing), Security-Sophos-XG-Firewall, Security-Fortigate-FortiOS, acronis-cyberprotect
@@ -218,6 +218,14 @@ Nobus uses a structured naming: **si.{vCPU}.{RAM_GB}.{Disk_GB}.{OS}**
 
 ## Instance Types & Flavors
 
+FCS offers four instance **types** - choose the shape for the workload, then the size:
+- **Standard (General Purpose):** balanced vCPU-to-memory - web/app servers and most general workloads
+- **Compute Optimized:** more vCPU per GiB - batch processing, media transcoding, HPC, high-traffic front-ends
+- **Memory Optimized:** more memory per vCPU - in-memory databases, real-time analytics, large caches
+- **GPU Optimized:** GPU-accelerated - AI/ML training and inference, rendering, scientific compute
+
+The flavor tables below are **examples of common sizes within these types**, not the full catalogue - sizes scale well beyond them, and GPU/memory-optimized shapes are available on request. Confirm exact flavors in the console or Quote Builder.
+
 ### Entry-Level (1-2 vCPU) - Web Servers, Microservices, Dev/Test
 | Flavor | vCPU | RAM | Disk | OS | Best For |
 |--------|------|-----|------|----|----------|
@@ -274,12 +282,10 @@ NMIs are pre-configured VM templates (equivalent to AMIs on AWS):
 | Image Name | Format | Size | Min Disk | Min RAM | Notes |
 |-----------|--------|------|----------|---------|-------|
 | **Ubuntu-22.04-64bit** | QCOW2 | ~600 MB | 30 GB | 2048 MB | Most popular Linux choice |
-| **CentOS-7-64bit** | QCOW2 | 618 MB | 30 GB | 2048 MB | Legacy enterprise Linux |
-| **CentOS-8-64bit** | QCOW2 | 774 MB | 30 GB | 2048 MB | Enterprise workloads |
 | **debian-10-generic-64Bit** | QCOW2 | 217 MB | 20 GB | 1024 MB | Minimal Debian |
 | **debian-11-genericcloud-64Bit** | QCOW2 | 247 MB | 30 GB | 2048 MB | Current Debian stable |
 | **debian-12-generic-64Bit** | QCOW2 | 361 MB | 30 GB | 2048 MB | Latest Debian |
-| **Rocky-Linux-8-64bit** | QCOW2 | ~600 MB | 30 GB | 2048 MB | CentOS replacement |
+| **Rocky-Linux-8-64bit** | QCOW2 | ~600 MB | 30 GB | 2048 MB | Enterprise Linux (RHEL-compatible) |
 | **Rocky-Linux-9-64bit** | QCOW2 | ~600 MB | 30 GB | 2048 MB | Latest Rocky |
 | **Oracle_Linux_9_64bit** | QCOW2 | 561 MB | 40 GB | - | Oracle database workloads |
 | **Windows-Server-2019** | QCOW2 | ~12 GB | 50 GB | 4096 MB | Windows Server (licensed) |

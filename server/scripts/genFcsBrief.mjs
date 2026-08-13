@@ -80,19 +80,19 @@ let y = 108;
 
 y = para(y, 'Flexible Compute Service (FCS) is Nobus Cloud\'s on-demand virtual server platform: launch production-grade Linux or Windows instances in minutes, resize as workloads change, and pay only for what you use - billed in local currency with zero egress fees, from Tier III-certified data centres in West and East Africa.') + 12;
 
-y = heading(y, 'Instance families');
-y = para(y, '15+ right-sized flavours from 1 to 8 vCPU and 2 to 64 GiB, on Linux (license-free) or Windows Server (managed licence). Representative sizes:') + 4;
+y = heading(y, 'Instance types');
+y = para(y, 'Choose the shape for your workload, then the size. FCS offers four instance types:') + 4;
 y = table(y, [
-  ['si.1.2', '1 vCPU · 2 GiB · 30 GB - entry / dev-test'],
-  ['si.2.4', '2 vCPU · 4 GiB · 30 GB - small web & app tiers'],
-  ['si.4.8', '4 vCPU · 8 GiB · 30 GB - general-purpose workloads'],
-  ['si.8.16', '8 vCPU · 16 GiB · 30 GB - databases & compute'],
-  ['si.8.64', '8 vCPU · 64 GiB · 50 GB - large in-memory (Windows)'],
-], 'Flavour', 'Profile');
-y += 2;
+  ['Standard', 'Balanced vCPU-to-memory - general web / app workloads'],
+  ['Compute Optimized', 'More vCPU per GiB - batch, media transcoding, HPC'],
+  ['Memory Optimized', 'More memory per vCPU - databases, analytics, caches'],
+  ['GPU Optimized', 'GPU-accelerated - AI / ML, rendering, scientific compute'],
+], 'Type', 'Best for');
+y += 6;
+y = para(y, 'Each type spans a wide range of sizes - 1 to 8+ vCPU and 2 to 64+ GiB, plus GPU. Example sizes include si.2.4 (2 vCPU / 4 GiB), si.4.8 (4 / 8), si.8.16 (8 / 16) and si.8.64 (8 / 64). These are examples only; larger CPU, memory and GPU configurations are available on request - confirm exact flavours in the Quote Builder.') + 6;
 y = bullets(y, [
-  'OS images: Ubuntu 24.04 / 22.04 LTS, Debian 12, Rocky Linux 9, AlmaLinux 9, CentOS Stream 9; Windows Server 2022 and 2025.',
-  'AES-256 FBS block storage with snapshots attaches to any instance; FOS for unlimited object storage. Resize vCPU/RAM/disk without rebuilding.',
+  'OS images: Ubuntu 24.04 / 22.04 LTS, Debian 12, Rocky Linux 9, AlmaLinux 9; Windows Server 2022 and 2025.',
+  'AES-256 FBS block storage with snapshots and FOS object storage attach to any instance; resize vCPU / RAM / disk without rebuilding.',
 ]) + 14;
 
 y = heading(y, 'Autoscaling & load balancing');
