@@ -21,8 +21,8 @@ function seedPortalContent() {
       { title: 'Nobus Partner Brand Guidelines', description: 'How to use the Nobus brand in partner marketing: colors, typography, logo clearance.', category: 'Logos & Brand', file_url: 'https://nobus.io/', file_type: 'PDF', tags: JSON.stringify(['brand', 'guidelines']) },
       { title: 'Nobus Cloud Corporate Brochure', description: 'Customer-facing overview of the full Nobus service catalogue with Naira pricing story.', category: 'Brochures', file_url: 'https://nobus.io/documentation/fcs', file_type: 'PDF', tags: JSON.stringify(['overview', 'catalogue']) },
       { title: 'FCS Compute Solution Brief', description: 'Two-pager on Flexible Compute Service: instance families, monitoring-driven scaling, dedicated hosting, BYOL.', category: 'Brochures', file_url: '/marketing/fcs-compute-solution-brief.pdf', file_type: 'PDF', tags: JSON.stringify(['fcs', 'compute']) },
-      { title: 'AWS/Azure vs Nobus Battle Card', description: 'Competitive positioning: Naira billing, zero egress fees, local support, NDPA data residency.', category: 'Battle Cards', file_url: 'https://nobus.io/nobus-pricing-calculator', file_type: 'PDF', tags: JSON.stringify(['competitive', 'aws', 'azure']) },
-      { title: 'Security Stack Battle Card', description: 'Selling Sophos XG, FortiGate NGFW and Acronis Cyber Protect on Nobus.', category: 'Battle Cards', file_url: 'https://nobus.io/documentation/cloud-security', file_type: 'PDF', tags: JSON.stringify(['security', 'sophos', 'fortigate', 'acronis']) },
+      { title: 'AWS/Azure vs Nobus Battle Card', description: 'Competitive positioning: Naira billing, zero egress fees, local support, NDPA data residency.', category: 'Battle Cards', file_url: '/marketing/aws-azure-vs-nobus-battle-card.pdf', file_type: 'PDF', tags: JSON.stringify(['competitive', 'aws', 'azure']) },
+      { title: 'Security Stack Battle Card', description: 'Selling Sophos XG, FortiGate NGFW, FortiSIEM and Acronis Cyber Protect on Nobus.', category: 'Battle Cards', file_url: '/marketing/security-stack-battle-card.pdf', file_type: 'PDF', tags: JSON.stringify(['security', 'sophos', 'fortigate', 'fortisiem', 'acronis']) },
       { title: 'Cloud Migration Email Sequence', description: '5-email nurture campaign template for on-premise to Nobus migration prospects.', category: 'Email Templates', file_url: 'https://nobus.io/', file_type: 'DOCX', tags: JSON.stringify(['email', 'migration', 'nurture']) },
       { title: 'Naira Billing Social Kit', description: 'LinkedIn/X post templates and graphics on the "budget in Naira, pay in Naira" message.', category: 'Social Media', file_url: 'https://nobus.io/', file_type: 'ZIP', tags: JSON.stringify(['social', 'naira', 'billing']) },
       { title: 'Nobus Platform Pitch Deck', description: 'Editable customer presentation: platform overview, services, pricing model, case studies.', category: 'Presentations', file_url: 'https://nobus.io/', file_type: 'PPTX', tags: JSON.stringify(['pitch', 'deck', 'sales']) },
@@ -37,6 +37,18 @@ function seedPortalContent() {
   db.prepare("UPDATE marketing_assets SET file_url = ?, file_type = 'PDF', updated_at = datetime('now') WHERE title = 'FCS Compute Solution Brief' AND file_url != ?").run(FCS_BRIEF, FCS_BRIEF);
   const FCS_BRIEF_DESC = 'Two-pager on Flexible Compute Service: instance families, monitoring-driven scaling, dedicated hosting, BYOL.';
   db.prepare("UPDATE marketing_assets SET description = ?, updated_at = datetime('now') WHERE title = 'FCS Compute Solution Brief' AND description != ?").run(FCS_BRIEF_DESC, FCS_BRIEF_DESC);
+
+  // Repoint the battle cards to their generated branded PDFs (idempotent).
+  const battleCards = [
+    { title: 'AWS/Azure vs Nobus Battle Card', url: '/marketing/aws-azure-vs-nobus-battle-card.pdf',
+      desc: 'Competitive positioning: Naira billing, zero egress fees, local support, NDPA data residency.' },
+    { title: 'Security Stack Battle Card', url: '/marketing/security-stack-battle-card.pdf',
+      desc: 'Selling Sophos XG, FortiGate NGFW, FortiSIEM and Acronis Cyber Protect on Nobus.' },
+  ];
+  for (const c of battleCards) {
+    db.prepare("UPDATE marketing_assets SET file_url = ?, file_type = 'PDF', description = ?, updated_at = datetime('now') WHERE title = ? AND (file_url != ? OR description != ?)")
+      .run(c.url, c.desc, c.title, c.url, c.desc);
+  }
 
   const contentCount = db.prepare('SELECT COUNT(*) as count FROM content_items').get().count;
   if (contentCount === 0) {
